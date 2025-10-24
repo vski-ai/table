@@ -1,4 +1,5 @@
 import { type JSX } from "preact";
+import { useMemo } from "preact/hooks";
 import {
   type CellFormatting,
   type CellStyle,
@@ -77,8 +78,8 @@ export const CellFormatter = (
 
   if (formatting.date) {
     displayValue = formatDate(value, formatting.date);
-  } else if (formatting.number && typeof value === "number") {
-    displayValue = formatNumber(value, formatting.number);
+  } else if (formatting.number) {
+    displayValue = formatNumber(Number(value), formatting.number);
   }
 
   if (formatting.style) {
@@ -93,13 +94,9 @@ export const CellFormatter = (
     }
   }
 
-  const { prefix, suffix } = formatting;
-
   return (
     <span style={style as any}>
-      {prefix}
       {displayValue}
-      {suffix}
     </span>
   );
 };

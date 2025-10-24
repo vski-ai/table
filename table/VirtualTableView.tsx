@@ -14,7 +14,7 @@ import {
 export function VirtualTableView(
   {
     data,
-    columns,
+    columns: cols,
     initialWidth,
     columnExtensions,
     columnAction,
@@ -39,6 +39,14 @@ export function VirtualTableView(
   const headerContainerRef = useRef<HTMLDivElement>(null);
   const bodyContainerRef = useRef<HTMLDivElement>(null);
 
+  const columns = useMemo(() => {
+    return cols;
+  }, [cols]);
+
+  const formatting = useMemo(() => {
+    return cellFormatting;
+  }, [cellFormatting]);
+
   const rowKey = useMemo(() => {
     if (rowIdentifier && columns.includes(rowIdentifier)) return rowIdentifier;
     if (columns.includes("id")) return "id";
@@ -47,6 +55,7 @@ export function VirtualTableView(
 
   const shownRows = useMemo(() => {
     if (!groupStates?.value) return data;
+
     return data.filter((row: any) => {
       if (!row.$parent_id?.length) {
         return true;
@@ -169,7 +178,7 @@ export function VirtualTableView(
   };
 
   return (
-    <div class="transition-all">
+    <>
       <div
         ref={headerContainerRef}
         style={{ position: "sticky", top: 0, zIndex: 10 }}
@@ -404,8 +413,7 @@ export function VirtualTableView(
                               <span class="ml-1" />
                               <CellFormatter
                                 value={row[row.$group_by]}
-                                formatting={cellFormatting
-                                  ?.value[row.$group_by]}
+                                formatting={formatting?.[row.$group_by]}
                               />
                             </span>
                           </>
@@ -427,7 +435,7 @@ export function VirtualTableView(
                             <GroupMargin level={row.$group_level} size={16} />
                             <CellFormatter
                               value={row[row.$group_by]}
-                              formatting={cellFormatting?.value[row.$group_by]}
+                              formatting={formatting?.[row.$group_by]}
                             />
                           </div>
                         )}
@@ -459,7 +467,7 @@ export function VirtualTableView(
                         >
                           <CellFormatter
                             value={row[col]}
-                            formatting={cellFormatting?.value[col]}
+                            formatting={formatting?.[col]}
                           />
                         </div>
                       </td>
@@ -521,6 +529,6 @@ export function VirtualTableView(
           </button>
         </div>
       )}
-    </div>
+    </>
   );
 }

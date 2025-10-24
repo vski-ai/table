@@ -130,70 +130,61 @@ export const StyleFormatting = (
   };
 
   return (
-    <div class="collapse p-0 collapse-arrow border border-base-300 bg-base-200 transition-none">
-      <input type="checkbox" />
-      <div class="collapse-title font-bold">
-        Style
-      </div>
+    <div class="flex flex-col gap-3 py-6">
+      <StyleEditor
+        style={style.default}
+        onStyleChange={onDefaultStyleChange}
+      />
 
-      <div class="collapse-content flex flex-col items-start transition-none">
-        <h4 class="font-bold mt-4">Default Style</h4>
-        <StyleEditor
-          style={style.default}
-          onStyleChange={onDefaultStyleChange}
-        />
-
-        <h4 class="font-bold mt-4">Conditional Formatting</h4>
-        {style.conditions.map((condition: any, index: number) => (
-          <div class="flex flex-col gap-2 mt-2 border border-dashed rounded w-full p-2">
-            <div class="flex gap-2">
-              <select
-                class="select select-bordered"
-                value={condition.operator}
-                onChange={(e) => {
-                  onConditionChange(index, {
-                    ...condition,
-                    operator: e.currentTarget.value as ConditionOperator,
-                  });
-                }}
-              >
-                {Object.values(ConditionOperator).map((op) => (
-                  <option value={op}>{op}</option>
-                ))}
-              </select>
-              <input
-                type="text"
-                class="input input-bordered"
-                value={condition.value}
-                onInput={(e) => {
-                  onConditionChange(index, {
-                    ...condition,
-                    value: e.currentTarget.value,
-                  });
-                }}
-              />
-            </div>
-            <div class="flex justify-between">
-              <StyleEditor
-                style={condition.style}
-                onStyleChange={(newStyle) => {
-                  onConditionChange(index, { ...condition, style: newStyle });
-                }}
-              />
-              <button
-                class="btn btn-ghost"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeCondition(index);
-                }}
-              >
-                <Trash2Icon />
-              </button>
-            </div>
+      {style.conditions.map((condition: any, index: number) => (
+        <div class="flex flex-col gap-2 mt-2 border border-dashed rounded w-full p-2">
+          <div class="flex gap-2">
+            <select
+              class="select select-bordered"
+              value={condition.operator}
+              onChange={(e) => {
+                onConditionChange(index, {
+                  ...condition,
+                  operator: e.currentTarget.value as ConditionOperator,
+                });
+              }}
+            >
+              {Object.values(ConditionOperator).map((op) => (
+                <option value={op}>{op}</option>
+              ))}
+            </select>
+            <input
+              type="text"
+              class="input input-bordered"
+              value={condition.value}
+              onInput={(e) => {
+                onConditionChange(index, {
+                  ...condition,
+                  value: e.currentTarget.value,
+                });
+              }}
+            />
           </div>
-        ))}
-        <button class="btn mt-2" onClick={addCondition}>Add Condition</button>
-      </div>
+          <div class="flex justify-between">
+            <StyleEditor
+              style={condition.style}
+              onStyleChange={(newStyle) => {
+                onConditionChange(index, { ...condition, style: newStyle });
+              }}
+            />
+            <button
+              class="btn btn-ghost"
+              onClick={(e) => {
+                e.stopPropagation();
+                removeCondition(index);
+              }}
+            >
+              <Trash2Icon />
+            </button>
+          </div>
+        </div>
+      ))}
+      <button class="btn mt-2" onClick={addCondition}>Add Condition</button>
     </div>
   );
 };

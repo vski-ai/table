@@ -1,0 +1,5 @@
+@layer components {
+  .menu-tabs {
+    @apply tabs-lift tabs w-auto min-w-full;
+  }
+}

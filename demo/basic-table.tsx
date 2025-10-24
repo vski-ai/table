@@ -1,17 +1,15 @@
 import {
-  ColumnMenu,
   ColumnSelector,
   ColumnSorter,
   DynamicTable,
-  GroupingSelector,
   SortState,
 } from "@/table/mod.ts";
 
-import { GeneralFormatting } from "@/format/General.tsx";
+import { Formatting } from "../format/index.tsx";
 
 import { useSignal } from "@preact/signals";
 import { useMemo, useRef } from "preact/hooks";
-import { XYModal } from "@/popup/XYModal.tsx";
+import { ColumnMenu } from "@/menu/ColumnMenu.tsx";
 
 import GridIcon from "lucide-react/dist/esm/icons/grid-2x2-plus.js";
 import GroupIcon from "lucide-react/dist/esm/icons/group.js";
@@ -61,57 +59,19 @@ export const BasicTable = () => {
   return (
     <div ref={parent}>
       <div>
-        <XYModal
-          target={columnMenuTarget.value}
+        <ColumnMenu
+          column={columnMenuTarget.value}
           openSignal={columnMenuOpenSignal}
-        >
-          <div tabIndex={1} className="tabs-lift tabs w-full min-w-full">
-            <label className="tab">
-              <input
-                type="radio"
-                name="my_tabs_7"
-                defaultChecked
-              />
-              Filtering
-            </label>
-            <div className="start-0 tab-content min-h-100 max-w-full border-base-300 bg-base-100 p-6">
-              Tab content 1
-            </div>
-            <label className="tab">
-              <input
-                type="radio"
-                name="my_tabs_7"
-              />
-              Formatting
-            </label>
-            <div className=" start-0 tab-content max-w-full border-base-300 bg-base-100 p-6">
-              Tab content 2
-            </div>
-          </div>
-        </XYModal>
+          store={{
+            formatting,
+          }}
+        />
       </div>
-      <div className="fixed z-50 bottom-2 right-6 flex flex-col gap-2">
-        <div className="dropdown dropdown-top dropdown-end">
-          <button
-            tabIndex={0}
-            type="button"
-            className="btn btn-md btn-primary transition-opacity opacity-40 hover:opacity-100 focus:opacity-100"
-          >
-            <GroupIcon />
-            <span class="badge badge-xs">{selectedGroups.value.length}</span>
-          </button>
-          <div class="dropdown-content z-100 mb-2">
-            <GroupingSelector
-              allColumns={allColumns.value}
-              selectedGroups={selectedGroups}
-            />
-          </div>
-        </div>
-      </div>
+
       <DynamicTable
         data={data}
         columns={selectedColumns.value}
-        cellFormatting={formatting}
+        cellFormatting={formatting.value}
         onColumnDrop={onColumnDrop}
         groupStates={groupStates}
         selectedRows={selected}
@@ -130,42 +90,16 @@ export const BasicTable = () => {
           />
         )}
         columnExtensions={(column: string) => {
-          const activeTab = useSignal("general");
           return (
             <>
               <button
                 onClick={() => {
-                  columnMenuTarget.value = `#column-header-${column}`;
+                  columnMenuTarget.value = column;
                   columnMenuOpenSignal.value = true;
                 }}
               >
                 0
               </button>
-
-              <ColumnMenu>
-                <div class="menu card bg-base-100 w-100 border">
-                  <div class="tabs">
-                    <a
-                      tabIndex={1}
-                      class={`tab tab-lifted ${
-                        activeTab.value === "general" ? "tab-active" : ""
-                      }`}
-                      onClick={() => activeTab.value = "general"}
-                    >
-                      General
-                    </a>
-                  </div>
-
-                  <div class="p-2">
-                    {activeTab.value === "general" && (
-                      <GeneralFormatting
-                        column={column}
-                        formatting={formatting}
-                      />
-                    )}
-                  </div>
-                </div>
-              </ColumnMenu>
             </>
           );
         }}

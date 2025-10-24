@@ -9,7 +9,16 @@ export interface XYModalProps {
   children: JSX.Element | JSX.Element[];
 }
 
-// Places itself contained or around a target element
+/**
+ * This modal places itself in bounds of a target element.
+ *
+ * @nesterow:
+ *   In this project you'll often see that sometimes I use a modal
+ *   instead of a popup (modal styled as popup).
+ *   The reason being that when dealing with tables it's safer
+ *   to get rid of a scroll (or control it programmatically) when user
+ *   setups columns, grouping and other things that would grow space or change format.
+ */
 export const XYModal = ({ target, openSignal, children }: XYModalProps) => {
   const [mounted, setMounted] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -21,31 +30,35 @@ export const XYModal = ({ target, openSignal, children }: XYModalProps) => {
 
   const onBlur = () => {
     if (focused.value) {
-      focused.value = false;
       return;
     }
     openSignal.value = false;
   };
 
-  const keepFocus = () => {
+  const keepFocus = (ev: MouseEvent) => {
+    ev.stopPropagation();
     focused.value = true;
-    modalRef.current?.focus();
   };
+
+  const clickOutside = () => {
+    focused.value = false;
+    openSignal.value = false;
+  };
+
   useEffect(() => {
     if (!target) return;
-
     function allign() {
       if (!modalRef.current) {
-        return console.error(modalRef.current, "element is not in dom");
+        return;
       }
+      console.log(12);
       modalRef.current?.removeEventListener("blur", onBlur);
       modalRef.current?.addEventListener("blur", onBlur);
       modalRef.current?.removeEventListener("mousedown", keepFocus);
       modalRef.current.addEventListener("mousedown", keepFocus);
-      modalRef.current?.focus();
 
       const el = document.querySelector(target);
-      if (!el) return console.error(target, "element is not in dom");
+      if (!el) return;
       const { top, left, width } = el.getBoundingClientRect();
       topPosition.value = top;
       leftPosition.value = left;
@@ -57,7 +70,7 @@ export const XYModal = ({ target, openSignal, children }: XYModalProps) => {
 
     document.addEventListener("click", listener);
     document.addEventListener("resize", listener);
-    document.addEventListener("mousemove", listener);
+    document.addEventListener("mousedown", clickOutside);
 
     setMounted(true);
     return () => {
@@ -66,7 +79,7 @@ export const XYModal = ({ target, openSignal, children }: XYModalProps) => {
 
       document.removeEventListener("click", listener);
       document.removeEventListener("resize", listener);
-      document.removeEventListener("mousemove", listener);
+      document.removeEventListener("mousedown", clickOutside);
     };
   }, [target]);
 

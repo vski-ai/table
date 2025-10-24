@@ -15,7 +15,7 @@ export interface VirtualTableViewProps {
   rowIdentifier?: string;
   expandedRows?: Signal<Record<string, boolean>>;
   tableAddon?: JSX.Element;
-  cellFormatting?: Signal<Record<string, CellFormatting>>;
+  cellFormatting?: Record<string, CellFormatting>;
   onColumnDrop?: (draggedColumn: string, targetColumn: string) => void;
   formatColumnName?: (a: string) => string;
   renderExpandedRow?: (row: any) => JSX.Element;

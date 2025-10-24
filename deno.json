@@ -1,4 +1,5 @@
 {
+  "name": "@vski/table",
   "nodeModulesDir": "auto",
   "tasks": {
     "dev": "vite"
