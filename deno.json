@@ -1,0 +1,45 @@
+{
+  "nodeModulesDir": "auto",
+  "tasks": {
+    "dev": "vite"
+  },
+  "imports": {
+    "@/": "./",
+    "@deno/dnt": "jsr:@deno/dnt@^0.42.3",
+    "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.5",
+    "@faker-js/faker": "npm:@faker-js/faker@^10.1.0",
+    "@preact/preset-vite": "npm:@preact/preset-vite@^2.10.2",
+    "@preact/signals": "npm:@preact/signals@^2.3.2",
+    "@std/assert": "jsr:@std/assert@1",
+    "@tailwindcss/typography": "npm:@tailwindcss/typography@^0.5.19",
+    "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.16",
+    "daisyui": "npm:daisyui@^5.3.8",
+    "lucide-react": "npm:lucide-react@^0.546.0",
+    "preact": "npm:preact@^10.27.2",
+    "preact-iso": "npm:preact-iso@^2.11.0",
+    "tailwindcss": "npm:tailwindcss@^4.1.16",
+    "vite": "npm:vite@^7.1.12"
+  },
+  "compilerOptions": {
+    "lib": ["dom", "dom.asynciterable", "dom.iterable", "deno.ns"],
+    "jsx": "precompile",
+    "jsxImportSource": "preact",
+    "jsxPrecompileSkipElements": [
+      "a",
+      "img",
+      "source",
+      "body",
+      "html",
+      "head",
+      "title",
+      "meta",
+      "script",
+      "link",
+      "style",
+      "base",
+      "noscript",
+      "template"
+    ],
+    "types": ["vite/client"]
+  }
+}

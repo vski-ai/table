@@ -1,0 +1,51 @@
+VSKI·QUANT Community License v2.0
+
+Copyright (c) 2025 VSKI·QUANT Contributors
+
+This VSKI·QUANT Community License (the "License") governs your use of the software provided hereunder (the "Software"). By using, copying, modifying, or distributing the Software, you accept and agree to be bound by the terms of this License.
+
+1. Definitions
+
+"Entity" shall mean any individual, corporation, partnership, or other legal entity, and includes all other entities that control, are controlled by, or are under common control with that entity.
+
+"Annual Gross Revenue" shall mean all revenue received by an Entity from all sources worldwide during its most recently completed fiscal year, measured in United States Dollars ($USD).
+
+"Total Capital Raised" shall mean the cumulative total of all funds received by an Entity in exchange for equity, debt instruments convertible to equity, grants, or any other form of investment, measured in United States Dollars ($USD).
+
+"Derivative Work" shall mean any work based on the Software, including any modification, translation, or adaptation that incorporates a substantial portion of the Software's source code.
+
+"Excluded Work" shall mean a separate and independent software work, such as a third-party plugin or extension, which interoperates with the Software through its designated Application Programming Interfaces (APIs) but is not otherwise a Derivative Work.
+
+2. Free License Grant
+
+Subject to the terms and conditions of this License, a perpetual, worldwide, non-exclusive, royalty-free, irrevocable license is hereby granted to any Entity that meets neither of the conditions set forth in Section 3, to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software.
+
+3. Commercial License Required
+
+Use, modification, or distribution of the Software by or for any Entity is prohibited without a separate, paid commercial license if the Entity meets either of the following conditions:
+
+a. Its Annual Gross Revenue is one million US dollars ($1,000,000 USD) or more; OR
+
+b. Its Total Capital Raised is one million US dollars ($1,000,000 USD) or more.
+
+To inquire about a commercial license, please contact an+sales@vski.sh.
+
+4. Copyleft and Distribution Conditions
+
+Any distribution of the Software, or any Derivative Work, is subject to the following conditions:
+
+a. It must be licensed under the terms of this VSKI·QUANT Community License.
+
+b. The above copyright notice and the full text of this License must be included in all copies or substantial portions of the Software or Derivative Work.
+
+c. For the avoidance of doubt, creating and distributing an Excluded Work that interoperates with the Software does not, by itself, subject the Excluded Work to the terms of this License.
+
+5. Software-as-a-Service (SaaS) Distribution
+
+Providing the functionality of the Software or a Derivative Work as part of a commercial Software-as-a-Service (SaaS) product constitutes distribution and is subject to the conditions defined in Section 3.
+
+Furthermore, any Entity providing such a SaaS product under the free license granted in Section 2 must display the following notice visibly within the product's user interface (e.g., in a footer or "About" page): "Powered by VSKI·QUANT".
+
+6. Disclaimer of Warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
