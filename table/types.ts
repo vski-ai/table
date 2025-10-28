@@ -1,25 +1,32 @@
 import { type JSX, type RefObject } from "preact";
 import { type Signal } from "@preact/signals";
-import { type CellFormatting } from "@/format/types.ts";
+import { TableStore } from "@/store/types.ts";
 
-export interface VirtualTableViewProps {
-  data: any[];
-  columns: string[];
-  initialWidth?: number;
-  loading?: boolean;
-  rowHeight?: number;
-  buffer?: number;
-  scrollContainerRef?: RefObject<HTMLElement>;
-  selectedRows?: Signal<any[]>;
-  groupStates?: Signal<Record<string, boolean>>;
-  rowIdentifier?: string;
-  expandedRows?: Signal<Record<string, boolean>>;
-  tableAddon?: JSX.Element;
-  cellFormatting?: Record<string, CellFormatting>;
-  onColumnDrop?: (draggedColumn: string, targetColumn: string) => void;
-  formatColumnName?: (a: string) => string;
-  renderExpandedRow?: (row: any) => JSX.Element;
-  columnExtensions?: (col: string) => JSX.Element;
-  columnAction?: (col: string) => JSX.Element;
-  onLoadMore?: () => void;
-}
+export type VirtualTableViewProps =
+  & {
+    data: any[];
+    columns: string[];
+    store: TableStore;
+    selectable?: boolean;
+    initialWidth?: number;
+    rowHeight?: number;
+    buffer?: number;
+    scrollContainerRef?: RefObject<HTMLElement>;
+    groupStates?: Signal<Record<string, boolean>>;
+    rowIdentifier?: string;
+    tableAddon?: JSX.Element;
+    onColumnDrop?: (draggedColumn: string, targetColumn: string) => void;
+    formatColumnName?: (a: string) => string;
+    columnExtensions?: (col: string) => JSX.Element;
+    columnAction?: (col: string) => JSX.Element;
+    onLoadMore?: () => void;
+  }
+  & (
+    | {
+      expandable: true;
+      renderExpand: (row: any) => JSX.Element;
+    }
+    | {
+      expandable?: false;
+    }
+  );

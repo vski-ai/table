@@ -1,10 +1,19 @@
-import { Signal } from "@preact/signals";
+import { Signal, useSignal, useSignalEffect } from "@preact/signals";
 import { NumberFormatting as NumberFormattingType } from "./types.ts";
+import { LocaleSelector } from "@/menu/LocaleSelector.tsx";
 
 export const NumberFormatting = (
   { column, formatting }: { column: string; formatting: Signal<any> },
 ) => {
   const numberFormatting = formatting.value[column]?.number || {};
+  const selectedLocale = useSignal(numberFormatting.locale);
+
+  useSignalEffect(() => {
+    onNumberChange({
+      ...numberFormatting,
+      locale: selectedLocale.value,
+    });
+  });
 
   const onNumberChange = (newNumberFormatting: NumberFormattingType) => {
     formatting.value = {
@@ -22,17 +31,7 @@ export const NumberFormatting = (
         <label class="label">
           <span class="label-text">Locale</span>
         </label>
-        <input
-          type="text"
-          placeholder="e.g., en-US"
-          class="input input-bordered"
-          value={numberFormatting.locale ?? ""}
-          onInput={(e) =>
-            onNumberChange({
-              ...numberFormatting,
-              locale: e.currentTarget.value,
-            })}
-        />
+        <LocaleSelector selectedLocale={selectedLocale} />
       </div>
       <div class="form-control w-full max-w-xs">
         <label class="label">

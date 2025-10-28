@@ -10,29 +10,25 @@ import {
   GroupLinePointer,
   GroupMargin,
 } from "@/group/mod.ts";
+import { CommandType } from "@/store/mod.ts";
 
-export function VirtualTableView(
-  {
+export function VirtualTableView(props: VirtualTableViewProps) {
+  const {
     data,
     columns: cols,
+    store,
     initialWidth,
     columnExtensions,
     columnAction,
     onLoadMore,
-    loading,
     rowHeight = 56,
     buffer = 5,
     scrollContainerRef,
-    selectedRows,
     rowIdentifier,
-    renderExpandedRow,
-    expandedRows,
     tableAddon,
-    cellFormatting,
     onColumnDrop,
-    groupStates,
-  }: VirtualTableViewProps,
-) {
+    selectable,
+  } = props;
   const columnWidths = useSignal<Record<string, number>>({});
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const tableRef = useRef<HTMLTableElement>(null); // For body table
@@ -44,8 +40,8 @@ export function VirtualTableView(
   }, [cols]);
 
   const formatting = useMemo(() => {
-    return cellFormatting;
-  }, [cellFormatting]);
+    return store.state.cellFormatting.value;
+  }, [store.state.cellFormatting.value]);
 
   const rowKey = useMemo(() => {
     if (rowIdentifier && columns.includes(rowIdentifier)) return rowIdentifier;
@@ -54,7 +50,7 @@ export function VirtualTableView(
   }, [columns, rowIdentifier]);
 
   const shownRows = useMemo(() => {
-    if (!groupStates?.value) return data;
+    if (!store.state.drilldowns?.value) return data;
 
     return data.filter((row: any) => {
       if (!row.$parent_id?.length) {
@@ -63,7 +59,7 @@ export function VirtualTableView(
 
       if (
         row.$parent_id.every(
-          (id: string) => groupStates.value[id],
+          (id: string) => store.state.drilldowns.value.includes(id),
         )
       ) {
         return true;
@@ -71,17 +67,19 @@ export function VirtualTableView(
 
       return false;
     });
-  }, [data, groupStates?.value]);
+  }, [data, store.state.drilldowns?.value]);
 
   const rowHeights = useMemo(() => {
     return shownRows.map((row) => {
-      if (expandedRows && expandedRows.value[row[rowKey]]) {
+      if (
+        props.expandable && store.state.expandedRows.value.includes(row[rowKey])
+      ) {
         // TODO: Replace 100 with a dynamic height calculation
         return rowHeight + 100; // 100 is a placeholder for the expanded content height
       }
       return rowHeight;
     });
-  }, [shownRows]);
+  }, [shownRows, store.state.expandedRows.value]);
 
   const { startIndex, endIndex, paddingTop, paddingBottom } =
     useVariableVirtualizer({
@@ -137,7 +135,7 @@ export function VirtualTableView(
 
     const loadMoreObserver = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !loading) {
+        if (entry.isIntersecting && !store.state.loading.value) {
           onLoadMore();
         }
       },
@@ -153,7 +151,7 @@ export function VirtualTableView(
         loadMoreObserver.unobserve(loadMoreRef.current);
       }
     };
-  }, [onLoadMore, loading]);
+  }, [onLoadMore, store.state.loading.value]);
 
   const handleResize = (column: string, newWidth: number) => {
     columnWidths.value = {
@@ -165,7 +163,7 @@ export function VirtualTableView(
   const totalWidth = Object.values(columnWidths.value).reduce(
     (sum, width) => sum + width,
     0,
-  ) + (selectedRows ? 50 : 0) + (renderExpandedRow ? 50 : 0) +
+  ) + (props.expandable ? 50 : 0) + (selectable ? 50 : 0) +
     (tableAddon ? 80 : 0);
 
   const tableStyle = {
@@ -189,7 +187,7 @@ export function VirtualTableView(
         >
           <thead>
             <tr>
-              {renderExpandedRow && (
+              {props.expandable && (
                 <th
                   style={{ width: "60px" }}
                   class="vski-expanded-row-th"
@@ -197,7 +195,7 @@ export function VirtualTableView(
                 </th>
               )}
 
-              {selectedRows && (
+              {selectable && (
                 <th
                   style={{ width: "60px" }}
                   class="vski-select-row-th"
@@ -205,19 +203,26 @@ export function VirtualTableView(
                   <input
                     type="checkbox"
                     class="checkbox"
-                    checked={selectedRows?.value.length === data.length}
+                    checked={store.state.selectedRows.value.length ===
+                      data.length}
                     onChange={(e) => {
                       if ((e.target as HTMLInputElement).checked) {
-                        selectedRows.value = data.map((row) => row[rowKey]);
+                        store.dispatch({
+                          type: CommandType.SELECTED_ROWS_SET,
+                          payload: data.map((row) => row[rowKey]),
+                        });
                       } else {
-                        selectedRows.value = [];
+                        store.dispatch({
+                          type: CommandType.SELECTED_ROWS_SET,
+                          payload: [],
+                        });
                       }
                     }}
                   />
                 </th>
               )}
 
-              {groupStates && (
+              {store.state.drilldowns && (
                 <ResizableHeader
                   key="$group_by"
                   column="$group_by"
@@ -263,15 +268,15 @@ export function VirtualTableView(
         >
           <tbody>
             <tr style={{ height: `${paddingTop}px` }}>
-              {renderExpandedRow && (
+              {props.expandable && (
                 <td style={{ width: "50px", height: 0, border: 0, padding: 0 }}>
                 </td>
               )}
-              {selectedRows && (
+              {selectable && (
                 <td style={{ width: "60px", height: 0, border: 0, padding: 0 }}>
                 </td>
               )}
-              {groupStates && (
+              {store.state.drilldowns && (
                 <td
                   style={{
                     width: columnWidths.value["$group_by"],
@@ -309,12 +314,12 @@ export function VirtualTableView(
             </tr>
             {shownRows.slice(startIndex, endIndex + 1).map((row, i) => {
               const rowIndex = startIndex + i;
-              const isSelected = selectedRows
-                ? selectedRows.value.includes(row[rowKey])
-                : false;
-              const isExpanded = expandedRows
-                ? expandedRows.value[row[rowKey]]
-                : false;
+              const isSelected = store.state.selectedRows.value.includes(
+                row[rowKey],
+              );
+              const isExpanded = store.state.expandedRows.value.includes(
+                row[rowKey],
+              );
 
               const rowContent = (
                 <tr
@@ -326,7 +331,7 @@ export function VirtualTableView(
                   ].join(" ")}
                   style={{ height: rowHeight }}
                 >
-                  {renderExpandedRow && expandedRows && (
+                  {props.expandable && (
                     <td
                       class="border border-base-300 align-center text-center p-0"
                       style={{ width: "50px" }}
@@ -334,18 +339,17 @@ export function VirtualTableView(
                       <button
                         type="button"
                         class="btn btn-ghost btn-md"
-                        onClick={() => {
-                          expandedRows.value = {
-                            ...expandedRows.value,
-                            [row[rowKey]]: !isExpanded,
-                          };
-                        }}
+                        onClick={() =>
+                          store.dispatch({
+                            type: CommandType.ROW_EXPANSION_TOGGLE,
+                            payload: row[rowKey],
+                          })}
                       >
                         {isExpanded ? "[-]" : "[+]"}
                       </button>
                     </td>
                   )}
-                  {selectedRows && (
+                  {selectable && (
                     <td
                       class="border border-base-300 align-center text-center p-0"
                       style={{ width: "50px" }}
@@ -357,22 +361,27 @@ export function VirtualTableView(
                         onChange={(e) => {
                           const checked =
                             (e.target as HTMLInputElement).checked;
+                          const currentSelectedRows =
+                            store.state.selectedRows.value;
                           if (checked) {
-                            selectedRows.value = [
-                              ...selectedRows.value,
-                              row[rowKey],
-                            ];
+                            store.dispatch({
+                              type: CommandType.SELECTED_ROWS_SET,
+                              payload: [...currentSelectedRows, row[rowKey]],
+                            });
                           } else {
-                            selectedRows.value = selectedRows.value.filter((
-                              id,
-                            ) => id !== row[rowKey]);
+                            store.dispatch({
+                              type: CommandType.SELECTED_ROWS_SET,
+                              payload: currentSelectedRows.filter((id) =>
+                                id !== row[rowKey]
+                              ),
+                            });
                           }
                         }}
                       />
                     </td>
                   )}
 
-                  {groupStates && (
+                  {store.state.drilldowns && (
                     <td
                       key="$group_by"
                       style={{
@@ -385,7 +394,9 @@ export function VirtualTableView(
                         {row.$is_group_root && (
                           <>
                             <GroupCaret
-                              active={groupStates.value[row.id]}
+                              active={store.state.drilldowns.value.includes(
+                                row.id,
+                              )}
                               size={16}
                               level={row.$group_level}
                             />
@@ -404,10 +415,16 @@ export function VirtualTableView(
                             <span
                               class="pt-1/2 cursor-pointer"
                               onClick={() => {
-                                groupStates.value = {
-                                  ...groupStates.value,
-                                  [row.id]: !groupStates.value[row.id],
-                                };
+                                const newDrilldowns =
+                                  store.state.drilldowns.value.includes(row.id)
+                                    ? store.state.drilldowns.value.filter((
+                                      id,
+                                    ) => id !== row.id)
+                                    : [...store.state.drilldowns.value, row.id];
+                                store.dispatch({
+                                  type: CommandType.DRILLDOWN_SET,
+                                  payload: newDrilldowns,
+                                });
                               }}
                             >
                               <span class="ml-1" />
@@ -490,16 +507,16 @@ export function VirtualTableView(
                 </tr>
               );
 
-              if (isExpanded && renderExpandedRow) {
+              if (isExpanded && props.expandable) {
                 return [
                   rowContent,
                   <tr key={`${rowIndex}-expanded`} class="transition-all">
                     <td
-                      colSpan={columns.length + (selectedRows ? 1 : 0) +
-                        (Boolean(renderExpandedRow) ? 1 : 0) +
-                        (groupStates ? 1 : 0)}
+                      colSpan={columns.length + (props.expandable ? 1 : 0) +
+                        (selectable ? 1 : 0) +
+                        (store.state.drilldowns ? 1 : 0)}
                     >
-                      {renderExpandedRow(row)}
+                      {props.renderExpand(row)}
                     </td>
                   </tr>,
                 ];
@@ -508,8 +525,8 @@ export function VirtualTableView(
             })}
             <tr style={{ height: `${paddingBottom}px` }}>
               <td
-                colSpan={columns.length + (selectedRows ? 1 : 0) +
-                  (renderExpandedRow ? 1 : 0) + (groupStates ? 1 : 0)}
+                colSpan={columns.length + (props.expandable ? 1 : 0) +
+                  (selectable ? 1 : 0)}
                 style={{ padding: 0, border: 0 }}
               >
               </td>
@@ -523,9 +540,9 @@ export function VirtualTableView(
             type="button"
             class="btn btn-primary"
             onClick={onLoadMore}
-            disabled={loading}
+            disabled={store.state.loading.value}
           >
-            {loading ? "Loading..." : "Load More"}
+            {store.state.loading.value ? "Loading..." : "Load More"}
           </button>
         </div>
       )}

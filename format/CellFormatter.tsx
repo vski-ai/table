@@ -47,23 +47,56 @@ function formatNumber(value: any, options?: NumberFormatting): string {
 }
 
 function formatDate(value: any, options: DateFormatting): string {
-  const { granularity, showAsSpan, locale } = options;
+  const { granularity, locale } = options;
   const d = new Date(value);
   if (isNaN(d.getTime())) return value;
 
-  if (showAsSpan) {
-    const d2 = new Date(d);
-    if (granularity === "year") d2.setFullYear(d.getFullYear() + 1);
-    else if (granularity === "month") d2.setMonth(d.getMonth() + 1);
-    else if (granularity === "week") d2.setDate(d.getDate() + 7);
-    else if (granularity === "day") d2.setDate(d.getDate() + 1);
-    else if (granularity === "hour") d2.setHours(d.getHours() + 1);
-    else if (granularity === "minute") d2.setMinutes(d.getMinutes() + 1);
-    else if (granularity === "second") d2.setSeconds(d.getSeconds() + 1);
-    return `${d.toLocaleString(locale)} - ${d2.toLocaleString(locale)}`;
+  const formatOptions: Intl.DateTimeFormatOptions = {};
+  switch (granularity) {
+    case "year":
+      formatOptions.year = "numeric";
+      break;
+    case "month":
+      formatOptions.year = "numeric";
+      formatOptions.month = "short";
+      break;
+    case "day":
+      formatOptions.year = "numeric";
+      formatOptions.month = "short";
+      formatOptions.day = "numeric";
+      break;
+    case "hour":
+      formatOptions.year = "numeric";
+      formatOptions.month = "short";
+      formatOptions.day = "numeric";
+      formatOptions.hour = "numeric";
+      break;
+    case "minute":
+      formatOptions.year = "numeric";
+      formatOptions.month = "short";
+      formatOptions.day = "numeric";
+      formatOptions.hour = "numeric";
+      formatOptions.minute = "numeric";
+      break;
+    case "second":
+      formatOptions.year = "numeric";
+      formatOptions.month = "short";
+      formatOptions.day = "numeric";
+      formatOptions.hour = "numeric";
+      formatOptions.minute = "numeric";
+      formatOptions.second = "numeric";
+      break;
+    case "auto":
+    default:
+      return d.toLocaleString(locale);
   }
 
-  return d.toLocaleString(locale);
+  try {
+    return new Intl.DateTimeFormat(locale, formatOptions).format(d);
+  } catch (e) {
+    console.error(e);
+    return d.toLocaleString(locale);
+  }
 }
 
 export const CellFormatter = (

@@ -21,6 +21,7 @@ export const Formatting = (
           aria-label="Style"
           value="0"
           onChange={setActive}
+          checked={active.value === "0"}
         />
         <input
           className="join-item btn w-1/3"
@@ -29,14 +30,16 @@ export const Formatting = (
           aria-label="Number"
           value="1"
           onChange={setActive}
+          checked={active.value === "1"}
         />
         <input
           className="join-item btn w-1/3"
           type="radio"
           name="options"
-          aria-label="Date/Time"
+          aria-label="Datetime"
           value="2"
           onChange={setActive}
+          checked={active.value === "2"}
         />
       </form>
 

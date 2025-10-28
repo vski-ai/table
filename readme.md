@@ -7,7 +7,8 @@ A high performant data table for Preact.
 
 ## WIP
 
-This is a prototype being shaped into a library. Core functionality and performance were tested in RND phase, now the goal is to make it usable.
+This is a prototype being shaped into a library. Core functionality and
+performance were tested in RND phase, now the goal is to make it usable.
 
 ```sh
 deno run dev
@@ -15,6 +16,6 @@ deno run dev
 
 ## Project structure
 
-There's no `src` or extra build setup. Deno and Vite handle it seamlessly 
-so we can use a `flat` project structure inspired by go. A directory is a module, root is a package.
-
+There's no `src` or extra build setup. Deno and Vite handle it seamlessly so we
+can use a `flat` project structure inspired by go. A directory is a module, root
+is a package.

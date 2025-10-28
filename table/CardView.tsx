@@ -2,26 +2,23 @@ import { useMemo, useRef } from "preact/hooks";
 import { useVariableVirtualizer } from "./useVariableVirtualizer.ts";
 import { VirtualTableViewProps } from "./types.ts";
 import { CellFormatter } from "@/format/CellFormatter.tsx";
+import { CommandType } from "@/store/mod.ts";
 
-interface CardViewProps extends VirtualTableViewProps {}
+type CardViewProps = VirtualTableViewProps;
 
-export function CardView(
-  {
+export function CardView(props: CardViewProps) {
+  const {
     data,
     columns,
+    store,
     onLoadMore,
-    loading,
     rowHeight = 60, // Adjusted for a card-like appearance
     buffer = 5,
     scrollContainerRef,
-    selectedRows,
     rowIdentifier,
-    renderExpandedRow,
-    expandedRows,
-    cellFormatting,
     formatColumnName,
-  }: CardViewProps,
-) {
+    selectable,
+  } = props;
   const tableRef = useRef<HTMLDivElement>(null);
 
   const rowKey = useMemo(() => {
@@ -31,13 +28,12 @@ export function CardView(
   }, [columns, rowIdentifier]);
 
   const rowHeights = useMemo(() => {
-    if (!expandedRows) return data.map(() => rowHeight);
     return data.map((row) => {
-      const isExpanded = expandedRows.value[row[rowKey]];
+      const isExpanded = store.state.expandedRows.value.includes(row[rowKey]);
       // Expanded height can be dynamic based on content, 200 is a placeholder
       return isExpanded ? rowHeight + 200 : rowHeight;
     });
-  }, [data, expandedRows, rowHeight, rowKey]);
+  }, [data, store.state.expandedRows.value, rowHeight, rowKey]);
 
   const { startIndex, endIndex, paddingTop, paddingBottom } =
     useVariableVirtualizer({
@@ -59,12 +55,8 @@ export function CardView(
       <div style={{ height: `${paddingTop}px` }} />
       {visibleData.map((row, i) => {
         const rowIndex = startIndex + i;
-        const isSelected = selectedRows
-          ? selectedRows.value.includes(row[rowKey])
-          : false;
-        const isExpanded = expandedRows
-          ? expandedRows.value[row[rowKey]]
-          : false;
+        const isSelected = store.state.selectedRows.value.includes(row[rowKey]);
+        const isExpanded = store.state.expandedRows.value.includes(row[rowKey]);
 
         const rowContent = (
           <div
@@ -76,16 +68,14 @@ export function CardView(
           >
             <div
               class="collapse-title font-medium flex items-center"
-              onClick={() => {
-                if (expandedRows) {
-                  expandedRows.value = {
-                    ...expandedRows.value,
-                    [row[rowKey]]: !isExpanded,
-                  };
-                }
-              }}
+              onClick={() =>
+                props.expandable &&
+                store.dispatch({
+                  type: CommandType.ROW_EXPANSION_TOGGLE,
+                  payload: row[rowKey],
+                })}
             >
-              {selectedRows && (
+              {selectable && (
                 <input
                   type="checkbox"
                   class="checkbox mr-4"
@@ -94,12 +84,19 @@ export function CardView(
                   onChange={(e) => {
                     e.stopPropagation(); // Prevent opening the card
                     const checked = (e.target as HTMLInputElement).checked;
+                    const currentSelectedRows = store.state.selectedRows.value;
                     if (checked) {
-                      selectedRows.value = [...selectedRows.value, row[rowKey]];
+                      store.dispatch({
+                        type: CommandType.SELECTED_ROWS_SET,
+                        payload: [...currentSelectedRows, row[rowKey]],
+                      });
                     } else {
-                      selectedRows.value = selectedRows.value.filter((id) =>
-                        id !== row[rowKey]
-                      );
+                      store.dispatch({
+                        type: CommandType.SELECTED_ROWS_SET,
+                        payload: currentSelectedRows.filter((id) =>
+                          id !== row[rowKey]
+                        ),
+                      });
                     }
                   }}
                 />
@@ -123,16 +120,16 @@ export function CardView(
                       >
                         <CellFormatter
                           value={row[col]}
-                          formatting={cellFormatting?.value[col]}
+                          formatting={store.state.cellFormatting.value[col]}
                         />
                       </span>
                     </div>
                   );
                 })}
               </div>
-              {isExpanded && renderExpandedRow && (
+              {isExpanded && props.expandable && (
                 <div class="mt-4">
-                  {renderExpandedRow(row)}
+                  {props.renderExpand(row)}
                 </div>
               )}
             </div>
@@ -148,9 +145,9 @@ export function CardView(
             type="button"
             class="btn btn-primary"
             onClick={onLoadMore}
-            disabled={loading}
+            disabled={store.state.loading.value}
           >
-            {loading ? "Loading..." : "Load More"}
+            {store.state.loading.value ? "Loading..." : "Load More"}
           </button>
         </div>
       )}

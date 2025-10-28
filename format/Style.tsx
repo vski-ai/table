@@ -38,24 +38,24 @@ const StyleEditor = (
           onStyleChange({ ...style, color: e.currentTarget.value })}
       />
       <div class="btn-group flex gap-1">
-        <button
-          class={`btn ${isBold ? "btn-active" : ""}`}
+        <a
+          class={`btn ${isBold ? "btn-accent" : ""}`}
           onClick={toggleBold}
         >
           B
-        </button>
-        <button
-          class={`btn ${isItalic ? "btn-active" : ""}`}
+        </a>
+        <a
+          class={`btn ${isItalic ? "btn-accent" : ""}`}
           onClick={toggleItalic}
         >
           I
-        </button>
-        <button
-          class={`btn ${isUnderline ? "btn-active" : ""}`}
+        </a>
+        <a
+          class={`btn ${isUnderline ? "btn-accent" : ""}`}
           onClick={toggleUnderline}
         >
           U
-        </button>
+        </a>
       </div>
     </div>
   );
@@ -137,7 +137,7 @@ export const StyleFormatting = (
       />
 
       {style.conditions.map((condition: any, index: number) => (
-        <div class="flex flex-col gap-2 mt-2 border border-dashed rounded w-full p-2">
+        <div class="flex flex-col gap-2 mt-2 shadow border border-neutral/50 rounded w-full p-3">
           <div class="flex gap-2">
             <select
               class="select select-bordered"
@@ -172,19 +172,20 @@ export const StyleFormatting = (
                 onConditionChange(index, { ...condition, style: newStyle });
               }}
             />
-            <button
-              class="btn btn-ghost"
-              onClick={(e) => {
-                e.stopPropagation();
-                removeCondition(index);
-              }}
-            >
-              <Trash2Icon />
-            </button>
           </div>
+          <a
+            class="btn btn-xs btn-ghost mt-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              removeCondition(index);
+            }}
+          >
+            <Trash2Icon style={{ width: 12 }} />
+            Remove condition
+          </a>
         </div>
       ))}
-      <button class="btn mt-2" onClick={addCondition}>Add Condition</button>
+      <a class="btn mt-2" onClick={addCondition}>Add Condition</a>
     </div>
   );
 };

@@ -1,15 +1,34 @@
 import { faker } from "@faker-js/faker";
 
+interface GroupDataItem {
+  id: string;
+  $parent_id: string[] | null;
+  $group_by: string;
+  $group_level: number;
+  name: string;
+  company: string;
+  sex: string;
+  user: string;
+  bonus: string;
+  hours: number;
+  timestamp: string;
+  $is_group_root?: boolean;
+}
+
 // Let's define a recursive function to generate nested group data
-export function generateGroupData(level = 0, maxLevel = 3, parentId = null) {
-  const items = [];
+export function generateGroupData(
+  level = 0,
+  maxLevel = 3,
+  parentId: string[] | null = null,
+): GroupDataItem[] {
+  const items: GroupDataItem[] = [];
   const numItems = 5;
   const groups = ["company", "sex", "name", "hours"];
   for (let i = 0; i < numItems; i++) {
     const id = faker.string.uuid();
     const isGroup = level < maxLevel && faker.datatype.boolean();
 
-    const baseItem = {
+    const baseItem: GroupDataItem = {
       id,
       $parent_id: parentId,
       $group_by: groups[level],
@@ -25,10 +44,10 @@ export function generateGroupData(level = 0, maxLevel = 3, parentId = null) {
     if (isGroup) {
       baseItem.$is_group_root = true;
       items.push(baseItem);
-      const children = generateGroupData(
+      const children: GroupDataItem[] = generateGroupData(
         level + 1,
         maxLevel,
-        [parentId, id].filter(Boolean).flat(),
+        [...(parentId ?? []), id],
       );
       items.push(...children);
     } else {

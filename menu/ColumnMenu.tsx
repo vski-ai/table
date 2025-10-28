@@ -1,10 +1,10 @@
-import { Signal } from "@preact/signals";
-import { XYModal } from "@/popup/XYModal.tsx";
+import { Signal, useSignal } from "@preact/signals";
+import { XYModal } from "./XYModal.tsx";
 import { Formatting } from "../format/index.tsx";
 
 export interface ColumnMenuProps {
   column: string;
-  openSignal: Signal<boolean>;
+  openSignal?: Signal<boolean>;
   store: ColumnMenuStore;
 }
 
@@ -14,7 +14,7 @@ export interface ColumnMenuStore {
 
 export const ColumnMenu = ({
   column,
-  openSignal,
+  openSignal = useSignal(false),
   store,
 }: ColumnMenuProps) => {
   const target = `#column-header-${column}`;
@@ -23,6 +23,9 @@ export const ColumnMenu = ({
     <XYModal
       target={target}
       openSignal={openSignal}
+      margins={{
+        top: 72,
+      }}
     >
       <div tabIndex={1} className="tabs-lift tabs w-full min-w-full">
         <label className="tab">

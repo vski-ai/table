@@ -7,6 +7,7 @@ export interface XYModalProps {
   target: string;
   openSignal: Signal<boolean>;
   children: JSX.Element | JSX.Element[];
+  margins?: Partial<Record<"top" | "x", number>>;
 }
 
 /**
@@ -19,7 +20,23 @@ export interface XYModalProps {
  *   to get rid of a scroll (or control it programmatically) when user
  *   setups columns, grouping and other things that would grow space or change format.
  */
-export const XYModal = ({ target, openSignal, children }: XYModalProps) => {
+export const XYModal = ({
+  target,
+  openSignal,
+  children,
+  margins = {
+    x: 6,
+    top: 12,
+  },
+}: XYModalProps) => {
+  const margin = {
+    ...{
+      x: 6,
+      top: 12,
+    },
+    ...margins,
+  };
+
   const [mounted, setMounted] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const topPosition = useSignal(0);
@@ -51,10 +68,9 @@ export const XYModal = ({ target, openSignal, children }: XYModalProps) => {
       if (!modalRef.current) {
         return;
       }
-      console.log(12);
-      modalRef.current?.removeEventListener("blur", onBlur);
-      modalRef.current?.addEventListener("blur", onBlur);
-      modalRef.current?.removeEventListener("mousedown", keepFocus);
+      modalRef.current.removeEventListener("blur", onBlur);
+      modalRef.current.addEventListener("blur", onBlur);
+      modalRef.current.removeEventListener("mousedown", keepFocus);
       modalRef.current.addEventListener("mousedown", keepFocus);
 
       const el = document.querySelector(target);
@@ -89,9 +105,9 @@ export const XYModal = ({ target, openSignal, children }: XYModalProps) => {
     <div className="modal modal-open bg-transparent pointer-events-none">
       <div
         style={{
-          width: boxWidth.value - 12,
-          top: topPosition.value + 64 + 12,
-          left: leftPosition.value + 6,
+          width: boxWidth.value - margin.x * 2,
+          top: topPosition.value + margin.top,
+          left: leftPosition.value + margin.x,
         }}
         tabIndex={0}
         ref={modalRef}

@@ -1,11 +1,21 @@
-import { Signal } from "@preact/signals";
+import { Signal, useSignal, useSignalEffect } from "@preact/signals";
 import { DateFormatting as DateFormattingType } from "./types.ts";
+import { LocaleSelector } from "@/menu/LocaleSelector.tsx";
+import { GranularitySelector } from "@/menu/GranularitySelector.tsx";
 
 export const DateFormatting = (
   { column, formatting }: { column: string; formatting: Signal<any> },
 ) => {
   const dateFormatting = formatting.value[column]?.date ||
-    { granularity: "auto", showAsSpan: false };
+    { granularity: "auto" };
+  const selectedLocale = useSignal(dateFormatting.locale);
+
+  useSignalEffect(() => {
+    onDateChange({
+      ...dateFormatting,
+      locale: selectedLocale.value,
+    });
+  });
 
   const onDateChange = (newDateFormatting: DateFormattingType) => {
     formatting.value = {
@@ -23,55 +33,20 @@ export const DateFormatting = (
         <label class="label">
           <span class="label-text">Granularity</span>
         </label>
-        <select
-          class="select select-bordered"
+        <GranularitySelector
           value={dateFormatting.granularity}
-          onChange={(e) =>
+          onChange={(granularity) =>
             onDateChange({
               ...dateFormatting,
-              granularity: e.currentTarget.value,
+              granularity,
             })}
-        >
-          <option value="auto">Auto</option>
-          <option value="year">Year</option>
-          <option value="month">Month</option>
-          <option value="week">Week</option>
-          <option value="day">Day</option>
-          <option value="hour">Hour</option>
-          <option value="minute">Minute</option>
-          <option value="second">Second</option>
-        </select>
-      </div>
-      <div class="form-control w-full">
-        <label class="label cursor-pointer">
-          <span class="label-text">Show as span</span>
-          <input
-            type="checkbox"
-            class="toggle"
-            checked={dateFormatting.showAsSpan}
-            onChange={(e) =>
-              onDateChange({
-                ...dateFormatting,
-                showAsSpan: e.currentTarget.checked,
-              })}
-          />
-        </label>
+        />
       </div>
       <div class="form-control flex flex-col gap-1 w-full">
         <label class="label">
           <span class="label-text">Locale</span>
         </label>
-        <input
-          type="text"
-          placeholder="e.g., en-US, fr-FR"
-          class="input input-bordered w-full max-w-xs"
-          value={dateFormatting.locale ?? ""}
-          onInput={(e) =>
-            onDateChange({
-              ...dateFormatting,
-              locale: e.currentTarget.value,
-            })}
-        />
+        <LocaleSelector selectedLocale={selectedLocale} />
       </div>
     </div>
   );

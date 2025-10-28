@@ -28,7 +28,6 @@ export interface StyleCondition {
 
 export interface DateFormatting {
   granularity: string;
-  showAsSpan: boolean;
   locale?: string;
 }
 

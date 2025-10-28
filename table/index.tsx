@@ -4,35 +4,37 @@ import { TablePlaceholder } from "./TablePlaceholder.tsx";
 import { VirtualTableView } from "./VirtualTableView.tsx";
 import { VirtualTableViewProps } from "./types.ts";
 
-export function DynamicTable(
-  {
+export function DynamicTable(props: VirtualTableViewProps) {
+  const {
     data,
     columns,
+    store,
     initialWidth,
     columnExtensions,
     columnAction,
     onLoadMore,
-    loading,
     rowHeight,
     buffer,
     scrollContainerRef,
-    selectedRows,
     rowIdentifier,
-    renderExpandedRow,
-    expandedRows,
     tableAddon,
-    cellFormatting,
-    groupStates,
-  }: VirtualTableViewProps,
-) {
+  } = props;
   const isMobile = useMediaQuery("(max-width: 980px)");
+  store.state.isMobile.value = isMobile.value;
 
-  if (loading && (!data || data.length === 0)) {
+  const filteredColumns = columns.filter(
+    (col) =>
+      !["$group_by", "$group_level", "$parent_id", "$is_group_root"].includes(
+        col,
+      ),
+  );
+
+  if (store.state.loading.value && (!data || data.length === 0)) {
     return (
       <TablePlaceholder
-        columns={columns}
-        selectedRows={selectedRows}
-        renderExpandedRow={renderExpandedRow}
+        columns={filteredColumns}
+        selectedRows={store.state.selectedRows}
+        renderExpand={props.expandable ? props.renderExpand : undefined}
       />
     );
   }
@@ -44,43 +46,16 @@ export function DynamicTable(
   if (isMobile.value) {
     return (
       <CardView
-        data={data}
-        columns={columns}
-        onLoadMore={onLoadMore}
-        loading={loading}
-        selectedRows={selectedRows}
-        rowIdentifier={rowIdentifier}
-        renderExpandedRow={renderExpandedRow}
-        expandedRows={expandedRows}
-        rowHeight={rowHeight}
-        buffer={buffer}
-        scrollContainerRef={scrollContainerRef}
-        tableAddon={tableAddon}
-        columnAction={columnAction}
-        cellFormatting={cellFormatting}
+        {...props}
+        columns={filteredColumns}
       />
     );
   }
 
   return (
     <VirtualTableView
-      data={data}
-      columns={columns}
-      initialWidth={initialWidth}
-      columnExtensions={columnExtensions}
-      onLoadMore={onLoadMore}
-      loading={loading}
-      rowHeight={rowHeight}
-      buffer={buffer}
-      scrollContainerRef={scrollContainerRef}
-      selectedRows={selectedRows}
-      rowIdentifier={rowIdentifier}
-      renderExpandedRow={renderExpandedRow}
-      expandedRows={expandedRows}
-      tableAddon={tableAddon}
-      columnAction={columnAction}
-      cellFormatting={cellFormatting}
-      groupStates={groupStates}
+      {...props}
+      columns={filteredColumns}
     />
   );
 }
