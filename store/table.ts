@@ -1,22 +1,48 @@
-import { signal } from "@preact/signals";
+import { effect, signal } from "@preact/signals";
 import { Command, CommandType } from "./commands.ts";
+import { StorageAdapter } from "./storage.ts";
 import { TableState, TableStore } from "./types.ts";
 
-export function createTableStore(): TableStore {
+export function createTableStore(
+  storage?: StorageAdapter,
+  tableId?: string,
+): TableStore {
+  const initialState = storage && tableId
+    ? storage.getItem<TableState>(
+      `tableState_${tableId}`,
+    )
+    : null;
+
   const state: TableState = {
-    drilldowns: signal([]),
-    filters: signal([]),
-    sorting: signal([]),
-    columnOrder: signal([]),
-    columnVisibility: signal({}),
+    drilldowns: signal(initialState?.drilldowns || []),
+    filters: signal(initialState?.filters || []),
+    sorting: signal(initialState?.sorting || []),
+    columnOrder: signal(initialState?.columnOrder || []),
+    columnVisibility: signal(initialState?.columnVisibility || {}),
     loading: signal(false),
     isMobile: signal(false),
     selectedRows: signal([]),
     expandedRows: signal([]),
-    cellFormatting: signal({}),
+    cellFormatting: signal(initialState?.cellFormatting || {}),
+    columnWidths: signal(initialState?.columnWidths || {}),
   };
 
   const history: Command[] = [];
+
+  effect(() => {
+    if (storage && tableId) {
+      const currentState = {
+        drilldowns: state.drilldowns.value,
+        filters: state.filters.value,
+        sorting: state.sorting.value,
+        columnOrder: state.columnOrder.value,
+        columnVisibility: state.columnVisibility.value,
+        cellFormatting: state.cellFormatting.value,
+        columnWidths: state.columnWidths.value,
+      };
+      storage.setItem(`tableState_${tableId}`, currentState);
+    }
+  });
 
   const dispatch = (command: Command) => {
     history.push(command);
@@ -42,6 +68,9 @@ export function createTableStore(): TableStore {
         break;
       case CommandType.COLUMN_VISIBILITY_SET:
         state.columnVisibility.value = command.payload;
+        break;
+      case CommandType.COLUMN_WIDTHS_SET:
+        state.columnWidths.value = command.payload;
         break;
 
       // View

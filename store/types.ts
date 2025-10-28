@@ -13,6 +13,7 @@ export interface TableState {
   selectedRows: Signal<string[]>;
   expandedRows: Signal<string[]>;
   cellFormatting: Signal<Record<string, CellFormatting>>;
+  columnWidths: Signal<Record<string, number>>;
 }
 
 export interface TableStore {

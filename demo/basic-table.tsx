@@ -1,10 +1,13 @@
 import { DynamicTable } from "@/table/mod.ts";
-import { createTableStore } from "@/store/mod.ts";
+import { createTableStore, LocalStorageAdapter } from "@/store/mod.ts";
 import { generateGroupData } from "./mock/groupable-table.ts";
 import { useMemo } from "preact/hooks";
 
 export const BasicTable = () => {
-  const tableStore = createTableStore();
+  const tableStore = createTableStore(
+    new LocalStorageAdapter(),
+    "basic-table",
+  );
   const data = useMemo(() => generateGroupData(), []);
   const allColumns = Object.keys(data?.[0] ?? {});
 

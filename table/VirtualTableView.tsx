@@ -29,11 +29,13 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     onColumnDrop,
     selectable,
   } = props;
-  const columnWidths = useSignal<Record<string, number>>({});
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const tableRef = useRef<HTMLTableElement>(null); // For body table
   const headerContainerRef = useRef<HTMLDivElement>(null);
   const bodyContainerRef = useRef<HTMLDivElement>(null);
+  const resizingColumn = useSignal<{ column: string; width: number } | null>(
+    null,
+  );
 
   const columns = useMemo(() => {
     return cols;
@@ -106,27 +108,29 @@ export function VirtualTableView(props: VirtualTableViewProps) {
   }, []);
 
   useEffect(() => {
-    const currentWidths = columnWidths.peek();
+    const currentWidths = { ...store.state.columnWidths.peek() };
     let needsUpdate = false;
-    const newWidths = { ...currentWidths };
     const defaultWidth = 250;
     const _columns = [...columns, "$group_by"];
     for (const col of _columns) {
-      if (newWidths[col] !== undefined) continue;
-      newWidths[col] = defaultWidth;
+      if (currentWidths[col] !== undefined) continue;
+      currentWidths[col] = defaultWidth;
       needsUpdate = true;
     }
 
-    const currentColsInState = Object.keys(newWidths);
+    const currentColsInState = Object.keys(currentWidths);
     for (const col of currentColsInState) {
       if (!_columns.includes(col)) {
-        delete newWidths[col];
+        delete currentWidths[col];
         needsUpdate = true;
       }
     }
 
     if (needsUpdate) {
-      columnWidths.value = newWidths;
+      store.dispatch({
+        type: CommandType.COLUMN_WIDTHS_SET,
+        payload: currentWidths,
+      });
     }
   }, [columns, initialWidth]);
 
@@ -154,14 +158,29 @@ export function VirtualTableView(props: VirtualTableViewProps) {
   }, [onLoadMore, store.state.loading.value]);
 
   const handleResize = (column: string, newWidth: number) => {
-    columnWidths.value = {
-      ...columnWidths.value,
-      [column]: newWidth,
-    };
+    resizingColumn.value = null;
+    store.dispatch({
+      type: CommandType.COLUMN_WIDTHS_SET,
+      payload: {
+        ...store.state.columnWidths.value,
+        [column]: newWidth,
+      },
+    });
   };
 
-  const totalWidth = Object.values(columnWidths.value).reduce(
-    (sum, width) => sum + width,
+  const handleResizeUpdate = (column: string, newWidth: number) => {
+    resizingColumn.value = { column, width: newWidth };
+  };
+
+  const getColumnWidth = (col: string) => {
+    if (resizingColumn.value && resizingColumn.value.column === col) {
+      return resizingColumn.value.width;
+    }
+    return store.state.columnWidths.value[col];
+  };
+
+  const totalWidth = Object.entries(store.state.columnWidths.value).reduce(
+    (sum, [col, width]) => sum + getColumnWidth(col),
     0,
   ) + (props.expandable ? 50 : 0) + (selectable ? 50 : 0) +
     (tableAddon ? 80 : 0);
@@ -170,7 +189,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     width: `${totalWidth}px`,
     ...columns.reduce((acc, col) => {
       const sanitizedCol = col.replace(/[^a-zA-Z0-9]/g, "_");
-      acc[`--col-width-${sanitizedCol}`] = `${columnWidths.value[col]}px`;
+      acc[`--col-width-${sanitizedCol}`] = `${getColumnWidth(col)}px`;
       return acc;
     }, {} as Record<string, string>),
   };
@@ -226,8 +245,9 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                 <ResizableHeader
                   key="$group_by"
                   column="$group_by"
-                  width={columnWidths?.value["$group_by"]}
+                  width={getColumnWidth("$group_by")}
                   onResize={handleResize}
+                  onResizeUpdate={handleResizeUpdate}
                 >
                   <span></span>
                 </ResizableHeader>
@@ -237,8 +257,9 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                 <ResizableHeader
                   key={col}
                   column={col}
-                  width={columnWidths?.value[col]}
+                  width={getColumnWidth(col)}
                   onResize={handleResize}
+                  onResizeUpdate={handleResizeUpdate}
                   extensions={columnExtensions}
                   action={columnAction}
                   onColumnDrop={onColumnDrop}
@@ -279,7 +300,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
               {store.state.drilldowns && (
                 <td
                   style={{
-                    width: columnWidths.value["$group_by"],
+                    width: getColumnWidth("$group_by"),
                     height: 0,
                     border: 0,
                     padding: 0,
@@ -290,7 +311,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
               {columns.map((col) => (
                 <td
                   style={{
-                    width: columnWidths.value[col],
+                    width: getColumnWidth(col),
                     height: 0,
                     border: 0,
                     padding: 0,

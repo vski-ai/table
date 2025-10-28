@@ -9,6 +9,7 @@ export interface ResizableHeaderProps {
   extensions?: (col: string) => JSX.Element;
   action?: (col: string) => JSX.Element;
   onResize: (column: string, newWidth: number) => void;
+  onResizeUpdate: (column: string, newWidth: number) => void;
   onColumnDrop?: (draggedColumn: string, targetColumn: string) => void;
   formatColumnName?: (a: string) => string;
   children?: any;
@@ -19,6 +20,7 @@ export function ResizableHeader(
     column,
     width,
     onResize,
+    onResizeUpdate,
     extensions,
     action,
     onColumnDrop,
@@ -43,12 +45,14 @@ export function ResizableHeader(
     const handleMouseMove = (moveEvent: MouseEvent) => {
       const newWidth = startWidth.value + (moveEvent.clientX - startX.value);
       if (newWidth > 50) { // Minimum column width
-        onResize(column, newWidth);
+        onResizeUpdate(column, newWidth);
       }
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (moveEvent: MouseEvent) => {
       isResizing.value = false;
+      const newWidth = startWidth.value + (moveEvent.clientX - startX.value);
+      onResize(column, newWidth > 50 ? newWidth : 50);
       globalThis.removeEventListener("mousemove", handleMouseMove);
       globalThis.removeEventListener("mouseup", handleMouseUp);
     };
