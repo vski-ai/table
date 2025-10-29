@@ -18,6 +18,7 @@ export const BasicTable = () => {
         columns={allColumns}
         store={tableStore}
         selectable
+        sortable
       />
     </div>
   );

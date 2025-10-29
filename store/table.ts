@@ -8,7 +8,7 @@ export function createTableStore(
   tableId?: string,
 ): TableStore {
   const initialState = storage && tableId
-    ? storage.getItem<TableState>(
+    ? storage.getItem<Record<string, any>>(
       `tableState_${tableId}`,
     )
     : null;
@@ -17,6 +17,7 @@ export function createTableStore(
     drilldowns: signal(initialState?.drilldowns || []),
     filters: signal(initialState?.filters || []),
     sorting: signal(initialState?.sorting || []),
+    leafSorting: signal(initialState?.leafSorting || {}),
     columnOrder: signal(initialState?.columnOrder || []),
     columnVisibility: signal(initialState?.columnVisibility || {}),
     loading: signal(false),

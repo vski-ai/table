@@ -1,11 +1,12 @@
 import { Signal } from "@preact/signals";
 import { Command } from "./commands.ts";
 import { CellFormatting } from "@/format/types.ts";
-
+import { SortState } from "@/sorting/mod.ts";
 export interface TableState {
   drilldowns: Signal<string[]>;
-  filters: Signal<any[]>;
-  sorting: Signal<any[]>;
+  filters: Signal<Record<string, string>>;
+  sorting: Signal<SortState>;
+  leafSorting: Signal<Record<string, SortState>>;
   columnOrder: Signal<string[]>;
   columnVisibility: Signal<Record<string, boolean>>;
   loading: Signal<boolean>;

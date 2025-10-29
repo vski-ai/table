@@ -15,6 +15,7 @@ export type VirtualTableViewProps =
     groupStates?: Signal<Record<string, boolean>>;
     rowIdentifier?: string;
     tableAddon?: JSX.Element;
+    sortable?: boolean;
     onColumnDrop?: (draggedColumn: string, targetColumn: string) => void;
     formatColumnName?: (a: string) => string;
     columnExtensions?: (col: string) => JSX.Element;

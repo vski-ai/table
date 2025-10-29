@@ -1,5 +1,5 @@
 import { useMemo, useRef } from "preact/hooks";
-import { useVariableVirtualizer } from "./useVariableVirtualizer.ts";
+import { useVariableVirtualizer } from "../hooks/useVariableVirtualizer.ts";
 import { VirtualTableViewProps } from "./types.ts";
 import { CellFormatter } from "@/format/CellFormatter.tsx";
 import { CommandType } from "@/store/mod.ts";

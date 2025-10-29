@@ -1,6 +1,6 @@
 import { useSignal } from "@preact/signals";
 import { useEffect, useMemo, useRef } from "preact/hooks";
-import { useVariableVirtualizer } from "./useVariableVirtualizer.ts";
+import { useVariableVirtualizer } from "../hooks/useVariableVirtualizer.ts";
 import { VirtualTableViewProps } from "./types.ts";
 import { CellFormatter } from "@/format/CellFormatter.tsx";
 import { ResizableHeader } from "./ResizableHeader.tsx";
@@ -11,6 +11,7 @@ import {
   GroupMargin,
 } from "@/group/mod.ts";
 import { CommandType } from "@/store/mod.ts";
+import { ColumnSorter, sorter } from "@/sorting/mod.ts";
 
 export function VirtualTableView(props: VirtualTableViewProps) {
   const {
@@ -28,6 +29,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     tableAddon,
     onColumnDrop,
     selectable,
+    sortable,
   } = props;
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const tableRef = useRef<HTMLTableElement>(null); // For body table
@@ -35,6 +37,29 @@ export function VirtualTableView(props: VirtualTableViewProps) {
   const bodyContainerRef = useRef<HTMLDivElement>(null);
   const resizingColumn = useSignal<{ column: string; width: number } | null>(
     null,
+  );
+
+  // TODO: first filter then sort
+  const sortedData = useMemo(() => {
+    return sortable ? sorter({ data, store: store.state }) : data;
+  }, [
+    data,
+    store.state.sorting.value,
+    store.state.leafSorting.value,
+  ]);
+
+  const renderColumnAction = (col: string) => (
+    <>
+      {sortable
+        ? (
+          <ColumnSorter
+            column={col}
+            store={store.state}
+          />
+        )
+        : null}
+      {columnAction?.(col)}
+    </>
   );
 
   const columns = useMemo(() => {
@@ -52,9 +77,9 @@ export function VirtualTableView(props: VirtualTableViewProps) {
   }, [columns, rowIdentifier]);
 
   const shownRows = useMemo(() => {
-    if (!store.state.drilldowns?.value) return data;
+    if (!store.state.drilldowns?.value) return sortedData;
 
-    return data.filter((row: any) => {
+    const shown = sortedData.filter((row: any) => {
       if (!row.$parent_id?.length) {
         return true;
       }
@@ -69,7 +94,14 @@ export function VirtualTableView(props: VirtualTableViewProps) {
 
       return false;
     });
-  }, [data, store.state.drilldowns?.value]);
+    return shown;
+  }, [
+    sortedData,
+    sortable,
+    store.state.sorting.value,
+    store.state.leafSorting.value,
+    store.state.drilldowns?.value,
+  ]);
 
   const rowHeights = useMemo(() => {
     return shownRows.map((row) => {
@@ -261,7 +293,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                   onResize={handleResize}
                   onResizeUpdate={handleResizeUpdate}
                   extensions={columnExtensions}
-                  action={columnAction}
+                  action={renderColumnAction}
                   onColumnDrop={onColumnDrop}
                 />
               ))}
@@ -490,7 +522,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                           width: `var(--col-width-${sanitizedCol})`,
                           height: `${rowHeight}px`,
                         }}
-                        class="border border-base-300"
+                        class="border border-base-300 relative"
                       >
                         <div
                           class="truncate"
@@ -507,6 +539,23 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                             value={row[col]}
                             formatting={formatting?.[col]}
                           />
+
+                          {row.$is_group_root && (
+                            <>
+                              <ColumnSorter
+                                style={{
+                                  top: rowHeight / 2 - 6,
+                                  width: 12,
+                                  height: 12,
+                                }}
+                                className="cursor-pointer opacity-50 hover:opacity-100 transition-opacity p-0 w-3 h-3 btn btn-ghost absolute right-2"
+                                activeClassName="!opacity-100 !text-accent"
+                                column={col}
+                                store={store.state}
+                                leafId={row.id}
+                              />
+                            </>
+                          )}
                         </div>
                       </td>
                     );
