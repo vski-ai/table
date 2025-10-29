@@ -1,5 +1,11 @@
 import { useSignal } from "@preact/signals";
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "preact/hooks";
 import { useVariableVirtualizer } from "../hooks/useVariableVirtualizer.ts";
 import { VirtualTableViewProps } from "./types.ts";
 import { ResizableHeader } from "./ResizableHeader.tsx";
@@ -13,7 +19,7 @@ import { Row } from "./Row.tsx";
 export function VirtualTableView(props: VirtualTableViewProps) {
   const {
     data,
-    columns: cols,
+    columns,
     store,
     initialWidth,
     columnExtensions,
@@ -53,7 +59,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     store.state.leafSorting.value,
   ]);
 
-  const renderColumnAction = (col: string) => (
+  const renderColumnAction = useCallback((col: string) => (
     <>
       {sortable
         ? (
@@ -65,22 +71,16 @@ export function VirtualTableView(props: VirtualTableViewProps) {
         : null}
       {columnAction?.(col)}
     </>
-  );
+  ), [sortable]);
 
-  const renderColumnExtension = (col: string) => (
+  const renderColumnExtension = useCallback((col: string) => (
     <>
       <ColumnMenu column={col} store={store.state} />
       {columnExtensions?.(col)}
     </>
-  );
+  ), []);
 
-  const columns = useMemo(() => {
-    return cols;
-  }, [cols]);
-
-  const formatting = useMemo(() => {
-    return store.state.cellFormatting.value;
-  }, [store.state.cellFormatting.value]);
+  const formatting = store.state.cellFormatting.value;
 
   const rowKey = useMemo(() => {
     if (rowIdentifier && columns.includes(rowIdentifier)) return rowIdentifier;
@@ -144,21 +144,6 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     drilldowns: store.state.drilldowns.value,
   });
 
-  // Effect to sync horizontal scroll
-  useEffect(() => {
-    const bodyEl = bodyContainerRef.current;
-    if (!bodyEl) return;
-
-    const handleScroll = () => {
-      if (headerContainerRef.current) {
-        headerContainerRef.current.scrollLeft = bodyEl.scrollLeft;
-      }
-    };
-
-    bodyEl.addEventListener("scroll", handleScroll);
-    return () => bodyEl.removeEventListener("scroll", handleScroll);
-  }, []);
-
   useEffect(() => {
     const currentWidths = { ...store.state.columnWidths.peek() };
     let needsUpdate = false;
@@ -189,6 +174,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
   useEffect(() => {
     if (!onLoadMore) return;
 
+    const loadMoreEl = loadMoreRef.current;
     const loadMoreObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !store.state.loading.value) {
@@ -198,18 +184,18 @@ export function VirtualTableView(props: VirtualTableViewProps) {
       { root: null, rootMargin: "0px", threshold: 1.0 },
     );
 
-    if (loadMoreRef.current) {
-      loadMoreObserver.observe(loadMoreRef.current);
+    if (loadMoreEl) {
+      loadMoreObserver.observe(loadMoreEl);
     }
 
     return () => {
-      if (loadMoreRef.current) {
-        loadMoreObserver.unobserve(loadMoreRef.current);
+      if (loadMoreEl) {
+        loadMoreObserver.unobserve(loadMoreEl);
       }
     };
   }, [onLoadMore, store.state.loading.value]);
 
-  const handleResize = (column: string, newWidth: number) => {
+  const handleResize = useCallback((column: string, newWidth: number) => {
     resizingColumn.value = null;
     store.dispatch({
       type: CommandType.COLUMN_WIDTHS_SET,
@@ -218,35 +204,39 @@ export function VirtualTableView(props: VirtualTableViewProps) {
         [column]: newWidth,
       },
     });
-  };
+  }, []);
 
-  const handleResizeUpdate = (column: string, newWidth: number) => {
+  const handleResizeUpdate = useCallback((column: string, newWidth: number) => {
     resizingColumn.value = { column, width: newWidth };
-  };
+  }, []);
 
-  const getColumnWidth = (col: string) => {
+  const getColumnWidth = useCallback((col: string) => {
     if (resizingColumn.value && resizingColumn.value.column === col) {
       return resizingColumn.value.width;
     }
     return store.state.columnWidths.value[col];
-  };
+  }, []);
 
-  const totalWidth = Object.entries(store.state.columnWidths.value).reduce(
-    (sum, [col, width]) => sum + getColumnWidth(col),
-    0,
-  ) + (props.expandable ? 50 : 0) + (selectable ? 50 : 0) +
-    (tableAddon ? 80 : 0);
+  const totalWidth = useMemo(
+    () =>
+      Object.entries(store.state.columnWidths.value).reduce(
+        (sum, [col, width]) => sum + getColumnWidth(col),
+        0,
+      ) + (props.expandable ? 50 : 0) + (selectable ? 50 : 0) +
+      (tableAddon ? 80 : 0),
+    [store.state.columnWidths.value],
+  );
 
-  const tableStyle = {
+  const tableStyle = useMemo(() => ({
     width: `${totalWidth}px`,
     ...columns.reduce((acc, col) => {
       const sanitizedCol = col.replace(/[^a-zA-Z0-9]/g, "_");
       acc[`--col-width-${sanitizedCol}`] = `${getColumnWidth(col)}px`;
       return acc;
     }, {} as Record<string, string>),
-  };
+  }), [totalWidth, columns]);
 
-  const renderRow = (row: any, index: number) => {
+  const renderRow = useCallback((row: any, index: number) => {
     const isSelected = store.state.selectedRows.value.includes(
       row[rowKey],
     );
@@ -271,7 +261,18 @@ export function VirtualTableView(props: VirtualTableViewProps) {
         rowKey={rowKey}
       />
     );
-  };
+  }, [
+    store.state.selectedRows.value,
+    store.state.expandedRows.value,
+    rowKey,
+    rowHeight,
+    formatting,
+    columns,
+    getColumnWidth,
+    tableAddon,
+    props.expandable,
+    selectable,
+  ]);
 
   return (
     <>

@@ -1,3 +1,4 @@
+import { memo } from "preact/compat";
 import { VirtualTableViewProps } from "./types.ts";
 
 interface StickyRowsContainerProps {
@@ -8,7 +9,7 @@ interface StickyRowsContainerProps {
   top: number;
 }
 
-export const StickyRowsContainer = (props: StickyRowsContainerProps) => {
+export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
   const { stickyHeaders, rowHeight, renderRow, tableStyle, top } = props;
 
   return (
@@ -28,4 +29,4 @@ export const StickyRowsContainer = (props: StickyRowsContainerProps) => {
       </table>
     </div>
   );
-};
+});

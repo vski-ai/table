@@ -1,6 +1,6 @@
 import { type JSX } from "preact";
 import { useSignal } from "@preact/signals";
-import { useRef } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 import { Draggable } from "./Draggable.tsx";
 
 export interface ResizableHeaderProps {
@@ -41,7 +41,9 @@ export function ResizableHeader(
     isResizing.value = true;
     startX.value = e.clientX;
     startWidth.value = width;
+  };
 
+  useEffect(() => {
     const handleMouseMove = (moveEvent: MouseEvent) => {
       const newWidth = startWidth.value + (moveEvent.clientX - startX.value);
       if (newWidth > 50) { // Minimum column width
@@ -53,13 +55,18 @@ export function ResizableHeader(
       isResizing.value = false;
       const newWidth = startWidth.value + (moveEvent.clientX - startX.value);
       onResize(column, newWidth > 50 ? newWidth : 50);
+    };
+
+    if (isResizing.value) {
+      globalThis.addEventListener("mousemove", handleMouseMove);
+      globalThis.addEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
       globalThis.removeEventListener("mousemove", handleMouseMove);
       globalThis.removeEventListener("mouseup", handleMouseUp);
     };
-
-    globalThis.addEventListener("mousemove", handleMouseMove);
-    globalThis.addEventListener("mouseup", handleMouseUp);
-  };
+  }, [isResizing.value]);
 
   return (
     <th

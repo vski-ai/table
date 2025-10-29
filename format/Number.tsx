@@ -1,29 +1,34 @@
-import { Signal, useSignal, useSignalEffect } from "@preact/signals";
+import { memo } from "preact/compat";
+import { useCallback, useEffect } from "preact/hooks";
+import { Signal, useSignal } from "@preact/signals";
 import { NumberFormatting as NumberFormattingType } from "./types.ts";
 import { LocaleSelector } from "@/menu/LocaleSelector.tsx";
 
-export const NumberFormatting = (
+export const NumberFormatting = memo((
   { column, formatting }: { column: string; formatting: Signal<any> },
 ) => {
   const numberFormatting = formatting.value[column]?.number || {};
   const selectedLocale = useSignal(numberFormatting.locale);
 
-  useSignalEffect(() => {
+  const onNumberChange = useCallback(
+    (newNumberFormatting: NumberFormattingType) => {
+      formatting.value = {
+        ...formatting.value,
+        [column]: {
+          ...formatting.value[column],
+          number: newNumberFormatting,
+        },
+      };
+    },
+    [formatting, column],
+  );
+
+  useEffect(() => {
     onNumberChange({
       ...numberFormatting,
       locale: selectedLocale.value,
     });
-  });
-
-  const onNumberChange = (newNumberFormatting: NumberFormattingType) => {
-    formatting.value = {
-      ...formatting.value,
-      [column]: {
-        ...formatting.value[column],
-        number: newNumberFormatting,
-      },
-    };
-  };
+  }, [onNumberChange, numberFormatting, selectedLocale.value]);
 
   return (
     <div class="flex flex-col gap-2 transition-none py-6">
@@ -161,4 +166,4 @@ export const NumberFormatting = (
       </div>
     </div>
   );
-};
+});

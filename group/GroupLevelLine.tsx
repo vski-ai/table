@@ -1,7 +1,9 @@
+import { memo } from "preact/compat";
+
 /**
  * This is a vertival line drawn from the group caret to bottom of the group
  */
-export const GroupLevelLine = (
+export const GroupLevelLine = memo((
   { level, height, caretSize }: {
     level: number;
     height: number;
@@ -20,12 +22,12 @@ export const GroupLevelLine = (
     >
     </span>
   ));
-};
+});
 
 /**
  * This is a line pointing to the group name (---- )
  */
-export const GroupLinePointer = (
+export const GroupLinePointer = memo((
   { level, height }: { level: number; height: number },
 ) => {
   return (
@@ -39,4 +41,4 @@ export const GroupLinePointer = (
     >
     </span>
   );
-};
+});

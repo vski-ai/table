@@ -1,3 +1,5 @@
+import { memo } from "preact/compat";
+import { useCallback } from "preact/hooks";
 import { CellFormatter } from "@/format/CellFormatter.tsx";
 import {
   GroupCaret,
@@ -8,7 +10,7 @@ import {
 import { CommandType } from "@/store/mod.ts";
 import { RowSorter } from "@/sorting/mod.ts";
 
-export const Row = (props) => {
+export const Row = memo((props) => {
   const {
     row,
     rowIndex,
@@ -24,6 +26,39 @@ export const Row = (props) => {
     selectable,
     rowKey,
   } = props;
+
+  const onExpansionToggle = useCallback(() => {
+    store.dispatch({
+      type: CommandType.ROW_EXPANSION_TOGGLE,
+      payload: row[rowKey],
+    });
+  }, [store, row, rowKey]);
+
+  const onSelectionChange = useCallback((e: Event) => {
+    const checked = (e.target as HTMLInputElement).checked;
+    const currentSelectedRows = store.state.selectedRows.value;
+    if (checked) {
+      store.dispatch({
+        type: CommandType.SELECTED_ROWS_SET,
+        payload: [...currentSelectedRows, row[rowKey]],
+      });
+    } else {
+      store.dispatch({
+        type: CommandType.SELECTED_ROWS_SET,
+        payload: currentSelectedRows.filter((id) => id !== row[rowKey]),
+      });
+    }
+  }, [store, row, rowKey]);
+
+  const onDrilldown = useCallback(() => {
+    const newDrilldowns = store.state.drilldowns.value.includes(row.id)
+      ? store.state.drilldowns.value.filter((id) => id !== row.id)
+      : [...store.state.drilldowns.value, row.id];
+    store.dispatch({
+      type: CommandType.DRILLDOWN_SET,
+      payload: newDrilldowns,
+    });
+  }, [store, row]);
 
   return (
     <tr
@@ -47,11 +82,7 @@ export const Row = (props) => {
           <button
             type="button"
             class="btn btn-ghost btn-md"
-            onClick={() =>
-              store.dispatch({
-                type: CommandType.ROW_EXPANSION_TOGGLE,
-                payload: row[rowKey],
-              })}
+            onClick={onExpansionToggle}
           >
             {isExpanded ? "[-]" : "[+]"}
           </button>
@@ -66,23 +97,7 @@ export const Row = (props) => {
             type="checkbox"
             class="checkbox"
             checked={isSelected}
-            onChange={(e) => {
-              const checked = (e.target as HTMLInputElement).checked;
-              const currentSelectedRows = store.state.selectedRows.value;
-              if (checked) {
-                store.dispatch({
-                  type: CommandType.SELECTED_ROWS_SET,
-                  payload: [...currentSelectedRows, row[rowKey]],
-                });
-              } else {
-                store.dispatch({
-                  type: CommandType.SELECTED_ROWS_SET,
-                  payload: currentSelectedRows.filter((id) =>
-                    id !== row[rowKey]
-                  ),
-                });
-              }
-            }}
+            onChange={onSelectionChange}
           />
         </td>
       )}
@@ -120,18 +135,7 @@ export const Row = (props) => {
                   )}
                 <span
                   class="pt-1/2 cursor-pointer"
-                  onClick={() => {
-                    const newDrilldowns =
-                      store.state.drilldowns.value.includes(row.id)
-                        ? store.state.drilldowns.value.filter((
-                          id,
-                        ) => id !== row.id)
-                        : [...store.state.drilldowns.value, row.id];
-                    store.dispatch({
-                      type: CommandType.DRILLDOWN_SET,
-                      payload: newDrilldowns,
-                    });
-                  }}
+                  onClick={onDrilldown}
                 >
                   <span class="ml-1" />
                   <CellFormatter
@@ -229,4 +233,4 @@ export const Row = (props) => {
         : null}
     </tr>
   );
-};
+});

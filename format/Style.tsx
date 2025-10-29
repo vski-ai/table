@@ -1,9 +1,11 @@
+import { memo } from "preact/compat";
+import { useCallback } from "preact/hooks";
 import { Signal } from "@preact/signals";
 import { CellStyle, ConditionOperator, StyleCondition } from "./types.ts";
 
 import Trash2Icon from "lucide-react/dist/esm/icons/trash-2.js";
 
-const StyleEditor = (
+const StyleEditor = memo((
   { style, onStyleChange }: {
     style: CellStyle;
     onStyleChange: (newStyle: CellStyle) => void;
@@ -13,20 +15,20 @@ const StyleEditor = (
   const isItalic = style?.fontStyle === "italic";
   const isUnderline = style?.textDecoration === "underline";
 
-  const toggleBold = () => {
+  const toggleBold = useCallback(() => {
     onStyleChange({ ...style, fontWeight: isBold ? "normal" : "bold" });
-  };
+  }, [style, onStyleChange, isBold]);
 
-  const toggleItalic = () => {
+  const toggleItalic = useCallback(() => {
     onStyleChange({ ...style, fontStyle: isItalic ? "normal" : "italic" });
-  };
+  }, [style, onStyleChange, isItalic]);
 
-  const toggleUnderline = () => {
+  const toggleUnderline = useCallback(() => {
     onStyleChange({
       ...style,
       textDecoration: isUnderline ? "none" : "underline",
     });
-  };
+  }, [style, onStyleChange, isUnderline]);
 
   return (
     <div class="flex gap-2">
@@ -59,15 +61,15 @@ const StyleEditor = (
       </div>
     </div>
   );
-};
+});
 
-export const StyleFormatting = (
+export const StyleFormatting = memo((
   { column, formatting }: { column: string; formatting: Signal<any> },
 ) => {
   const style = formatting.value[column]?.style ||
     { default: {}, conditions: [] };
 
-  const onDefaultStyleChange = (newStyle: CellStyle) => {
+  const onDefaultStyleChange = useCallback((newStyle: CellStyle) => {
     formatting.value = {
       ...formatting.value,
       [column]: {
@@ -78,24 +80,27 @@ export const StyleFormatting = (
         },
       },
     };
-  };
+  }, [formatting, column, style]);
 
-  const onConditionChange = (index: number, newCondition: StyleCondition) => {
-    const newConditions = [...style.conditions];
-    newConditions[index] = newCondition;
-    formatting.value = {
-      ...formatting.value,
-      [column]: {
-        ...formatting.value[column],
-        style: {
-          ...style,
-          conditions: newConditions,
+  const onConditionChange = useCallback(
+    (index: number, newCondition: StyleCondition) => {
+      const newConditions = [...style.conditions];
+      newConditions[index] = newCondition;
+      formatting.value = {
+        ...formatting.value,
+        [column]: {
+          ...formatting.value[column],
+          style: {
+            ...style,
+            conditions: newConditions,
+          },
         },
-      },
-    };
-  };
+      };
+    },
+    [formatting, column, style],
+  );
 
-  const addCondition = () => {
+  const addCondition = useCallback(() => {
     const newConditions = [...style.conditions, {
       operator: ConditionOperator.Equals,
       value: "",
@@ -111,9 +116,9 @@ export const StyleFormatting = (
         },
       },
     };
-  };
+  }, [formatting, column, style]);
 
-  const removeCondition = (index: number) => {
+  const removeCondition = useCallback((index: number) => {
     const newConditions = style.conditions.filter((_: any, i: number) =>
       i !== index
     );
@@ -127,7 +132,7 @@ export const StyleFormatting = (
         },
       },
     };
-  };
+  }, [formatting, column, style]);
 
   return (
     <div class="flex flex-col gap-3 py-6">
@@ -188,4 +193,4 @@ export const StyleFormatting = (
       <a class="btn mt-2" onClick={addCondition}>Add Condition</a>
     </div>
   );
-};
+});

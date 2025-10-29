@@ -58,7 +58,6 @@ export function useVariableVirtualizer(
         break;
       }
     }
-
     setRange({
       startIndex: Math.max(0, startIndex - buffer),
       endIndex: Math.min(itemCount - 1, endIndex + buffer),

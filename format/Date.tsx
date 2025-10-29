@@ -1,23 +1,18 @@
-import { Signal, useSignal, useSignalEffect } from "@preact/signals";
+import { memo } from "preact/compat";
+import { useCallback, useEffect } from "preact/hooks";
+import { Signal, useSignal } from "@preact/signals";
 import { DateFormatting as DateFormattingType } from "./types.ts";
 import { LocaleSelector } from "@/menu/LocaleSelector.tsx";
 import { GranularitySelector } from "@/menu/GranularitySelector.tsx";
 
-export const DateFormatting = (
+export const DateFormatting = memo((
   { column, formatting }: { column: string; formatting: Signal<any> },
 ) => {
   const dateFormatting = formatting.value[column]?.date ||
     { granularity: "auto" };
   const selectedLocale = useSignal(dateFormatting.locale);
 
-  useSignalEffect(() => {
-    onDateChange({
-      ...dateFormatting,
-      locale: selectedLocale.value,
-    });
-  });
-
-  const onDateChange = (newDateFormatting: DateFormattingType) => {
+  const onDateChange = useCallback((newDateFormatting: DateFormattingType) => {
     formatting.value = {
       ...formatting.value,
       [column]: {
@@ -25,7 +20,14 @@ export const DateFormatting = (
         date: newDateFormatting,
       },
     };
-  };
+  }, [formatting, column]);
+
+  useEffect(() => {
+    onDateChange({
+      ...dateFormatting,
+      locale: selectedLocale.value,
+    });
+  }, [onDateChange, dateFormatting, selectedLocale.value]);
 
   return (
     <div class="transition-none flex flex-col items-start gap-2 py-6">
@@ -50,4 +52,4 @@ export const DateFormatting = (
       </div>
     </div>
   );
-};
+});

@@ -1,4 +1,5 @@
 import { type JSX } from "preact";
+import { memo } from "preact/compat";
 import { useMemo } from "preact/hooks";
 import {
   type CellFormatting,
@@ -99,7 +100,7 @@ function formatDate(value: any, options: DateFormatting): string {
   }
 }
 
-export const CellFormatter = (
+export const CellFormatter = memo((
   { value, formatting }: CellFormatterProps,
 ): JSX.Element => {
   if (!formatting) {
@@ -132,4 +133,4 @@ export const CellFormatter = (
       {displayValue}
     </span>
   );
-};
+});

@@ -1,6 +1,6 @@
 import { JSX } from "preact/jsx-runtime";
 import { useEffect, useRef, useState } from "preact/hooks";
-import { Signal, useSignal } from "@preact/signals";
+import { Signal, useSignal, useSignalEffect } from "@preact/signals";
 import CloseIcon from "lucide-react/dist/esm/icons/circle-x.js";
 
 export interface XYModalProps {
@@ -43,61 +43,44 @@ export const XYModal = ({
   const leftPosition = useSignal(0);
   const boxWidth = useSignal(0);
 
-  const focused = useSignal(false);
-
   const onBlur = () => {
-    if (focused.value) {
+    openSignal.value = false;
+  };
+
+  const clickOutside = (ev: MouseEvent) => {
+    if (modalRef.current?.contains(ev.target as Node)) return;
+    openSignal.value = false;
+  };
+
+  function allign() {
+    if (!modalRef.current) {
       return;
     }
-    openSignal.value = false;
-  };
 
-  const keepFocus = (ev: MouseEvent) => {
-    ev.stopPropagation();
-    focused.value = true;
-  };
+    const el = document.querySelector(target);
+    if (!el) return;
+    const { top, left, width } = el.getBoundingClientRect();
+    topPosition.value = top;
+    leftPosition.value = left;
+    boxWidth.value = width;
+  }
 
-  const clickOutside = () => {
-    focused.value = false;
-    openSignal.value = false;
-  };
+  useSignalEffect(() => {
+    if (openSignal.value) {
+      setTimeout(allign);
+      document.addEventListener("click", clickOutside);
+      document.addEventListener("resize", allign);
+      modalRef.current?.addEventListener("blur", onBlur);
+    } else {
+      document.removeEventListener("click", clickOutside);
+      document.removeEventListener("resize", allign);
+      modalRef.current?.removeEventListener("blur", onBlur);
+    }
+  });
 
   useEffect(() => {
-    if (!target) return;
-    function allign() {
-      if (!modalRef.current) {
-        return;
-      }
-      modalRef.current.removeEventListener("blur", onBlur);
-      modalRef.current.addEventListener("blur", onBlur);
-      modalRef.current.removeEventListener("mousedown", keepFocus);
-      modalRef.current.addEventListener("mousedown", keepFocus);
-
-      const el = document.querySelector(target);
-      if (!el) return;
-      const { top, left, width } = el.getBoundingClientRect();
-      topPosition.value = top;
-      leftPosition.value = left;
-      boxWidth.value = width;
-    }
-
-    setTimeout(allign);
-    const listener = () => allign();
-
-    document.addEventListener("click", listener);
-    document.addEventListener("resize", listener);
-    document.addEventListener("mousedown", clickOutside);
-
     setMounted(true);
-    return () => {
-      modalRef.current?.removeEventListener("blur", onBlur);
-      modalRef.current?.removeEventListener("mousedown", keepFocus);
-
-      document.removeEventListener("click", listener);
-      document.removeEventListener("resize", listener);
-      document.removeEventListener("mousedown", clickOutside);
-    };
-  }, [target]);
+  }, []);
 
   if (!(mounted && openSignal.value)) return null;
 

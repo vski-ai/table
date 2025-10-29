@@ -3,6 +3,8 @@ import { Command, CommandType } from "./commands.ts";
 import { StorageAdapter } from "./storage.ts";
 import { TableState, TableStore } from "./types.ts";
 
+const MAX_HISTORY_SIZE = 100;
+
 export function createTableStore(
   storage?: StorageAdapter,
   tableId?: string,
@@ -46,6 +48,9 @@ export function createTableStore(
   });
 
   const dispatch = (command: Command) => {
+    if (history.length >= MAX_HISTORY_SIZE) {
+      history.shift();
+    }
     history.push(command);
     switch (command.type) {
       // Drilldown
