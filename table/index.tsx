@@ -55,6 +55,7 @@ export function DynamicTable(props: VirtualTableViewProps) {
   return (
     <VirtualTableView
       {...props}
+      tableAddon={tableAddon}
       columns={filteredColumns}
     />
   );

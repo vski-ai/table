@@ -4,7 +4,21 @@
       rounded-none;
 
     th {
-      @apply sticky top-0 bg-base-200 z-10 shadow;
+      @apply sticky top-0 bg-base-200 z-10 shadow p-1 border-r border-r-base-300
+        h-14;
+
+      input {
+        @apply p-1 w-full outline-0;
+      }
     }
+  }
+
+  .vski-table-group-row {
+    @apply bg-base-300 font-bold;
+    filter: brightness(calc(1 + var(--group-level, 0) * 0.1));
+  }
+
+  .vski-table-row {
+    filter: brightness(calc(1 + var(--group-level, 0) * 0.1));
   }
 }

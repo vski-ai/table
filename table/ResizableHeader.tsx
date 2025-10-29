@@ -68,12 +68,12 @@ export function ResizableHeader(
     >
       <Draggable onDrop={onColumnDrop} id={column}>
         {children ? children : (
-          <div class="flex justify-between items-center">
+          <div class="flex justify-start items-center">
             {action?.(column)}
             {!edit.value
               ? (
                 <div
-                  class="truncate p-1 min-w-32"
+                  class="truncate p-1 min-w-32 w-full"
                   title={formattedName}
                   onDblClick={() => {
                     edit.value = true;
@@ -91,7 +91,6 @@ export function ResizableHeader(
                   autoComplete="off"
                   type="text"
                   value={formattedName}
-                  class="input insput-sm w-full"
                   ref={inputRef}
                   onFocusOut={() => {
                     edit.value = false;

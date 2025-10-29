@@ -3,7 +3,7 @@ import ArrowUpIcon from "lucide-react/dist/esm/icons/arrow-up-1-0.js";
 import ArrowDownUpIcon from "lucide-react/dist/esm/icons/arrow-down-up.js";
 import { SorterStore, SortState } from "./types.ts";
 
-interface ColumnSorterProps {
+interface RowSorterProps {
   className?: string;
   activeClassName?: string;
   column: string;
@@ -13,7 +13,7 @@ interface ColumnSorterProps {
   style?: any;
 }
 
-export const ColumnSorter = ({
+export const RowSorter = ({
   column,
   store,
   className = "btn btn-xs btn-ghost w-8 h-8",
@@ -21,7 +21,7 @@ export const ColumnSorter = ({
   leafId,
   style,
   onChange,
-}: ColumnSorterProps) => {
+}: RowSorterProps) => {
   const state = !leafId
     ? store.sorting.value
     : (store.leafSorting.value[leafId] ?? { column: "", sort: "" });

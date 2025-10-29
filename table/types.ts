@@ -16,6 +16,7 @@ export type VirtualTableViewProps =
     rowIdentifier?: string;
     tableAddon?: JSX.Element;
     sortable?: boolean;
+    stickyGroupHeaders?: number;
     onColumnDrop?: (draggedColumn: string, targetColumn: string) => void;
     formatColumnName?: (a: string) => string;
     columnExtensions?: (col: string) => JSX.Element;
