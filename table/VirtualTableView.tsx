@@ -11,6 +11,7 @@ import {
   useTableStyle,
   useVariableVirtualizer,
   useVisibleRows,
+  useColumnsOrderCallback
 } from "@/hooks/mod.ts";
 import { VirtualTableViewProps } from "./types.ts";
 import { ResizableHeader } from "./ResizableHeader.tsx";
@@ -35,7 +36,6 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     scrollContainerRef,
     rowIdentifier,
     tableAddon,
-    onColumnDrop,
     selectable,
     sortable,
     stickyGroupHeaderLevel = 2,
@@ -48,6 +48,19 @@ export function VirtualTableView(props: VirtualTableViewProps) {
   const resizingColumn = useSignal<{ column: string; width: number } | null>(
     null,
   );
+
+  const columnsInOrder = useMemo(() => {
+    const colOrder = store.state.columnOrder.value;
+    if (colOrder.length === 0) {
+      return columns;
+    }
+    return [...colOrder, ...columns.filter((c) => !colOrder.includes(c))];
+  }, [columns, store.state.columnOrder.value]);
+
+  const orderColumnsCallback = useColumnsOrderCallback({
+    store,
+    columns
+  })
 
   // TODO: first filter then sort
   const sortedData = useMemo(() => {
@@ -164,7 +177,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     store,
     rowKey,
     rowHeight,
-    columns,
+    columns: columnsInOrder,
     expandable,
     selectable,
     tableAddon,
@@ -238,7 +251,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                 </ResizableHeader>
               )}
 
-              {columns.map((col) => (
+              {columnsInOrder.map((col) => (
                 <ResizableHeader
                   key={col}
                   column={col}
@@ -247,7 +260,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                   onResizeUpdate={handleResizeUpdate}
                   extensions={renderColumnExtension}
                   action={renderColumnAction}
-                  onColumnDrop={onColumnDrop}
+                  onColumnDrop={orderColumnsCallback}
                   stickyColumns={stickyColumns}
                 />
               ))}
@@ -304,7 +317,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                 >
                 </td>
               )}
-              {columns.map((col) => (
+              {columnsInOrder.map((col) => (
                 <td
                   style={{
                     width: getColumnWidth(col),
