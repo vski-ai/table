@@ -8,7 +8,7 @@ interface RowSorterProps {
   activeClassName?: string;
   column: string;
   store: SorterStore;
-  leafId?: string;
+  leafId?: string | number;
   onChange?: (state: SortState) => void;
   style?: any;
 }

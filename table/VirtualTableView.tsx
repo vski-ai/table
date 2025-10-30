@@ -6,13 +6,22 @@ import {
   useRef,
   useState,
 } from "preact/hooks";
-import { useVariableVirtualizer } from "../hooks/useVariableVirtualizer.ts";
-import { VirtualTableViewProps } from "./types.ts";
+
+import {
+  useColumnWidthEffect,
+  useLoadMoreEffect,
+  useRowHeights,
+  useRowKey,
+  useStickyGroupHeaders,
+  useTableStyle,
+  useVariableVirtualizer,
+  useVisibleRows,
+} from "@/hooks/mod.ts";
+import { Row as RowType, VirtualTableViewProps } from "./types.ts";
 import { ResizableHeader } from "./ResizableHeader.tsx";
 import { CommandType } from "@/store/mod.ts";
 import { RowSorter, sorter } from "@/sorting/mod.ts";
 import { ColumnMenu } from "@/menu/ColumnMenu.tsx";
-import { useStickyGroupHeaders } from "../hooks/useStickyGroupHeaders.ts";
 import { StickyRowsContainer } from "./StickyRowsContainer.tsx";
 import { Row } from "./Row.tsx";
 
@@ -34,6 +43,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     selectable,
     sortable,
     stickyGroupHeaders = 2,
+    expandable,
   } = props;
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const tableRef = useRef<HTMLTableElement>(null); // For body table
@@ -43,6 +53,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     null,
   );
   const [headerHeight, setHeaderHeight] = useState(0);
+  const formatting = store.state.cellFormatting.value;
 
   useEffect(() => {
     if (headerContainerRef.current) {
@@ -80,120 +91,45 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     </>
   ), []);
 
-  const formatting = store.state.cellFormatting.value;
+  const rowKey = useRowKey(columns, rowIdentifier);
 
-  const rowKey = useMemo(() => {
-    if (rowIdentifier && columns.includes(rowIdentifier)) return rowIdentifier;
-    if (columns.includes("id")) return "id";
-    return columns[0];
-  }, [columns, rowIdentifier]);
-
-  const shownRows = useMemo(() => {
-    if (!store.state.drilldowns?.value) return sortedData;
-
-    const shown = sortedData.filter((row: any) => {
-      if (!row.$parent_id?.length) {
-        return true;
-      }
-
-      if (
-        row.$parent_id.every(
-          (id: string) => store.state.drilldowns.value.includes(id),
-        )
-      ) {
-        return true;
-      }
-
-      return false;
-    });
-    return shown;
-  }, [
-    sortedData,
+  const visibleRows = useVisibleRows({
+    data: sortedData,
+    store,
     sortable,
-    store.state.sorting.value,
-    store.state.leafSorting.value,
-    store.state.drilldowns?.value,
-  ]);
+  });
 
-  const rowHeights = useMemo(() => {
-    return shownRows.map((row) => {
-      if (
-        props.expandable && store.state.expandedRows.value.includes(row[rowKey])
-      ) {
-        // TODO: Replace 100 with a dynamic height calculation
-        return rowHeight + 100; // 100 is a placeholder for the expanded content height
-      }
-      return rowHeight;
-    });
-  }, [shownRows, store.state.expandedRows.value]);
+  const rowHeights = useRowHeights({
+    data: visibleRows,
+    store,
+    expandable,
+    rowKey,
+    height: rowHeight,
+  });
 
   const { startIndex, endIndex, paddingTop, paddingBottom } =
     useVariableVirtualizer({
       scrollContainerRef,
       tableRef,
-      itemCount: shownRows.length,
+      itemCount: visibleRows.length,
       rowHeights: rowHeights,
       buffer,
     });
 
   const stickyHeaders = useStickyGroupHeaders({
     scrollContainerRef,
-    shownRows,
+    shownRows: visibleRows,
     rowHeights,
     maxLevel: stickyGroupHeaders,
     drilldowns: store.state.drilldowns.value,
   });
 
-  useEffect(() => {
-    const currentWidths = { ...store.state.columnWidths.peek() };
-    let needsUpdate = false;
-    const defaultWidth = 250;
-    const _columns = [...columns, "$group_by"];
-    for (const col of _columns) {
-      if (currentWidths[col] !== undefined) continue;
-      currentWidths[col] = defaultWidth;
-      needsUpdate = true;
-    }
-
-    const currentColsInState = Object.keys(currentWidths);
-    for (const col of currentColsInState) {
-      if (!_columns.includes(col)) {
-        delete currentWidths[col];
-        needsUpdate = true;
-      }
-    }
-
-    if (needsUpdate) {
-      store.dispatch({
-        type: CommandType.COLUMN_WIDTHS_SET,
-        payload: currentWidths,
-      });
-    }
-  }, [columns, initialWidth]);
-
-  useEffect(() => {
-    if (!onLoadMore) return;
-
-    const loadMoreEl = loadMoreRef.current;
-    const loadMoreObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !store.state.loading.value) {
-          onLoadMore();
-        }
-      },
-      { root: null, rootMargin: "0px", threshold: 1.0 },
-    );
-
-    if (loadMoreEl) {
-      loadMoreObserver.observe(loadMoreEl);
-    }
-
-    return () => {
-      if (loadMoreEl) {
-        loadMoreObserver.unobserve(loadMoreEl);
-      }
-    };
-  }, [onLoadMore, store.state.loading.value]);
+  useColumnWidthEffect(store, columns, initialWidth);
+  useLoadMoreEffect({
+    store,
+    onLoadMore,
+    ref: loadMoreRef,
+  });
 
   const handleResize = useCallback((column: string, newWidth: number) => {
     resizingColumn.value = null;
@@ -217,26 +153,16 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     return store.state.columnWidths.value[col];
   }, []);
 
-  const totalWidth = useMemo(
-    () =>
-      Object.entries(store.state.columnWidths.value).reduce(
-        (sum, [col, width]) => sum + getColumnWidth(col),
-        0,
-      ) + (props.expandable ? 50 : 0) + (selectable ? 50 : 0) +
-      (tableAddon ? 80 : 0),
-    [store.state.columnWidths.value],
-  );
+  const { style: tableStyle } = useTableStyle({
+    store,
+    getColumnWidth,
+    columns,
+    selectable,
+    expandable,
+    hasAddon: !!tableAddon,
+  });
 
-  const tableStyle = useMemo(() => ({
-    width: `${totalWidth}px`,
-    ...columns.reduce((acc, col) => {
-      const sanitizedCol = col.replace(/[^a-zA-Z0-9]/g, "_");
-      acc[`--col-width-${sanitizedCol}`] = `${getColumnWidth(col)}px`;
-      return acc;
-    }, {} as Record<string, string>),
-  }), [totalWidth, columns]);
-
-  const renderRow = useCallback((row: any, index: number) => {
+  const renderRow = useCallback((row: RowType, index: number) => {
     const isSelected = store.state.selectedRows.value.includes(
       row[rowKey],
     );
@@ -254,7 +180,6 @@ export function VirtualTableView(props: VirtualTableViewProps) {
         formatting={formatting}
         columns={columns}
         store={store}
-        getColumnWidth={getColumnWidth}
         tableAddon={tableAddon}
         expandable={props.expandable}
         selectable={selectable}
@@ -422,7 +347,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                 )
                 : null}
             </tr>
-            {shownRows.slice(startIndex, endIndex + 1).map((row, i) => {
+            {visibleRows.slice(startIndex, endIndex + 1).map((row, i) => {
               const rowIndex = startIndex + i;
               const rowContent = renderRow(row, rowIndex);
               const isExpanded = store.state.expandedRows.value.includes(

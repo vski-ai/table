@@ -2,7 +2,8 @@
   "name": "@vski/table",
   "nodeModulesDir": "auto",
   "tasks": {
-    "dev": "vite"
+    "dev": "vite",
+    "build": "vite build"
   },
   "imports": {
     "@/": "./",

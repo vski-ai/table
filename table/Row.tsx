@@ -9,8 +9,26 @@ import {
 } from "@/group/mod.ts";
 import { CommandType } from "@/store/mod.ts";
 import { RowSorter } from "@/sorting/mod.ts";
+import { Row as RowType } from "./types.ts";
+import { CellFormatting } from "@/format/types.ts";
+import { TableStore } from "@/store/types.ts";
 
-export const Row = memo((props) => {
+interface RowProps {
+  row: RowType;
+  rowIndex: number | string;
+  isSelected?: boolean;
+  isExpanded?: boolean;
+  expandable?: boolean;
+  selectable?: boolean;
+  rowKey: string;
+  rowHeight: number;
+  formatting: Record<string, CellFormatting>;
+  columns: string[];
+  store: TableStore;
+  tableAddon: any;
+}
+
+export const Row = memo((props: RowProps) => {
   const {
     row,
     rowIndex,
@@ -20,7 +38,6 @@ export const Row = memo((props) => {
     formatting,
     columns,
     store,
-    getColumnWidth,
     tableAddon,
     expandable,
     selectable,
@@ -51,7 +68,7 @@ export const Row = memo((props) => {
   }, [store, row, rowKey]);
 
   const onDrilldown = useCallback(() => {
-    const newDrilldowns = store.state.drilldowns.value.includes(row.id)
+    const newDrilldowns = store.state.drilldowns.value.includes(row.id as never)
       ? store.state.drilldowns.value.filter((id) => id !== row.id)
       : [...store.state.drilldowns.value, row.id];
     store.dispatch({
@@ -76,7 +93,7 @@ export const Row = memo((props) => {
     >
       {expandable && (
         <td
-          class="border border-base-300 align-center text-center p-0"
+          class="vski-table-cell"
           style={{ width: "50px" }}
         >
           <button
@@ -90,7 +107,7 @@ export const Row = memo((props) => {
       )}
       {selectable && (
         <td
-          class="border border-base-300 align-center text-center p-0"
+          class="vski-table-cell"
           style={{ width: "50px" }}
         >
           <input
@@ -109,38 +126,39 @@ export const Row = memo((props) => {
             width: `var(--col-width-$group_by)`,
             height: `${rowHeight}px`,
           }}
-          class="relative border border-base-300"
+          class="vski-table-group-cell"
         >
-          <div class="truncate flex items-center">
+          <div class="c-content">
             {row.$is_group_root && (
               <>
                 <GroupCaret
                   active={store.state.drilldowns.value.includes(
-                    row.id,
+                    row.id as never,
                   )}
                   size={16}
-                  level={row.$group_level}
+                  level={row.$group_level!}
+                  onClick={onDrilldown}
                 />
                 <GroupLevelLine
-                  level={row.$group_level}
+                  level={row.$group_level!}
                   height={rowHeight}
                   caretSize={16}
                 />
                 {row.$group_level !== 0 &&
                   (
                     <GroupLinePointer
-                      level={row.$group_level}
+                      level={row.$group_level!}
                       height={rowHeight - 1}
                     />
                   )}
                 <span
-                  class="pt-1/2 cursor-pointer"
+                  class="c-pointer"
                   onClick={onDrilldown}
                 >
                   <span class="ml-1" />
                   <CellFormatter
-                    value={row[row.$group_by]}
-                    formatting={formatting?.[row.$group_by]}
+                    value={row[row.$group_by!]}
+                    formatting={formatting?.[row.$group_by!]}
                   />
                 </span>
               </>
@@ -148,21 +166,21 @@ export const Row = memo((props) => {
             {!row.$is_group_root && (
               <div class="truncate">
                 <GroupLevelLine
-                  level={row.$group_level}
+                  level={row.$group_level!}
                   height={rowHeight - 1}
                   caretSize={16}
                 />
                 {row.$group_level !== 0 &&
                   (
                     <GroupLinePointer
-                      level={row.$group_level}
+                      level={row.$group_level!}
                       height={rowHeight - 1}
                     />
                   )}
-                <GroupMargin level={row.$group_level} size={16} />
+                <GroupMargin level={row.$group_level!} size={16} />
                 <CellFormatter
-                  value={row[row.$group_by]}
-                  formatting={formatting?.[row.$group_by]}
+                  value={row[row.$group_by!]}
+                  formatting={formatting?.[row.$group_by!]}
                 />
               </div>
             )}
@@ -179,7 +197,7 @@ export const Row = memo((props) => {
               width: `var(--col-width-${sanitizedCol})`,
               height: `${rowHeight}px`,
             }}
-            class="border border-base-300 relative"
+            class="vski-table-group-cell"
           >
             <div
               class="truncate"
@@ -205,8 +223,8 @@ export const Row = memo((props) => {
                       width: 12,
                       height: 12,
                     }}
-                    className="cursor-pointer opacity-50 hover:opacity-100 transition-opacity p-0 w-3 h-3 btn btn-ghost absolute right-2"
-                    activeClassName="!opacity-100 !text-accent"
+                    className="group-sorter"
+                    activeClassName="group-sorter-active"
                     column={col}
                     store={store.state}
                     leafId={row.id}
@@ -220,7 +238,7 @@ export const Row = memo((props) => {
       {tableAddon
         ? (
           <td
-            class="border border-base-300 text-center"
+            class="vski-table-group-cell"
             style={{
               padding: 0,
               width: "80px",

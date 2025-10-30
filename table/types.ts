@@ -4,7 +4,7 @@ import { TableStore } from "@/store/types.ts";
 
 export type VirtualTableViewProps =
   & {
-    data: any[];
+    data: Row[];
     columns: string[];
     store: TableStore;
     selectable?: boolean;
@@ -32,3 +32,11 @@ export type VirtualTableViewProps =
       expandable?: false;
     }
   );
+
+export interface Row extends Record<string, any> {
+  id: string | number;
+  $group_by?: string;
+  $is_group_root?: boolean;
+  $group_level?: number;
+  $parent_id?: string[] | number[];
+}

@@ -1,10 +1,8 @@
 import { SorterStore, SortState } from "./types.ts";
-
-type Row = Record<string, any>;
-type Rows = Row[];
+import { Row } from "@/table/types.ts";
 
 export interface SorterProps {
-  data: Rows;
+  data: Row[];
   store: SorterStore;
 }
 
@@ -26,12 +24,12 @@ const sortFn = (sorting: SortState) => (a: Row, b: Row) => {
  * is a bit tricky - we have to rebuilt tree and visit branches
  * recursevely.
  */
-const sortGroup = (data: Rows, store: SorterStore): Rows => {
+const sortGroup = (data: Row[], store: SorterStore): Row[] => {
   const sorting = store.sorting.value;
   const leafSorting = store.leafSorting.value;
 
   const roots = data.filter((row) => !row.$parent_id);
-  const children: Record<string, Rows> = {};
+  const children: Record<string, Row[]> = {};
 
   for (const row of data) {
     if (row.$parent_id) {
@@ -43,34 +41,34 @@ const sortGroup = (data: Rows, store: SorterStore): Rows => {
     }
   }
 
-  const sortLevel = (rows: Rows, parentId: string | null): Rows => {
+  const sortLevel = (rows: Row[], parentId?: string): Row[] => {
     const currentSorting = parentId ? leafSorting[parentId] : sorting;
 
     if (currentSorting) {
       rows.sort(sortFn(currentSorting));
     }
 
-    const result: Rows = [];
+    const result: Row[] = [];
     for (const row of rows) {
       result.push(row);
       if (children[row.id]) {
-        const sortedChildren = sortLevel(children[row.id], row.id);
+        const sortedChildren = sortLevel(children[row.id], row.id?.toString());
         result.push(...sortedChildren);
       }
     }
     return result;
   };
 
-  return sortLevel(roots, null);
+  return sortLevel(roots);
 };
 
 export function createSorter() {
-  let lastData: Rows | undefined;
+  let lastData: Row[] | undefined;
   let lastSorting: SortState | undefined;
   let lastLeafSorting: Record<string, SortState> | undefined;
-  let lastResult: Rows | undefined;
+  let lastResult: Row[] | undefined;
 
-  return function sorter({ data, store }: SorterProps): Rows {
+  return function sorter({ data, store }: SorterProps): Row[] {
     const sorting = store.sorting.value;
     const leafSorting = store.leafSorting.value;
 

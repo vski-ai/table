@@ -3,7 +3,7 @@ import { Command } from "./commands.ts";
 import { CellFormatting } from "@/format/types.ts";
 import { SortState } from "@/sorting/mod.ts";
 export interface TableState {
-  drilldowns: Signal<string[]>;
+  drilldowns: Signal<string[] | number[]>;
   filters: Signal<Record<string, string>>;
   sorting: Signal<SortState>;
   leafSorting: Signal<Record<string, SortState>>;
