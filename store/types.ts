@@ -5,7 +5,8 @@ import { SortState } from "@/sorting/mod.ts";
 
 export type StickyPosition = "left" | "right" | false;
 export interface TableState {
-  drilldowns: Signal<string[] | number[]>;
+  drilldowns: Signal<string[]>;
+  expandedLevels: Signal<string[] | number[]>;
   filters: Signal<Record<string, string>>;
   sorting: Signal<SortState>;
   leafSorting: Signal<Record<string, SortState>>;

@@ -2,9 +2,10 @@ import { StickyPosition } from "./types.ts";
 
 export enum CommandType {
   // Drilldown
-  DRILLDOWN_ADD = "DRILLDOWN_ADD",
-  DRILLDOWN_REMOVE = "DRILLDOWN_REMOVE",
   DRILLDOWN_SET = "DRILLDOWN_SET",
+
+  // Expanded Levels
+  EXPANDED_LEVELS_SET = "EXPANDED_LEVELS_SET",
 
   // Filtering
   FILTER_ADD = "FILTER_ADD",

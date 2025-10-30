@@ -21,6 +21,7 @@ export function createTableStore(
 
   const state: TableState = {
     drilldowns: signal(initialState?.drilldowns || []),
+    expandedLevels: signal(initialState?.expandedLevels || []),
     filters: signal(initialState?.filters || []),
     sorting: signal(initialState?.sorting || []),
     leafSorting: signal(initialState?.leafSorting || {}),
@@ -43,6 +44,7 @@ export function createTableStore(
     if (storage && tableId) {
       const currentState = {
         drilldowns: state.drilldowns.value,
+        expandedLevels: state.expandedLevels.value,
         filters: state.filters.value,
         sorting: state.sorting.value,
         leafSorting: state.leafSorting.value,
@@ -65,6 +67,11 @@ export function createTableStore(
       // Drilldown
       case CommandType.DRILLDOWN_SET:
         state.drilldowns.value = command.payload;
+        break;
+
+      // Expanded Levels
+      case CommandType.EXPANDED_LEVELS_SET:
+        state.expandedLevels.value = command.payload;
         break;
 
       // Filtering

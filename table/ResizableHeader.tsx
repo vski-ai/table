@@ -78,6 +78,7 @@ export function ResizableHeader(
 
   return (
     <th
+      data-column-name={column}
       style={{
         width: `${width}px`,
         left: isStickyLeft ? stickyColumns.left[column] : undefined,

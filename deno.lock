@@ -15,6 +15,7 @@
     "jsr:@ts-morph/common@0.27": "0.27.0",
     "npm:@deno/vite-plugin@^1.0.5": "1.0.5_vite@6.4.0__picomatch@4.0.3",
     "npm:@faker-js/faker@^10.1.0": "10.1.0",
+    "npm:@floating-ui/dom@^1.7.4": "1.7.4",
     "npm:@preact/preset-vite@^2.10.2": "2.10.2_@babel+core@7.28.4_vite@6.4.0__picomatch@4.0.3_preact@10.27.2",
     "npm:@preact/signals@^2.3.2": "2.3.2_preact@10.27.2",
     "npm:@tailwindcss/typography@~0.5.19": "0.5.19_tailwindcss@4.1.16",
@@ -373,6 +374,22 @@
     },
     "@faker-js/faker@10.1.0": {
       "integrity": "sha512-C3mrr3b5dRVlKPJdfrAXS8+dq+rq8Qm5SNRazca0JKgw1HQERFmrVb0towvMmw5uu8hHKNiQasMaR/tydf3Zsg=="
+    },
+    "@floating-ui/core@1.7.3": {
+      "integrity": "sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==",
+      "dependencies": [
+        "@floating-ui/utils"
+      ]
+    },
+    "@floating-ui/dom@1.7.4": {
+      "integrity": "sha512-OOchDgh4F2CchOX94cRVqhvy7b3AFb+/rQXyswmzmGakRfkMgoWVjfnLWkRirfLEfuD4ysVW16eXzwt3jHIzKA==",
+      "dependencies": [
+        "@floating-ui/core",
+        "@floating-ui/utils"
+      ]
+    },
+    "@floating-ui/utils@0.2.10": {
+      "integrity": "sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ=="
     },
     "@jridgewell/gen-mapping@0.3.13": {
       "integrity": "sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==",
@@ -1138,6 +1155,7 @@
       "jsr:@std/assert@1",
       "npm:@deno/vite-plugin@^1.0.5",
       "npm:@faker-js/faker@^10.1.0",
+      "npm:@floating-ui/dom@^1.7.4",
       "npm:@preact/preset-vite@^2.10.2",
       "npm:@preact/signals@^2.3.2",
       "npm:@tailwindcss/typography@~0.5.19",

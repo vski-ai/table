@@ -1,35 +1,35 @@
+import { useSignal } from "@preact/signals";
 import { TableStore } from "@/store/mod.ts";
-import { CommandType } from "@/store/commands.ts";
+import { DrilldownDisplay } from "./DrilldownDisplay.tsx";
+import { DrilldownEditor } from "./DrilldownEditor.tsx";
 
 interface DrilldownProps {
   store: TableStore;
 }
 
 export function Drilldown({ store }: DrilldownProps) {
-  const { drilldowns } = store.state;
+  const isEditorOpen = useSignal(false);
 
-  const removeDrilldown = (drilldown: string) => {
-    const newDrilldowns = drilldowns.value.filter((d) => d !== drilldown);
-    store.dispatch({ type: CommandType.DRILLDOWN_SET, payload: newDrilldowns });
+  const openEditor = () => {
+    isEditorOpen.value = true;
+  };
+
+  const closeEditor = () => {
+    isEditorOpen.value = false;
   };
 
   return (
-    <div class="p-4 bg-base-200 rounded-box shadow-lg">
-      <h3 class="text-lg font-bold mb-2">Drilldowns</h3>
-      <div class="flex flex-wrap gap-2">
-        {drilldowns.value.map((drilldown) => (
-          <div key={drilldown} class="badge badge-lg">
-            {drilldown}
-            <button
-              class="btn btn-xs btn-circle btn-ghost ml-2"
-              onClick={() =>
-                removeDrilldown(drilldown)}
-            >
-              &times;
-            </button>
-          </div>
-        ))}
+    <>
+      <div id="drilldown-display-target">
+        <DrilldownDisplay store={store} onEditClick={openEditor} />
       </div>
-    </div>
+      {isEditorOpen.value && (
+        <DrilldownEditor
+          store={store}
+          onClose={closeEditor}
+          openSignal={isEditorOpen}
+        />
+      )}
+    </>
   );
 }

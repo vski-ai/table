@@ -8,7 +8,7 @@ interface UseStickyGroupHeadersProps {
   visibleRows: Row[];
   rowHeights: number[];
   maxLevel?: number;
-  drilldowns?: number[] | string[];
+  expandedLevels?: number[] | string[];
 }
 
 type IndexedRow = {
@@ -25,7 +25,7 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
     visibleRows,
     rowHeights,
     maxLevel = 2,
-    drilldowns,
+    expandedLevels,
   } = props;
 
   const result = useSignal<IndexedRow[]>([]);
@@ -51,7 +51,8 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
         const row = visibleRows[i];
         if (
           row.$is_group_root && row.$group_level! < maxLevel &&
-          drilldowns?.includes(row.id as never) && rowTops[i].top < scrollTop
+          expandedLevels?.includes(row.id as never) &&
+          rowTops[i].top < scrollTop
         ) {
           const level = row.$group_level!;
           if (!newStickyHeaders[level] || i > newStickyHeaders[level].index) {
@@ -70,7 +71,7 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
     return () => {
       scrollContainer.removeEventListener("scroll", handleScroll);
     };
-  }, [visibleRows, rowHeights, maxLevel, drilldowns]);
+  }, [visibleRows, rowHeights, maxLevel, expandedLevels]);
 
   return result;
 };

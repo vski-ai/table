@@ -74,18 +74,20 @@ export const Row = memo((props: RowProps) => {
   }, [store, row, rowKey]);
 
   const onDrilldown = useCallback(() => {
-    const newDrilldowns = store.state.drilldowns.value.includes(row.id as never)
-      ? store.state.drilldowns.value.filter((id) => id !== row.id)
-      : [...store.state.drilldowns.value, row.id];
+    const newexpandedLevels =
+      store.state.expandedLevels.value.includes(row.id as never)
+        ? store.state.expandedLevels.value.filter((id) => id !== row.id)
+        : [...store.state.expandedLevels.value, row.id];
     store.dispatch({
-      type: CommandType.DRILLDOWN_SET,
-      payload: newDrilldowns,
+      type: CommandType.EXPANDED_LEVELS_SET,
+      payload: newexpandedLevels,
     });
   }, [store, row]);
 
   return (
     <tr
       key={row.id}
+      data-row-id={row[rowKey]}
       data-index={rowIndex}
       class={[
         "hover:shadow-md",
@@ -125,9 +127,10 @@ export const Row = memo((props: RowProps) => {
         </td>
       )}
 
-      {store.state.drilldowns && (
+      {store.state.expandedLevels && (
         <td
           key="$group_by"
+          data-column-name="$group_by"
           style={{
             width: `var(--col-width-$group_by)`,
             height: `${rowHeight}px`,
@@ -138,7 +141,7 @@ export const Row = memo((props: RowProps) => {
             {row.$is_group_root && (
               <>
                 <GroupCaret
-                  active={store.state.drilldowns.value.includes(
+                  active={store.state.expandedLevels.value.includes(
                     row.id as never,
                   )}
                   size={16}
@@ -201,6 +204,7 @@ export const Row = memo((props: RowProps) => {
         return (
           <td
             key={col}
+            data-column-name={col}
             style={{
               width: `var(--col-width-${sanitizeColName(col)})`,
               height: `${rowHeight}px`,

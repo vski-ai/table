@@ -16,9 +16,10 @@ import { VirtualTableViewProps } from "./types.ts";
 import { ResizableHeader } from "./ResizableHeader.tsx";
 import { CommandType } from "@/store/mod.ts";
 import { RowSorter, sorter } from "@/sorting/mod.ts";
-import { ColumnMenu } from "@/menu/ColumnMenu.tsx";
 import { StickyRowsContainer } from "./StickyRowsContainer.tsx";
 import { useRenderRowCallback } from "./Row.tsx";
+import { ContextMenu } from "@/menu/ContextMenu.tsx";
+import { Drilldown } from "../menu/Drilldown.tsx";
 
 export function VirtualTableView(props: VirtualTableViewProps) {
   const {
@@ -73,7 +74,6 @@ export function VirtualTableView(props: VirtualTableViewProps) {
 
   const renderColumnExtension = useCallback((col: string) => (
     <>
-      <ColumnMenu column={col} store={store} />
       {columnExtensions?.(col)}
     </>
   ), []);
@@ -109,7 +109,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     visibleRows,
     rowHeights,
     maxLevel: stickyGroupHeaderLevel,
-    drilldowns: store.state.drilldowns.value,
+    expandedLevels: store.state.expandedLevels.value,
   });
 
   const stickyColumns = useStickyColOffset({
@@ -174,6 +174,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
 
   return (
     <>
+      <ContextMenu store={store} />
       <div
         ref={headerContainerRef}
         style={{
@@ -224,7 +225,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                 </th>
               )}
 
-              {store.state.drilldowns && (
+              {store.state.expandedLevels && (
                 <ResizableHeader
                   key="$group_by"
                   column="$group_by"
@@ -233,7 +234,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                   onResizeUpdate={handleResizeUpdate}
                   stickyColumns={stickyColumns}
                 >
-                  <span></span>
+                  <Drilldown store={store} />
                 </ResizableHeader>
               )}
 
@@ -292,7 +293,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                 <td style={{ width: "60px", height: 0, border: 0, padding: 0 }}>
                 </td>
               )}
-              {store.state.drilldowns && (
+              {store.state.expandedLevels && (
                 <td
                   style={{
                     width: getColumnWidth("$group_by"),
@@ -342,7 +343,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                     <td
                       colSpan={columns.length + (props.expandable ? 1 : 0) +
                         (selectable ? 1 : 0) +
-                        (store.state.drilldowns ? 1 : 0)}
+                        (store.state.expandedLevels ? 1 : 0)}
                     >
                       {props.renderExpand(row)}
                     </td>

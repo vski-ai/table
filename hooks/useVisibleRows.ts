@@ -20,10 +20,10 @@ export function useVisibleRows({
       }
 
       if (
-        store.state.drilldowns.value &&
+        store.state.expandedLevels.value &&
         row.$parent_id?.every(
           (id: string | number) =>
-            store.state.drilldowns.value?.includes(id as never),
+            store.state.expandedLevels.value?.includes(id as never),
         )
       ) {
         return true;
@@ -37,6 +37,6 @@ export function useVisibleRows({
     sortable,
     store.state.sorting.value,
     store.state.leafSorting.value,
-    store.state.drilldowns?.value,
+    store.state.expandedLevels?.value,
   ]);
 }

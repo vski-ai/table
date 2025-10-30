@@ -2,4 +2,61 @@
   .menu-tabs {
     @apply tabs-lift tabs w-auto min-w-full;
   }
+
+  .drilldown-editor {
+    @apply absolute top-0 left-0 w-full h-full bg-white p-4 border-t
+      border-gray-200;
+  }
+
+  .drilldown-editor-header {
+    @apply flex justify-between items-center mb-4;
+  }
+
+  .drilldown-editor-title {
+    @apply text-lg font-medium;
+  }
+
+  .drilldown-editor-close {
+    @apply text-gray-500 hover:text-gray-700;
+  }
+
+  .drilldown-editor-levels {
+    @apply flex flex-wrap gap-2 mb-4;
+  }
+
+  .drilldown-editor-level {
+    @apply flex items-center bg-gray-100 rounded-md px-2 py-1;
+  }
+
+  .drilldown-editor-level-remove {
+    @apply ml-2 text-gray-500 hover:text-gray-700;
+  }
+
+  .drilldown-editor-add {
+    @apply relative;
+  }
+
+  .drilldown-editor-input {
+    @apply border border-gray-300 rounded-md px-2 py-1 w-full;
+  }
+
+  .drilldown-editor-suggestions {
+    @apply absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1;
+  }
+
+  .drilldown-editor-suggestion {
+    @apply px-2 py-1 cursor-pointer hover:bg-gray-100;
+  }
+
+  .drilldown-editor-footer {
+    @apply flex justify-end gap-2 mt-4;
+  }
+
+  .drilldown-editor-cancel {
+    @apply text-gray-500 hover:text-gray-700;
+  }
+
+  .drilldown-editor-save {
+    @apply bg-blue-500 text-white rounded-md px-4 py-1;
+  }
 }
