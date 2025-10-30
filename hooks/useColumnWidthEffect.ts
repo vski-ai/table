@@ -2,11 +2,17 @@ import { useEffect } from "preact/hooks";
 import { TableStore } from "@/store/types.ts";
 import { CommandType } from "@/store/mod.ts";
 
-export function useColumnWidthEffect(
-  store: TableStore,
-  columns: string[],
-  initialWidth?: number,
-) {
+interface ColumnWidthEffectProps {
+  store: TableStore;
+  columns: string[];
+  initialWidth?: number;
+}
+
+export function useColumnWidthEffect({
+  store,
+  columns,
+  initialWidth,
+}: ColumnWidthEffectProps) {
   useEffect(() => {
     const currentWidths = { ...store.state.columnWidths.peek() };
     let needsUpdate = false;

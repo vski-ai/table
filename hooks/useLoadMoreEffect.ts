@@ -1,6 +1,5 @@
 import { useEffect } from "preact/hooks";
 import { TableStore } from "@/store/types.ts";
-import { CommandType } from "@/store/mod.ts";
 import { RefObject } from "preact/compat";
 
 interface LoadMoreEffectProps {

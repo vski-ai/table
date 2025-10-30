@@ -1,5 +1,6 @@
 import { memo } from "preact/compat";
 import { VirtualTableViewProps } from "./types.ts";
+import { useEffect, useRef } from "preact/hooks";
 
 interface StickyRowsContainerProps {
   stickyHeaders: any[];
@@ -11,7 +12,13 @@ interface StickyRowsContainerProps {
 
 export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
   const { stickyHeaders, rowHeight, renderRow, tableStyle, top } = props;
-
+  const ref = useRef<HTMLTableElement>(null);
+  useEffect(() => {
+    const mainHead = document.getElementById("vski-table-main-head");
+    if (mainHead) {
+      ref.current?.prepend(mainHead);
+    }
+  }, []);
   return (
     <div
       class={stickyHeaders.length ? "shadow-2xl border-b border-accent/10" : ""}
@@ -20,9 +27,10 @@ export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
       <table
         class="vski-table"
         style={tableStyle}
+        ref={ref}
       >
         <tbody>
-          {stickyHeaders.map((header, index) =>
+          {stickyHeaders.map((header, _) =>
             renderRow(header.row, header.index)
           )}
         </tbody>

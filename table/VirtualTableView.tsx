@@ -23,7 +23,7 @@ import { CommandType } from "@/store/mod.ts";
 import { RowSorter, sorter } from "@/sorting/mod.ts";
 import { ColumnMenu } from "@/menu/ColumnMenu.tsx";
 import { StickyRowsContainer } from "./StickyRowsContainer.tsx";
-import { Row } from "./Row.tsx";
+import { Row, useRenderRowCallback } from "./Row.tsx";
 
 export function VirtualTableView(props: VirtualTableViewProps) {
   const {
@@ -42,7 +42,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     onColumnDrop,
     selectable,
     sortable,
-    stickyGroupHeaders = 2,
+    stickyGroupHeaderLevel = 2,
     expandable,
   } = props;
   const loadMoreRef = useRef<HTMLDivElement>(null);
@@ -118,13 +118,18 @@ export function VirtualTableView(props: VirtualTableViewProps) {
 
   const stickyHeaders = useStickyGroupHeaders({
     scrollContainerRef,
-    shownRows: visibleRows,
+    visibleRows,
     rowHeights,
-    maxLevel: stickyGroupHeaders,
+    maxLevel: stickyGroupHeaderLevel,
     drilldowns: store.state.drilldowns.value,
   });
 
-  useColumnWidthEffect(store, columns, initialWidth);
+  useColumnWidthEffect({
+    store,
+    columns,
+    initialWidth,
+  });
+
   useLoadMoreEffect({
     store,
     onLoadMore,
@@ -162,42 +167,16 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     hasAddon: !!tableAddon,
   });
 
-  const renderRow = useCallback((row: RowType, index: number) => {
-    const isSelected = store.state.selectedRows.value.includes(
-      row[rowKey],
-    );
-    const isExpanded = store.state.expandedRows.value.includes(
-      row[rowKey],
-    );
-
-    return (
-      <Row
-        row={row}
-        rowIndex={index}
-        isSelected={isSelected}
-        isExpanded={isExpanded}
-        rowHeight={rowHeight}
-        formatting={formatting}
-        columns={columns}
-        store={store}
-        tableAddon={tableAddon}
-        expandable={props.expandable}
-        selectable={selectable}
-        rowKey={rowKey}
-      />
-    );
-  }, [
-    store.state.selectedRows.value,
-    store.state.expandedRows.value,
+  const renderRow = useRenderRowCallback({
+    store,
     rowKey,
     rowHeight,
-    formatting,
     columns,
-    getColumnWidth,
-    tableAddon,
-    props.expandable,
+    expandable,
     selectable,
-  ]);
+    tableAddon,
+    getColumnWidth,
+  });
 
   return (
     <>
@@ -209,9 +188,9 @@ export function VirtualTableView(props: VirtualTableViewProps) {
           style={tableStyle}
           class="vski-table"
         >
-          <thead>
+          <thead id="vski-table-main-head">
             <tr>
-              {props.expandable && (
+              {expandable && (
                 <th
                   style={{ width: "60px" }}
                   class="vski-expanded-row-th"
@@ -292,7 +271,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
         renderRow={renderRow}
         rowHeight={rowHeight}
         tableStyle={tableStyle}
-        top={headerHeight}
+        top={0}
       />
 
       <div ref={bodyContainerRef}>

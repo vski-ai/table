@@ -252,3 +252,66 @@ export const Row = memo((props: RowProps) => {
     </tr>
   );
 });
+
+interface RenderRowCallbackProps {
+  store: TableStore;
+  rowKey?: string;
+  rowHeight: number;
+  columns: string[];
+  tableAddon: any;
+  expandable?: boolean;
+  selectable?: boolean;
+  getColumnWidth: (col: string) => number;
+}
+
+export function useRenderRowCallback({
+  store,
+  rowHeight,
+  columns,
+  tableAddon,
+  selectable,
+  expandable,
+  getColumnWidth,
+  rowKey = "id",
+}: RenderRowCallbackProps) {
+  const formatting = store.state.cellFormatting.value;
+  const selected = store.state.selectedRows.value;
+  const expanded = store.state.expandedRows.value;
+
+  return useCallback((row: RowType, index: number) => {
+    const isSelected = selected.includes(
+      row[rowKey],
+    );
+    const isExpanded = expanded.includes(
+      row[rowKey],
+    );
+
+    return (
+      <Row
+        row={row}
+        rowIndex={index}
+        isSelected={isSelected}
+        isExpanded={isExpanded}
+        rowHeight={rowHeight}
+        formatting={formatting}
+        columns={columns}
+        store={store}
+        tableAddon={tableAddon}
+        expandable={expandable}
+        selectable={selectable}
+        rowKey={rowKey}
+      />
+    );
+  }, [
+    selected,
+    expanded,
+    rowKey,
+    rowHeight,
+    formatting,
+    columns,
+    getColumnWidth,
+    tableAddon,
+    expandable,
+    selectable,
+  ]);
+}
