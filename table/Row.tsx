@@ -12,20 +12,25 @@ import { RowSorter } from "@/sorting/mod.ts";
 import { Row as RowType } from "./types.ts";
 import { CellFormatting } from "@/format/types.ts";
 import { TableStore } from "@/store/types.ts";
+import { sanitizeColName } from "@/utils/sanitizeColName.ts";
 
 interface RowProps {
   row: RowType;
   rowIndex: number | string;
   isSelected?: boolean;
   isExpanded?: boolean;
-  expandable?: boolean;
-  selectable?: boolean;
   rowKey: string;
   rowHeight: number;
   formatting: Record<string, CellFormatting>;
   columns: string[];
+  stickyColumns: {
+    left: Record<string, number>;
+    right: Record<string, number>;
+  };
   store: TableStore;
   tableAddon: any;
+  expandable?: boolean;
+  selectable?: boolean;
 }
 
 export const Row = memo((props: RowProps) => {
@@ -39,9 +44,10 @@ export const Row = memo((props: RowProps) => {
     columns,
     store,
     tableAddon,
+    rowKey,
     expandable,
     selectable,
-    rowKey,
+    stickyColumns,
   } = props;
 
   const onExpansionToggle = useCallback(() => {
@@ -189,15 +195,23 @@ export const Row = memo((props: RowProps) => {
       )}
 
       {columns.map((col, colIndex) => {
-        const sanitizedCol = col.replace(/[^a-zA-Z0-9]/g, "_");
+        const isStickyLeft = typeof stickyColumns.left[col] === "number";
+        const isStickyRight = typeof stickyColumns.right[col] === "number";
+
         return (
           <td
             key={col}
             style={{
-              width: `var(--col-width-${sanitizedCol})`,
+              width: `var(--col-width-${sanitizeColName(col)})`,
               height: `${rowHeight}px`,
+              left: isStickyLeft ? stickyColumns.left[col] : undefined,
+              right: isStickyRight ? stickyColumns.right[col] : undefined,
+              zIndex: isStickyLeft || isStickyRight ? 100 : 0,
+              position: isStickyLeft || isStickyRight ? "sticky" : undefined,
             }}
-            class="vski-table-group-cell"
+            class={`vski-table-group-cell ${
+              isStickyLeft || isStickyRight ? "vski-sticky-col" : ""
+            }`}
           >
             <div
               class="truncate"
@@ -262,6 +276,10 @@ interface RenderRowCallbackProps {
   expandable?: boolean;
   selectable?: boolean;
   getColumnWidth: (col: string) => number;
+  stickyColumns: {
+    left: Record<string, number>;
+    right: Record<string, number>;
+  };
 }
 
 export function useRenderRowCallback({
@@ -271,6 +289,7 @@ export function useRenderRowCallback({
   tableAddon,
   selectable,
   expandable,
+  stickyColumns,
   getColumnWidth,
   rowKey = "id",
 }: RenderRowCallbackProps) {
@@ -292,13 +311,14 @@ export function useRenderRowCallback({
         rowIndex={index}
         isSelected={isSelected}
         isExpanded={isExpanded}
+        selectable={selectable}
+        expandable={expandable}
         rowHeight={rowHeight}
         formatting={formatting}
         columns={columns}
+        stickyColumns={stickyColumns}
         store={store}
         tableAddon={tableAddon}
-        expandable={expandable}
-        selectable={selectable}
         rowKey={rowKey}
       />
     );
@@ -313,5 +333,6 @@ export function useRenderRowCallback({
     tableAddon,
     expandable,
     selectable,
+    stickyColumns,
   ]);
 }

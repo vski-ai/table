@@ -1,16 +1,14 @@
 import { Signal, useSignal } from "@preact/signals";
 import { XYModal } from "./XYModal.tsx";
 import { Formatting } from "@/format/index.tsx";
+import { CommandType, TableStore } from "@/store/mod.ts";
+import { StickyPosition } from "@/store/types.ts";
 import MenuIcon from "lucide-react/dist/esm/icons/sliders-horizontal.js";
 
 export interface MenuProps {
   column: string;
   openSignal?: Signal<boolean>;
-  store: ColumnMenuStore;
-}
-
-export interface ColumnMenuStore {
-  cellFormatting: Signal<Record<string, any>>;
+  store: TableStore;
 }
 
 export const ColumnMenu = ({
@@ -34,7 +32,7 @@ export const ColumnMenu = ({
         target={target}
         openSignal={openSignal}
         margins={{
-          top: 72,
+          top: 56,
         }}
       >
         <div tabIndex={1} className="tabs-lift tabs w-full min-w-full">
@@ -59,8 +57,33 @@ export const ColumnMenu = ({
           <div className=" start-0 tab-content max-w-full border-base-300 bg-base-100 p-6">
             <Formatting
               column={column}
-              formatting={store.cellFormatting}
+              formatting={store.state.cellFormatting}
             />
+          </div>
+          <div class="p-4">
+            <label class="label">
+              <span class="label-text">Sticky Position</span>
+            </label>
+            <select
+              class="select select-bordered w-full max-w-xs"
+              value={store.state.stickyColumns.value[column] || "false"}
+              onChange={(e) => {
+                const position = (e.target as HTMLSelectElement).value as
+                  | StickyPosition
+                  | "false";
+                store.dispatch({
+                  type: CommandType.COLUMN_STICK_SET,
+                  payload: {
+                    column,
+                    position: position === "false" ? false : position,
+                  },
+                });
+              }}
+            >
+              <option value="false">None</option>
+              <option value="left">Left</option>
+              <option value="right">Right</option>
+            </select>
           </div>
         </div>
       </XYModal>

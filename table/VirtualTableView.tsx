@@ -1,29 +1,24 @@
 import { useSignal } from "@preact/signals";
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "preact/hooks";
+import { useCallback, useMemo, useRef } from "preact/hooks";
 
 import {
   useColumnWidthEffect,
   useLoadMoreEffect,
   useRowHeights,
   useRowKey,
+  useStickyColOffset,
   useStickyGroupHeaders,
   useTableStyle,
   useVariableVirtualizer,
   useVisibleRows,
 } from "@/hooks/mod.ts";
-import { Row as RowType, VirtualTableViewProps } from "./types.ts";
+import { VirtualTableViewProps } from "./types.ts";
 import { ResizableHeader } from "./ResizableHeader.tsx";
 import { CommandType } from "@/store/mod.ts";
 import { RowSorter, sorter } from "@/sorting/mod.ts";
 import { ColumnMenu } from "@/menu/ColumnMenu.tsx";
 import { StickyRowsContainer } from "./StickyRowsContainer.tsx";
-import { Row, useRenderRowCallback } from "./Row.tsx";
+import { useRenderRowCallback } from "./Row.tsx";
 
 export function VirtualTableView(props: VirtualTableViewProps) {
   const {
@@ -52,14 +47,6 @@ export function VirtualTableView(props: VirtualTableViewProps) {
   const resizingColumn = useSignal<{ column: string; width: number } | null>(
     null,
   );
-  const [headerHeight, setHeaderHeight] = useState(0);
-  const formatting = store.state.cellFormatting.value;
-
-  useEffect(() => {
-    if (headerContainerRef.current) {
-      setHeaderHeight(headerContainerRef.current.offsetHeight);
-    }
-  }, [headerContainerRef.current]);
 
   // TODO: first filter then sort
   const sortedData = useMemo(() => {
@@ -86,10 +73,11 @@ export function VirtualTableView(props: VirtualTableViewProps) {
 
   const renderColumnExtension = useCallback((col: string) => (
     <>
-      <ColumnMenu column={col} store={store.state} />
+      <ColumnMenu column={col} store={store} />
       {columnExtensions?.(col)}
     </>
   ), []);
+  console.log(1);
 
   const rowKey = useRowKey(columns, rowIdentifier);
 
@@ -122,6 +110,11 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     rowHeights,
     maxLevel: stickyGroupHeaderLevel,
     drilldowns: store.state.drilldowns.value,
+  });
+
+  const stickyColumns = useStickyColOffset({
+    store,
+    columns,
   });
 
   useColumnWidthEffect({
@@ -176,13 +169,19 @@ export function VirtualTableView(props: VirtualTableViewProps) {
     selectable,
     tableAddon,
     getColumnWidth,
+    stickyColumns,
   });
 
   return (
     <>
       <div
         ref={headerContainerRef}
-        style={{ position: "sticky", top: 0, zIndex: 10 }}
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
+          width: tableStyle.width,
+        }}
       >
         <table
           style={tableStyle}
@@ -232,6 +231,7 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                   width={getColumnWidth("$group_by")}
                   onResize={handleResize}
                   onResizeUpdate={handleResizeUpdate}
+                  stickyColumns={stickyColumns}
                 >
                   <span></span>
                 </ResizableHeader>
@@ -247,8 +247,10 @@ export function VirtualTableView(props: VirtualTableViewProps) {
                   extensions={renderColumnExtension}
                   action={renderColumnAction}
                   onColumnDrop={onColumnDrop}
+                  stickyColumns={stickyColumns}
                 />
               ))}
+
               {tableAddon
                 ? (
                   <th

@@ -45,4 +45,9 @@
   .group-sorter-active {
     @apply !opacity-100 !text-accent;
   }
+
+  .vski-sticky-col {
+    @apply bg-base-300 border-r border-r-accent/10;
+    box-shadow: 1px 0px 5px var(--color-base-300);
+  }
 }

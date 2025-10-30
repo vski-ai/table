@@ -37,7 +37,6 @@ export const XYModal = ({
     ...margins,
   };
 
-  const [mounted, setMounted] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const topPosition = useSignal(0);
   const leftPosition = useSignal(0);
@@ -48,7 +47,10 @@ export const XYModal = ({
   };
 
   const clickOutside = (ev: MouseEvent) => {
-    if (modalRef.current?.contains(ev.target as Node)) return;
+    if (
+      !modalRef.current || modalRef.current?.contains(ev.target as Node) ||
+      !openSignal.value
+    ) return;
     openSignal.value = false;
   };
 
@@ -65,7 +67,7 @@ export const XYModal = ({
     boxWidth.value = width;
   }
 
-  useSignalEffect(() => {
+  useEffect(() => {
     if (openSignal.value) {
       setTimeout(allign);
       document.addEventListener("click", clickOutside);
@@ -76,13 +78,14 @@ export const XYModal = ({
       document.removeEventListener("resize", allign);
       modalRef.current?.removeEventListener("blur", onBlur);
     }
-  });
+    return () => {
+      document.removeEventListener("click", clickOutside);
+      document.removeEventListener("resize", allign);
+      modalRef.current?.removeEventListener("blur", onBlur);
+    };
+  }, [openSignal.value, modalRef.current]);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!(mounted && openSignal.value)) return null;
+  if (!(openSignal.value)) return null;
 
   return (
     <div className="modal modal-open bg-transparent pointer-events-none">

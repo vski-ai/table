@@ -1,7 +1,11 @@
 import { effect, signal } from "@preact/signals";
-import { Command, CommandType } from "./commands.ts";
+import {
+  ColumnStickSetCommandPayload,
+  Command,
+  CommandType,
+} from "./commands.ts";
 import { StorageAdapter } from "./storage.ts";
-import { TableState, TableStore } from "./types.ts";
+import { StickyPosition, TableState, TableStore } from "./types.ts";
 
 const MAX_HISTORY_SIZE = 100;
 
@@ -22,10 +26,13 @@ export function createTableStore(
     leafSorting: signal(initialState?.leafSorting || {}),
     columnOrder: signal(initialState?.columnOrder || []),
     columnVisibility: signal(initialState?.columnVisibility || {}),
+    stickyColumns: signal<Record<string, StickyPosition>>(
+      initialState?.stickyColumns || {},
+    ),
     loading: signal(false),
     isMobile: signal(false),
-    selectedRows: signal([]),
-    expandedRows: signal([]),
+    selectedRows: signal(initialState?.selectedRows || []),
+    expandedRows: signal(initialState?.expandedRows || []),
     cellFormatting: signal(initialState?.cellFormatting || {}),
     columnWidths: signal(initialState?.columnWidths || {}),
   };
@@ -38,10 +45,12 @@ export function createTableStore(
         drilldowns: state.drilldowns.value,
         filters: state.filters.value,
         sorting: state.sorting.value,
+        leafSorting: state.leafSorting.value,
         columnOrder: state.columnOrder.value,
         columnVisibility: state.columnVisibility.value,
         cellFormatting: state.cellFormatting.value,
         columnWidths: state.columnWidths.value,
+        stickyColumns: state.stickyColumns.value,
       };
       storage.setItem(`tableState_${tableId}`, currentState);
     }
@@ -99,11 +108,19 @@ export function createTableStore(
         break;
       }
 
-      // Formatting
       case CommandType.CELL_FORMATTING_SET:
         state.cellFormatting.value = command.payload;
         break;
 
+      case CommandType.COLUMN_STICK_SET: {
+        const { column, position } = command
+          .payload as ColumnStickSetCommandPayload;
+        state.stickyColumns.value = {
+          ...state.stickyColumns.value,
+          [column]: position,
+        };
+        break;
+      }
       default:
         break;
     }

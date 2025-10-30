@@ -7,3 +7,4 @@ export * from "./useVisibleRows.ts";
 export * from "./useRowHeights.ts";
 export * from "./useColumnWidthEffect.ts";
 export * from "./useLoadMoreEffect.ts";
+export * from "./useStickyColOffset.ts";

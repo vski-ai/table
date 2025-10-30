@@ -12,6 +12,10 @@ export interface ResizableHeaderProps {
   onResizeUpdate: (column: string, newWidth: number) => void;
   onColumnDrop?: (draggedColumn: string, targetColumn: string) => void;
   formatColumnName?: (a: string) => string;
+  stickyColumns: {
+    left: Record<string, number>;
+    right: Record<string, number>;
+  };
   children?: any;
 }
 
@@ -26,6 +30,7 @@ export function ResizableHeader(
     onColumnDrop,
     formatColumnName,
     children,
+    stickyColumns,
   }: ResizableHeaderProps,
 ) {
   const isResizing = useSignal(false);
@@ -68,9 +73,18 @@ export function ResizableHeader(
     };
   }, [isResizing.value]);
 
+  const isStickyLeft = typeof stickyColumns.left[column] === "number";
+  const isStickyRight = typeof stickyColumns.right[column] === "number";
+
   return (
     <th
-      style={{ width: `${width}px` }}
+      style={{
+        width: `${width}px`,
+        left: isStickyLeft ? stickyColumns.left[column] : undefined,
+        right: isStickyRight ? stickyColumns.right[column] : undefined,
+        zIndex: isStickyLeft || isStickyRight ? 100 : 10,
+        position: isStickyLeft || isStickyRight ? "sticky" : undefined,
+      }}
       id={`column-header-${column}`}
     >
       <Draggable onDrop={onColumnDrop} id={column}>

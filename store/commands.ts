@@ -1,3 +1,5 @@
+import { StickyPosition } from "./types.ts";
+
 export enum CommandType {
   // Drilldown
   DRILLDOWN_ADD = "DRILLDOWN_ADD",
@@ -27,9 +29,16 @@ export enum CommandType {
 
   // Formatting
   CELL_FORMATTING_SET = "CELL_FORMATTING_SET",
+
+  COLUMN_STICK_SET = "COLUMN_STICK_SET",
 }
 
 export interface Command {
   type: CommandType;
   payload: any;
+}
+
+export interface ColumnStickSetCommandPayload {
+  column: string;
+  position: StickyPosition;
 }

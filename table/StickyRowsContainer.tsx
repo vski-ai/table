@@ -21,11 +21,13 @@ export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
   }, []);
   return (
     <div
-      class={stickyHeaders.length ? "shadow-2xl border-b border-accent/10" : ""}
       style={{ position: "sticky", top: `${top}px`, zIndex: 5 }}
     >
       <table
-        class="vski-table"
+        class={[
+          "vski-table",
+          stickyHeaders.length ? "shadow-2xl border-b border-accent/10" : "",
+        ].join(" ")}
         style={tableStyle}
         ref={ref}
       >

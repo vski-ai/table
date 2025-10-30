@@ -1,6 +1,6 @@
 import { useMemo } from "preact/hooks";
 import { TableStore } from "@/store/types.ts";
-
+import { sanitizeColName } from "@/utils/sanitizeColName.ts";
 export interface TableStyleProps {
   columns: string[];
   store: TableStore;
@@ -28,14 +28,26 @@ export function useTableStyle({
     [store.state.columnWidths.value],
   );
 
-  const style = useMemo(() => ({
-    width: `${totalWidth}px`,
-    ...columns.reduce((acc, col) => {
-      const sanitizedCol = col.replace(/[^a-zA-Z0-9]/g, "_");
-      acc[`--col-width-${sanitizedCol}`] = `${getColumnWidth(col)}px`;
-      return acc;
-    }, {} as Record<string, string>),
-  }), [totalWidth, columns]);
+  const style = useMemo(() => {
+    const widths: Record<string, string> = {
+      width: `${totalWidth}px`,
+      ...columns.reduce((acc, col, i) => {
+        acc[`--col-width-${sanitizeColName(col)}`] = `${getColumnWidth(col)}px`;
+        return acc;
+      }, {} as Record<string, string>),
+    };
+
+    const currentState = store.state.columnWidths.value;
+    Object.entries(currentState).reduce(
+      (sum, [col, _]) => {
+        widths[`--col-left-${sanitizeColName(col)}`] = sum + "px";
+        return sum + getColumnWidth(col);
+      },
+      0,
+    );
+
+    return widths;
+  }, [totalWidth, columns]);
 
   return {
     style,
