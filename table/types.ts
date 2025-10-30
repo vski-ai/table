@@ -12,10 +12,11 @@ export type VirtualTableViewProps =
     rowHeight?: number;
     buffer?: number;
     scrollContainerRef?: RefObject<HTMLElement>;
-    groupStates?: Signal<Record<string, boolean>>;
     rowIdentifier?: string;
     tableAddon?: JSX.Element;
     sortable?: boolean;
+    enumerable?: boolean;
+    groupable?: boolean;
     stickyGroupHeaderLevel?: number;
     onColumnDrop?: (draggedColumn: string, targetColumn: string) => void;
     formatColumnName?: (a: string) => string;

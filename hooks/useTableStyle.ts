@@ -7,7 +7,10 @@ export interface TableStyleProps {
   getColumnWidth: (col: string) => number;
   selectable?: boolean;
   expandable?: boolean;
+  groupable?: boolean;
+  enumerable?: boolean;
   hasAddon?: boolean;
+  key?: any;
 }
 
 export function useTableStyle({
@@ -16,16 +19,20 @@ export function useTableStyle({
   columns,
   selectable,
   expandable,
+  enumerable,
   hasAddon,
+  key,
 }: TableStyleProps) {
+  const leftOffset = 0 + (enumerable ? 50 : 0) + (expandable ? 50 : 0) +
+    (selectable ? 50 : 0);
   const totalWidth = useMemo(
     () =>
       Object.entries(store.state.columnWidths.value).reduce(
         (sum, [col, _]) => sum + getColumnWidth(col),
         0,
-      ) + (expandable ? 50 : 0) + (selectable ? 50 : 0) +
+      ) + leftOffset +
       (hasAddon ? 80 : 0),
-    [store.state.columnWidths.value],
+    [store.state.columnWidths.value, key],
   );
 
   const style = useMemo(() => {
@@ -47,10 +54,11 @@ export function useTableStyle({
     );
 
     return widths;
-  }, [totalWidth, columns]);
+  }, [totalWidth, columns, store.state.columnWidths.value, key]);
 
   return {
     style,
     totalWidth,
+    leftOffset,
   };
 }

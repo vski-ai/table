@@ -11,6 +11,9 @@
         @apply p-1 w-full outline-0;
       }
     }
+    .vski-select-row-th {
+      @apply justify-center text-center;
+    }
   }
 
   .vski-table-group-row {

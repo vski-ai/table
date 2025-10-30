@@ -36,6 +36,7 @@ export function createTableStore(
     expandedRows: signal(initialState?.expandedRows || []),
     cellFormatting: signal(initialState?.cellFormatting || {}),
     columnWidths: signal(initialState?.columnWidths || {}),
+    resizingColumn: signal(null),
   };
 
   const history: Command[] = [];

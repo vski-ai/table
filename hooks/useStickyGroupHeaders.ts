@@ -9,6 +9,7 @@ interface UseStickyGroupHeadersProps {
   rowHeights: number[];
   maxLevel?: number;
   expandedLevels?: number[] | string[];
+  groupable?: boolean;
 }
 
 type IndexedRow = {
@@ -26,11 +27,14 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
     rowHeights,
     maxLevel = 2,
     expandedLevels,
+    groupable,
   } = props;
 
   const result = useSignal<IndexedRow[]>([]);
 
   useEffect(() => {
+    if (!groupable) return;
+
     const scrollContainer = scrollContainerRef?.current as HTMLDivElement ||
       globalThis;
     if (!scrollContainer) return;
@@ -71,7 +75,7 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
     return () => {
       scrollContainer.removeEventListener("scroll", handleScroll);
     };
-  }, [visibleRows, rowHeights, maxLevel, expandedLevels]);
+  }, [groupable, visibleRows, rowHeights, maxLevel, expandedLevels]);
 
   return result;
 };

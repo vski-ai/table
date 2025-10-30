@@ -9,3 +9,5 @@ export * from "./useColumnWidthEffect.ts";
 export * from "./useLoadMoreEffect.ts";
 export * from "./useStickyColOffset.ts";
 export * from "./useColumnsOrderCallback.ts";
+export * from "./useColumnnResize.ts";
+export * from "./useOrderedColumns.ts";

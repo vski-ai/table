@@ -1,17 +1,40 @@
 import { memo } from "preact/compat";
-import { VirtualTableViewProps } from "./types.ts";
 import { useEffect, useRef } from "preact/hooks";
+import {
+  useColumnResizer,
+  useStickyGroupHeaders,
+  useTableStyle,
+} from "@/hooks/mod.ts";
+import { TableStore } from "@/store/types.ts";
+import { Row } from "./types.ts";
 
 interface StickyRowsContainerProps {
-  stickyHeaders: any[];
-  rowHeight: number;
+  store: TableStore;
+  visibleRows: Row[];
   renderRow: (row: any, index: number) => preact.ComponentChild;
-  tableStyle: any;
-  top: number;
+  top?: number;
+  expandable?: boolean;
+  selectable?: boolean;
+  groupable?: boolean;
+  enumerable?: boolean;
+  columns: string[];
+  scrollContainerRef?: any;
+  rowHeights: number[];
 }
 
 export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
-  const { stickyHeaders, rowHeight, renderRow, tableStyle, top } = props;
+  const {
+    store,
+    visibleRows,
+    columns,
+    renderRow,
+    top = 0,
+    selectable,
+    enumerable,
+    groupable,
+    scrollContainerRef,
+    rowHeights,
+  } = props;
   const ref = useRef<HTMLTableElement>(null);
   useEffect(() => {
     const mainHead = document.getElementById("vski-table-main-head");
@@ -19,6 +42,29 @@ export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
       ref.current?.prepend(mainHead);
     }
   }, []);
+  const {
+    getColumnWidth,
+  } = useColumnResizer({
+    store,
+  });
+  const { style } = useTableStyle({
+    store,
+    columns,
+    selectable,
+    enumerable,
+    groupable,
+    getColumnWidth,
+  });
+
+  const stickyHeaders = useStickyGroupHeaders({
+    groupable,
+    scrollContainerRef,
+    visibleRows,
+    rowHeights,
+    maxLevel: 2,
+    expandedLevels: store.state.expandedLevels.value,
+  });
+
   return (
     <div
       style={{ position: "sticky", top: `${top}px`, zIndex: 5 }}
@@ -26,13 +72,15 @@ export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
       <table
         class={[
           "vski-table",
-          stickyHeaders.length ? "shadow-2xl border-b border-accent/10" : "",
+          stickyHeaders.value.length
+            ? "shadow-2xl border-b border-accent/10"
+            : "",
         ].join(" ")}
-        style={tableStyle}
+        style={style}
         ref={ref}
       >
         <tbody>
-          {stickyHeaders.map((header, _) =>
+          {stickyHeaders.value.map((header, _) =>
             renderRow(header.row, header.index)
           )}
         </tbody>

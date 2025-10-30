@@ -13,6 +13,7 @@ import { Row as RowType } from "./types.ts";
 import { CellFormatting } from "@/format/types.ts";
 import { TableStore } from "@/store/types.ts";
 import { sanitizeColName } from "@/utils/sanitizeColName.ts";
+import { useStickyColOffset } from "@/hooks/useStickyColOffset.ts";
 
 interface RowProps {
   row: RowType;
@@ -23,14 +24,12 @@ interface RowProps {
   rowHeight: number;
   formatting: Record<string, CellFormatting>;
   columns: string[];
-  stickyColumns: {
-    left: Record<string, number>;
-    right: Record<string, number>;
-  };
   store: TableStore;
   tableAddon: any;
   expandable?: boolean;
   selectable?: boolean;
+  groupable?: boolean;
+  enumerable?: boolean;
 }
 
 export const Row = memo((props: RowProps) => {
@@ -47,8 +46,14 @@ export const Row = memo((props: RowProps) => {
     rowKey,
     expandable,
     selectable,
-    stickyColumns,
+    groupable,
+    enumerable,
   } = props;
+
+  const stickyColumns = useStickyColOffset({
+    store,
+    columns,
+  });
 
   const onExpansionToggle = useCallback(() => {
     store.dispatch({
@@ -73,7 +78,7 @@ export const Row = memo((props: RowProps) => {
     }
   }, [store, row, rowKey]);
 
-  const onDrilldown = useCallback(() => {
+  const onLevelToggle = useCallback(() => {
     const newexpandedLevels =
       store.state.expandedLevels.value.includes(row.id as never)
         ? store.state.expandedLevels.value.filter((id) => id !== row.id)
@@ -99,6 +104,20 @@ export const Row = memo((props: RowProps) => {
         "--group-level": row.$group_level ?? 0,
       }}
     >
+      {enumerable && (
+        <td
+          class="vski-table-cell"
+          style={{ width: "50px" }}
+        >
+          <button
+            type="button"
+            class="btn btn-ghost btn-md"
+            onClick={onExpansionToggle}
+          >
+            {rowIndex}
+          </button>
+        </td>
+      )}
       {expandable && (
         <td
           class="vski-table-cell"
@@ -127,7 +146,7 @@ export const Row = memo((props: RowProps) => {
         </td>
       )}
 
-      {store.state.expandedLevels && (
+      {groupable && (
         <td
           key="$group_by"
           data-column-name="$group_by"
@@ -146,7 +165,7 @@ export const Row = memo((props: RowProps) => {
                   )}
                   size={16}
                   level={row.$group_level!}
-                  onClick={onDrilldown}
+                  onClick={onLevelToggle}
                 />
                 <GroupLevelLine
                   level={row.$group_level!}
@@ -162,7 +181,7 @@ export const Row = memo((props: RowProps) => {
                   )}
                 <span
                   class="c-pointer"
-                  onClick={onDrilldown}
+                  onClick={onLevelToggle}
                 >
                   <span class="ml-1" />
                   <CellFormatter
@@ -279,11 +298,8 @@ interface RenderRowCallbackProps {
   tableAddon: any;
   expandable?: boolean;
   selectable?: boolean;
-  getColumnWidth: (col: string) => number;
-  stickyColumns: {
-    left: Record<string, number>;
-    right: Record<string, number>;
-  };
+  groupable?: boolean;
+  enumerable?: boolean;
 }
 
 export function useRenderRowCallback({
@@ -293,8 +309,8 @@ export function useRenderRowCallback({
   tableAddon,
   selectable,
   expandable,
-  stickyColumns,
-  getColumnWidth,
+  groupable,
+  enumerable,
   rowKey = "id",
 }: RenderRowCallbackProps) {
   const formatting = store.state.cellFormatting.value;
@@ -319,8 +335,9 @@ export function useRenderRowCallback({
         expandable={expandable}
         rowHeight={rowHeight}
         formatting={formatting}
+        groupable={groupable}
+        enumerable={enumerable}
         columns={columns}
-        stickyColumns={stickyColumns}
         store={store}
         tableAddon={tableAddon}
         rowKey={rowKey}
@@ -333,10 +350,8 @@ export function useRenderRowCallback({
     rowHeight,
     formatting,
     columns,
-    getColumnWidth,
     tableAddon,
     expandable,
     selectable,
-    stickyColumns,
   ]);
 }
