@@ -143,6 +143,9 @@ export function TableView(props: VirtualTableViewProps) {
 
   const focusNavCallback = useFocusNavCallback({
     store,
+    startIndex,
+    endIndex,
+    scrollContainerRef,
     key: paddingTop + paddingBottom,
   });
 

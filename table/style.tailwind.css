@@ -16,7 +16,7 @@
     td {
       @apply border border-accent/20;
       &:focus {
-        box-shadow: 0px 0px 2px #000000 inset;
+        @apply bg-accent/20;
       }
     }
   }
