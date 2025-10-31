@@ -73,7 +73,7 @@ export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
         class={[
           "vski-table",
           stickyHeaders.value.length
-            ? "shadow-2xl border-b border-accent/10"
+            ? "shadow-md border-b border-accent/10"
             : "",
         ].join(" ")}
         style={style}

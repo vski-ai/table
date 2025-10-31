@@ -13,7 +13,7 @@ import { Row as RowType } from "./types.ts";
 import { CellFormatting } from "@/format/types.ts";
 import { TableStore } from "@/store/types.ts";
 import { sanitizeColName } from "@/utils/sanitizeColName.ts";
-import { useFocusNavCallback, useStickyColOffset } from "@/hooks/mod.ts";
+import { useStickyColOffset } from "@/hooks/mod.ts";
 
 interface RowProps {
   row: RowType;
@@ -89,7 +89,6 @@ export const Row = memo((props: RowProps) => {
     });
   }, [store, row]);
 
-  const focusNavCallback = useFocusNavCallback();
   const tabIndex = 5;
 
   return (
@@ -106,7 +105,6 @@ export const Row = memo((props: RowProps) => {
         height: rowHeight,
         "--group-level": row.$group_level ?? 0,
       }}
-      onKeyDown={focusNavCallback}
     >
       {enumerable && (
         <td
@@ -242,12 +240,12 @@ export const Row = memo((props: RowProps) => {
               height: `${rowHeight}px`,
               left: isStickyLeft ? stickyColumns.left[col] : undefined,
               right: isStickyRight ? stickyColumns.right[col] : undefined,
-              zIndex: isStickyLeft || isStickyRight ? 100 : 0,
+              zIndex: isStickyLeft || isStickyRight ? 1 : 0,
               position: isStickyLeft || isStickyRight ? "sticky" : undefined,
             }}
             class={`vski-table-group-cell ${
-              isStickyLeft || isStickyRight ? "vski-sticky-col" : ""
-            }`}
+              isStickyLeft ? "vski-sticky-left-col" : ""
+            } ${isStickyRight ? "vski-sticky-right-col" : ""}`}
           >
             <div
               class="truncate"

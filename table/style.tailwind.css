@@ -1,11 +1,10 @@
 @layer components {
   .vski-table {
-    @apply table w-auto bg-base-100 table-fixed border-separate border-spacing-0
-      rounded-none;
+    @apply table w-auto bg-base-100 table-fixed border-spacing-0 rounded-none;
 
     th {
-      @apply sticky top-0 bg-base-200 z-10 shadow p-1 border-r border-r-base-300
-        h-14;
+      @apply sticky top-0 bg-base-200 z-10 shadow p-1 border border-accent/20
+        border-b-0;
 
       input {
         @apply p-1 w-full outline-0;
@@ -15,17 +14,20 @@
       @apply justify-center text-center;
     }
     td {
-      @apply focus-within:border-2 focus:border-2;
+      @apply border border-accent/20;
+      &:focus {
+        box-shadow: 0px 0px 2px #000000 inset;
+      }
     }
   }
 
   .vski-table-group-row {
     @apply bg-base-300 font-bold;
-    filter: brightness(calc(1 + var(--group-level, 0) * 0.1));
+    /* filter: brightness(calc(1 + var(--group-level, 0) * 0.1)); */
   }
 
   .vski-table-row {
-    filter: brightness(calc(1 + var(--group-level, 0) * 0.1));
+    /* filter: brightness(calc(1 + var(--group-level, 0) * 0.1)); */
   }
 
   .vski-table-cell {
@@ -52,8 +54,12 @@
     @apply !opacity-100 !text-accent;
   }
 
-  .vski-sticky-col {
-    @apply bg-base-300 border-r border-r-accent/10;
-    box-shadow: 1px 0px 5px var(--color-base-300);
+  .vski-sticky-left-col {
+    @apply bg-base-100 border-r border-r-accent/10;
+    box-shadow: 2px 0px 0px 0px #72f3f554;
+  }
+  .vski-sticky-right-col {
+    @apply bg-base-100 border-l border-l-accent/10;
+    box-shadow: -2px 0px 0px 0px #72f3f554;
   }
 }

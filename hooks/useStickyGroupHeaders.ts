@@ -34,7 +34,6 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
 
   useEffect(() => {
     if (!groupable) return;
-
     const scrollContainer = scrollContainerRef?.current as HTMLDivElement ||
       globalThis;
     if (!scrollContainer) return;
@@ -75,7 +74,14 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
     return () => {
       scrollContainer.removeEventListener("scroll", handleScroll);
     };
-  }, [groupable, visibleRows, rowHeights, maxLevel, expandedLevels]);
+  }, [
+    scrollContainerRef?.current,
+    groupable,
+    visibleRows,
+    rowHeights,
+    maxLevel,
+    expandedLevels,
+  ]);
 
   return result;
 };

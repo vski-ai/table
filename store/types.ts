@@ -20,6 +20,7 @@ export interface TableState {
   cellFormatting: Signal<Record<string, CellFormatting>>;
   columnWidths: Signal<Record<string, number>>;
   resizingColumn: Signal<{ column: string; width: number } | null>;
+  focusedCell: Signal<{ tabIndex: number; rowIndex: number } | null>;
 }
 
 export interface TableStore {

@@ -3,16 +3,17 @@ import { hydrate, LocationProvider, Route, Router } from "preact-iso";
 import { NotFound } from "./404.tsx";
 import { Home } from "./Home.tsx";
 import { BasicTable } from "./basic-table.tsx";
+import Layout from "./layout.tsx";
 
 export function App() {
   return (
     <LocationProvider>
-      <main>
+      <Layout>
         <Router>
           <Route path="/" component={BasicTable} />
           <Route default component={NotFound} />
         </Router>
-      </main>
+      </Layout>
     </LocationProvider>
   );
 }

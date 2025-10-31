@@ -3,6 +3,7 @@ import { useCallback, useMemo, useRef } from "preact/hooks";
 import {
   useColumnResizer,
   useColumnWidthEffect,
+  useFocusNavCallback,
   useLoadMoreEffect,
   useOrderedColumns,
   useRowHeights,
@@ -77,7 +78,6 @@ export function TableView(props: VirtualTableViewProps) {
       {columnExtensions?.(col)}
     </>
   ), []);
-  console.log(1);
 
   const rowKey = useRowKey(columns, rowIdentifier);
 
@@ -141,6 +141,11 @@ export function TableView(props: VirtualTableViewProps) {
     tableAddon,
   });
 
+  const focusNavCallback = useFocusNavCallback({
+    store,
+    key: paddingTop + paddingBottom,
+  });
+
   return (
     <>
       <ContextMenu store={store} />
@@ -171,6 +176,7 @@ export function TableView(props: VirtualTableViewProps) {
           columns,
           rowHeights,
           visibleRows,
+          scrollContainerRef,
         }}
       />
 
@@ -178,7 +184,9 @@ export function TableView(props: VirtualTableViewProps) {
         <table
           ref={tableRef}
           style={style}
+          id="vski-table-main"
           class="vski-table"
+          onKeyDown={focusNavCallback}
         >
           <tbody>
             <RowPadding

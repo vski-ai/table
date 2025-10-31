@@ -109,7 +109,7 @@ export function ContextMenu({ store }: ContextMenuProps) {
             isVisible: false,
             activeMenu: "main",
           }; // Reset activeMenu on close
-        }, 300); // Match animation duration
+        }, 100); // Match animation duration
       }
     };
 
@@ -165,7 +165,7 @@ export function ContextMenu({ store }: ContextMenuProps) {
     isVisible
       ? "opacity-100 scale-100"
       : "opacity-0 scale-95 pointer-events-none",
-    isAnimating ? "transition-all duration-300 ease-out" : "",
+    isAnimating ? "transition-all duration-100 ease-out" : "",
   ].join(" ");
 
   return (
