@@ -14,6 +14,9 @@
     .vski-select-row-th {
       @apply justify-center text-center;
     }
+    td {
+      @apply focus-within:border-2 focus:border-2;
+    }
   }
 
   .vski-table-group-row {

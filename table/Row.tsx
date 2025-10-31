@@ -13,7 +13,7 @@ import { Row as RowType } from "./types.ts";
 import { CellFormatting } from "@/format/types.ts";
 import { TableStore } from "@/store/types.ts";
 import { sanitizeColName } from "@/utils/sanitizeColName.ts";
-import { useStickyColOffset } from "@/hooks/useStickyColOffset.ts";
+import { useFocusNavCallback, useStickyColOffset } from "@/hooks/mod.ts";
 
 interface RowProps {
   row: RowType;
@@ -89,6 +89,9 @@ export const Row = memo((props: RowProps) => {
     });
   }, [store, row]);
 
+  const focusNavCallback = useFocusNavCallback();
+  const tabIndex = 5;
+
   return (
     <tr
       key={row.id}
@@ -103,16 +106,19 @@ export const Row = memo((props: RowProps) => {
         height: rowHeight,
         "--group-level": row.$group_level ?? 0,
       }}
+      onKeyDown={focusNavCallback}
     >
       {enumerable && (
         <td
           class="vski-table-cell"
           style={{ width: "50px" }}
+          tabIndex={1}
         >
           <button
             type="button"
             class="btn btn-ghost btn-md"
             onClick={onExpansionToggle}
+            tabIndex={1}
           >
             {rowIndex}
           </button>
@@ -122,11 +128,13 @@ export const Row = memo((props: RowProps) => {
         <td
           class="vski-table-cell"
           style={{ width: "50px" }}
+          tabIndex={2}
         >
           <button
             type="button"
             class="btn btn-ghost btn-md"
             onClick={onExpansionToggle}
+            tabIndex={2}
           >
             {isExpanded ? "[-]" : "[+]"}
           </button>
@@ -136,12 +144,14 @@ export const Row = memo((props: RowProps) => {
         <td
           class="vski-table-cell"
           style={{ width: "50px" }}
+          tabIndex={3}
         >
           <input
             type="checkbox"
             class="checkbox"
             checked={isSelected}
             onChange={onSelectionChange}
+            tabIndex={3}
           />
         </td>
       )}
@@ -155,6 +165,7 @@ export const Row = memo((props: RowProps) => {
             height: `${rowHeight}px`,
           }}
           class="vski-table-group-cell"
+          tabIndex={4}
         >
           <div class="c-content">
             {row.$is_group_root && (
@@ -166,6 +177,7 @@ export const Row = memo((props: RowProps) => {
                   size={16}
                   level={row.$group_level!}
                   onClick={onLevelToggle}
+                  tabIndex={4}
                 />
                 <GroupLevelLine
                   level={row.$group_level!}
@@ -224,6 +236,7 @@ export const Row = memo((props: RowProps) => {
           <td
             key={col}
             data-column-name={col}
+            tabIndex={colIndex + tabIndex}
             style={{
               width: `var(--col-width-${sanitizeColName(col)})`,
               height: `${rowHeight}px`,

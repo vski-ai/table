@@ -7,10 +7,11 @@ interface GroupCaretProps {
   active: boolean;
   level: number;
   onClick?: () => void;
+  tabIndex?: number;
 }
 
 export const GroupCaret = memo((
-  { active, size, onClick, level }: GroupCaretProps,
+  { active, size, onClick, level, tabIndex }: GroupCaretProps,
 ) => {
   const style = { width: size, height: size };
   return (
@@ -21,6 +22,7 @@ export const GroupCaret = memo((
       style={{
         marginLeft: (size * (level ?? 0)) + "px",
       }}
+      tabIndex={tabIndex}
     >
       {active ? <ChevronDown style={style} /> : <ChevronRight style={style} />}
     </button>

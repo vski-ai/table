@@ -46,6 +46,7 @@ export const RowSorter = ({
     <button
       key={state?.column}
       type="button"
+      tabIndex={-1}
       style={style}
       class={`${className} ${state?.column === column && activeClassName}`}
       onClick={() => {

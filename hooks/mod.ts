@@ -11,3 +11,4 @@ export * from "./useStickyColOffset.ts";
 export * from "./useColumnsOrderCallback.ts";
 export * from "./useColumnnResize.ts";
 export * from "./useOrderedColumns.ts";
+export * from "./useFocusNavCallback.ts";
