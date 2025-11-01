@@ -34,6 +34,7 @@ export function useStickyColOffset({ store, columns }: StickyColOffset) {
   }, [
     store.state.columnWidths.value,
     store.state.stickyColumns.value,
+    store.state.columnOrder.value,
     columns,
   ]);
   return offsets;

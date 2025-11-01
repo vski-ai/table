@@ -1,4 +1,4 @@
 node_modules/
 .vite/
 dist/
-doc/mock/
+flat-1m-rows.json

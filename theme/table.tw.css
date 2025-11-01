@@ -1,14 +1,14 @@
 @layer components {
   .vt {
-    @apply table w-auto bg-accent/15 table-fixed border-spacing-px border-0
+    @apply table w-auto bg-black/10 table-fixed border-0 border-collapse
       rounded-none;
-    border-collapse: separate;
+
     tbody, thead {
       @apply bg-base-300;
     }
     th {
-      @apply sticky top-0 bg-accent/5 z-10 p-1 h-[50px];
-      /* box-shadow: 0px 3px 0px #00eeff32; */
+      @apply sticky top-0 bg-accent/5 z-10 p-1 h-[50px] border-transparent
+        border-x-1;
     }
 
     .vski-select-row-th {
@@ -16,9 +16,9 @@
     }
 
     td {
-      @apply bg-base-200/50;
+      @apply bg-base-200/50 border-transparent border-1 relative;
       &:focus {
-        @apply bg-accent/20 rounded;
+        @apply bg-accent/5;
       }
     }
 

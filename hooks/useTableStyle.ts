@@ -26,13 +26,22 @@ export function useTableStyle({
   const leftOffset = 0 + (enumerable ? 50 : 0) + (expandable ? 50 : 0) +
     (selectable ? 50 : 0);
   const totalWidth = useMemo(
-    () =>
-      Object.entries(store.state.columnWidths.value).reduce(
-        (sum, [col, _]) => sum + getColumnWidth(col),
-        0,
-      ) + leftOffset +
-      (hasAddon ? 80 : 0),
-    [store.state.columnWidths.value, key],
+    () => {
+      const { column, width: resizingColumnWidth } =
+        store.state.resizingColumn.value || {};
+
+      return Object.entries(store.state.columnWidths.value)
+        .filter(([col, _]) => {
+          return col !== column;
+        })
+        .reduce(
+          (sum, [col, _]) => sum + getColumnWidth(col),
+          resizingColumnWidth ?? 0,
+        ) +
+        leftOffset +
+        (hasAddon ? 80 : 0);
+    },
+    [store.state.columnWidths.value, store.state.resizingColumn.value, key],
   );
 
   const style = useMemo(() => {

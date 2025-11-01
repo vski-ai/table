@@ -46,11 +46,6 @@ export function StickyHeaderContainer({
     store,
   });
 
-  const stickyColumns = useStickyColOffset({
-    store,
-    columns,
-  });
-
   const orderColumnsCallback = useColumnsOrderCallback({
     store,
     columns,
@@ -61,6 +56,11 @@ export function StickyHeaderContainer({
     columns,
   });
 
+  const stickyColumns = useStickyColOffset({
+    store,
+    columns: columnsInOrder,
+  });
+
   const { style } = useTableStyle({
     store,
     getColumnWidth,
@@ -69,15 +69,14 @@ export function StickyHeaderContainer({
     enumerable,
     expandable,
   });
-
   return (
     <div
       style={{
         position: "sticky",
         top: 0,
         zIndex: 10,
-        width: style.width,
       }}
+      class="shadow-2xl"
     >
       <table
         style={style}

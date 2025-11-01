@@ -1,10 +1,18 @@
 @layer components {
-  .vt-s-left {
-    @apply bg-base-100 border-r border-r-accent/10;
+  th.vt-s-left {
+    @apply bg-base-300! border-r! border-r-accent/10!;
     box-shadow: 2px 0px 0px 0px #72f3f554;
   }
-  .vt-s-right {
-    @apply bg-base-100 border-l border-l-accent/10;
+  th.vt-s-right {
+    @apply bg-base-300! border-l! border-l-accent/10!;
+    box-shadow: -2px 0px 0px 0px #72f3f554;
+  }
+  td.vt-s-left {
+    @apply bg-base-200! border-r! border-r-accent/10!;
+    box-shadow: 2px 0px 0px 0px #72f3f554;
+  }
+  td.vt-s-right {
+    @apply bg-base-200! border-l! border-l-accent/10!;
     box-shadow: -2px 0px 0px 0px #72f3f554;
   }
 }

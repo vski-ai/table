@@ -49,13 +49,15 @@ export default function ({ children }: { children: any }) {
             </li>
           </ul>
           <div className="main-aside-bottom">
-            <a
+            {
+              /* <a
               href="/app/profile"
               class="btn btn-ghost btn-circle"
               aria-label="Profile"
             >
               <UserIcon style={{ width: "24px", height: "24px" }} />
-            </a>
+            </a> */
+            }
             <AsideFold />
             <ThemeSwitch theme={ui.value.theme!} />
           </div>

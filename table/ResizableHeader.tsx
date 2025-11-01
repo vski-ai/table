@@ -87,6 +87,10 @@ export function ResizableHeader(
         position: isStickyLeft || isStickyRight ? "sticky" : undefined,
       }}
       id={`column-header-${column}`}
+      class={[
+        isStickyLeft ? "vt-s-left" : "",
+        isStickyRight ? "vt-s-right" : "",
+      ].join(" ")}
     >
       <Draggable onDrop={onColumnDrop} id={column}>
         {children ? children : (

@@ -2,6 +2,7 @@ import { memo } from "preact/compat";
 import { useEffect, useRef } from "preact/hooks";
 import {
   useColumnResizer,
+  useOrderedColumns,
   useStickyGroupHeaders,
   useTableStyle,
 } from "@/hooks/mod.ts";
@@ -47,7 +48,7 @@ export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
   } = useColumnResizer({
     store,
   });
-  const { style } = useTableStyle({
+  const { style, totalWidth } = useTableStyle({
     store,
     columns,
     selectable,
@@ -64,11 +65,15 @@ export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
     maxLevel: 2,
     expandedLevels: store.state.expandedLevels.value,
   });
-
   return (
     <div
-      style={{ position: "sticky", top: `${top}px`, zIndex: 5 }}
-      class="bg-base-300"
+      style={{
+        position: "sticky",
+        top: `${top}px`,
+        zIndex: 5,
+        width: totalWidth,
+      }}
+      class="shadow-md bg-accent/5"
     >
       <table
         class={[

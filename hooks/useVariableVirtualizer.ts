@@ -8,11 +8,13 @@ export function useVariableVirtualizer(
     itemCount,
     rowHeights,
     buffer = 5,
+    spacing = 0,
   }: {
     scrollContainerRef?: RefObject<HTMLElement>;
     itemCount: number;
     rowHeights: number[];
     buffer?: number;
+    spacing?: number;
   },
 ) {
   const [range, setRange] = useState({ startIndex: 0, endIndex: 0 });
@@ -32,7 +34,7 @@ export function useVariableVirtualizer(
       }
       ignoreTimeoutRef.current = setTimeout(() => {
         ignoreScrollEventsRef.current = false;
-      }, 0);
+      }, 50);
     }
   }, [range]);
 
@@ -55,14 +57,14 @@ export function useVariableVirtualizer(
         startIndex = i;
         break;
       }
-      y += height;
+      y += height + spacing;
     }
 
     let endIndex = startIndex;
     let visibleHeight = 0;
     for (let i = startIndex; i < itemCount; i++) {
       const height = rowHeights[i] || 0;
-      visibleHeight += height;
+      visibleHeight += height + spacing;
       endIndex = i;
       if (visibleHeight >= containerHeight) {
         break;
@@ -78,6 +80,7 @@ export function useVariableVirtualizer(
     itemCount,
     rowHeights,
     buffer,
+    spacing,
     setRangeAndIgnoreScroll,
   ]);
 
@@ -116,11 +119,11 @@ export function useVariableVirtualizer(
   }, [scrollContainerRef?.current, calculateRange]);
 
   const paddingTop = rowHeights.slice(0, range.startIndex).reduce(
-    (sum, height) => sum + height,
+    (sum, height) => sum + height + spacing,
     0,
   );
   const paddingBottom = rowHeights.slice(range.endIndex + 1).reduce(
-    (sum, height) => sum + height,
+    (sum, height) => sum + height + spacing,
     0,
   );
 

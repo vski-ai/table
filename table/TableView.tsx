@@ -1,4 +1,10 @@
-import { useCallback, useMemo, useRef } from "preact/hooks";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "preact/hooks";
 
 import {
   useColumnResizer,
@@ -44,6 +50,7 @@ export function TableView(props: VirtualTableViewProps) {
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const tableRef = useRef<HTMLTableElement>(null); // For body table
   const bodyContainerRef = useRef<HTMLDivElement>(null);
+  const [borderSpacing] = useState(0);
 
   const columnsInOrder = useOrderedColumns({
     store,
@@ -106,6 +113,7 @@ export function TableView(props: VirtualTableViewProps) {
       itemCount: visibleRows.length,
       rowHeights,
       buffer,
+      spacing: borderSpacing,
     });
 
   useColumnWidthEffect({
@@ -122,7 +130,7 @@ export function TableView(props: VirtualTableViewProps) {
 
   const { getColumnWidth } = useColumnResizer({ store });
 
-  const { style } = useTableStyle({
+  const { style, totalWidth } = useTableStyle({
     store,
     getColumnWidth,
     columns,
@@ -145,14 +153,14 @@ export function TableView(props: VirtualTableViewProps) {
     tableAddon,
   });
 
-  const focusNavCallback = useFocusNavCallback({
+  const focusNav = useFocusNavCallback({
     store,
     startIndex,
     endIndex,
     key: paddingTop + paddingBottom,
+    scrollContainerRef: scrollContainerRef!,
+    rowHeights,
   });
-
-  console.log(startIndex, endIndex);
 
   return (
     <>
@@ -195,7 +203,8 @@ export function TableView(props: VirtualTableViewProps) {
           style={style}
           id="vt-main"
           class="vt"
-          onKeyDown={focusNavCallback}
+          onKeyDown={focusNav.onKeyDown}
+          onKeyUp={focusNav.onKeyUp}
         >
           <tbody>
             <RowPadding

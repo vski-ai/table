@@ -57,7 +57,7 @@ export const Row = memo((props: RowProps) => {
 
   const resizingRow = store.state.resizingRow.value;
   const isResizing = resizingRow?.rowId === row[rowKey];
-  const height = isResizing ? resizingRow.height : rowHeight;
+  const height = isResizing ? resizingRow?.height : rowHeight;
 
   const stickyColumns = useStickyColOffset({
     store,
@@ -126,7 +126,7 @@ export const Row = memo((props: RowProps) => {
             rowId={row[rowKey]}
             onResize={onResize}
             onResizeEnd={onResizeEnd}
-            rowHeight={height}
+            rowHeight={height!}
           />
         </td>
       )}
@@ -154,7 +154,7 @@ export const Row = memo((props: RowProps) => {
         >
           <input
             type="checkbox"
-            class="checkbox"
+            class="checkbox checkbox-sm"
             checked={isSelected}
             onChange={onSelectionChange}
             tabIndex={3}
@@ -237,7 +237,6 @@ export const Row = memo((props: RowProps) => {
       {columns.map((col, colIndex) => {
         const isStickyLeft = typeof stickyColumns.left[col] === "number";
         const isStickyRight = typeof stickyColumns.right[col] === "number";
-
         return (
           <td
             key={col}

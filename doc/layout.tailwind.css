@@ -1,30 +1,31 @@
 @layer components {
   .main-navbar {
-    @apply fixed top-0 z-100 bg-transparent shadow-none w-18 p-2;
+    @apply fixed top-0 z-100 bg-transparent shadow-none w-16 p-2;
   }
   .main-aside {
-    @apply -left-64 dense:-left-18 w-64 dense:w-18 min-w-64 dense:min-w-18
+    @apply -left-64 dense:-left-14 w-64 dense:w-14 min-w-64 dense:min-w-14
       aside-open:block fixed z-99 h-[calc(100vh)] top-0 overflow-y-auto
       overflow-x-hidden bg-base-200 border-r border-base-300 aside-open:left-0
       aside-open:dense:left-0 transition-[left] ease-in-out duration-200;
   }
   .main-aside-menu {
-    @apply menu menu-lg bg-base-200 rounded-box w-full dense:!w-16;
+    @apply menu menu-lg bg-base-200 rounded-box w-full dense:!w-12;
     li {
-      @apply dense:max-w-14 dense:w-14 dense:text-[0px] mt-2;
+      @apply dense:max-w-12 dense:w-12 dense:text-[0px] mt-2 p-0 m-0;
       a {
-        @apply dense:w-14 dense:max-w-14 h-10 dense:text-[0px];
+        @apply dense:w-14 dense:max-w-10 h-10 dense:text-[0px] m-0 pl-3
+          items-center;
         svg {
-          @apply mt-[2px];
+          @apply mt-[1px] w-4;
         }
       }
     }
   }
   .main-outlet {
     @apply p-0 min-w-[320px] w-full max-w-[calc(100vw)]
-      aside-open:dense:max-w-[calc(100vw-74px)]
+      aside-open:dense:max-w-[calc(100vw-60px)]
       aside-open:max-w-[calc(100vw-260px)] overflow-x-auto max-h-screen
-      min-h-screen sm:aside-open:ml-64 sm:dense:aside-open:ml-18 flex-1
+      min-h-screen sm:aside-open:ml-64 sm:dense:aside-open:ml-14 flex-1
       transition-all ease-in-out duration-200;
   }
   .main-aside-bottom {

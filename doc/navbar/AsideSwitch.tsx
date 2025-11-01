@@ -6,7 +6,7 @@ export function AsideSwitch() {
   return (
     <a
       role="button"
-      className="btn btn-circle ml-2 border border-primary text-primary"
+      className="btn btn-circle ml-0 -mt-0.5 border border-primary text-primary"
       onClick={() => {
         ui.value.aside = ui.value.aside == "1" ? "0" : "1";
         ui.value = { ...ui.value };
@@ -14,11 +14,11 @@ export function AsideSwitch() {
     >
       <LogsIcon
         className="hidden aside-open:block"
-        style={{ width: "24px", height: "24px" }}
+        style={{ width: "16px", height: "16px" }}
       />
       <MenuIcon
         className="block aside-open:hidden"
-        style={{ width: "24px", height: "24px" }}
+        style={{ width: "16px", height: "16px" }}
       />
     </a>
   );
