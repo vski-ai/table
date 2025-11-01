@@ -36,7 +36,9 @@ export function createTableStore(
     expandedRows: signal(initialState?.expandedRows || []),
     cellFormatting: signal(initialState?.cellFormatting || {}),
     columnWidths: signal(initialState?.columnWidths || {}),
+    rowHeights: signal(initialState?.rowHeights || {}),
     resizingColumn: signal(null),
+    resizingRow: signal(null),
     focusedCell: signal(null),
   };
 
@@ -54,6 +56,7 @@ export function createTableStore(
         columnVisibility: state.columnVisibility.value,
         cellFormatting: state.cellFormatting.value,
         columnWidths: state.columnWidths.value,
+        rowHeights: state.rowHeights.value,
         stickyColumns: state.stickyColumns.value,
       };
       storage.setItem(`tableState_${tableId}`, currentState);
@@ -95,6 +98,12 @@ export function createTableStore(
         break;
       case CommandType.COLUMN_WIDTHS_SET:
         state.columnWidths.value = command.payload;
+        break;
+      case CommandType.ROW_HEIGHTS_SET:
+        state.rowHeights.value = command.payload;
+        break;
+      case CommandType.ROW_RESIZING_SET:
+        state.resizingRow.value = command.payload;
         break;
 
       // View

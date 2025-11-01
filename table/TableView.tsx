@@ -87,7 +87,7 @@ export function TableView(props: VirtualTableViewProps) {
     sortable,
   });
 
-  const rowHeights = useRowHeights({
+  const getRowHeight = useRowHeights({
     data: visibleRows,
     store,
     expandable,
@@ -95,10 +95,14 @@ export function TableView(props: VirtualTableViewProps) {
     height: rowHeight,
   });
 
+  const rowHeights = useMemo(() => visibleRows.map(getRowHeight), [
+    visibleRows,
+    getRowHeight,
+  ]);
+
   const { startIndex, endIndex, paddingTop, paddingBottom } =
     useVariableVirtualizer({
       scrollContainerRef,
-      tableRef,
       itemCount: visibleRows.length,
       rowHeights,
       buffer,
@@ -132,7 +136,7 @@ export function TableView(props: VirtualTableViewProps) {
   const renderRow = useRenderRowCallback({
     store,
     rowKey,
-    rowHeight,
+    getRowHeight,
     columns: columnsInOrder,
     expandable,
     selectable,

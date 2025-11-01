@@ -14,6 +14,7 @@ import { CellFormatting } from "@/format/types.ts";
 import { TableStore } from "@/store/types.ts";
 import { sanitizeColName } from "@/utils/sanitizeColName.ts";
 import { useStickyColOffset } from "@/hooks/mod.ts";
+import { RowResizeHandle } from "./RowResizeHandle.tsx";
 
 interface RowProps {
   row: RowType;
@@ -22,6 +23,8 @@ interface RowProps {
   isExpanded?: boolean;
   rowKey: string;
   rowHeight: number;
+  onResize: (rowId: string | number, height: number) => void;
+  onResizeEnd: () => void;
   formatting: Record<string, CellFormatting>;
   columns: string[];
   store: TableStore;
@@ -39,6 +42,8 @@ export const Row = memo((props: RowProps) => {
     isSelected,
     isExpanded,
     rowHeight,
+    onResize,
+    onResizeEnd,
     formatting,
     columns,
     store,
@@ -49,6 +54,10 @@ export const Row = memo((props: RowProps) => {
     groupable,
     enumerable,
   } = props;
+
+  const resizingRow = store.state.resizingRow.value;
+  const isResizing = resizingRow?.rowId === row[rowKey];
+  const height = isResizing ? resizingRow.height : rowHeight;
 
   const stickyColumns = useStickyColOffset({
     store,
@@ -102,17 +111,23 @@ export const Row = memo((props: RowProps) => {
         row.$is_group_root ? "vt-g-row" : "vt-row",
       ].join(" ")}
       style={{
-        height: rowHeight,
+        height: height,
         "--group-level": row.$group_level ?? 0,
       }}
     >
       {enumerable && (
         <td
           class="vt-cell"
-          style={{ width: "50px" }}
+          style={{ width: "50px", position: "relative" }}
           tabIndex={1}
         >
           {rowIndex}
+          <RowResizeHandle
+            rowId={row[rowKey]}
+            onResize={onResize}
+            onResizeEnd={onResizeEnd}
+            rowHeight={height}
+          />
         </td>
       )}
       {expandable && (
@@ -153,7 +168,7 @@ export const Row = memo((props: RowProps) => {
           data-column-name="$group_by"
           style={{
             width: `var(--col-width-$group_by)`,
-            height: `${rowHeight}px`,
+            height: `${height}px`,
           }}
           class="vt-g-cell"
           tabIndex={4}
@@ -230,7 +245,7 @@ export const Row = memo((props: RowProps) => {
             tabIndex={colIndex + tabIndex}
             style={{
               width: `var(--col-width-${sanitizeColName(col)})`,
-              height: `${rowHeight}px`,
+              height: `${height}px`,
               left: isStickyLeft ? stickyColumns.left[col] : undefined,
               right: isStickyRight ? stickyColumns.right[col] : undefined,
               zIndex: isStickyLeft || isStickyRight ? 1 : 0,
@@ -297,7 +312,7 @@ export const Row = memo((props: RowProps) => {
 interface RenderRowCallbackProps {
   store: TableStore;
   rowKey?: string;
-  rowHeight: number;
+  getRowHeight: (row: RowType) => number;
   columns: string[];
   tableAddon: any;
   expandable?: boolean;
@@ -308,7 +323,7 @@ interface RenderRowCallbackProps {
 
 export function useRenderRowCallback({
   store,
-  rowHeight,
+  getRowHeight,
   columns,
   tableAddon,
   selectable,
@@ -320,6 +335,32 @@ export function useRenderRowCallback({
   const formatting = store.state.cellFormatting.value;
   const selected = store.state.selectedRows.value;
   const expanded = store.state.expandedRows.value;
+  const resizingRow = store.state.resizingRow.value;
+
+  const onResize = useCallback((rowId: string | number, newHeight: number) => {
+    store.dispatch({
+      type: CommandType.ROW_RESIZING_SET,
+      payload: { rowId, height: newHeight },
+    });
+  }, [store]);
+
+  const onResizeEnd = useCallback(() => {
+    if (resizingRow) {
+      const { rowId, height } = resizingRow;
+      const newRowHeights = {
+        ...store.state.rowHeights.value,
+        [rowId]: height,
+      };
+      store.dispatch({
+        type: CommandType.ROW_HEIGHTS_SET,
+        payload: newRowHeights,
+      });
+      store.dispatch({
+        type: CommandType.ROW_RESIZING_SET,
+        payload: null,
+      });
+    }
+  }, [store, resizingRow]);
 
   return useCallback((row: RowType, index: number) => {
     const isSelected = selected.includes(
@@ -328,6 +369,7 @@ export function useRenderRowCallback({
     const isExpanded = expanded.includes(
       row[rowKey],
     );
+    const rowHeight = getRowHeight(row);
 
     return (
       <Row
@@ -338,6 +380,8 @@ export function useRenderRowCallback({
         selectable={selectable}
         expandable={expandable}
         rowHeight={rowHeight}
+        onResize={onResize}
+        onResizeEnd={onResizeEnd}
         formatting={formatting}
         groupable={groupable}
         enumerable={enumerable}
@@ -351,11 +395,13 @@ export function useRenderRowCallback({
     selected,
     expanded,
     rowKey,
-    rowHeight,
+    getRowHeight,
     formatting,
     columns,
     tableAddon,
     expandable,
     selectable,
+    onResize,
+    onResizeEnd,
   ]);
 }

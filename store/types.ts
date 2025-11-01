@@ -19,7 +19,9 @@ export interface TableState {
   expandedRows: Signal<string[]>;
   cellFormatting: Signal<Record<string, CellFormatting>>;
   columnWidths: Signal<Record<string, number>>;
+  rowHeights: Signal<Record<string, number>>;
   resizingColumn: Signal<{ column: string; width: number } | null>;
+  resizingRow: Signal<{ rowId: string | number; height: number } | null>;
   focusedCell: Signal<{ tabIndex: number; rowIndex: number } | null>;
 }
 

@@ -32,6 +32,8 @@ export enum CommandType {
   CELL_FORMATTING_SET = "CELL_FORMATTING_SET",
 
   COLUMN_STICK_SET = "COLUMN_STICK_SET",
+  ROW_HEIGHTS_SET = "ROW_HEIGHTS_SET",
+  ROW_RESIZING_SET = "ROW_RESIZING_SET",
 }
 
 export interface Command {
