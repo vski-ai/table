@@ -37,7 +37,7 @@ export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
   } = props;
   const ref = useRef<HTMLTableElement>(null);
   useEffect(() => {
-    const mainHead = document.getElementById("vski-table-main-head");
+    const mainHead = document.getElementById("vt-main-head");
     if (mainHead) {
       ref.current?.prepend(mainHead);
     }
@@ -68,10 +68,11 @@ export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
   return (
     <div
       style={{ position: "sticky", top: `${top}px`, zIndex: 5 }}
+      class="bg-base-300"
     >
       <table
         class={[
-          "vski-table",
+          "vt",
           stickyHeaders.value.length
             ? "shadow-md border-b border-accent/10"
             : "",

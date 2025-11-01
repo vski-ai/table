@@ -97,9 +97,9 @@ export const Row = memo((props: RowProps) => {
       data-row-id={row[rowKey]}
       data-index={rowIndex}
       class={[
-        "hover:shadow-md",
+        //"hover:shadow-md",
         isSelected ? "bg-base-200" : "",
-        row.$is_group_root ? "vski-table-group-row" : "vski-table-row",
+        row.$is_group_root ? "vt-g-row" : "vt-row",
       ].join(" ")}
       style={{
         height: rowHeight,
@@ -108,23 +108,16 @@ export const Row = memo((props: RowProps) => {
     >
       {enumerable && (
         <td
-          class="vski-table-cell"
+          class="vt-cell"
           style={{ width: "50px" }}
           tabIndex={1}
         >
-          <button
-            type="button"
-            class="btn btn-ghost btn-md"
-            onClick={onExpansionToggle}
-            tabIndex={1}
-          >
-            {rowIndex}
-          </button>
+          {rowIndex}
         </td>
       )}
       {expandable && (
         <td
-          class="vski-table-cell"
+          class="vt-cell"
           style={{ width: "50px" }}
           tabIndex={2}
         >
@@ -140,7 +133,7 @@ export const Row = memo((props: RowProps) => {
       )}
       {selectable && (
         <td
-          class="vski-table-cell"
+          class="vt-cell"
           style={{ width: "50px" }}
           tabIndex={3}
         >
@@ -162,10 +155,10 @@ export const Row = memo((props: RowProps) => {
             width: `var(--col-width-$group_by)`,
             height: `${rowHeight}px`,
           }}
-          class="vski-table-group-cell"
+          class="vt-g-cell"
           tabIndex={4}
         >
-          <div class="c-content">
+          <div class="vt-g-wrap">
             {row.$is_group_root && (
               <>
                 <GroupCaret
@@ -190,7 +183,7 @@ export const Row = memo((props: RowProps) => {
                     />
                   )}
                 <span
-                  class="c-pointer"
+                  class="vt-pointer"
                   onClick={onLevelToggle}
                 >
                   <span class="ml-1" />
@@ -243,9 +236,9 @@ export const Row = memo((props: RowProps) => {
               zIndex: isStickyLeft || isStickyRight ? 1 : 0,
               position: isStickyLeft || isStickyRight ? "sticky" : undefined,
             }}
-            class={`vski-table-group-cell ${
-              isStickyLeft ? "vski-sticky-left-col" : ""
-            } ${isStickyRight ? "vski-sticky-right-col" : ""}`}
+            class={`vt-g-cell ${isStickyLeft ? "vt-s-left" : ""} ${
+              isStickyRight ? "vt-s-right" : ""
+            }`}
           >
             <div
               class="truncate"
@@ -271,8 +264,8 @@ export const Row = memo((props: RowProps) => {
                       width: 12,
                       height: 12,
                     }}
-                    className="group-sorter"
-                    activeClassName="group-sorter-active"
+                    className="vt-g-sort"
+                    activeClassName="vt-g-sort-active"
                     column={col}
                     store={store.state}
                     leafId={row.id}
@@ -286,7 +279,7 @@ export const Row = memo((props: RowProps) => {
       {tableAddon
         ? (
           <td
-            class="vski-table-group-cell"
+            class="vt-g-cell"
             style={{
               padding: 0,
               width: "80px",

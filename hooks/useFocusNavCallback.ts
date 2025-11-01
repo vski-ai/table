@@ -7,13 +7,11 @@ interface FocusCallbackProps {
   store: TableStore;
   startIndex: number;
   endIndex: number;
-  scrollContainerRef?: RefObject<HTMLDivElement | null>;
   key: any;
 }
 
 export function useFocusNavCallback({
   store,
-  scrollContainerRef,
   startIndex,
   endIndex,
   key,
@@ -24,7 +22,7 @@ export function useFocusNavCallback({
 
   const getCell = useCallback((index: number, tabIndex: number) => {
     return document
-      .querySelector(`#vski-table-main tr[data-index="${index}"]`)
+      .querySelector(`#vt-main tr[data-index="${index}"]`)
       ?.querySelector(`td[tabindex="${tabIndex}"]`) as HTMLTableCellElement;
   }, []);
 
@@ -50,6 +48,7 @@ export function useFocusNavCallback({
     switch (ev.key) {
       case "ArrowRight":
         ev.preventDefault();
+        preventScroll.value = false;
         store.state.focusedCell.value = {
           tabIndex: tabIndex + 1,
           rowIndex,
@@ -57,6 +56,7 @@ export function useFocusNavCallback({
         break;
       case "ArrowLeft":
         ev.preventDefault();
+        preventScroll.value = false;
         store.state.focusedCell.value = {
           tabIndex: tabIndex - 1,
           rowIndex,

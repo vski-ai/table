@@ -3,4 +3,4 @@
 @plugin "daisyui";
 
 @import "./layout.tailwind.css";
-@import "../table/style.tailwind.css";
+@import "../theme/index.css";

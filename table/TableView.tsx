@@ -31,7 +31,7 @@ export function TableView(props: VirtualTableViewProps) {
     columnAction,
     onLoadMore,
     rowHeight = 56,
-    buffer = 5,
+    buffer = 50,
     scrollContainerRef,
     rowIdentifier,
     tableAddon,
@@ -145,13 +145,15 @@ export function TableView(props: VirtualTableViewProps) {
     store,
     startIndex,
     endIndex,
-    scrollContainerRef,
     key: paddingTop + paddingBottom,
   });
 
+  console.log(startIndex, endIndex);
+
   return (
     <>
-      <ContextMenu store={store} />
+      <ContextMenu store={store} target={scrollContainerRef} />
+
       <StickyHeaderContainer
         store={store}
         extensions={renderColumnExtension}
@@ -187,8 +189,8 @@ export function TableView(props: VirtualTableViewProps) {
         <table
           ref={tableRef}
           style={style}
-          id="vski-table-main"
-          class="vski-table"
+          id="vt-main"
+          class="vt"
           onKeyDown={focusNavCallback}
         >
           <tbody>

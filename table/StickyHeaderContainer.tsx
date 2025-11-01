@@ -81,9 +81,9 @@ export function StickyHeaderContainer({
     >
       <table
         style={style}
-        class="vski-table"
+        class="vt"
       >
-        <thead id="vski-table-main-head">
+        <thead id="vt-main-head">
           <tr>
             {enumerable && (
               <th

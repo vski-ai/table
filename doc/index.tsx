@@ -3,6 +3,7 @@ import { hydrate, LocationProvider, Route, Router } from "preact-iso";
 import { NotFound } from "./404.tsx";
 import { Home } from "./Home.tsx";
 import { BasicTable } from "./basic-table.tsx";
+import { FlatTable } from "./flat-table.tsx";
 import Layout from "./layout.tsx";
 
 export function App() {
@@ -10,7 +11,8 @@ export function App() {
     <LocationProvider>
       <Layout>
         <Router>
-          <Route path="/" component={BasicTable} />
+          <Route path="/flat" component={FlatTable} />
+          <Route path="/groupable" component={BasicTable} />
           <Route default component={NotFound} />
         </Router>
       </Layout>

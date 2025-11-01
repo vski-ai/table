@@ -1,10 +1,11 @@
-import { signal } from "@preact/signals";
+import { signal, useSignal } from "@preact/signals";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { computePosition, flip, shift } from "@floating-ui/dom";
 import { ColumnMenu } from "./ColumnMenu.tsx";
 import ArrowLeftIcon from "lucide-react/dist/esm/icons/arrow-left.js";
 import SettingsIcon from "lucide-react/dist/esm/icons/settings.js";
 import { TableStore } from "@/store/types.ts";
+import { RefObject } from "preact/compat";
 
 type ActiveMenu = "main" | "columnSettings";
 
@@ -16,29 +17,71 @@ interface ContextMenuState {
   activeMenu: ActiveMenu;
 }
 
-const contextMenuState = signal<ContextMenuState>({
-  isVisible: false,
-  x: 0,
-  y: 0,
-  context: null,
-  activeMenu: "main",
-});
-
 interface ContextMenuProps {
   store: TableStore;
+  target?: RefObject<HTMLElement>;
 }
 
-export function ContextMenu({ store }: ContextMenuProps) {
+const MENU_WIDTH = "300px";
+
+export function ContextMenu({
+  store,
+  target,
+}: ContextMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const lastTarget = useRef<HTMLElement>(null);
+
+  const contextMenuState = useSignal<ContextMenuState>({
+    isVisible: false,
+    x: 0,
+    y: 0,
+    context: null,
+    activeMenu: "main",
+  });
+
+  const { x, y, context, isVisible, activeMenu } = contextMenuState.value;
 
   useEffect(() => {
+    const positionMenu = async () => {
+      const { x: x2, y: y2 } = await computePosition(
+        {
+          getBoundingClientRect: () => ({
+            width: 0,
+            height: 0,
+            x: x,
+            y: y,
+            top: y,
+            left: x,
+            right: x,
+            bottom: y,
+          }),
+          contextElement: lastTarget.current!,
+        },
+        menuRef.current!,
+        {
+          placement: "top-start",
+          middleware: [shift(), flip()],
+        },
+      );
+      contextMenuState.value = {
+        ...contextMenuState.value,
+        x: x2,
+        y: y2,
+      };
+    };
+
+    if (activeMenu !== "main") {
+      positionMenu();
+    }
+
     const handleContextMenu = async (event: MouseEvent) => {
       event.preventDefault();
 
+      await new Promise((r) => setTimeout(r));
+
       let context: { type: string; data?: any } = { type: "unknown" };
       const target = event.target as HTMLElement;
-
+      lastTarget.current = target;
       const cellElement = target.closest("td");
       const headerElement = target.closest("th");
       const rowElement = target.closest("tr");
@@ -83,7 +126,7 @@ export function ContextMenu({ store }: ContextMenuProps) {
           virtualElement,
           menuRef.current,
           {
-            placement: "right-start", // Default placement, will be flipped if needed
+            placement: "top-start",
             middleware: [flip(), shift()],
           },
         );
@@ -94,85 +137,48 @@ export function ContextMenu({ store }: ContextMenuProps) {
           x,
           y,
           context: context,
-          activeMenu: "main", // Reset to main menu when context menu opens
+          activeMenu: "main",
         };
-        setIsAnimating(true);
       }
     };
 
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsAnimating(false);
-        setTimeout(() => {
-          contextMenuState.value = {
-            ...contextMenuState.value,
-            isVisible: false,
-            activeMenu: "main",
-          }; // Reset activeMenu on close
-        }, 100); // Match animation duration
+        contextMenuState.value = {
+          ...contextMenuState.value,
+          isVisible: false,
+          activeMenu: "main",
+        };
       }
     };
 
-    let longPressTimer: number | undefined;
-    const LONG_PRESS_DURATION = 500; // milliseconds
+    const box = target?.current || document.body;
 
-    const startLongPressTimer = (event: TouchEvent) => {
-      longPressTimer = setTimeout(() => {
-        handleContextMenu(event as unknown as MouseEvent); // Cast to MouseEvent for compatibility
-      }, LONG_PRESS_DURATION);
-    };
-
-    const clearLongPressTimer = () => {
-      if (longPressTimer) {
-        clearTimeout(longPressTimer);
-        longPressTimer = undefined;
-      }
-    };
-
-    const handleTouchStart = (event: TouchEvent) => {
-      if (event.touches.length === 1) {
-        startLongPressTimer(event);
-      }
-    };
-
-    const handleTouchEnd = () => {
-      clearLongPressTimer();
-    };
-
-    const handleTouchMove = () => {
-      clearLongPressTimer();
-    };
-
-    document.addEventListener("contextmenu", handleContextMenu);
-    document.addEventListener("click", handleClickOutside);
-    document.addEventListener("touchstart", handleTouchStart);
-    document.addEventListener("touchend", handleTouchEnd);
-    document.addEventListener("touchmove", handleTouchMove);
+    box.addEventListener("contextmenu", handleContextMenu);
+    box.addEventListener("click", handleClickOutside);
 
     return () => {
-      document.removeEventListener("contextmenu", handleContextMenu);
-      document.removeEventListener("click", handleClickOutside);
-      document.removeEventListener("touchstart", handleTouchStart);
-      document.removeEventListener("touchend", handleTouchEnd);
-      document.removeEventListener("touchmove", handleTouchMove);
+      box.removeEventListener("contextmenu", handleContextMenu);
+      box.removeEventListener("click", handleClickOutside);
     };
-  }, []);
-
-  const { x, y, context, isVisible, activeMenu } = contextMenuState.value;
+  }, [target, activeMenu]);
 
   const menuClasses = [
     "absolute z-50 bg-base-300 shadow-lg rounded-box p-2 border border-accent/10",
     isVisible
       ? "opacity-100 scale-100"
       : "opacity-0 scale-95 pointer-events-none",
-    isAnimating ? "transition-all duration-100 ease-out" : "",
   ].join(" ");
 
   return (
     <div
       ref={menuRef}
       className={menuClasses}
-      style={{ top: y, left: x }}
+      style={{
+        top: y,
+        left: x,
+        width: MENU_WIDTH,
+      }}
     >
       {activeMenu === "main" && (
         <ul className="menu menu-compact bg-base-300 rounded-box w-56">
