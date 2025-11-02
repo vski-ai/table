@@ -121,7 +121,7 @@ export function TableView(props: VirtualTableViewProps) {
     selectable,
     groupable,
     enumerable,
-    tableAddon,
+    plugins,
   });
 
   const focusNav = useFocusNavCallback({

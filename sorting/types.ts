@@ -16,4 +16,11 @@ declare module "@/table/types.ts" {
   interface DataLoadOptions {
     sort?: SortState;
   }
+
+  interface TableMeta {
+    sortableAll?: boolean;
+    sortableColumns?: string[];
+    sortableGroupLevelAll?: boolean;
+    sortableGroupLevelColumns?: string[][];
+  }
 }

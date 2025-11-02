@@ -1,6 +1,7 @@
 import { Signal } from "@preact/signals";
 import { Command } from "./commands.ts";
 import { CellFormatting } from "@/format/types.ts";
+import { TableMeta } from "@/table/types.ts";
 
 export interface Store {
   data?: Record<string, unknown>;
@@ -20,6 +21,7 @@ export interface TableState {
   stickyColumns: Signal<Record<string, StickyPosition>>;
   loading: Signal<boolean>;
   dataLoadKey: Signal<number>;
+  tableMeta: Signal<TableMeta>;
   selectedRows: Signal<string[]>;
   expandedRows: Signal<string[]>;
   cellFormatting: Signal<Record<string, CellFormatting>>;

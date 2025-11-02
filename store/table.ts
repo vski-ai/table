@@ -32,6 +32,7 @@ export function createTableStore(
     ),
     loading: signal(false),
     dataLoadKey: signal(0),
+    tableMeta: signal({}),
     selectedRows: signal(initialState?.selectedRows || []),
     expandedRows: signal(initialState?.expandedRows || []),
     cellFormatting: signal(initialState?.cellFormatting || {}),

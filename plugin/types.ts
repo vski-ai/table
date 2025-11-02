@@ -2,7 +2,11 @@ import { TableStore } from "@/store/types.ts";
 import { DataLoadOptions, DataLoadResult, Row } from "@/table/types.ts";
 import { SortedAddon } from "./addon.ts";
 
-export type CellRenderer = (col: string, row: Row) => preact.ComponentChildren;
+export type CellRenderer = (opts: {
+  column: string;
+  row: Row;
+  store: TableStore;
+}) => preact.ComponentChildren;
 export type ColumnRendererCallback = (opts: {
   column: string;
   store: TableStore;
@@ -27,10 +31,16 @@ export type BeforeLoadCallback = (
 ) => Promise<DataLoadOptions> | DataLoadOptions;
 
 type HeaderPrefixes = SortedAddon<ColumnRendererCallback>;
+type GroupHeaderCellSuffixes = SortedAddon<CellRenderer>;
+type GroupHeaderCellPrefixes = SortedAddon<CellRenderer>;
+type GroupHeaderCellContent = SortedAddon<CellRenderer>;
 
 export type PluginInitCallback = (opts: {
   store: TableStore;
   headerPrefixes: HeaderPrefixes;
+  groupHeaderCellPrefixes: GroupHeaderCellPrefixes;
+  groupHeaderCellSuffixes: GroupHeaderCellSuffixes;
+  groupHeaderCellContent: GroupHeaderCellSuffixes;
 }) => void;
 
 export type ITablePlugin = {

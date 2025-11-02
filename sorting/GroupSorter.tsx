@@ -4,33 +4,43 @@ import ArrowDownUpIcon from "lucide-react/dist/esm/icons/arrow-down-up.js";
 
 import { TableStore } from "@/store/mod.ts";
 import { SortState } from "./types.ts";
-import { ColumnRendererCallback } from "@/plugin/types.ts";
+import { CellRenderer } from "@/plugin/types.ts";
 import { CommandType } from "./store.ts";
+import { Row } from "@/table/types.ts";
 
 interface RowSorterProps {
   className?: string;
   activeClassName?: string;
   column: string;
   store: TableStore;
+  row: Row;
   onChange?: (state: SortState) => void;
 }
 
-export const RowSorter = ({
+export const GroupSorter = ({
   column,
   store,
+  row,
   onChange,
 }: RowSorterProps) => {
   const meta = store.state.tableMeta.value;
-  if (!meta.sortableAll && !meta?.sortableColumns?.includes(column)) {
+  if (
+    !meta.sortableGroupLevelAll &&
+    !meta?.sortableGroupLevelColumns?.[row.$group_level ?? 0]
+      .includes(column)
+  ) {
     return null;
   }
 
-  const state = store.state.sorting.value ?? { column: "", sort: "" };
+  const state = store.state.leafSorting.value[row.id] ??
+    { column: "", sort: "" };
 
   const sort = (state: SortState) => {
     store.dispatch({
-      type: CommandType.SORT_SET,
-      payload: state,
+      type: CommandType.LEAF_SORT_SET,
+      payload: {
+        [row.id]: state,
+      },
     });
   };
 
@@ -39,7 +49,7 @@ export const RowSorter = ({
       key={state?.column}
       type="button"
       class={[
-        "btn btn-xs btn-ghost w-8 h-8",
+        "btn btn-sm btn-ghost w-4 h-4 p-0",
         state?.column === column && "btn-active",
       ].join(" ")}
       onClick={() => {
@@ -67,9 +77,10 @@ export const RowSorter = ({
   );
 };
 
-export const headerRenderCallback: ColumnRendererCallback = ({
+export const cellSuffixRender: CellRenderer = ({
   column,
+  row,
   store,
 }) => {
-  return <RowSorter column={column} store={store} />;
+  return <GroupSorter column={column} row={row} store={store} />;
 };

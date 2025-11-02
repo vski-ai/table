@@ -3,12 +3,13 @@ import { useCallback, useEffect, useRef } from "preact/hooks";
 import { TableStore } from "@/store/types.ts";
 import { Row } from "@/table/types.ts";
 import { PluginContainer } from "@/plugin/mod.ts";
+import { DataLoadResult } from "@/table/types.ts";
 interface DataProps {
   onDataLoad: (options: {
     offset: number;
     limit: number;
     store: TableStore;
-  }) => Promise<{ rows: Row[]; total: number }>;
+  }) => Promise<DataLoadResult>;
   store: TableStore;
   limit?: number;
   plugins: PluginContainer;
@@ -65,6 +66,7 @@ export const useData = (
       });
 
       const res = await onDataLoad(options);
+      store.state.tableMeta.value = res.meta;
 
       const { rows, total: newTotal } = await plugins.afterLoad(res);
 

@@ -1,4 +1,4 @@
-import { ColumnRendererCallback, ITablePlugin } from "./types.ts";
+import { CellRenderer, ColumnRendererCallback, ITablePlugin } from "./types.ts";
 import { TableStore } from "../store/mod.ts";
 import { SortedAddon } from "./addon.ts";
 import { DataLoadOptions, DataLoadResult } from "../table/types.ts";
@@ -21,9 +21,18 @@ export const createPluginContainer = (
   });
 
   const headerPrefixes = new SortedAddon<ColumnRendererCallback>();
+  const groupHeaderCellPrefixes = new SortedAddon<CellRenderer>();
+  const groupHeaderCellSuffixes = new SortedAddon<CellRenderer>();
+  const groupHeaderCellContent = new SortedAddon<CellRenderer>();
 
   for (const plugin of sortedPlugins) {
-    plugin.onInit?.({ store, headerPrefixes });
+    plugin.onInit?.({
+      store,
+      headerPrefixes,
+      groupHeaderCellContent,
+      groupHeaderCellPrefixes,
+      groupHeaderCellSuffixes,
+    });
   }
 
   return {
@@ -45,5 +54,8 @@ export const createPluginContainer = (
       return result;
     },
     headerPrefixes,
+    groupHeaderCellSuffixes,
+    groupHeaderCellContent,
+    groupHeaderCellPrefixes,
   };
 };

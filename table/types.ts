@@ -8,9 +8,14 @@ export interface DataLoadOptions {
   store: TableStore;
 }
 
+export interface TableMeta {
+  id?: unknown;
+}
+
 export type DataLoadResult = {
   rows: Row[];
   total: number;
+  meta: TableMeta;
 };
 
 export type DataLoadCallback = (

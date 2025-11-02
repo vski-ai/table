@@ -13,6 +13,7 @@ export enum CommandType {
   SORT_ADD = "SORT_ADD",
   SORT_REMOVE = "SORT_REMOVE",
   SORT_SET = "SORT_SET",
+  LEAF_SORT_SET = "LEAF_SORT_SET",
 }
 
 export const sorterStore: Store = {
@@ -22,9 +23,20 @@ export const sorterStore: Store = {
   },
 
   reducer: (state, command) => {
-    if (command.type === CommandType.SORT_SET) {
-      state.sorting.value = command.payload;
-      state.dataLoadKey.value = new Date().getTime();
+    switch (command.type) {
+      case CommandType.SORT_SET: {
+        state.sorting.value = command.payload;
+        state.dataLoadKey.value = new Date().getTime();
+        break;
+      }
+      case CommandType.LEAF_SORT_SET: {
+        state.leafSorting.value = {
+          ...state.leafSorting.value,
+          ...command.payload,
+        };
+        state.dataLoadKey.value = new Date().getTime();
+        break;
+      }
     }
     return state;
   },

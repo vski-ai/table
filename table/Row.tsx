@@ -15,6 +15,7 @@ import { TableStore } from "@/store/types.ts";
 import { sanitizeColName } from "@/utils/sanitizeColName.ts";
 import { useStickyColOffset } from "@/hooks/mod.ts";
 import { RowResizeHandle } from "./RowResizeHandle.tsx";
+import { PluginContainer } from "../plugin/mod.ts";
 
 interface RowProps {
   row: RowType;
@@ -28,7 +29,7 @@ interface RowProps {
   formatting: Record<string, CellFormatting>;
   columns: string[];
   store: TableStore;
-  tableAddon: any;
+  plugins: PluginContainer;
   expandable?: boolean;
   selectable?: boolean;
   groupable?: boolean;
@@ -47,7 +48,7 @@ export const Row = memo((props: RowProps) => {
     formatting,
     columns,
     store,
-    tableAddon,
+    plugins,
     rowKey,
     expandable,
     selectable,
@@ -256,7 +257,7 @@ export const Row = memo((props: RowProps) => {
             }`}
           >
             <div
-              class="truncate"
+              class="truncate flex w-full items-center justify-between"
               title={row[col]}
               style={{
                 paddingLeft: row.$is_group_root
@@ -266,45 +267,32 @@ export const Row = memo((props: RowProps) => {
                   : "0px",
               }}
             >
+              {row.$is_group_root && (
+                <>
+                  {plugins.groupHeaderCellPrefixes.render({
+                    column: col,
+                    row,
+                    store,
+                  })}
+                </>
+              )}
               <CellFormatter
                 value={row[col]}
                 formatting={formatting?.[col]}
               />
-
               {row.$is_group_root && (
                 <>
-                  <RowSorter
-                    style={{
-                      top: rowHeight / 2 - 6,
-                      width: 12,
-                      height: 12,
-                    }}
-                    className="vt-g-sort"
-                    activeClassName="vt-g-sort-active"
-                    column={col}
-                    store={store}
-                    leafId={row.id}
-                  />
+                  {plugins.groupHeaderCellSuffixes.render({
+                    column: col,
+                    row,
+                    store,
+                  })}
                 </>
               )}
             </div>
           </td>
         );
       })}
-      {tableAddon
-        ? (
-          <td
-            class="vt-g-cell"
-            style={{
-              padding: 0,
-              width: "80px",
-            }}
-          >
-            <button class="btn w-full h-12 border-0 rounded-none opacity-45 hover:opacity-100 transition-opacity">
-            </button>
-          </td>
-        )
-        : null}
     </tr>
   );
 });
@@ -314,18 +302,18 @@ interface RenderRowCallbackProps {
   rowKey?: string;
   getRowHeight: (row: RowType) => number;
   columns: string[];
-  tableAddon: any;
   expandable?: boolean;
   selectable?: boolean;
   groupable?: boolean;
   enumerable?: boolean;
+  plugins: PluginContainer;
 }
 
 export function useRenderRowCallback({
   store,
   getRowHeight,
   columns,
-  tableAddon,
+  plugins,
   selectable,
   expandable,
   groupable,
@@ -387,7 +375,7 @@ export function useRenderRowCallback({
         enumerable={enumerable}
         columns={columns}
         store={store}
-        tableAddon={tableAddon}
+        plugins={plugins}
         rowKey={rowKey}
       />
     );
@@ -398,7 +386,6 @@ export function useRenderRowCallback({
     getRowHeight,
     formatting,
     columns,
-    tableAddon,
     expandable,
     selectable,
     onResize,
