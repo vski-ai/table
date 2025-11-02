@@ -1,17 +1,18 @@
 import { useSignal } from "@preact/signals";
-import { useEffect, useRef } from "preact/hooks";
+import { useCallback, useEffect, useRef } from "preact/hooks";
 import { TableStore } from "@/store/types.ts";
 import { Row } from "@/table/types.ts";
-
+import { PluginContainer } from "@/plugin/mod.ts";
 interface DataProps {
   onDataLoad: (options: {
     offset: number;
     limit: number;
     store: TableStore;
-  }) => Promise<{ rows: Row[]; total: number }>,
-  store: TableStore,
-  limit?: number,
-  groupable?: boolean
+  }) => Promise<{ rows: Row[]; total: number }>;
+  store: TableStore;
+  limit?: number;
+  plugins: PluginContainer;
+  groupable?: boolean;
 }
 
 export const useData = (
@@ -19,14 +20,16 @@ export const useData = (
     onDataLoad,
     store,
     limit = 100,
-    groupable
-  }: DataProps
+    groupable,
+    plugins,
+  }: DataProps,
 ) => {
   const data = useSignal<Row[]>([]);
   const total = useSignal(0);
   const timeoutRef = useRef<number | null>(null);
+  const lastKey = useRef<number>(0);
 
-  const load = (start: number, end: number) => {
+  const load = useCallback((start: number, end: number) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -44,16 +47,26 @@ export const useData = (
         }
       }
 
+      if (lastKey.current != store.state.dataLoadKey.value) {
+        shouldLoad = true;
+      }
+
       if (!shouldLoad) {
         return;
       }
 
+      lastKey.current = store.state.dataLoadKey.value;
       store.state.loading.value = true;
-      const { rows, total: newTotal } = await onDataLoad({
+
+      const options = await plugins.beforeLoad({
         offset: start,
         limit: end - start,
         store,
       });
+
+      const res = await onDataLoad(options);
+
+      const { rows, total: newTotal } = await plugins.afterLoad(res);
 
       if (total.value === 0) {
         total.value = newTotal;
@@ -65,13 +78,13 @@ export const useData = (
         newData[start + i] = rows[i];
       }
       if (groupable) {
-        newData = newData.filter(Boolean)
+        newData = newData.filter(Boolean);
       }
       data.value = newData;
 
       store.state.loading.value = false;
     }, 200);
-  };
+  }, [store.state.dataLoadKey.value]);
 
   useEffect(() => {
     load(0, limit);

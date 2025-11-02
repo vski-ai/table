@@ -5,13 +5,14 @@ import {
   CommandType,
 } from "./commands.ts";
 import { StorageAdapter } from "./storage.ts";
-import { StickyPosition, TableState, TableStore } from "./types.ts";
+import { StickyPosition, Store, TableState, TableStore } from "./types.ts";
 
 const MAX_HISTORY_SIZE = 100;
 
 export function createTableStore(
   storage?: StorageAdapter,
   tableId?: string,
+  plugins: Store[] = [],
 ): TableStore {
   const initialState = storage && tableId
     ? storage.getItem<Record<string, any>>(
@@ -19,19 +20,18 @@ export function createTableStore(
     )
     : null;
 
-  const state: TableState = {
+  const state: TableState & any = {
     drilldowns: signal(initialState?.drilldowns || []),
     expandedLevels: signal(initialState?.expandedLevels || []),
     filters: signal(initialState?.filters || []),
-    sorting: signal(initialState?.sorting || []),
-    leafSorting: signal(initialState?.leafSorting || {}),
+
     columnOrder: signal(initialState?.columnOrder || []),
     columnVisibility: signal(initialState?.columnVisibility || {}),
     stickyColumns: signal<Record<string, StickyPosition>>(
       initialState?.stickyColumns || {},
     ),
     loading: signal(false),
-    isMobile: signal(false),
+    dataLoadKey: signal(0),
     selectedRows: signal(initialState?.selectedRows || []),
     expandedRows: signal(initialState?.expandedRows || []),
     cellFormatting: signal(initialState?.cellFormatting || {}),
@@ -42,16 +42,22 @@ export function createTableStore(
     focusedCell: signal(null),
   };
 
-  const history: Command[] = [];
+  for (const plugin of plugins) {
+    if (plugin.data) {
+      for (const key in plugin.data) {
+        state[key] = signal(initialState?.[key] || plugin.data[key]);
+      }
+    }
+  }
+
+  const history: Command<unknown>[] = [];
 
   effect(() => {
     if (storage && tableId) {
-      const currentState = {
+      const currentState: Record<string, unknown> = {
         expandedRows: state.expandedRows.value,
         expandedLevels: state.expandedLevels.value,
         filters: state.filters.value,
-        sorting: state.sorting.value,
-        leafSorting: state.leafSorting.value,
         columnOrder: state.columnOrder.value,
         columnVisibility: state.columnVisibility.value,
         cellFormatting: state.cellFormatting.value,
@@ -59,15 +65,31 @@ export function createTableStore(
         rowHeights: state.rowHeights.value,
         stickyColumns: state.stickyColumns.value,
       };
+
+      for (const plugin of plugins) {
+        if (plugin.data) {
+          for (const key in plugin.data) {
+            currentState[key] = state[key].value;
+          }
+        }
+      }
+
       storage.setItem(`tableState_${tableId}`, currentState);
     }
   });
 
-  const dispatch = (command: Command) => {
+  const dispatch = <T>(command: Command<T>) => {
     if (history.length >= MAX_HISTORY_SIZE) {
       history.shift();
     }
     history.push(command);
+
+    for (const plugin of plugins) {
+      if (plugin.reducer) {
+        plugin.reducer(state, command);
+      }
+    }
+
     switch (command.type) {
       // Drilldown
       case CommandType.DRILLDOWN_SET:
@@ -83,12 +105,6 @@ export function createTableStore(
       case CommandType.FILTER_SET:
         state.filters.value = command.payload;
         break;
-
-      // Sorting
-      case CommandType.SORT_SET:
-        state.sorting.value = command.payload;
-        break;
-
       // Column Management
       case CommandType.COLUMN_ORDER_SET:
         state.columnOrder.value = command.payload;
@@ -120,7 +136,9 @@ export function createTableStore(
         const newExpandedRows = state.expandedRows.value.includes(
             command.payload,
           )
-          ? state.expandedRows.value.filter((row) => row !== command.payload)
+          ? state.expandedRows.value.filter((row: any) =>
+            row !== command.payload
+          )
           : [...state.expandedRows.value, command.payload];
         state.expandedRows.value = newExpandedRows;
         break;

@@ -64,19 +64,17 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
         }
       }
       const heads = Object.values(newStickyHeaders)
-        .sort((a, b) =>
-          a.index - b.index
-        )
+        .sort((a, b) => a.index - b.index)
         .reduce((acc, current) => {
-          if((acc.at(-1)?.row.$group_level ?? -1) < current.row.$group_level) {
-            acc.push(current)
+          if ((acc.at(-1)?.row.$group_level ?? -1) < current.row.$group_level) {
+            acc.push(current);
           }
-          return acc
-        }, [])
+          return acc;
+        }, []);
       if (heads.length == 1 && heads?.[0].row.$group_level > 0) {
-        heads.pop()
+        heads.pop();
       }
-      result.value = heads
+      result.value = heads;
     };
 
     scrollContainer.addEventListener("scroll", handleScroll);

@@ -1,11 +1,19 @@
 import { Signal } from "@preact/signals";
 
-export interface SorterStore {
-  sorting: Signal<SortState>;
-  leafSorting: Signal<Record<string, SortState>>;
-}
-
 export type SortState = {
   column: string;
   sort: "asc" | "desc";
 };
+
+declare module "@/store/types.ts" {
+  interface TableState {
+    sorting: Signal<SortState>;
+    leafSorting: Signal<Record<string, SortState>>;
+  }
+}
+
+declare module "@/table/types.ts" {
+  interface DataLoadOptions {
+    sort?: SortState;
+  }
+}

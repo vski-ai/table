@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "preact/hooks";
+import { useEffect, useMemo, useRef } from "preact/hooks";
 
 import {
   useColumnResizer,
@@ -20,7 +14,6 @@ import {
 } from "@/hooks/mod.ts";
 import { VirtualTableViewProps } from "./types.ts";
 
-import { RowSorter, sorter } from "@/sorting/mod.ts";
 import { StickyRowsContainer } from "./StickyRowsContainer.tsx";
 import { useRenderRowCallback } from "./Row.tsx";
 import { ContextMenu } from "@/menu/ContextMenu.tsx";
@@ -33,8 +26,6 @@ export function TableView(props: VirtualTableViewProps) {
     columns,
     store,
     initialWidth,
-    columnExtensions,
-    columnAction,
     rowHeight = 56,
     buffer = 50,
     scrollContainerRef,
@@ -45,50 +36,21 @@ export function TableView(props: VirtualTableViewProps) {
     expandable,
     enumerable,
     groupable,
+    plugins,
   } = props;
   const bodyContainerRef = useRef<HTMLDivElement>(null);
-  const [borderSpacing] = useState(0);
 
   const { data, total, load } = useData({
-    onDataLoad, 
+    onDataLoad,
     store,
-    groupable
+    groupable,
+    plugins,
   });
 
   const columnsInOrder = useOrderedColumns({
     store,
     columns,
   });
-
-  // TODO: first filter then sort
-  // const sortedData = useMemo(() => {
-  //   const filteredData = data.value.filter(Boolean);
-  //   return sortable ? sorter({ data: filteredData, store: store.state }) : filteredData;
-  // }, [
-  //   data.value,
-  //   store.state.sorting.value,
-  //   store.state.leafSorting.value,
-  // ]);
-
-  const renderColumnAction = useCallback((col: string) => (
-    <>
-      {sortable
-        ? (
-          <RowSorter
-            column={col}
-            store={store.state}
-          />
-        )
-        : null}
-      {columnAction?.(col)}
-    </>
-  ), [sortable]);
-
-  const renderColumnExtension = useCallback((col: string) => (
-    <>
-      {columnExtensions?.(col)}
-    </>
-  ), []);
 
   const rowKey = useRowKey(columns, rowIdentifier);
 
@@ -98,7 +60,7 @@ export function TableView(props: VirtualTableViewProps) {
     sortable,
   });
 
-  const loadedRows = visibleRows.filter(Boolean)
+  const loadedRows = visibleRows.filter(Boolean);
 
   const getRowHeight = useRowHeights({
     data: loadedRows,
@@ -122,7 +84,6 @@ export function TableView(props: VirtualTableViewProps) {
       itemCount: total.value,
       rowHeights,
       buffer,
-      spacing: borderSpacing,
     });
 
   useColumnWidthEffect({
@@ -136,7 +97,7 @@ export function TableView(props: VirtualTableViewProps) {
     if (total.value > 0) {
       load(startIndex, endIndex);
     }
-  }, [startIndex, endIndex, total.value]);
+  }, [startIndex, endIndex, total.value, store.state.dataLoadKey.value]);
 
   const { getColumnWidth } = useColumnResizer({ store });
 
@@ -178,8 +139,7 @@ export function TableView(props: VirtualTableViewProps) {
 
       <StickyHeaderContainer
         store={store}
-        extensions={renderColumnExtension}
-        action={renderColumnAction}
+        plugins={plugins}
         {...{
           data: loadedRows,
           enumerable,
@@ -207,11 +167,16 @@ export function TableView(props: VirtualTableViewProps) {
         }}
       />
 
+      {store.state.loading.value &&
+        (
+          <progress className="progress progress-primary h-1 rounded-none absolute z-100 w-full" />
+        )}
+
       <div ref={bodyContainerRef}>
         <table
           style={style}
           id="vt-main"
-          class="vt"
+          class={["vt"].join(" ")}
           onKeyDown={focusNav.onKeyDown}
           onKeyUp={focusNav.onKeyUp}
         >

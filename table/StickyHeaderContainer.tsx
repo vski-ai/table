@@ -1,7 +1,5 @@
-import { type JSX } from "preact";
 import { CommandType, TableStore } from "@/store/mod.ts";
 import { ResizableHeader } from "./ResizableHeader.tsx";
-import { Drilldown } from "@/menu/Drilldown.tsx";
 import { Row } from "./types.ts";
 import {
   useColumnResizer,
@@ -10,32 +8,29 @@ import {
   useStickyColOffset,
   useTableStyle,
 } from "@/hooks/mod.ts";
+import { PluginContainer } from "@/plugin/mod.ts";
 
 interface StickyHeaderContainerProps {
   data: Row[];
   store: TableStore;
+  plugins: PluginContainer;
   columns: string[];
   expandable?: boolean;
   selectable?: boolean;
   groupable?: boolean;
   enumerable?: boolean;
-  tableAddon?: any;
   rowKey: string;
-  extensions?: (col: string) => JSX.Element;
-  action?: (col: string) => JSX.Element;
 }
 
 export function StickyHeaderContainer({
   data,
   store,
+  plugins,
   columns,
   enumerable,
   expandable,
   selectable,
-  extensions,
-  action,
   groupable,
-  tableAddon,
   rowKey,
 }: StickyHeaderContainerProps) {
   const {
@@ -134,8 +129,9 @@ export function StickyHeaderContainer({
                 onResize={handleResizeCallback}
                 onResizeUpdate={handleResizeUpdateCallback}
                 stickyColumns={stickyColumns}
+                store={store}
+                plugins={plugins}
               >
-                <Drilldown store={store} />
               </ResizableHeader>
             )}
 
@@ -146,25 +142,12 @@ export function StickyHeaderContainer({
                 width={getColumnWidth(col)}
                 onResize={handleResizeCallback}
                 onResizeUpdate={handleResizeUpdateCallback}
-                extensions={extensions}
-                action={action}
                 onColumnDrop={orderColumnsCallback}
                 stickyColumns={stickyColumns}
+                store={store}
+                plugins={plugins}
               />
             ))}
-
-            {tableAddon
-              ? (
-                <th
-                  style={{
-                    width: "80px",
-                    padding: 0,
-                  }}
-                >
-                  {tableAddon}
-                </th>
-              )
-              : null}
           </tr>
         </thead>
       </table>

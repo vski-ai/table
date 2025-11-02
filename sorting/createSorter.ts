@@ -1,10 +1,6 @@
-import { SorterStore, SortState } from "./types.ts";
 import { Row } from "@/table/types.ts";
-
-export interface SorterProps {
-  data: Row[];
-  store: SorterStore;
-}
+import { TableStore } from "@/store/mod.ts";
+import { SortState } from "./types.ts";
 
 const sortFn = (sorting: SortState) => (a: Row, b: Row) => {
   const aValue = a[sorting.column];
@@ -24,9 +20,9 @@ const sortFn = (sorting: SortState) => (a: Row, b: Row) => {
  * is a bit tricky - we have to rebuilt tree and visit branches
  * recursevely.
  */
-const sortGroup = (data: Row[], store: SorterStore): Row[] => {
-  const sorting = store.sorting.value;
-  const leafSorting = store.leafSorting.value;
+const sortGroup = (data: Row[], store: TableStore): Row[] => {
+  const sorting = store.state.sorting.value;
+  const leafSorting = store.state.leafSorting.value;
 
   const roots = data.filter((row) => !row.$parent_id);
   const children: Record<string, Row[]> = {};
@@ -68,9 +64,12 @@ export function createSorter() {
   let lastLeafSorting: Record<string, SortState> | undefined;
   let lastResult: Row[] | undefined;
 
-  return function sorter({ data, store }: SorterProps): Row[] {
-    const sorting = store.sorting.value;
-    const leafSorting = store.leafSorting.value;
+  return function sorter({ data, store }: {
+    data: Row[];
+    store: TableStore;
+  }): Row[] {
+    const sorting = store.state.sorting.value;
+    const leafSorting = store.state.leafSorting.value;
 
     if (
       lastData === data &&
@@ -90,5 +89,3 @@ export function createSorter() {
     return result;
   };
 }
-
-export const sorter = createSorter();

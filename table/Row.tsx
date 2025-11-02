@@ -282,7 +282,7 @@ export const Row = memo((props: RowProps) => {
                     className="vt-g-sort"
                     activeClassName="vt-g-sort-active"
                     column={col}
-                    store={store.state}
+                    store={store}
                     leafId={row.id}
                   />
                 </>

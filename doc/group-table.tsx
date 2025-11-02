@@ -4,16 +4,15 @@ import { useEffect, useRef } from "preact/hooks";
 import { Row } from "@/table/types.ts";
 import data from "./mock/group-1m-rows.json" with { type: "json" };
 
-
-
 export const GroupTable = () => {
   const tableStore = createTableStore(
     new LocalStorageAdapter(),
     "basic-table",
+    [],
   );
 
   const allColumns = Object.keys(data?.[0] ?? {}).filter((c) => {
-    return !c.startsWith('$') && !['id', 'Year', 'Month'].includes(c)
+    return !c.startsWith("$") && !["id", "Year", "Month"].includes(c);
   });
   const scrollRef = useRef();
   useEffect(() => {
@@ -23,12 +22,14 @@ export const GroupTable = () => {
   const onDataLoad = async ({ store, offset, limit }: {
     offset: number;
     limit: number;
-    store: any
+    store: any;
   }): Promise<{ rows: Row[]; total: number }> => {
-    const d = data.filter(r => r.$parent_id?.every(
-          (id: string | number) =>
-            store.state.expandedLevels.value?.includes(id as never),
-        ) || r.$group_level === 0)
+    const d = data.filter((r) =>
+      r.$parent_id?.every(
+        (id: string | number) =>
+          store.state.expandedLevels.value?.includes(id as never),
+      ) || r.$group_level === 0
+    );
     return {
       rows: d.slice(offset, offset + limit),
       total: d.length,
@@ -43,7 +44,6 @@ export const GroupTable = () => {
       scrollContainerRef={scrollRef}
       groupable
       selectable
-      sortable
       enumerable
     />
   );

@@ -1,13 +1,15 @@
 import { type JSX } from "preact";
 import { useSignal } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
+import { PluginContainer } from "@/plugin/mod.ts";
+import { TableStore } from "../store/types.ts";
 import { Draggable } from "./Draggable.tsx";
 
 export interface ResizableHeaderProps {
   column: string;
   width: number;
-  extensions?: (col: string) => JSX.Element;
-  action?: (col: string) => JSX.Element;
+  plugins: PluginContainer;
+  store: TableStore;
   onResize: (column: string, newWidth: number) => void;
   onResizeUpdate: (column: string, newWidth: number) => void;
   onColumnDrop?: (draggedColumn: string, targetColumn: string) => void;
@@ -25,12 +27,12 @@ export function ResizableHeader(
     width,
     onResize,
     onResizeUpdate,
-    extensions,
-    action,
     onColumnDrop,
     formatColumnName,
     children,
     stickyColumns,
+    plugins,
+    store,
   }: ResizableHeaderProps,
 ) {
   const isResizing = useSignal(false);
@@ -95,7 +97,10 @@ export function ResizableHeader(
       <Draggable onDrop={onColumnDrop} id={column}>
         {children ? children : (
           <div class="flex justify-start items-center">
-            {action?.(column)}
+            {plugins.headerPrefixes.render({
+              column,
+              store,
+            })}
             {!edit.value
               ? (
                 <div
@@ -132,7 +137,6 @@ export function ResizableHeader(
                 />
               )}
             <div class="ml-2">
-              {extensions?.(column)}
             </div>
           </div>
         )}

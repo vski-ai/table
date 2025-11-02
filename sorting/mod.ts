@@ -1,3 +1,5 @@
 export * from "./types.ts";
 export * from "./RowSorter.tsx";
-export * from "./sorter.ts";
+export * from "./createSorter.ts";
+export * from "./plugin.ts";
+export * from "./store.ts";

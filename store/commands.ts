@@ -12,11 +12,6 @@ export enum CommandType {
   FILTER_REMOVE = "FILTER_REMOVE",
   FILTER_SET = "FILTER_SET",
 
-  // Sorting
-  SORT_ADD = "SORT_ADD",
-  SORT_REMOVE = "SORT_REMOVE",
-  SORT_SET = "SORT_SET",
-
   // Column Management
   COLUMN_ORDER_SET = "COLUMN_ORDER_SET",
   COLUMN_VISIBILITY_SET = "COLUMN_VISIBILITY_SET",
@@ -36,8 +31,8 @@ export enum CommandType {
   ROW_RESIZING_SET = "ROW_RESIZING_SET",
 }
 
-export interface Command {
-  type: CommandType;
+export interface Command<T = CommandType> {
+  type: T;
   payload: any;
 }
 

@@ -1,13 +1,21 @@
 import { type JSX, type RefObject } from "preact";
 import { TableStore } from "@/store/types.ts";
+import { PluginContainer } from "@/plugin/mod.ts";
+
+export interface DataLoadOptions {
+  offset: number;
+  limit: number;
+  store: TableStore;
+}
+
+export type DataLoadResult = {
+  rows: Row[];
+  total: number;
+};
 
 export type DataLoadCallback = (
-  options: {
-    offset: number;
-    limit: number;
-    store: TableStore;
-  },
-) => Promise<{ rows: Row[]; total: number }>;
+  options: DataLoadOptions,
+) => Promise<DataLoadResult>;
 
 export type VirtualTableViewProps =
   & {
@@ -29,6 +37,7 @@ export type VirtualTableViewProps =
     formatColumnName?: (a: string) => string;
     columnExtensions?: (col: string) => JSX.Element;
     columnAction?: (col: string) => JSX.Element;
+    plugins: PluginContainer;
   }
   & (
     | {
