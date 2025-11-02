@@ -1,30 +1,37 @@
 import { TableView } from "@/table/mod.ts";
 import { createTableStore, LocalStorageAdapter } from "@/store/mod.ts";
-import { generateGroupData } from "./mock/groupable-table.ts";
 import { useEffect, useRef } from "preact/hooks";
 import { Row } from "@/table/types.ts";
+import data from "./mock/group-1m-rows.json" with { type: "json" };
 
-const data = generateGroupData();
 
-export const BasicTable = () => {
+
+export const GroupTable = () => {
   const tableStore = createTableStore(
     new LocalStorageAdapter(),
     "basic-table",
   );
 
-  const allColumns = Object.keys(data?.[0] ?? {});
+  const allColumns = Object.keys(data?.[0] ?? {}).filter((c) => {
+    return !c.startsWith('$') && !['id', 'Year', 'Month'].includes(c)
+  });
   const scrollRef = useRef();
   useEffect(() => {
     scrollRef.current = document.querySelector(".main-outlet");
   });
 
-  const onDataLoad = async ({ offset, limit }: {
+  const onDataLoad = async ({ store, offset, limit }: {
     offset: number;
     limit: number;
+    store: any
   }): Promise<{ rows: Row[]; total: number }> => {
+    const d = data.filter(r => r.$parent_id?.every(
+          (id: string | number) =>
+            store.state.expandedLevels.value?.includes(id as never),
+        ) || r.$group_level === 0)
     return {
-      rows: data.slice(offset, offset + limit),
-      total: data.length,
+      rows: d.slice(offset, offset + limit),
+      total: d.length,
     };
   };
 

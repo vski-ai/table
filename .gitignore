@@ -2,3 +2,4 @@ node_modules/
 .vite/
 dist/
 flat-1m-rows.json
+group-1m-rows.json

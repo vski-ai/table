@@ -49,7 +49,11 @@ export function TableView(props: VirtualTableViewProps) {
   const bodyContainerRef = useRef<HTMLDivElement>(null);
   const [borderSpacing] = useState(0);
 
-  const { data, total, load } = useData(onDataLoad, store);
+  const { data, total, load } = useData({
+    onDataLoad, 
+    store,
+    groupable
+  });
 
   const columnsInOrder = useOrderedColumns({
     store,
@@ -94,8 +98,10 @@ export function TableView(props: VirtualTableViewProps) {
     sortable,
   });
 
+  const loadedRows = visibleRows.filter(Boolean)
+
   const getRowHeight = useRowHeights({
-    data: visibleRows,
+    data: loadedRows,
     store,
     expandable,
     rowKey,
@@ -175,7 +181,7 @@ export function TableView(props: VirtualTableViewProps) {
         extensions={renderColumnExtension}
         action={renderColumnAction}
         {...{
-          data: visibleRows,
+          data: loadedRows,
           enumerable,
           expandable,
           groupable,
@@ -196,7 +202,7 @@ export function TableView(props: VirtualTableViewProps) {
           store,
           columns,
           rowHeights,
-          visibleRows,
+          visibleRows: loadedRows,
           scrollContainerRef,
         }}
       />
@@ -223,7 +229,7 @@ export function TableView(props: VirtualTableViewProps) {
               }}
             />
 
-            {data.value.slice(startIndex, endIndex + 1).map((row, i) => {
+            {visibleRows.slice(startIndex, endIndex + 1).map((row, i) => {
               row = row ||
                 columns.reduce((acc, col) => ({ ...acc, [col]: "" }), {
                   $loading: true,

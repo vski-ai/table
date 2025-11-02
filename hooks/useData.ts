@@ -3,14 +3,24 @@ import { useEffect, useRef } from "preact/hooks";
 import { TableStore } from "@/store/types.ts";
 import { Row } from "@/table/types.ts";
 
-export const useData = (
+interface DataProps {
   onDataLoad: (options: {
     offset: number;
     limit: number;
     store: TableStore;
   }) => Promise<{ rows: Row[]; total: number }>,
   store: TableStore,
-  limit = 50,
+  limit?: number,
+  groupable?: boolean
+}
+
+export const useData = (
+  {
+    onDataLoad,
+    store,
+    limit = 100,
+    groupable
+  }: DataProps
 ) => {
   const data = useSignal<Row[]>([]);
   const total = useSignal(0);
@@ -50,9 +60,12 @@ export const useData = (
         data.value = Array(newTotal).fill(null);
       }
 
-      const newData = [...data.value];
+      let newData = [...data.value];
       for (let i = 0; i < rows.length; i++) {
         newData[start + i] = rows[i];
+      }
+      if (groupable) {
+        newData = newData.filter(Boolean)
       }
       data.value = newData;
 

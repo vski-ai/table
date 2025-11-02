@@ -47,7 +47,7 @@ export function createTableStore(
   effect(() => {
     if (storage && tableId) {
       const currentState = {
-        drilldowns: state.drilldowns.value,
+        expandedRows: state.expandedRows.value,
         expandedLevels: state.expandedLevels.value,
         filters: state.filters.value,
         sorting: state.sorting.value,

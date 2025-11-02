@@ -15,10 +15,7 @@ export function useVisibleRows({
 }: VisibleRowsProps) {
   return useMemo(() => {
     const shown = data.filter((row: Row) => {
-      if (!row) {
-        return false;
-      }
-      if (!row.$parent_id?.length) {
+      if (!row?.$parent_id?.length) {
         return true;
       }
 
