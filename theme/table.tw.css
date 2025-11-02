@@ -36,4 +36,21 @@
   .vt-cell {
     @apply border border-base-300 items-center text-center p-0;
   }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  .vt-loading td {
+    pointer-events: none;
+  }
+  .vt-loading {
+    animation: pulse 1.5s infinite;
+    background: rgba(0, 150, 219, 0.2);
+  }
 }

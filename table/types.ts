@@ -1,10 +1,17 @@
 import { type JSX, type RefObject } from "preact";
-import { type Signal } from "@preact/signals";
 import { TableStore } from "@/store/types.ts";
+
+export type DataLoadCallback = (
+  options: {
+    offset: number;
+    limit: number;
+    store: TableStore;
+  },
+) => Promise<{ rows: Row[]; total: number }>;
 
 export type VirtualTableViewProps =
   & {
-    data: Row[];
+    onDataLoad: DataLoadCallback;
     columns: string[];
     store: TableStore;
     selectable?: boolean;
@@ -22,7 +29,6 @@ export type VirtualTableViewProps =
     formatColumnName?: (a: string) => string;
     columnExtensions?: (col: string) => JSX.Element;
     columnAction?: (col: string) => JSX.Element;
-    onLoadMore?: () => void;
   }
   & (
     | {

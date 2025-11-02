@@ -9,8 +9,8 @@ import {
 import {
   useColumnResizer,
   useColumnWidthEffect,
+  useData,
   useFocusNavCallback,
-  useLoadMoreEffect,
   useOrderedColumns,
   useRowHeights,
   useRowKey,
@@ -29,13 +29,12 @@ import { RowPadding } from "./RowPadding.tsx";
 
 export function TableView(props: VirtualTableViewProps) {
   const {
-    data,
+    onDataLoad,
     columns,
     store,
     initialWidth,
     columnExtensions,
     columnAction,
-    onLoadMore,
     rowHeight = 56,
     buffer = 50,
     scrollContainerRef,
@@ -47,10 +46,10 @@ export function TableView(props: VirtualTableViewProps) {
     enumerable,
     groupable,
   } = props;
-  const loadMoreRef = useRef<HTMLDivElement>(null);
-  const tableRef = useRef<HTMLTableElement>(null); // For body table
   const bodyContainerRef = useRef<HTMLDivElement>(null);
   const [borderSpacing] = useState(0);
+
+  const { data, total, load } = useData(onDataLoad, store);
 
   const columnsInOrder = useOrderedColumns({
     store,
@@ -58,13 +57,14 @@ export function TableView(props: VirtualTableViewProps) {
   });
 
   // TODO: first filter then sort
-  const sortedData = useMemo(() => {
-    return sortable ? sorter({ data, store: store.state }) : data;
-  }, [
-    data,
-    store.state.sorting.value,
-    store.state.leafSorting.value,
-  ]);
+  // const sortedData = useMemo(() => {
+  //   const filteredData = data.value.filter(Boolean);
+  //   return sortable ? sorter({ data: filteredData, store: store.state }) : filteredData;
+  // }, [
+  //   data.value,
+  //   store.state.sorting.value,
+  //   store.state.leafSorting.value,
+  // ]);
 
   const renderColumnAction = useCallback((col: string) => (
     <>
@@ -89,7 +89,7 @@ export function TableView(props: VirtualTableViewProps) {
   const rowKey = useRowKey(columns, rowIdentifier);
 
   const visibleRows = useVisibleRows({
-    data: sortedData,
+    data: data.value,
     store,
     sortable,
   });
@@ -102,15 +102,18 @@ export function TableView(props: VirtualTableViewProps) {
     height: rowHeight,
   });
 
-  const rowHeights = useMemo(() => visibleRows.map(getRowHeight), [
-    visibleRows,
-    getRowHeight,
-  ]);
+  const rowHeights = useMemo(
+    () => data.value.map((row) => row ? getRowHeight(row) : rowHeight),
+    [
+      data.value,
+      getRowHeight,
+    ],
+  );
 
   const { startIndex, endIndex, paddingTop, paddingBottom } =
     useVariableVirtualizer({
       scrollContainerRef,
-      itemCount: visibleRows.length,
+      itemCount: total.value,
       rowHeights,
       buffer,
       spacing: borderSpacing,
@@ -122,15 +125,16 @@ export function TableView(props: VirtualTableViewProps) {
     initialWidth,
   });
 
-  useLoadMoreEffect({
-    store,
-    onLoadMore,
-    ref: loadMoreRef,
-  });
+  useEffect(() => {
+    if (startIndex + endIndex < 1) return;
+    if (total.value > 0) {
+      load(startIndex, endIndex);
+    }
+  }, [startIndex, endIndex, total.value]);
 
   const { getColumnWidth } = useColumnResizer({ store });
 
-  const { style, totalWidth } = useTableStyle({
+  const { style } = useTableStyle({
     store,
     getColumnWidth,
     columns,
@@ -171,7 +175,7 @@ export function TableView(props: VirtualTableViewProps) {
         extensions={renderColumnExtension}
         action={renderColumnAction}
         {...{
-          data,
+          data: visibleRows,
           enumerable,
           expandable,
           groupable,
@@ -199,7 +203,6 @@ export function TableView(props: VirtualTableViewProps) {
 
       <div ref={bodyContainerRef}>
         <table
-          ref={tableRef}
           style={style}
           id="vt-main"
           class="vt"
@@ -220,7 +223,11 @@ export function TableView(props: VirtualTableViewProps) {
               }}
             />
 
-            {visibleRows.slice(startIndex, endIndex + 1).map((row, i) => {
+            {data.value.slice(startIndex, endIndex + 1).map((row, i) => {
+              row = row ||
+                columns.reduce((acc, col) => ({ ...acc, [col]: "" }), {
+                  $loading: true,
+                });
               const rowIndex = startIndex + i;
               const rowContent = renderRow(row, rowIndex);
               const isExpanded = store.state.expandedRows.value.includes(
@@ -254,19 +261,6 @@ export function TableView(props: VirtualTableViewProps) {
           </tbody>
         </table>
       </div>
-
-      {onLoadMore && (
-        <div ref={loadMoreRef} class="h-20 flex justify-center items-center">
-          <button
-            type="button"
-            class="btn btn-primary"
-            onClick={onLoadMore}
-            disabled={store.state.loading.value}
-          >
-            {store.state.loading.value ? "Loading..." : "Load More"}
-          </button>
-        </div>
-      )}
     </>
   );
 }

@@ -109,6 +109,7 @@ export const Row = memo((props: RowProps) => {
         //"hover:shadow-md",
         isSelected ? "bg-base-200" : "",
         row.$is_group_root ? "vt-g-row" : "vt-row",
+        row.$loading ? "vt-loading" : "",
       ].join(" ")}
       style={{
         height: height,
