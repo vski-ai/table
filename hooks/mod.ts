@@ -11,3 +11,4 @@ export * from "./useStickyGroupHeaders.ts";
 export * from "./useTableStyle.ts";
 export * from "./useVariableVirtualizer.ts";
 export * from "./useData.ts";
+export * from "./useDataLoader.ts";

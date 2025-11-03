@@ -1,22 +1,19 @@
-import { useMemo, useRef } from "preact/hooks";
+import { useRef } from "preact/hooks";
 import {
   useColumnResizer,
   useColumnWidthEffect,
-  useData,
+  useDataLoader,
   useFocusNavCallback,
   useOrderedColumns,
   useRowHeights,
   useRowKey,
   useTableStyle,
-  useVariableVirtualizer,
-  useVirtualData,
 } from "@/hooks/mod.ts";
 import { VirtualTableViewProps } from "./types.ts";
 import { useRenderRowCallback } from "./Row.tsx";
 import { ContextMenu } from "@/menu/ContextMenu.tsx";
 import { StickyHeaderContainer } from "./StickyHeaderContainer.tsx";
 import { RowPadding } from "./RowPadding.tsx";
-import { useSignal } from "@preact/signals";
 
 export function TableView(props: VirtualTableViewProps) {
   const {
@@ -32,53 +29,31 @@ export function TableView(props: VirtualTableViewProps) {
     groupable,
     plugins,
     onDataLoad,
-    rowHeight,
+    rowHeight = 64,
     buffer,
   } = props;
   const bodyContainerRef = useRef<HTMLDivElement>(null);
 
-  const loadedData = useSignal([]);
-  const count = useSignal(buffer ?? 50);
+  const rowKey = useRowKey(columns, rowIdentifier);
 
-  const getRowHeight = useRowHeights({
-    store,
-    expandable,
-    rowKey: rowIdentifier,
-    height: rowHeight,
-  });
-
-  const rowHeights = loadedData.value.map(getRowHeight);
   const {
-    virtualItems,
-    paddingTop,
-    paddingBottom,
-  } = useVariableVirtualizer({
-    scrollContainerRef,
-    itemCount: count.value,
+    data,
+    visibleRows,
     rowHeights,
-  });
-
-  const visibleRows = useMemo(() => {
-    return virtualItems.map((i) => ({
-      ...i,
-      row: loadedData.value[i.index] ?? null,
-    }));
-  }, [loadedData.value, virtualItems]);
-
-  console.log("11", visibleRows);
-
-  const { data, total, isLoading } = useData({
-    onDataLoad,
+    paddingBottom,
+    paddingTop,
+    isLoading,
+  } = useDataLoader({
     store,
     plugins,
-    visibleRows,
+    scrollContainerRef,
+    rowKey,
+    rowHeight,
+    onDataLoad,
+    buffer,
   });
 
-  loadedData.value = data.value;
-  count.value = total.value;
-
   const columnsInOrder = useOrderedColumns({ store, columns });
-  const rowKey = useRowKey(columns, rowIdentifier);
 
   useColumnWidthEffect({ store, columns, initialWidth });
 
@@ -93,6 +68,12 @@ export function TableView(props: VirtualTableViewProps) {
     groupable,
     enumerable,
     hasAddon: !!tableAddon,
+  });
+
+  const getRowHeight = useRowHeights({
+    store,
+    rowKey,
+    height: rowHeight,
   });
 
   const renderRow = useRenderRowCallback({
