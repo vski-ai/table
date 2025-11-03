@@ -18,6 +18,7 @@ declare module "@/table/types.ts" {
   }
 
   interface TableMeta {
+    groupby?: string[];
     sortableAll?: boolean;
     sortableColumns?: string[];
     sortableGroupLevelAll?: boolean;

@@ -10,7 +10,6 @@ import {
   useRowKey,
   useTableStyle,
   useVariableVirtualizer,
-  useVisibleRows,
 } from "@/hooks/mod.ts";
 import { VirtualTableViewProps } from "./types.ts";
 
@@ -32,7 +31,6 @@ export function TableView(props: VirtualTableViewProps) {
     rowIdentifier,
     tableAddon,
     selectable,
-    sortable,
     expandable,
     enumerable,
     groupable,
@@ -43,7 +41,6 @@ export function TableView(props: VirtualTableViewProps) {
   const { data, total, load } = useData({
     onDataLoad,
     store,
-    groupable,
     plugins,
   });
 
@@ -54,16 +51,10 @@ export function TableView(props: VirtualTableViewProps) {
 
   const rowKey = useRowKey(columns, rowIdentifier);
 
-  const visibleRows = useVisibleRows({
-    data: data.value,
-    store,
-    sortable,
-  });
-
-  const loadedRows = visibleRows.filter(Boolean);
+  const visibleRows = data.value;
 
   const getRowHeight = useRowHeights({
-    data: loadedRows,
+    data: visibleRows,
     store,
     expandable,
     rowKey,
@@ -141,7 +132,7 @@ export function TableView(props: VirtualTableViewProps) {
         store={store}
         plugins={plugins}
         {...{
-          data: loadedRows,
+          data: visibleRows,
           enumerable,
           expandable,
           groupable,
@@ -162,7 +153,7 @@ export function TableView(props: VirtualTableViewProps) {
           store,
           columns,
           rowHeights,
-          visibleRows: loadedRows,
+          visibleRows: visibleRows,
           scrollContainerRef,
         }}
       />

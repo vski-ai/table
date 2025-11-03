@@ -92,16 +92,6 @@ export function createTableStore(
     }
 
     switch (command.type) {
-      // Drilldown
-      case CommandType.DRILLDOWN_SET:
-        state.drilldowns.value = command.payload;
-        break;
-
-      // Expanded Levels
-      case CommandType.EXPANDED_LEVELS_SET:
-        state.expandedLevels.value = command.payload;
-        break;
-
       // Filtering
       case CommandType.FILTER_SET:
         state.filters.value = command.payload;

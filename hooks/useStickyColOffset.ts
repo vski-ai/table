@@ -13,7 +13,7 @@ export function useStickyColOffset({ store, columns }: StickyColOffset) {
 
     const leftOffsets: Record<string, number> = {};
     let currentLeftOffset = 0;
-    for (const col of columns) {
+    for (const col of ["$group_by", ...columns]) {
       if (stickyColumns[col] === "left") {
         leftOffsets[col] = currentLeftOffset;
         currentLeftOffset += widths[col] ?? 0;

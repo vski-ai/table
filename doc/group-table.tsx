@@ -5,6 +5,7 @@ import { Row } from "@/table/types.ts";
 import data from "./mock/group-1m-rows.json" with { type: "json" };
 import { createPluginContainer } from "@/plugin/mod.ts";
 import { sorterPlugin, sorterStore } from "@/sorting/mod.ts";
+import { groupingStore } from "@/group/mod.ts";
 
 export const GroupTable = () => {
   const tableStore = createTableStore(
@@ -12,6 +13,7 @@ export const GroupTable = () => {
     "basic-table",
     [
       sorterStore,
+      groupingStore,
     ],
   );
 
@@ -28,20 +30,23 @@ export const GroupTable = () => {
   });
 
   const onDataLoad = async ({ store, offset, limit }) => {
+    await new Promise((r) => setTimeout(r, 1000));
     const d = data.filter((r) =>
       r.$parent_id?.every(
         (id: string | number) =>
           store.state.expandedLevels.value?.includes(id as never),
-      ) || r.$group_level === 0
+      ) || !r.$group_level
     );
     return {
-      rows: d.slice(offset, offset + limit),
+      rows: (d as Row[]).slice(offset, offset + limit + 1),
       total: d.length,
       meta: {
-        sortableColumns: ["Company", "Hourly Rate"],
+        groupby: ["Year", "Month", "Company"],
+        sortableColumns: ["Year", "Hourly Rate", "Year", "Month"],
         sortableGroupLevelColumns: [
+          ["Month"],
+          ["Company", "First Name", "Last Name"],
           [],
-          ["First Name", "Last Name"],
         ],
       },
     };

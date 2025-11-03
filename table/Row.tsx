@@ -1,14 +1,8 @@
 import { memo } from "preact/compat";
 import { useCallback } from "preact/hooks";
 import { CellFormatter } from "@/format/CellFormatter.tsx";
-import {
-  GroupCaret,
-  GroupLevelLine,
-  GroupLinePointer,
-  GroupMargin,
-} from "@/group/mod.ts";
+import { GroupCell } from "@/group/mod.ts";
 import { CommandType } from "@/store/mod.ts";
-import { RowSorter } from "@/sorting/mod.ts";
 import { Row as RowType } from "./types.ts";
 import { CellFormatting } from "@/format/types.ts";
 import { TableStore } from "@/store/types.ts";
@@ -88,17 +82,6 @@ export const Row = memo((props: RowProps) => {
     }
   }, [store, row, rowKey]);
 
-  const onLevelToggle = useCallback(() => {
-    const newexpandedLevels =
-      store.state.expandedLevels.value.includes(row.id as never)
-        ? store.state.expandedLevels.value.filter((id) => id !== row.id)
-        : [...store.state.expandedLevels.value, row.id];
-    store.dispatch({
-      type: CommandType.EXPANDED_LEVELS_SET,
-      payload: newexpandedLevels,
-    });
-  }, [store, row]);
-
   const tabIndex = 5;
 
   return (
@@ -165,75 +148,18 @@ export const Row = memo((props: RowProps) => {
       )}
 
       {groupable && (
-        <td
-          key="$group_by"
-          data-column-name="$group_by"
-          style={{
-            width: `var(--col-width-$group_by)`,
-            height: `${height}px`,
-          }}
-          class="vt-g-cell"
-          tabIndex={4}
+        <GroupCell
+          store={store}
+          height={height ?? rowHeight}
+          row={row}
+          plugins={plugins}
+          stickyColumns={stickyColumns}
         >
-          <div class="vt-g-wrap">
-            {row.$is_group_root && (
-              <>
-                <GroupCaret
-                  active={store.state.expandedLevels.value.includes(
-                    row.id as never,
-                  )}
-                  size={16}
-                  level={row.$group_level!}
-                  onClick={onLevelToggle}
-                  tabIndex={4}
-                />
-                <GroupLevelLine
-                  level={row.$group_level!}
-                  height={rowHeight}
-                  caretSize={16}
-                />
-                {row.$group_level !== 0 &&
-                  (
-                    <GroupLinePointer
-                      level={row.$group_level!}
-                      height={rowHeight - 1}
-                    />
-                  )}
-                <span
-                  class="vt-pointer"
-                  onClick={onLevelToggle}
-                >
-                  <span class="ml-1" />
-                  <CellFormatter
-                    value={row[row.$group_by!]}
-                    formatting={formatting?.[row.$group_by!]}
-                  />
-                </span>
-              </>
-            )}
-            {!row.$is_group_root && (
-              <div class="truncate">
-                <GroupLevelLine
-                  level={row.$group_level!}
-                  height={rowHeight - 1}
-                  caretSize={16}
-                />
-                {row.$group_level !== 0 &&
-                  (
-                    <GroupLinePointer
-                      level={row.$group_level!}
-                      height={rowHeight - 1}
-                    />
-                  )}
-                <GroupMargin level={row.$group_level!} size={16} />
-                <CellFormatter
-                  value={row[row.$group_by!]}
-                  formatting={formatting?.[row.$group_by!]}
-                />
-              </div>
-            )}
-          </div>
-        </td>
+          <CellFormatter
+            value={row[row.$group_by!]}
+            formatting={formatting?.[row.$group_by!]}
+          />
+        </GroupCell>
       )}
 
       {columns.map((col, colIndex) => {

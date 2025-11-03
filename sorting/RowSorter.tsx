@@ -21,7 +21,7 @@ export const RowSorter = ({
   onChange,
 }: RowSorterProps) => {
   const meta = store.state.tableMeta.value;
-  if (!meta.sortableAll && !meta?.sortableColumns?.includes(column)) {
+  if (!meta?.sortableAll && !meta?.sortableColumns?.includes(column)) {
     return null;
   }
 

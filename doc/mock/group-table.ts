@@ -17,7 +17,7 @@ const month = [
 function generateLevel1(length = 20) {
   return new Array(length).fill(0).map((_, i) => {
     return {
-      id: i + "l1",
+      id: i + "l1" + (2025 - length + i),
       $is_group_root: true,
       $group_level: 0,
       $group_by: "Year",
@@ -38,7 +38,7 @@ function generateLevel1(length = 20) {
 function generateLevel2(length = 12) {
   return new Array(length).fill(0).map((_, i) => {
     return {
-      id: i + "l2",
+      id: i + "l2" + month[i],
       $is_group_root: true,
       $group_level: 1,
       $group_by: "Month",
@@ -59,7 +59,7 @@ function generateLevel2(length = 12) {
 function generateLevel3(length = 10) {
   return new Array(length).fill(0).map((_, i) => {
     return {
-      id: i + "l3",
+      id: i + "L3",
       $is_group_root: false,
       $group_level: 2,
       $group_by: "Company",
@@ -85,6 +85,7 @@ function generateRows() {
   for (const l1 of generateLevel1()) {
     result.push(l1);
     for (const l2 of generateLevel2()) {
+      l2.id = l2.id + l1.id;
       l2.$parent_id = [l1.id];
       l2.Year = l1.Year;
       result.push(l2);

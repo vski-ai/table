@@ -11,5 +11,4 @@ export * from "./useStickyColOffset.ts";
 export * from "./useStickyGroupHeaders.ts";
 export * from "./useTableStyle.ts";
 export * from "./useVariableVirtualizer.ts";
-export * from "./useVisibleRows.ts";
 export * from "./useData.ts";

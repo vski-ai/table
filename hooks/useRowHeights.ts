@@ -22,7 +22,7 @@ export function useRowHeights({
   return useCallback((row: Row) => {
     const rowId = row[rowKey];
     if (rowHeights[rowId]) {
-      return rowHeights[rowId];
+      return rowHeights[rowId] || height;
     }
 
     if (

@@ -53,7 +53,7 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
       for (let i = 0; i < visibleRows.length; i++) {
         const row = visibleRows[i];
         if (
-          row.$is_group_root && row.$group_level! < maxLevel &&
+          row?.$is_group_root && row?.$group_level! < maxLevel &&
           expandedLevels?.includes(row.id as never) &&
           rowTops[i].top < scrollTop
         ) {
