@@ -1,7 +1,14 @@
-import { type RefObject } from "preact";
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { MutableRef } from "preact/hooks";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "preact/hooks";
 
-// This hook is responsible for calculating the visible range of items in a list with variable heights.
+// This hook is responsible for calculating the visible range of items
+// in a list with variable heights.
 export function useVariableVirtualizer(
   {
     scrollContainerRef,
@@ -9,20 +16,27 @@ export function useVariableVirtualizer(
     rowHeights,
     buffer = 5,
     spacing = 0,
+    throttle = 50,
+    debounce = 50,
   }: {
-    scrollContainerRef?: RefObject<HTMLElement>;
+    scrollContainerRef: MutableRef<HTMLElement>;
     itemCount: number;
     rowHeights: number[];
     buffer?: number;
     spacing?: number;
+    throttle?: number;
+    debounce?: number;
   },
 ) {
   const [range, setRange] = useState({ startIndex: 0, endIndex: 0 });
-  const animationFrameRef = useRef<number>();
+  const debounceTimeoutRef = useRef<number>();
   const ignoreScrollEventsRef = useRef(false);
   const ignoreTimeoutRef = useRef<number>();
 
-  const setRangeAndIgnoreScroll = useCallback((newRange: typeof range) => {
+  // yes, we need trottle in combination with debounce
+  // consider "shaking" effects on animations, transitions, dataload etc.
+  // everything that may implictly emit scroll
+  const setRangeAndThrottle = useCallback((newRange: typeof range) => {
     if (
       newRange.startIndex !== range.startIndex ||
       newRange.endIndex !== range.endIndex
@@ -34,7 +48,7 @@ export function useVariableVirtualizer(
       }
       ignoreTimeoutRef.current = setTimeout(() => {
         ignoreScrollEventsRef.current = false;
-      }, 50);
+      }, throttle);
     }
   }, [range]);
 
@@ -71,7 +85,7 @@ export function useVariableVirtualizer(
       }
     }
 
-    setRangeAndIgnoreScroll({
+    setRangeAndThrottle({
       startIndex: Math.max(0, startIndex - buffer),
       endIndex: Math.min(itemCount - 1, endIndex + buffer),
     });
@@ -81,7 +95,7 @@ export function useVariableVirtualizer(
     rowHeights,
     buffer,
     spacing,
-    setRangeAndIgnoreScroll,
+    setRangeAndThrottle,
   ]);
 
   useEffect(() => {
@@ -98,10 +112,10 @@ export function useVariableVirtualizer(
         return;
       }
 
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
       }
-      animationFrameRef.current = requestAnimationFrame(calculateRange);
+      debounceTimeoutRef.current = setTimeout(calculateRange, debounce);
     };
 
     calculateRange();
@@ -110,22 +124,34 @@ export function useVariableVirtualizer(
     globalThis.addEventListener("resize", handleScroll, { passive: true });
 
     return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
       }
       scrollElement.removeEventListener("scroll", handleScroll);
       globalThis.removeEventListener("resize", handleScroll);
     };
   }, [scrollContainerRef?.current, calculateRange]);
 
-  const paddingTop = rowHeights.slice(0, range.startIndex).reduce(
-    (sum, height) => sum + height + spacing,
-    0,
+  const paddingTop = Math.floor(
+    rowHeights.slice(0, range.startIndex).reduce(
+      (sum, height) => sum + height + spacing,
+      0,
+    ),
   );
-  const paddingBottom = rowHeights.slice(range.endIndex + 1).reduce(
-    (sum, height) => sum + height + spacing,
-    0,
+  const paddingBottom = Math.floor(
+    rowHeights.slice(range.endIndex + 1).reduce(
+      (sum, height) => sum + height + spacing,
+      0,
+    ),
   );
 
-  return { ...range, paddingTop, paddingBottom };
+  const virtualItems = useMemo(() => {
+    const items = [];
+    for (let i = range.startIndex; i <= range.endIndex; i++) {
+      items.push({ index: i });
+    }
+    return items;
+  }, [range.startIndex, range.endIndex]);
+
+  return { ...range, paddingTop, paddingBottom, virtualItems };
 }

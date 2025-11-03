@@ -5,20 +5,6 @@ import { Row } from "@/table/types.ts";
 import { PluginContainer } from "@/plugin/mod.ts";
 import { DataLoadResult } from "@/table/types.ts";
 
-function debounce<F extends (...args: any[]) => void>(
-  func: F,
-  waitFor: number,
-  store: TableStore,
-) {
-  let timeout: number;
-
-  return (...args: Parameters<F>): void => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), waitFor);
-    store.state.loading.value = true;
-  };
-}
-
 interface DataProps {
   onDataLoad: (options: {
     offset: number;
@@ -26,80 +12,113 @@ interface DataProps {
     store: TableStore;
   }) => Promise<DataLoadResult>;
   store: TableStore;
-  limit?: number;
   plugins: PluginContainer;
+  visibleRows: any[];
 }
 
 export const useData = ({
   onDataLoad,
   store,
-  limit = 1,
   plugins,
+  visibleRows,
 }: DataProps) => {
-  const data = useSignal<Row[]>([]);
+  const data = useSignal<(Row | null)[]>([]);
   const total = useSignal(0);
-  const abortController = useRef<AbortController | null>(null);
+  const isLoading = useSignal(false);
+  const loadedRanges = useRef<{ start: number; end: number }[]>([]);
 
-  const debouncedLoad = useCallback(
-    debounce(
-      async (start: number, end: number) => {
-        if (abortController.current) {
-          abortController.current.abort();
+  const load = useCallback(async (offset: number, limit: number) => {
+    if (limit <= 0 || isLoading.value) return;
+
+    isLoading.value = true;
+    try {
+      const options = await plugins.beforeLoad({ offset, limit, store });
+      const { rows, total: newTotal } = await onDataLoad(options);
+
+      if (total.value !== newTotal) {
+        total.value = newTotal;
+        data.value = new Array(newTotal).fill(null);
+        loadedRanges.current = [];
+      }
+
+      const finalData = [...data.value];
+      for (let i = 0; i < rows.length; i++) {
+        if (offset + i < finalData.length) {
+          finalData[offset + i] = rows[i];
         }
-        const controller = new AbortController();
-        abortController.current = controller;
+      }
+      data.value = finalData;
 
-        store.state.loading.value = true;
-
-        try {
-          const options = await plugins.beforeLoad({
-            offset: start,
-            limit: end - start,
-            store,
-            abortController,
-          });
-          const res = await onDataLoad(options);
-          if (controller.signal.aborted) return;
-
-          const { rows, total: newTotal } = await plugins.afterLoad(res);
-          if (controller.signal.aborted) return;
-          total.value = newTotal;
-          const newData = new Array(newTotal).fill(null);
-
-          let zbi = 0;
-          for (let i = start; i < end + 1; i++) {
-            newData[i] = rows[zbi++];
-          }
-
-          data.value = newData;
-        } catch (error) {
-          if ((error as Error).message !== "Aborted") {
-            console.error("Failed to load data", error);
-          }
-        } finally {
-          if (abortController.current === controller) {
-            abortController.current = null;
-          }
-          if (!controller.signal.aborted) {
-            store.state.loading.value = false;
-          }
+      // Merge ranges
+      const newRange = { start: offset, end: offset + limit };
+      const mergedRanges: { start: number; end: number }[] = [];
+      let merged = false;
+      for (const range of loadedRanges.current) {
+        if (newRange.start <= range.end && newRange.end >= range.start) {
+          newRange.start = Math.min(newRange.start, range.start);
+          newRange.end = Math.max(newRange.end, range.end);
+          merged = true;
+        } else {
+          mergedRanges.push(range);
         }
-      },
-      0,
-      store,
-    ),
-    [store, onDataLoad, plugins],
-  );
-
-  const load = useCallback((start: number, end: number) => {
-    if (end > start) {
-      debouncedLoad(start, end);
+      }
+      if (!merged) {
+        mergedRanges.push(newRange);
+      }
+      loadedRanges.current = mergedRanges;
+    } catch (error) {
+      console.error("Failed to load data", error);
+    } finally {
+      isLoading.value = false;
     }
-  }, [debouncedLoad, store.state.dataLoadKey.value]);
+  }, [
+    onDataLoad,
+    store,
+    plugins,
+    data,
+    total,
+    isLoading,
+    loadedRanges,
+    visibleRows,
+  ]);
 
   useEffect(() => {
-    load(0, limit);
-  }, [store.state.dataLoadKey.value, limit, load]);
+    if (!visibleRows) return;
 
-  return { data, total, load };
+    const nullRanges: { start: number; end: number }[] = [];
+    let start: number | null = null;
+    for (const row of visibleRows) {
+      if (row.row === null) {
+        if (start === null) {
+          start = row.index;
+        }
+      } else {
+        if (start !== null) {
+          nullRanges.push({ start, end: row.index - 1 });
+          start = null;
+        }
+      }
+    }
+    if (start !== null) {
+      nullRanges.push({
+        start,
+        end: visibleRows[visibleRows.length - 1].index,
+      });
+    }
+
+    const newRanges = nullRanges.filter((range) => {
+      return !loadedRanges.current.some((loadingRange) => {
+        return range.start >= loadingRange.start &&
+          range.end <= loadingRange.end;
+      });
+    });
+
+    if (newRanges.length > 0) {
+      for (const range of newRanges) {
+        load(range.start, range.end - range.start + 1);
+      }
+    }
+  }, [visibleRows, load]);
+
+  return { data, total, isLoading };
 };

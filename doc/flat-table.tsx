@@ -31,7 +31,7 @@ export const FlatTable = () => {
   }): Promise<{ rows: Row[]; total: number }> => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     return {
-      rows: (data as Row[]).slice(offset, offset + limit + 1),
+      rows: (data as Row[]).slice(offset, offset + limit),
       total: (data as Row[]).length,
       meta: {
         sortableAll: true,

@@ -40,7 +40,7 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
 
     const rowTops = visibleRows.reduce((acc, _, index) => {
       const prevHeight = index > 0
-        ? acc[index - 1].top + rowHeights[index - 1]
+        ? acc[index - 1].top + (rowHeights[index - 1] || 0)
         : 0;
       acc.push({ top: prevHeight });
       return acc;
@@ -52,6 +52,8 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
 
       for (let i = 0; i < visibleRows.length; i++) {
         const row = visibleRows[i];
+        if (!row) continue;
+
         if (
           row?.$is_group_root && row?.$group_level! < maxLevel &&
           expandedLevels?.includes(row.id as never) &&

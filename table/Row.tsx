@@ -4,6 +4,7 @@ import { CellFormatter } from "@/format/CellFormatter.tsx";
 import { GroupCell } from "@/group/mod.ts";
 import { CommandType } from "@/store/mod.ts";
 import { Row as RowType } from "./types.ts";
+import { RowLoading } from "./RowLoading.tsx";
 import { CellFormatting } from "@/format/types.ts";
 import { TableStore } from "@/store/types.ts";
 import { sanitizeColName } from "@/utils/sanitizeColName.ts";
@@ -93,7 +94,6 @@ export const Row = memo((props: RowProps) => {
         //"hover:shadow-md",
         isSelected ? "bg-base-200" : "",
         row.$is_group_root ? "vt-g-row" : "vt-row",
-        row.$loading ? "vt-loading" : "",
       ].join(" ")}
       style={{
         height: height,
@@ -277,13 +277,17 @@ export function useRenderRowCallback({
   }, [store, resizingRow]);
 
   return useCallback((row: RowType, index: number) => {
+    const rowHeight = getRowHeight(row);
+    if (row.$loading) {
+      return <RowLoading columns={columns} rowHeight={rowHeight} />;
+    }
+
     const isSelected = selected.includes(
       row[rowKey],
     );
     const isExpanded = expanded.includes(
       row[rowKey],
     );
-    const rowHeight = getRowHeight(row);
 
     return (
       <Row

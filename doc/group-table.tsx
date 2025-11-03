@@ -31,14 +31,17 @@ export const GroupTable = () => {
 
   const onDataLoad = async ({ store, offset, limit }) => {
     await new Promise((r) => setTimeout(r, 1000));
+
     const d = data.filter((r) =>
       r.$parent_id?.every(
         (id: string | number) =>
           store.state.expandedLevels.value?.includes(id as never),
       ) || !r.$group_level
     );
+
+    console.log("4", offset, limit, (d as Row[]).slice(offset, offset + limit));
     return {
-      rows: (d as Row[]).slice(offset, offset + limit + 1),
+      rows: (d as Row[]).slice(offset, offset + limit),
       total: d.length,
       meta: {
         groupby: ["Year", "Month", "Company"],

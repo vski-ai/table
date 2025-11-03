@@ -143,10 +143,8 @@ export function useFocusNavCallback(
       case "ArrowUp": {
         ev.preventDefault();
         const nextRowIndex = rowIndex - 1;
-        if (nextRowIndex < 0) return;
-
         const itemTop = rowHeights.slice(0, nextRowIndex).reduce(
-          (a, b) => a + b,
+          (a, b) => a + (b || 0),
           0,
         );
         const currentScrollTop = scrollContainerRef.current!.scrollTop;
@@ -168,10 +166,10 @@ export function useFocusNavCallback(
         if (nextRowIndex >= rowHeights.length) return;
 
         const itemTop = rowHeights.slice(0, nextRowIndex).reduce(
-          (a, b) => a + b,
+          (a, b) => a + (b || 0),
           0,
         );
-        const itemHeight = rowHeights[nextRowIndex];
+        const itemHeight = rowHeights[nextRowIndex] || 0;
         const containerHeight = scrollContainerRef.current!.clientHeight;
         const currentScrollTop = scrollContainerRef.current!.scrollTop;
 

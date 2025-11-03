@@ -1,6 +1,7 @@
-import { type JSX, type RefObject } from "preact";
+import { type JSX } from "preact";
 import { TableStore } from "@/store/types.ts";
 import { PluginContainer } from "@/plugin/mod.ts";
+import { MutableRef } from "preact/hooks";
 
 export interface DataLoadOptions {
   offset: number;
@@ -31,7 +32,7 @@ export type VirtualTableViewProps =
     initialWidth?: number;
     rowHeight?: number;
     buffer?: number;
-    scrollContainerRef?: RefObject<HTMLElement>;
+    scrollContainerRef: MutableRef<HTMLElement>;
     rowIdentifier?: string;
     tableAddon?: JSX.Element;
     sortable?: boolean;

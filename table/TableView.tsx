@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useRef } from "preact/hooks";
-
+import { useMemo, useRef } from "preact/hooks";
 import {
   useColumnResizer,
   useColumnWidthEffect,
@@ -10,23 +9,20 @@ import {
   useRowKey,
   useTableStyle,
   useVariableVirtualizer,
+  useVirtualData,
 } from "@/hooks/mod.ts";
 import { VirtualTableViewProps } from "./types.ts";
-
-import { StickyRowsContainer } from "./StickyRowsContainer.tsx";
 import { useRenderRowCallback } from "./Row.tsx";
 import { ContextMenu } from "@/menu/ContextMenu.tsx";
 import { StickyHeaderContainer } from "./StickyHeaderContainer.tsx";
 import { RowPadding } from "./RowPadding.tsx";
+import { useSignal } from "@preact/signals";
 
 export function TableView(props: VirtualTableViewProps) {
   const {
-    onDataLoad,
     columns,
     store,
     initialWidth,
-    rowHeight = 56,
-    buffer = 50,
     scrollContainerRef,
     rowIdentifier,
     tableAddon,
@@ -35,60 +31,56 @@ export function TableView(props: VirtualTableViewProps) {
     enumerable,
     groupable,
     plugins,
+    onDataLoad,
+    rowHeight,
+    buffer,
   } = props;
   const bodyContainerRef = useRef<HTMLDivElement>(null);
 
-  const { data, total, load } = useData({
-    onDataLoad,
-    store,
-    plugins,
-  });
-
-  const columnsInOrder = useOrderedColumns({
-    store,
-    columns,
-  });
-
-  const rowKey = useRowKey(columns, rowIdentifier);
-
-  const visibleRows = data.value;
+  const loadedData = useSignal([]);
+  const count = useSignal(buffer ?? 50);
 
   const getRowHeight = useRowHeights({
-    data: visibleRows,
     store,
     expandable,
-    rowKey,
+    rowKey: rowIdentifier,
     height: rowHeight,
   });
 
-  const rowHeights = useMemo(
-    () => data.value.map((row) => row ? getRowHeight(row) : rowHeight),
-    [
-      data.value,
-      getRowHeight,
-    ],
-  );
-
-  const { startIndex, endIndex, paddingTop, paddingBottom } =
-    useVariableVirtualizer({
-      scrollContainerRef,
-      itemCount: total.value,
-      rowHeights,
-      buffer,
-    });
-
-  useColumnWidthEffect({
-    store,
-    columns,
-    initialWidth,
+  const rowHeights = loadedData.value.map(getRowHeight);
+  const {
+    virtualItems,
+    paddingTop,
+    paddingBottom,
+  } = useVariableVirtualizer({
+    scrollContainerRef,
+    itemCount: count.value,
+    rowHeights,
   });
 
-  useEffect(() => {
-    if (startIndex + endIndex < 1) return;
-    if (total.value > 0) {
-      load(startIndex, endIndex);
-    }
-  }, [startIndex, endIndex, total.value, store.state.dataLoadKey.value]);
+  const visibleRows = useMemo(() => {
+    return virtualItems.map((i) => ({
+      ...i,
+      row: loadedData.value[i.index] ?? null,
+    }));
+  }, [loadedData.value, virtualItems]);
+
+  console.log("11", visibleRows);
+
+  const { data, total, isLoading } = useData({
+    onDataLoad,
+    store,
+    plugins,
+    visibleRows,
+  });
+
+  loadedData.value = data.value;
+  count.value = total.value;
+
+  const columnsInOrder = useOrderedColumns({ store, columns });
+  const rowKey = useRowKey(columns, rowIdentifier);
+
+  useColumnWidthEffect({ store, columns, initialWidth });
 
   const { getColumnWidth } = useColumnResizer({ store });
 
@@ -117,8 +109,8 @@ export function TableView(props: VirtualTableViewProps) {
 
   const focusNav = useFocusNavCallback({
     store,
-    startIndex,
-    endIndex,
+    startIndex: visibleRows[0]?.index ?? 0,
+    endIndex: visibleRows[visibleRows.length - 1]?.index ?? 0,
     key: paddingTop + paddingBottom,
     scrollContainerRef: scrollContainerRef!,
     rowHeights,
@@ -127,12 +119,11 @@ export function TableView(props: VirtualTableViewProps) {
   return (
     <>
       <ContextMenu store={store} target={scrollContainerRef} />
-
       <StickyHeaderContainer
         store={store}
         plugins={plugins}
         {...{
-          data: visibleRows,
+          data: data.value,
           enumerable,
           expandable,
           groupable,
@@ -142,84 +133,62 @@ export function TableView(props: VirtualTableViewProps) {
           columns,
         }}
       />
-
-      <StickyRowsContainer
-        renderRow={renderRow}
-        {...{
-          enumerable,
-          expandable,
-          groupable,
-          selectable,
-          store,
-          columns,
-          rowHeights,
-          visibleRows: visibleRows,
-          scrollContainerRef,
-        }}
-      />
-
-      {store.state.loading.value &&
-        (
-          <progress className="progress progress-primary h-1 rounded-none absolute z-100 w-full opacity-25" />
-        )}
-
+      {isLoading.value && (
+        <progress class="progress progress-primary h-1 rounded-none absolute z-100 w-full opacity-25" />
+      )}
       <div ref={bodyContainerRef}>
         <table
           style={style}
           id="vt-main"
-          class={["vt"].join(" ")}
+          class="vt"
           onKeyDown={focusNav.onKeyDown}
           onKeyUp={focusNav.onKeyUp}
         >
           <tbody>
-            <RowPadding
-              padding={paddingTop}
-              columns={columnsInOrder}
-              {...{
-                enumerable,
-                expandable,
-                groupable,
-                selectable,
-                tableAddon,
-                getColumnWidth,
-              }}
-            />
-
-            {visibleRows.slice(startIndex, endIndex + 1).map((row, i) => {
-              row = row ||
-                columns.reduce((acc, col) => ({ ...acc, [col]: "" }), {
-                  $loading: true,
-                });
-              const rowIndex = startIndex + i;
-              const rowContent = renderRow(row, rowIndex);
-              const isExpanded = store.state.expandedRows.value.includes(
-                row[rowKey],
-              );
-
-              if (isExpanded && props.expandable) {
-                return [
-                  rowContent,
-                  <tr key={`${row.id}-expanded`} class="transition-all">
-                    <td
-                      colSpan={columns.length + (props.expandable ? 1 : 0) +
-                        (selectable ? 1 : 0) +
-                        (store.state.expandedLevels ? 1 : 0)}
-                    >
-                      {props.renderExpand(row)}
-                    </td>
-                  </tr>,
-                ];
+            {["top", ...visibleRows, "bottom"].map((row, i) => {
+              if (row === "top") {
+                return (
+                  <RowPadding
+                    key={paddingTop + i}
+                    name="top"
+                    padding={paddingTop}
+                    columns={columnsInOrder}
+                    {...{
+                      enumerable,
+                      expandable,
+                      groupable,
+                      selectable,
+                      tableAddon,
+                      getColumnWidth,
+                    }}
+                  />
+                );
               }
-              return rowContent;
+
+              if (row === "bottom") {
+                return (
+                  <RowPadding
+                    key={paddingBottom + i}
+                    name="bottom"
+                    padding={paddingBottom}
+                    columns={columnsInOrder}
+                    {...{
+                      enumerable,
+                      expandable,
+                      groupable,
+                      selectable,
+                      tableAddon,
+                      getColumnWidth,
+                    }}
+                  />
+                );
+              }
+
+              return renderRow(
+                row.row ?? { $loading: true, _key: row.index },
+                i,
+              );
             })}
-            <tr style={{ height: `${paddingBottom}px` }}>
-              <td
-                colSpan={columns.length + (props.expandable ? 1 : 0) +
-                  (selectable ? 1 : 0)}
-                style={{ padding: 0, border: 0 }}
-              >
-              </td>
-            </tr>
           </tbody>
         </table>
       </div>
