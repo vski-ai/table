@@ -49,8 +49,8 @@ export const GroupSorter = ({
       key={state?.column}
       type="button"
       class={[
-        "btn btn-sm btn-ghost w-4 h-4 p-0",
-        state?.column === column && "btn-active",
+        "btn btn-sm btn-circle w-4 h-4 p-0 opacity-50 hover:opacity-100 transition-opacity",
+        state?.column === column && "btn-active opacity-80",
       ].join(" ")}
       onClick={() => {
         if (!state) {
@@ -71,8 +71,10 @@ export const GroupSorter = ({
       }}
     >
       {state?.column === column
-        ? state?.sort === "asc" ? <ArrowDownIcon /> : <ArrowUpIcon />
-        : <ArrowDownUpIcon />}
+        ? state?.sort === "asc"
+          ? <ArrowDownIcon className="w-2" />
+          : <ArrowUpIcon className="w-2" />
+        : <ArrowDownUpIcon className="w-2" />}
     </button>
   );
 };

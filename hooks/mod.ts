@@ -2,7 +2,6 @@ export * from "./useColumnnResize.ts";
 export * from "./useColumnsOrderCallback.ts";
 export * from "./useColumnWidthEffect.ts";
 export * from "./useFocusNavCallback.ts";
-export * from "./useLoadMoreEffect.ts";
 export * from "./useMediaQuery.ts";
 export * from "./useOrderedColumns.ts";
 export * from "./useRowHeights.ts";

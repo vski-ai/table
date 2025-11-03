@@ -4,6 +4,21 @@ import { TableStore } from "@/store/types.ts";
 import { Row } from "@/table/types.ts";
 import { PluginContainer } from "@/plugin/mod.ts";
 import { DataLoadResult } from "@/table/types.ts";
+
+function debounce<F extends (...args: any[]) => void>(
+  func: F,
+  waitFor: number,
+  store: TableStore,
+) {
+  let timeout: number;
+
+  return (...args: Parameters<F>): void => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), waitFor);
+    store.state.loading.value = true;
+  };
+}
+
 interface DataProps {
   onDataLoad: (options: {
     offset: number;
@@ -15,91 +30,76 @@ interface DataProps {
   plugins: PluginContainer;
 }
 
-export const useData = (
-  {
-    onDataLoad,
-    store,
-    limit = 100,
-    plugins,
-  }: DataProps,
-) => {
+export const useData = ({
+  onDataLoad,
+  store,
+  limit = 1,
+  plugins,
+}: DataProps) => {
   const data = useSignal<Row[]>([]);
   const total = useSignal(0);
-  const lastKey = useRef<number>(0);
-  const queue = useRef<[number, number][]>([]);
-  const isProcessing = useRef(false);
+  const abortController = useRef<AbortController | null>(null);
 
-  const processQueue = useCallback(async () => {
-    if (isProcessing.current || queue.current.length === 0) {
-      return;
-    }
-    isProcessing.current = true;
-    store.state.loading.value = true;
-
-    const range = queue.current.pop()!;
-    const [start, end] = range;
-
-    if (start > total.value && total.value > 0) {
-      // Range is out of bounds, ignore
-    } else {
-      let shouldLoad = false;
-      for (let i = start; i < end; i++) {
-        if (!data.value[i]) {
-          shouldLoad = true;
-          break;
+  const debouncedLoad = useCallback(
+    debounce(
+      async (start: number, end: number) => {
+        if (abortController.current) {
+          abortController.current.abort();
         }
-      }
+        const controller = new AbortController();
+        abortController.current = controller;
 
-      if (lastKey.current != store.state.dataLoadKey.value) {
-        shouldLoad = true;
-      }
+        store.state.loading.value = true;
 
-      if (shouldLoad) {
-        lastKey.current = store.state.dataLoadKey.value;
+        try {
+          const options = await plugins.beforeLoad({
+            offset: start,
+            limit: end - start,
+            store,
+            abortController,
+          });
+          const res = await onDataLoad(options);
+          if (controller.signal.aborted) return;
 
-        const options = await plugins.beforeLoad({
-          offset: start,
-          limit: end - start,
-          store,
-        });
-
-        const res = await onDataLoad(options);
-        store.state.tableMeta.value = res.meta;
-
-        const { rows, total: newTotal } = await plugins.afterLoad(res);
-
-        let newData = [...data.value];
-        if (total.value !== newTotal) {
+          const { rows, total: newTotal } = await plugins.afterLoad(res);
+          if (controller.signal.aborted) return;
           total.value = newTotal;
-          newData = Array(newTotal).fill(null);
-        }
+          const newData = new Array(newTotal).fill(null);
 
-        for (let i = 0; i < rows.length; i++) {
-          if (start + i < newData.length) {
-            newData[start + i] = rows[i];
+          let zbi = 0;
+          for (let i = start; i < end + 1; i++) {
+            newData[i] = rows[zbi++];
+          }
+
+          data.value = newData;
+        } catch (error) {
+          if ((error as Error).message !== "Aborted") {
+            console.error("Failed to load data", error);
+          }
+        } finally {
+          if (abortController.current === controller) {
+            abortController.current = null;
+          }
+          if (!controller.signal.aborted) {
+            store.state.loading.value = false;
           }
         }
-
-        data.value = newData;
-      }
-    }
-
-    isProcessing.current = false;
-    store.state.loading.value = false;
-
-    if (queue.current.length > 0) {
-      processQueue();
-    }
-  }, [store.state.dataLoadKey.value]);
+      },
+      0,
+      store,
+    ),
+    [store, onDataLoad, plugins],
+  );
 
   const load = useCallback((start: number, end: number) => {
-    queue.current.push([start, end]);
-    processQueue();
-  }, [processQueue]);
+    if (end > start) {
+      debouncedLoad(start, end);
+    }
+  }, [debouncedLoad, store.state.dataLoadKey.value]);
 
   useEffect(() => {
     load(0, limit);
-  }, []);
+  }, [store.state.dataLoadKey.value, limit, load]);
 
   return { data, total, load };
 };

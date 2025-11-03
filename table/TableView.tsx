@@ -160,7 +160,7 @@ export function TableView(props: VirtualTableViewProps) {
 
       {store.state.loading.value &&
         (
-          <progress className="progress progress-primary h-1 rounded-none absolute z-100 w-full" />
+          <progress className="progress progress-primary h-1 rounded-none absolute z-100 w-full opacity-25" />
         )}
 
       <div ref={bodyContainerRef}>

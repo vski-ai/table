@@ -30,6 +30,7 @@ export const GroupCell = ({
       type: CommandType.EXPANDED_LEVELS_SET,
       payload: row.id,
     });
+    store.state.dataLoadKey.value = new Date().getTime();
   };
 
   const key = "$group_by";
@@ -51,7 +52,7 @@ export const GroupCell = ({
         position: isStickyLeft ? "sticky" : undefined,
       }}
       class={["vt-g-cell", isStickyLeft ? "vt-s-left" : ""].join(" ")}
-      //tbIndex={4}
+      tabIndex={4}
     >
       <div class="flex justify-between w-full">
         <div class="vt-g-wrap">
@@ -65,6 +66,7 @@ export const GroupCell = ({
                 level={row.$group_level!}
                 onClick={onLevelToggle}
                 tabIndex={4}
+                height={height}
               />
               <GroupLevelLine
                 level={row.$group_level!}
@@ -108,7 +110,6 @@ export const GroupCell = ({
         </div>
         {nextColInOrder && (
           <span
-            class="opacity-50"
             style={{ paddingRight: (row.$group_level! * 17) + "px" }}
           >
             {plugins.groupHeaderCellSuffixes.render({

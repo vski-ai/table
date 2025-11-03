@@ -85,7 +85,7 @@ export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
         style={style}
         ref={ref}
       >
-        <tbody>
+        <tbody class={store.state.loading.value ? "hidden" : ""}>
           {stickyHeaders.value.map((header, _) =>
             renderRow(header.row, header.index)
           )}

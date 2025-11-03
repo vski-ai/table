@@ -15,7 +15,7 @@ export const GroupLevelLine = memo((
       key={i}
       style={{
         height: height + "px",
-        top: -(height / 2),
+        top: -1 + "px",
         left: caretSize * (i + 1) + (caretSize / 2),
       }}
       class="absolute border-l-1 border-dashed dark:opacity-50"

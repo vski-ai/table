@@ -7,24 +7,42 @@ interface GroupCaretProps {
   active: boolean;
   level: number;
   onClick?: () => void;
+  height?: number;
   tabIndex?: number;
 }
 
 export const GroupCaret = memo((
-  { active, size, onClick, level, tabIndex }: GroupCaretProps,
+  { active, size, onClick, level, height = 64, tabIndex = 0 }: GroupCaretProps,
 ) => {
   const style = { width: size, height: size };
   return (
-    <button
-      type="button"
-      role="checkbox"
-      onClick={onClick}
-      style={{
-        marginLeft: (size * (level ?? 0)) + "px",
-      }}
-      tabIndex={tabIndex}
-    >
-      {active ? <ChevronDown style={style} /> : <ChevronRight style={style} />}
-    </button>
+    <>
+      <button
+        type="button"
+        role="checkbox"
+        onClick={onClick}
+        style={{
+          marginLeft: (size * (level ?? 0)) + "px",
+        }}
+        tabIndex={tabIndex}
+      >
+        {active
+          ? <ChevronDown style={style} />
+          : <ChevronRight style={style} />}
+      </button>
+      {active
+        ? (
+          <span
+            class="absolute border-l-1 border-dashed dark:opacity-50"
+            style={{
+              left: (size * (level + 1)) + size / 2 + "px",
+              bottom: 0 + "px",
+              height: height / 2 - size + "px",
+            }}
+          >
+          </span>
+        )
+        : null}
+    </>
   );
 });
