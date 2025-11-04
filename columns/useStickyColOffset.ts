@@ -1,19 +1,20 @@
 import { useMemo } from "preact/hooks";
-import { StickyPosition, TableStore } from "@/store/types.ts";
-
+import { TableStore } from "@/store/types.ts";
+import { useOrderedColumns } from "./useOrderedColumns.ts";
 interface StickyColOffset {
   store: TableStore;
-  columns: string[];
 }
 
-export function useStickyColOffset({ store, columns }: StickyColOffset) {
+export function useStickyColOffset({ store }: StickyColOffset) {
+  const columns = useOrderedColumns({ store });
+
   const offsets = useMemo(() => {
     const stickyColumns = store.state.stickyColumns.value;
     const widths = store.state.columnWidths.value;
 
     const leftOffsets: Record<string, number> = {};
     let currentLeftOffset = 0;
-    for (const col of ["$group_by", ...columns]) {
+    for (const col of columns) {
       if (stickyColumns[col] === "left") {
         leftOffsets[col] = currentLeftOffset;
         currentLeftOffset += widths[col] ?? 0;

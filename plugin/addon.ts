@@ -1,4 +1,4 @@
-export class SortedAddon<T extends (...args: any) => any> {
+export class SortedAddon<T extends (...args: any) => any = any> {
   #map = new Map<number, Set<T>>();
   use(index: number, ref: T) {
     if (!(this.#map.get(index) instanceof Set)) {

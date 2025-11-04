@@ -5,7 +5,7 @@ import { Row } from "@/table/types.ts";
 import data from "./mock/group-1m-rows.json" with { type: "json" };
 import { createPluginContainer } from "@/plugin/mod.ts";
 import { sorterPlugin, sorterStore } from "@/sorting/mod.ts";
-import { groupingStore } from "@/group/mod.ts";
+import { groupingStore } from "@/grouping/mod.ts";
 
 export const GroupTable = () => {
   const tableStore = createTableStore(
@@ -24,9 +24,9 @@ export const GroupTable = () => {
   const allColumns = Object.keys(data?.[0] ?? {}).filter((c) => {
     return !c.startsWith("$") && !["id", "Year", "Month"].includes(c);
   });
-  const scrollRef = useRef();
+  const scrollRef = useRef<HTMLElement>(null);
   useEffect(() => {
-    scrollRef.current = document.querySelector(".main-outlet");
+    scrollRef.current = document.querySelector(".main-outlet")!;
   });
 
   const onDataLoad = async ({ store, offset, limit }) => {

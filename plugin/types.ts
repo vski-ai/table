@@ -2,7 +2,7 @@ import { TableStore } from "@/store/types.ts";
 import { DataLoadOptions, DataLoadResult, Row } from "@/table/types.ts";
 import { SortedAddon } from "./addon.ts";
 
-export type CellRenderer = (opts: {
+export type CellRendererCallback = (opts: {
   column: string;
   row: Row;
   store: TableStore;
@@ -31,27 +31,40 @@ export type BeforeLoadCallback = (
 ) => Promise<DataLoadOptions> | DataLoadOptions;
 
 type HeaderPrefixes = SortedAddon<ColumnRendererCallback>;
-type GroupHeaderCellSuffixes = SortedAddon<CellRenderer>;
-type GroupHeaderCellPrefixes = SortedAddon<CellRenderer>;
-type GroupHeaderCellContent = SortedAddon<CellRenderer>;
+type LeftTableCells = SortedAddon<ColumnRendererCallback>;
+type RightTableCells = SortedAddon<ColumnRendererCallback>;
+type LeftTableHeaders = SortedAddon<ColumnRendererCallback>;
+type RightTableHeaders = SortedAddon<ColumnRendererCallback>;
+type GroupHeaderCellSuffixes = SortedAddon<CellRendererCallback>;
+type GroupHeaderCellPrefixes = SortedAddon<CellRendererCallback>;
+type GroupHeaderCellContent = SortedAddon<CellRendererCallback>;
 
-export type PluginInitCallback = (opts: {
+export interface PluginsInitOptions {
   store: TableStore;
   headerPrefixes: HeaderPrefixes;
+  leftTableCells: LeftTableCells;
+  rightTableCells: RightTableCells;
+  leftTableHeaders: LeftTableHeaders;
+  rightTableHeaders: RightTableHeaders;
   groupHeaderCellPrefixes: GroupHeaderCellPrefixes;
   groupHeaderCellSuffixes: GroupHeaderCellSuffixes;
   groupHeaderCellContent: GroupHeaderCellSuffixes;
-}) => void;
+}
 
-export type ITablePlugin = {
-  name: string;
-  dependencies?: string[];
+export type PluginInitCallback = (opts: PluginsInitOptions) => void;
 
-  onInit?: PluginInitCallback;
+export type ITablePlugin<T extends Record<string, any> = Record<string, any>> =
+  {
+    name: string;
+    dependencies?: string[];
+    tableProps?: T;
+    addons?: Record<string, SortedAddon>;
 
-  // A hook that is called before data is loaded
-  beforeLoad?: BeforeLoadCallback;
+    onInit?: PluginInitCallback;
 
-  // A hook that is called after data is loaded
-  afterLoad?: AfterLoadCallback;
-};
+    // A hook that is called before data is loaded
+    beforeLoad?: BeforeLoadCallback;
+
+    // A hook that is called after data is loaded
+    afterLoad?: AfterLoadCallback;
+  };

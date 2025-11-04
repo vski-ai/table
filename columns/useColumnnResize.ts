@@ -1,6 +1,7 @@
 import { useCallback } from "preact/hooks";
-import { useSignal } from "@preact/signals";
-import { CommandType, TableStore } from "@/store/mod.ts";
+
+import { TableStore } from "@/store/mod.ts";
+import { CommandType } from "./columnsStore.ts";
 
 interface ColumnResizerProps {
   store: TableStore;

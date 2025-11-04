@@ -1,27 +1,28 @@
-import { useRef } from "preact/hooks";
 import {
-  useColumnResizer,
-  useColumnWidthEffect,
   useDataLoader,
   useFocusNavCallback,
-  useOrderedColumns,
   useRowHeights,
   useRowKey,
   useTableStyle,
 } from "@/hooks/mod.ts";
+
+import { useColumnResizer, useOrderedColumns } from "@/columns/mod.ts";
+
+import { Row } from "./types.ts";
 import { VirtualTableViewProps } from "./types.ts";
 import { useRenderRowCallback } from "./Row.tsx";
 import { ContextMenu } from "@/menu/ContextMenu.tsx";
 import { StickyHeaderContainer } from "./StickyHeaderContainer.tsx";
+import { StickyRowsContainer } from "./StickyRowsContainer.tsx";
+
 import { RowPadding } from "./RowPadding.tsx";
 
 export function TableView(props: VirtualTableViewProps) {
   const {
-    columns,
+    //columns,
     store,
     initialWidth,
     scrollContainerRef,
-    rowIdentifier,
     tableAddon,
     selectable,
     expandable,
@@ -30,10 +31,12 @@ export function TableView(props: VirtualTableViewProps) {
     plugins,
     onDataLoad,
     rowHeight = 64,
-    buffer,
+    rowIdentifier = "id",
+    buffer = 1,
   } = props;
-  const bodyContainerRef = useRef<HTMLDivElement>(null);
 
+  const columns = store.state.columns.value;
+  console.log(columns);
   const rowKey = useRowKey(columns, rowIdentifier);
 
   const {
@@ -53,9 +56,7 @@ export function TableView(props: VirtualTableViewProps) {
     buffer,
   });
 
-  const columnsInOrder = useOrderedColumns({ store, columns });
-
-  useColumnWidthEffect({ store, columns, initialWidth });
+  const columnsInOrder = useOrderedColumns({ store });
 
   const { getColumnWidth } = useColumnResizer({ store });
 
@@ -101,9 +102,9 @@ export function TableView(props: VirtualTableViewProps) {
     <>
       <ContextMenu store={store} target={scrollContainerRef} />
       <StickyHeaderContainer
-        store={store}
-        plugins={plugins}
         {...{
+          store,
+          plugins,
           data: data.value,
           enumerable,
           expandable,
@@ -114,20 +115,36 @@ export function TableView(props: VirtualTableViewProps) {
           columns,
         }}
       />
-      {isLoading.value && (
-        <progress class="progress progress-primary h-1 rounded-none absolute z-100 w-full opacity-25" />
-      )}
-      <div ref={bodyContainerRef}>
-        <table
-          style={style}
-          id="vt-main"
-          class="vt"
-          onKeyDown={focusNav.onKeyDown}
-          onKeyUp={focusNav.onKeyUp}
-        >
-          <tbody>
-            {["top", ...visibleRows, "bottom"].map((row, i) => {
-              if (row === "top") {
+      <StickyRowsContainer
+        {...{
+          store,
+          plugins,
+          data: data.value,
+          visibleRows,
+          renderRow,
+          rowHeights,
+          enumerable,
+          expandable,
+          groupable,
+          selectable,
+          rowKey,
+          tableAddon,
+          columns,
+          scrollContainerRef,
+        }}
+      />
+
+      <table
+        style={style}
+        id="vt-main"
+        class="vt"
+        onKeyDown={focusNav.onKeyDown}
+        onKeyUp={focusNav.onKeyUp}
+      >
+        <tbody>
+          {[{ row: "top" }, ...visibleRows, { row: "bottom" }].map(
+            (item, i) => {
+              if (item.row === "top") {
                 return (
                   <RowPadding
                     key={paddingTop + i}
@@ -146,7 +163,7 @@ export function TableView(props: VirtualTableViewProps) {
                 );
               }
 
-              if (row === "bottom") {
+              if (item.row === "bottom") {
                 return (
                   <RowPadding
                     key={paddingBottom + i}
@@ -166,13 +183,13 @@ export function TableView(props: VirtualTableViewProps) {
               }
 
               return renderRow(
-                row.row ?? { $loading: true, _key: row.index },
+                (item.row as Row) ?? { $loading: true },
                 i,
               );
-            })}
-          </tbody>
-        </table>
-      </div>
+            },
+          )}
+        </tbody>
+      </table>
     </>
   );
 }

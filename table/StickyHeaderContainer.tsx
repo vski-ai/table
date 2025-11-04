@@ -1,13 +1,13 @@
 import { CommandType, TableStore } from "@/store/mod.ts";
-import { ResizableHeader } from "./ResizableHeader.tsx";
 import { Row } from "./types.ts";
 import {
+  ColumnHeader,
   useColumnResizer,
   useColumnsOrderCallback,
   useOrderedColumns,
   useStickyColOffset,
-  useTableStyle,
-} from "@/hooks/mod.ts";
+} from "@/columns/mod.ts";
+import { useTableStyle } from "@/hooks/mod.ts";
 import { PluginContainer } from "@/plugin/mod.ts";
 
 interface StickyHeaderContainerProps {
@@ -41,20 +41,11 @@ export function StickyHeaderContainer({
     store,
   });
 
-  const orderColumnsCallback = useColumnsOrderCallback({
-    store,
-    columns,
-  });
+  const orderColumnsCallback = useColumnsOrderCallback({ store });
 
-  const columnsInOrder = useOrderedColumns({
-    store,
-    columns,
-  });
+  const columnsInOrder = useOrderedColumns({ store });
 
-  const stickyColumns = useStickyColOffset({
-    store,
-    columns: columnsInOrder,
-  });
+  const stickyColumns = useStickyColOffset({ store });
 
   const { style } = useTableStyle({
     store,
@@ -122,30 +113,19 @@ export function StickyHeaderContainer({
             )}
 
             {groupable && (
-              <ResizableHeader
+              <ColumnHeader
                 key="$group_by"
                 column="$group_by"
-                width={getColumnWidth("$group_by")}
-                onResize={handleResizeCallback}
-                onResizeUpdate={handleResizeUpdateCallback}
-                stickyColumns={stickyColumns}
                 store={store}
-                plugins={plugins}
               >
-              </ResizableHeader>
+              </ColumnHeader>
             )}
 
             {columnsInOrder.map((col) => (
-              <ResizableHeader
+              <ColumnHeader
                 key={col}
                 column={col}
-                width={getColumnWidth(col)}
-                onResize={handleResizeCallback}
-                onResizeUpdate={handleResizeUpdateCallback}
-                onColumnDrop={orderColumnsCallback}
-                stickyColumns={stickyColumns}
                 store={store}
-                plugins={plugins}
               />
             ))}
           </tr>

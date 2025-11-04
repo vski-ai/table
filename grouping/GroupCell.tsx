@@ -5,15 +5,15 @@ import { GroupLinePointer } from "./GroupLevelLine.tsx";
 import { GroupMargin } from "./GroupMargin.tsx";
 import { Row } from "@/table/types.ts";
 import { TableStore } from "@/store/types.ts";
-import { PluginContainer } from "@/plugin/mod.ts";
 import { CommandType } from "./store.ts";
+import { CellRendererCallback } from "@/plugin/mod.ts";
+import { usePluginContainer } from "@/plugin/usePluginContainer.ts";
 
 interface GroupCellProps {
   store: TableStore;
   row: Row;
   height: number;
   children?: ComponentChildren;
-  plugins: PluginContainer;
   stickyColumns: { [key: string]: Record<string, number> };
 }
 
@@ -22,7 +22,6 @@ export const GroupCell = ({
   height,
   children,
   store,
-  plugins,
   stickyColumns,
 }: GroupCellProps) => {
   const onLevelToggle = () => {
@@ -39,6 +38,7 @@ export const GroupCell = ({
   const groupby = store.state.tableMeta.value?.groupby || [];
   const nextColInOrder = groupby.at(groupby.indexOf(row.$group_by!) + 1); // because of grouping it's a header of the next level
   const isStickyLeft = typeof stickyColumns.left[key] === "number";
+  const plugins = usePluginContainer({ store });
 
   return (
     <td
@@ -122,4 +122,11 @@ export const GroupCell = ({
       </div>
     </td>
   );
+};
+
+export const groupCellRenderCallback: CellRendererCallback = ({
+  store,
+  row,
+}) => {
+  return <GroupCell {...{ store, row }} />;
 };

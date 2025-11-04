@@ -3,18 +3,15 @@ import { TableStore } from "@/store/mod.ts";
 
 interface OrderedColumnsProps {
   store: TableStore;
-  columns: string[];
 }
 
-export function useOrderedColumns({
-  store,
-  columns,
-}: OrderedColumnsProps) {
+export function useOrderedColumns({ store }: OrderedColumnsProps) {
   return useMemo(() => {
     const colOrder = store.state.columnOrder.value;
+    const columns = store.state.columns.value;
     if (colOrder.length === 0) {
       return columns;
     }
     return [...colOrder, ...columns.filter((c) => !colOrder.includes(c))];
-  }, [columns, store.state.columnOrder.value]);
+  }, [store.state.columnOrder.value, store.state.columns.value]);
 }

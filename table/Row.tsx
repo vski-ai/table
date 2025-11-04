@@ -1,14 +1,14 @@
 import { memo } from "preact/compat";
 import { useCallback } from "preact/hooks";
 import { CellFormatter } from "@/format/CellFormatter.tsx";
-import { GroupCell } from "@/group/mod.ts";
+import { GroupCell } from "@/grouping/mod.ts";
 import { CommandType } from "@/store/mod.ts";
 import { Row as RowType } from "./types.ts";
 import { RowLoading } from "./RowLoading.tsx";
 import { CellFormatting } from "@/format/types.ts";
 import { TableStore } from "@/store/types.ts";
 import { sanitizeColName } from "@/utils/sanitizeColName.ts";
-import { useStickyColOffset } from "@/hooks/mod.ts";
+import { useStickyColOffset } from "@/columns/mod.ts";
 import { RowResizeHandle } from "./RowResizeHandle.tsx";
 import { PluginContainer } from "../plugin/mod.ts";
 
@@ -36,7 +36,6 @@ export const Row = memo((props: RowProps) => {
     row,
     rowIndex,
     isSelected,
-    isExpanded,
     rowHeight,
     onResize,
     onResizeEnd,
@@ -45,7 +44,6 @@ export const Row = memo((props: RowProps) => {
     store,
     plugins,
     rowKey,
-    expandable,
     selectable,
     groupable,
     enumerable,
@@ -55,17 +53,7 @@ export const Row = memo((props: RowProps) => {
   const isResizing = resizingRow?.rowId === row[rowKey];
   const height = isResizing ? resizingRow?.height : rowHeight;
 
-  const stickyColumns = useStickyColOffset({
-    store,
-    columns,
-  });
-
-  const onExpansionToggle = useCallback(() => {
-    store.dispatch({
-      type: CommandType.ROW_EXPANSION_TOGGLE,
-      payload: row[rowKey],
-    });
-  }, [store, row, rowKey]);
+  const stickyColumns = useStickyColOffset({ store });
 
   const onSelectionChange = useCallback((e: Event) => {
     const checked = (e.target as HTMLInputElement).checked;
@@ -91,7 +79,6 @@ export const Row = memo((props: RowProps) => {
       data-row-id={row[rowKey]}
       data-index={rowIndex}
       class={[
-        //"hover:shadow-md",
         isSelected ? "bg-base-200" : "",
         row.$is_group_root ? "vt-g-row" : "vt-row",
       ].join(" ")}
@@ -115,22 +102,7 @@ export const Row = memo((props: RowProps) => {
           />
         </td>
       )}
-      {expandable && (
-        <td
-          class="vt-cell"
-          style={{ width: "50px" }}
-          tabIndex={2}
-        >
-          <button
-            type="button"
-            class="btn btn-ghost btn-md"
-            onClick={onExpansionToggle}
-            tabIndex={2}
-          >
-            {isExpanded ? "[-]" : "[+]"}
-          </button>
-        </td>
-      )}
+
       {selectable && (
         <td
           class="vt-cell"
@@ -152,7 +124,6 @@ export const Row = memo((props: RowProps) => {
           store={store}
           height={height ?? rowHeight}
           row={row}
-          plugins={plugins}
           stickyColumns={stickyColumns}
         >
           <CellFormatter
@@ -161,6 +132,11 @@ export const Row = memo((props: RowProps) => {
           />
         </GroupCell>
       )}
+
+      {plugins.leftTableCells.render({
+        column: "",
+        store,
+      })}
 
       {columns.map((col, colIndex) => {
         const isStickyLeft = typeof stickyColumns.left[col] === "number";

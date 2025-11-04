@@ -1,11 +1,12 @@
 import { effect, signal } from "@preact/signals";
-import {
-  ColumnStickSetCommandPayload,
-  Command,
-  CommandType,
-} from "./commands.ts";
+import { Command, CommandType } from "./commands.ts";
 import { StorageAdapter } from "./storage.ts";
-import { StickyPosition, Store, TableState, TableStore } from "./types.ts";
+import { Store, TableState, TableStore } from "./types.ts";
+import {
+  columnsPersist,
+  columnsReducer,
+  columnsState,
+} from "@/columns/columnsStore.ts";
 
 const MAX_HISTORY_SIZE = 100;
 
@@ -20,27 +21,20 @@ export function createTableStore(
     )
     : null;
 
-  const state: TableState & any = {
+  const state: TableState = {
     drilldowns: signal(initialState?.drilldowns || []),
     expandedLevels: signal(initialState?.expandedLevels || []),
     filters: signal(initialState?.filters || []),
-
-    columnOrder: signal(initialState?.columnOrder || []),
-    columnVisibility: signal(initialState?.columnVisibility || {}),
-    stickyColumns: signal<Record<string, StickyPosition>>(
-      initialState?.stickyColumns || {},
-    ),
     loading: signal(false),
     dataLoadKey: signal(0),
     tableMeta: signal({}),
     selectedRows: signal(initialState?.selectedRows || []),
     expandedRows: signal(initialState?.expandedRows || []),
     cellFormatting: signal(initialState?.cellFormatting || {}),
-    columnWidths: signal(initialState?.columnWidths || {}),
     rowHeights: signal(initialState?.rowHeights || {}),
-    resizingColumn: signal(null),
     resizingRow: signal(null),
     focusedCell: signal(null),
+    ...columnsState(initialState),
   };
 
   for (const plugin of plugins) {
@@ -56,13 +50,10 @@ export function createTableStore(
   effect(() => {
     if (storage && tableId) {
       const currentState: Record<string, unknown> = {
+        ...columnsPersist(state),
         expandedRows: state.expandedRows.value,
         expandedLevels: state.expandedLevels.value,
         filters: state.filters.value,
-        columnOrder: state.columnOrder.value,
-        columnVisibility: state.columnVisibility.value,
-        cellFormatting: state.cellFormatting.value,
-        columnWidths: state.columnWidths.value,
         rowHeights: state.rowHeights.value,
         stickyColumns: state.stickyColumns.value,
       };
@@ -85,6 +76,8 @@ export function createTableStore(
     }
     history.push(command);
 
+    columnsReducer(state, command);
+
     for (const plugin of plugins) {
       if (plugin.reducer) {
         plugin.reducer(state, command);
@@ -96,16 +89,7 @@ export function createTableStore(
       case CommandType.FILTER_SET:
         state.filters.value = command.payload;
         break;
-      // Column Management
-      case CommandType.COLUMN_ORDER_SET:
-        state.columnOrder.value = command.payload;
-        break;
-      case CommandType.COLUMN_VISIBILITY_SET:
-        state.columnVisibility.value = command.payload;
-        break;
-      case CommandType.COLUMN_WIDTHS_SET:
-        state.columnWidths.value = command.payload;
-        break;
+
       case CommandType.ROW_HEIGHTS_SET:
         state.rowHeights.value = command.payload;
         break;
@@ -139,15 +123,6 @@ export function createTableStore(
         state.cellFormatting.value = command.payload;
         break;
 
-      case CommandType.COLUMN_STICK_SET: {
-        const { column, position } = command
-          .payload as ColumnStickSetCommandPayload;
-        state.stickyColumns.value = {
-          ...state.stickyColumns.value,
-          [column]: position,
-        };
-        break;
-      }
       default:
         break;
     }

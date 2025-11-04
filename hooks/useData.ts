@@ -1,6 +1,7 @@
 import { useSignal } from "@preact/signals";
 import { useCallback, useEffect, useRef } from "preact/hooks";
-import { TableStore } from "@/store/types.ts";
+import { TableStore } from "@/store/mod.ts";
+import { CommandType } from "@/columns/columnsStore.ts";
 import { Row } from "@/table/types.ts";
 import { PluginContainer } from "@/plugin/mod.ts";
 import { DataLoadResult } from "@/table/types.ts";
@@ -37,6 +38,10 @@ export const useData = ({
       const options = await plugins.beforeLoad({ offset, limit, store });
       const res = await onDataLoad(options);
       const { rows, total: newTotal, meta } = await plugins.afterLoad(res);
+      store.dispatch({
+        type: CommandType.COLUMNS_SET,
+        payload: Object.keys(rows.find((r) => r !== null) ?? {}),
+      });
       store.state.tableMeta.value = meta;
 
       if (total.value !== newTotal) {

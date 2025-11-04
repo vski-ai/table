@@ -1,6 +1,6 @@
-import { Signal } from "@preact/signals";
 import { Formatting } from "@/format/index.tsx";
-import { CommandType, TableStore } from "@/store/mod.ts";
+import { TableStore } from "@/store/mod.ts";
+import { CommandType } from "../columns/columnsStore.ts";
 import { StickyPosition } from "@/store/types.ts";
 
 export interface MenuProps {

@@ -1,14 +1,16 @@
 import { useCallback } from "preact/hooks";
-import { CommandType, TableStore } from "@/store/mod.ts";
+import { TableStore } from "@/store/mod.ts";
+import { CommandType } from "./columnsStore.ts";
+import { useOrderedColumns } from "./useOrderedColumns.ts";
 
 interface ColumnsOrderCallbackProps {
   store: TableStore;
-  columns: string[];
 }
 
 export function useColumnsOrderCallback(
-  { columns, store }: ColumnsOrderCallbackProps,
+  { store }: ColumnsOrderCallbackProps,
 ) {
+  const columns = useOrderedColumns({ store });
   return useCallback(
     (draggedColumn: string, targetColumn: string) => {
       const currentColumnOrder = store.state.columnOrder.value.length

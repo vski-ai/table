@@ -16,18 +16,13 @@ export interface TableState {
   [key: string]: any;
   expandedLevels: Signal<string[] | number[]>;
   filters: Signal<Record<string, string>>;
-  columnOrder: Signal<string[]>;
-  columnVisibility: Signal<Record<string, boolean>>;
-  stickyColumns: Signal<Record<string, StickyPosition>>;
   loading: Signal<boolean>;
   dataLoadKey: Signal<number>;
   tableMeta: Signal<TableMeta>;
   selectedRows: Signal<string[]>;
   expandedRows: Signal<string[]>;
   cellFormatting: Signal<Record<string, CellFormatting>>;
-  columnWidths: Signal<Record<string, number>>;
   rowHeights: Signal<Record<string, number>>;
-  resizingColumn: Signal<{ column: string; width: number } | null>;
   resizingRow: Signal<{ rowId: string | number; height: number } | null>;
   focusedCell: Signal<{ tabIndex: number; rowIndex: number } | null>;
 }

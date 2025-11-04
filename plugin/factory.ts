@@ -1,4 +1,10 @@
-import { CellRenderer, ColumnRendererCallback, ITablePlugin } from "./types.ts";
+import {
+  CellRendererCallback,
+  ColumnRendererCallback,
+  ITablePlugin,
+} from "./types.ts";
+import { PLUGIN_CONTAINER_ACCESSOR } from "./private.ts";
+
 import { TableStore } from "../store/mod.ts";
 import { SortedAddon } from "./addon.ts";
 import { DataLoadOptions, DataLoadResult } from "../table/types.ts";
@@ -20,22 +26,36 @@ export const createPluginContainer = (
     return 0;
   });
 
+  const pluginAddons = sortedPlugins.reduce(
+    (acc, p) => ({ ...p.addons, ...acc }),
+    {} as Record<string, SortedAddon>,
+  );
+
   const headerPrefixes = new SortedAddon<ColumnRendererCallback>();
-  const groupHeaderCellPrefixes = new SortedAddon<CellRenderer>();
-  const groupHeaderCellSuffixes = new SortedAddon<CellRenderer>();
-  const groupHeaderCellContent = new SortedAddon<CellRenderer>();
+  const leftTableCells = new SortedAddon<ColumnRendererCallback>();
+  const rightTableCells = new SortedAddon<ColumnRendererCallback>();
+  const leftTableHeaders = new SortedAddon<ColumnRendererCallback>();
+  const rightTableHeaders = new SortedAddon<ColumnRendererCallback>();
+  const groupHeaderCellPrefixes = new SortedAddon<CellRendererCallback>();
+  const groupHeaderCellSuffixes = new SortedAddon<CellRendererCallback>();
+  const groupHeaderCellContent = new SortedAddon<CellRendererCallback>();
 
   for (const plugin of sortedPlugins) {
     plugin.onInit?.({
       store,
       headerPrefixes,
+      leftTableCells,
+      rightTableCells,
+      leftTableHeaders,
+      rightTableHeaders,
+      ...pluginAddons,
       groupHeaderCellContent,
       groupHeaderCellPrefixes,
       groupHeaderCellSuffixes,
     });
   }
 
-  return {
+  const container = {
     beforeLoad: async (options: DataLoadOptions) => {
       let result = options;
       for (const plugin of sortedPlugins) {
@@ -54,8 +74,17 @@ export const createPluginContainer = (
       return result;
     },
     headerPrefixes,
+    leftTableCells,
+    rightTableCells,
+    leftTableHeaders,
+    rightTableHeaders,
     groupHeaderCellSuffixes,
     groupHeaderCellContent,
     groupHeaderCellPrefixes,
   };
+
+  // @ts-ignore: some privats
+  store[PLUGIN_CONTAINER_ACCESSOR] = container;
+
+  return container;
 };

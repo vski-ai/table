@@ -12,11 +12,6 @@ export enum CommandType {
   FILTER_REMOVE = "FILTER_REMOVE",
   FILTER_SET = "FILTER_SET",
 
-  // Column Management
-  COLUMN_ORDER_SET = "COLUMN_ORDER_SET",
-  COLUMN_VISIBILITY_SET = "COLUMN_VISIBILITY_SET",
-  COLUMN_WIDTHS_SET = "COLUMN_WIDTHS_SET",
-
   // View
   LOADING_SET = "LOADING_SET",
   SELECTED_ROWS_SET = "SELECTED_ROWS_SET",
@@ -26,7 +21,6 @@ export enum CommandType {
   // Formatting
   CELL_FORMATTING_SET = "CELL_FORMATTING_SET",
 
-  COLUMN_STICK_SET = "COLUMN_STICK_SET",
   ROW_HEIGHTS_SET = "ROW_HEIGHTS_SET",
   ROW_RESIZING_SET = "ROW_RESIZING_SET",
 }
@@ -34,9 +28,4 @@ export enum CommandType {
 export interface Command<T = CommandType> {
   type: T;
   payload: any;
-}
-
-export interface ColumnStickSetCommandPayload {
-  column: string;
-  position: StickyPosition;
 }

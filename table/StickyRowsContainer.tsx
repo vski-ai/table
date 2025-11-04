@@ -1,17 +1,13 @@
 import { memo } from "preact/compat";
-import { useEffect, useRef } from "preact/hooks";
-import {
-  useColumnResizer,
-  useOrderedColumns,
-  useStickyGroupHeaders,
-  useTableStyle,
-} from "@/hooks/mod.ts";
+import { MutableRef, useRef } from "preact/hooks";
+import { useStickyGroupHeaders, useTableStyle } from "@/hooks/mod.ts";
+import { useColumnResizer } from "@/columns/useColumnnResize.ts";
 import { TableStore } from "@/store/types.ts";
 import { Row } from "./types.ts";
 
 interface StickyRowsContainerProps {
   store: TableStore;
-  visibleRows: Row[];
+  visibleRows: { row: Row | null; index: number }[];
   renderRow: (row: any, index: number) => preact.ComponentChild;
   top?: number;
   expandable?: boolean;
@@ -19,7 +15,7 @@ interface StickyRowsContainerProps {
   groupable?: boolean;
   enumerable?: boolean;
   columns: string[];
-  scrollContainerRef?: any;
+  scrollContainerRef: MutableRef<HTMLElement>;
   rowHeights: number[];
 }
 
@@ -29,7 +25,7 @@ export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
     visibleRows,
     columns,
     renderRow,
-    top = 0,
+    top = 50,
     selectable,
     enumerable,
     groupable,
@@ -37,12 +33,6 @@ export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
     rowHeights,
   } = props;
   const ref = useRef<HTMLTableElement>(null);
-  useEffect(() => {
-    const mainHead = document.getElementById("vt-main-head");
-    if (mainHead) {
-      ref.current?.prepend(mainHead);
-    }
-  }, []);
   const {
     getColumnWidth,
   } = useColumnResizer({
@@ -85,7 +75,7 @@ export const StickyRowsContainer = memo((props: StickyRowsContainerProps) => {
         style={style}
         ref={ref}
       >
-        <tbody class={store.state.loading.value ? "hidden" : ""}>
+        <tbody>
           {stickyHeaders.value.map((header, _) =>
             renderRow(header.row, header.index)
           )}

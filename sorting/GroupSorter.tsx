@@ -4,9 +4,9 @@ import ArrowDownUpIcon from "lucide-react/dist/esm/icons/arrow-down-up.js";
 
 import { TableStore } from "@/store/mod.ts";
 import { SortState } from "./types.ts";
-import { CellRenderer } from "@/plugin/types.ts";
 import { CommandType } from "./store.ts";
 import { Row } from "@/table/types.ts";
+import { CellRendererCallback } from "../plugin/mod.ts";
 
 interface RowSorterProps {
   className?: string;
@@ -80,7 +80,7 @@ export const GroupSorter = ({
   );
 };
 
-export const cellSuffixRender: CellRenderer = ({
+export const cellSuffixRender: CellRendererCallback = ({
   column,
   row,
   store,

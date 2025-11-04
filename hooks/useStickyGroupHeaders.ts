@@ -1,11 +1,10 @@
 import { useSignal } from "@preact/signals";
-import { useEffect } from "preact/hooks";
+import { MutableRef, useEffect } from "preact/hooks";
 import { Row } from "@/table/types.ts";
-import { RefObject } from "preact/compat";
 
 interface UseStickyGroupHeadersProps {
-  scrollContainerRef?: RefObject<HTMLElement | Window>;
-  visibleRows: Row[];
+  scrollContainerRef: MutableRef<HTMLElement>;
+  visibleRows: { row: Row | null; index: number }[];
   rowHeights: number[];
   maxLevel?: number;
   expandedLevels?: number[] | string[];
@@ -33,9 +32,9 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
   const result = useSignal<IndexedRow[]>([]);
 
   useEffect(() => {
-    if (!groupable) return;
-    const scrollContainer = scrollContainerRef?.current as HTMLDivElement ||
-      globalThis;
+    const scrollContainer = scrollContainerRef?.current;
+
+    console.log(123123123);
     if (!scrollContainer) return;
 
     const rowTops = visibleRows.reduce((acc, _, index) => {
@@ -45,15 +44,15 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
       acc.push({ top: prevHeight });
       return acc;
     }, [] as { top: number }[]);
-
+    console.log(rowTops);
     const handleScroll = () => {
-      const scrollTop = scrollContainer.scrollTop || globalThis.scrollY;
+      const scrollTop = scrollContainer.scrollTop;
       const newStickyHeaders: StickyHeaders = {};
 
       for (let i = 0; i < visibleRows.length; i++) {
-        const row = visibleRows[i];
-        if (!row) continue;
-
+        const item = visibleRows[i];
+        if (!item.row) continue;
+        const { row } = item;
         if (
           row?.$is_group_root && row?.$group_level! < maxLevel &&
           expandedLevels?.includes(row.id as never) &&
@@ -61,7 +60,7 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
         ) {
           const level = row.$group_level!;
           if (!newStickyHeaders[level] || i > newStickyHeaders[level].index) {
-            newStickyHeaders[level] = { index: i, row: row };
+            newStickyHeaders[level] = { index: i, row };
           }
         }
       }
@@ -86,7 +85,7 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
       scrollContainer.removeEventListener("scroll", handleScroll);
     };
   }, [
-    scrollContainerRef?.current,
+    scrollContainerRef.current,
     groupable,
     visibleRows,
     rowHeights,

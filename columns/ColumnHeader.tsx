@@ -1,47 +1,47 @@
-import { type JSX } from "preact";
+import { ComponentChildren } from "preact";
 import { useSignal } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
-import { PluginContainer } from "@/plugin/mod.ts";
+import { usePluginContainer } from "@/plugin/mod.ts";
 import { TableStore } from "../store/types.ts";
-import { Draggable } from "./Draggable.tsx";
+import { Draggable } from "@/common/Draggable.tsx";
+import { useColumnsOrderCallback } from "./useColumnsOrderCallback.ts";
+import { useColumnResizer } from "./useColumnnResize.ts";
+import { useStickyColOffset } from "./useStickyColOffset.ts";
 
-export interface ResizableHeaderProps {
+export interface ColumnHeaderProps {
   column: string;
-  width: number;
-  plugins: PluginContainer;
   store: TableStore;
-  onResize: (column: string, newWidth: number) => void;
-  onResizeUpdate: (column: string, newWidth: number) => void;
-  onColumnDrop?: (draggedColumn: string, targetColumn: string) => void;
-  formatColumnName?: (a: string) => string;
-  stickyColumns: {
-    left: Record<string, number>;
-    right: Record<string, number>;
-  };
-  children?: any;
+  children?: ComponentChildren;
 }
 
-export function ResizableHeader(
+export function ColumnHeader(
   {
     column,
-    width,
-    onResize,
-    onResizeUpdate,
-    onColumnDrop,
-    formatColumnName,
     children,
-    stickyColumns,
-    plugins,
     store,
-  }: ResizableHeaderProps,
+  }: ColumnHeaderProps,
 ) {
+  const plugins = usePluginContainer({ store });
+  const onColumnDrop = useColumnsOrderCallback({ store });
+  const {
+    getColumnWidth,
+    handleResizeUpdateCallback,
+    handleResizeCallback,
+  } = useColumnResizer({
+    store,
+  });
+
+  const stickyColumns = useStickyColOffset({ store });
+
+  const width = getColumnWidth(column);
   const isResizing = useSignal(false);
   const startX = useSignal(0);
   const startWidth = useSignal(0);
   const edit = useSignal(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const formattedName = formatColumnName?.(column) ?? column;
+  // TODO: needs i18n and fromatters
+  const formattedName = column;
 
   const handleMouseDown = (e: MouseEvent) => {
     e.preventDefault();
@@ -54,14 +54,14 @@ export function ResizableHeader(
     const handleMouseMove = (moveEvent: MouseEvent) => {
       const newWidth = startWidth.value + (moveEvent.clientX - startX.value);
       if (newWidth > 50) { // Minimum column width
-        onResizeUpdate(column, newWidth);
+        handleResizeUpdateCallback(column, newWidth);
       }
     };
 
     const handleMouseUp = (moveEvent: MouseEvent) => {
       isResizing.value = false;
       const newWidth = startWidth.value + (moveEvent.clientX - startX.value);
-      onResize(column, newWidth > 50 ? newWidth : 50);
+      handleResizeCallback(column, newWidth > 50 ? newWidth : 50);
     };
 
     if (isResizing.value) {
