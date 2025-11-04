@@ -153,5 +153,11 @@ export function createTableStore(
     }
   };
 
-  return { state, dispatch };
+  return {
+    state,
+    dispatch,
+    shouldReload() {
+      state.dataLoadKey.value = new Date().getTime();
+    },
+  };
 }

@@ -42,6 +42,7 @@ export const GroupSorter = ({
         [row.id]: state,
       },
     });
+    store.shouldReload();
   };
 
   return (

@@ -11,7 +11,7 @@ import {
 import { PluginContainer } from "@/plugin/mod.ts";
 
 interface StickyHeaderContainerProps {
-  data: Row[];
+  data: (Row | null)[];
   store: TableStore;
   plugins: PluginContainer;
   columns: string[];
@@ -108,7 +108,7 @@ export function StickyHeaderContainer({
                     if ((e.target as HTMLInputElement).checked) {
                       store.dispatch({
                         type: CommandType.SELECTED_ROWS_SET,
-                        payload: data.map((row) => row[rowKey]),
+                        payload: data.map((row) => row?.[rowKey]),
                       });
                     } else {
                       store.dispatch({

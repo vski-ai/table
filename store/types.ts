@@ -35,4 +35,5 @@ export interface TableState {
 export interface TableStore {
   state: TableState;
   dispatch: <T>(command: Command<T>) => void;
+  shouldReload: () => void;
 }

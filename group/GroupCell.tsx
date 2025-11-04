@@ -30,7 +30,7 @@ export const GroupCell = ({
       type: CommandType.EXPANDED_LEVELS_SET,
       payload: row.id,
     });
-    store.state.dataLoadKey.value = new Date().getTime();
+    store.shouldReload();
   };
 
   const key = "$group_by";

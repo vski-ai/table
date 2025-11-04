@@ -32,6 +32,7 @@ export const RowSorter = ({
       type: CommandType.SORT_SET,
       payload: state,
     });
+    store.shouldReload();
   };
 
   return (

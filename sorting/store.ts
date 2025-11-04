@@ -26,7 +26,6 @@ export const sorterStore: Store = {
     switch (command.type) {
       case CommandType.SORT_SET: {
         state.sorting.value = command.payload;
-        state.dataLoadKey.value = new Date().getTime();
         break;
       }
       case CommandType.LEAF_SORT_SET: {
@@ -34,7 +33,6 @@ export const sorterStore: Store = {
           ...state.leafSorting.value,
           ...command.payload,
         };
-        state.dataLoadKey.value = new Date().getTime();
         break;
       }
     }

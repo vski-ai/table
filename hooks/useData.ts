@@ -26,6 +26,8 @@ export const useData = ({
   const total = useSignal(0);
   const isLoading = useSignal(false);
   const loadedRanges = useRef<{ start: number; end: number }[]>([]);
+  const reloadKey = store.state.dataLoadKey;
+  const lastReloadKey = useRef(reloadKey.value);
 
   const load = useCallback(async (offset: number, limit: number) => {
     if (limit <= 0 || isLoading.value) return;
@@ -33,7 +35,9 @@ export const useData = ({
     isLoading.value = true;
     try {
       const options = await plugins.beforeLoad({ offset, limit, store });
-      const { rows, total: newTotal } = await onDataLoad(options);
+      const res = await onDataLoad(options);
+      const { rows, total: newTotal, meta } = await plugins.afterLoad(res);
+      store.state.tableMeta.value = meta;
 
       if (total.value !== newTotal) {
         total.value = newTotal;
@@ -85,6 +89,14 @@ export const useData = ({
   useEffect(() => {
     if (!visibleRows) return;
 
+    if (lastReloadKey.current !== reloadKey.value) {
+      visibleRows.forEach((item) => {
+        item.row = null;
+      });
+      lastReloadKey.current = reloadKey.value;
+      loadedRanges.current = [];
+    }
+
     const nullRanges: { start: number; end: number }[] = [];
     let start: number | null = null;
     for (const row of visibleRows) {
@@ -118,7 +130,7 @@ export const useData = ({
         load(range.start, range.end - range.start + 1);
       }
     }
-  }, [visibleRows, load]);
+  }, [visibleRows, load, reloadKey.value]);
 
   return { data, total, isLoading };
 };
