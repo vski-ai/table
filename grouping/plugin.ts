@@ -46,6 +46,7 @@ export const plugin = (): ITablePlugin => {
         $is_group_root: false,
         $group_level: false,
         $group_by: false,
+        $parent_id: false,
       },
     });
   };

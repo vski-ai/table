@@ -1,13 +1,12 @@
-import { useFocusNavCallback } from "@/hooks/mod.ts";
+import { useFocusNavCallback } from "@/navigation/mod.ts";
 import { useTableStyle } from "./useTableStyle.ts";
-import { useDataFetcher, useRowHeights } from "@/fetcher/mod.ts";
+import { useDataFetcher } from "@/fetcher/mod.ts";
 
 import { Row } from "./types.ts";
 import { VirtualTableViewProps } from "./types.ts";
 import { useRenderRowCallback } from "./Row.tsx";
 import { ContextMenu } from "@/menu/ContextMenu.tsx";
 import { HeaderContainer } from "./HeaderContainer.tsx";
-import { StickyRowsContainer } from "./StickyRowsContainer.tsx";
 
 import { RowPadding } from "./RowPadding.tsx";
 

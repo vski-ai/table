@@ -13,9 +13,11 @@ export const plugin = (): ITablePlugin => {
   }) => {
     leftTableHeaders.use(1, selectorColumnRenderCallback);
     leftTableCells.use(1, selectorCellRenderCallback);
-    rowClasses.use(1, ({ row, store }) => {
+    rowClasses.use(1, ({ row, store, rowKey }) => {
       return [
-        store.state.selectedRows.value.includes(row?.id!) ? "bg-accent/25" : "",
+        store.state.selectedRows.value.includes(row?.[rowKey ?? ""]!)
+          ? "bg-accent/25"
+          : "",
       ];
     });
     store.dispatch({

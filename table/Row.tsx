@@ -1,16 +1,14 @@
 import { memo } from "preact/compat";
 import { useCallback } from "preact/hooks";
 import { CellFormatter } from "@/format/CellFormatter.tsx";
-import { Row as RowType } from "./types.ts";
-import { RowLoading } from "./RowLoading.tsx";
 import { CellFormatting } from "@/format/types.ts";
 import { TableStore } from "@/store/types.ts";
-import { sanitizeColName } from "@/utils/sanitizeColName.ts";
-import { useStickyColOffset } from "@/columns/mod.ts";
-import { usePluginContainer } from "../plugin/usePluginContainer.ts";
-import { useOrderedColumns } from "../columns/useOrderedColumns.ts";
-import { useRowHeights } from "../fetcher/useRowHeights.ts";
-import { useRowKey } from "../fetcher/useRowKey.ts";
+import { sanitizeColName } from "@/common/sanitizeColName.ts";
+import { useOrderedColumns, useStickyColOffset } from "@/columns/mod.ts";
+import { usePluginContainer } from "@/plugin/usePluginContainer.ts";
+import { useRowHeights, useRowKey } from "@/fetcher/mod.ts";
+import { Row as RowType } from "./types.ts";
+import { RowLoading } from "./RowLoading.tsx";
 
 interface RowProps {
   row: RowType;
@@ -41,11 +39,12 @@ export const Row = memo((props: RowProps) => {
   const classes = plugins.rowClasses.render({
     row,
     store,
+    rowKey,
   });
 
   return (
     <tr
-      key={row.id}
+      key={row[rowKey]}
       data-row-id={row[rowKey]}
       data-index={rowIndex}
       class={classes.flat().join(" ")}

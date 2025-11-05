@@ -1,8 +1,9 @@
 import { useCallback } from "preact/hooks";
 import { CommandType } from "./store.ts";
 import { CellRendererCallback } from "@/plugin/mod.ts";
-import { TableStore } from "../store/types.ts";
-import { Row } from "../table/types.ts";
+import { TableStore } from "@/store/types.ts";
+import { Row } from "@/table/types.ts";
+import { useRowKey } from "@/fetcher/mod.ts";
 import { KEY } from "./constants.ts";
 
 export const SelectorCell = ({
@@ -13,23 +14,24 @@ export const SelectorCell = ({
   row: Row;
   index: number;
 }) => {
+  const rowKey = useRowKey({ store });
   const onSelectionChange = useCallback((e: Event) => {
     const checked = (e.target as HTMLInputElement).checked;
     const currentSelectedRows = store.state.selectedRows.value;
     if (checked) {
       store.dispatch({
         type: CommandType.SELECTED_ROWS_SET,
-        payload: [...currentSelectedRows, row["id"]],
+        payload: [...currentSelectedRows, row[rowKey]],
       });
     } else {
       store.dispatch({
         type: CommandType.SELECTED_ROWS_SET,
-        payload: currentSelectedRows.filter((id) => id !== row["id"]),
+        payload: currentSelectedRows.filter((id) => id !== row[rowKey]),
       });
     }
   }, [store, row]);
 
-  const isSelected = store.state.selectedRows.value.includes(row.id);
+  const isSelected = store.state.selectedRows.value.includes(row[rowKey]);
 
   return (
     <td

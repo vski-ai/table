@@ -5,6 +5,7 @@ import { SortedAddon } from "./addon.ts";
 
 export type ClassResolverCallback = (opts: {
   row?: Row;
+  rowKey?: string;
   column?: string;
   store: TableStore;
 }) => string[];

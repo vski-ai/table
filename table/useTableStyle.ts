@@ -1,6 +1,6 @@
 import { useMemo } from "preact/hooks";
 import { TableStore } from "@/store/types.ts";
-import { sanitizeColName } from "@/utils/sanitizeColName.ts";
+import { sanitizeColName } from "@/common/sanitizeColName.ts";
 import { useColumnResizer, useOrderedColumns } from "@/columns/mod.ts";
 
 export interface TableStyleProps {

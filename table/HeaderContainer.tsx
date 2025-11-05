@@ -23,11 +23,10 @@ export function HeaderContainer({
         top: 0,
         zIndex: 10,
       }}
-      class="shadow-2xl"
     >
       <table
         style={style}
-        class="vt"
+        class="vt shadow-xl"
       >
         <thead id="vt-main-head">
           {loading
