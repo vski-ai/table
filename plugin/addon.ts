@@ -1,5 +1,8 @@
 export class SortedAddon<T extends (...args: any) => any = any> {
   #map = new Map<number, Set<T>>();
+  get size() {
+    return this.#map.size;
+  }
   use(index: number, ref: T) {
     if (!(this.#map.get(index) instanceof Set)) {
       this.#map.set(index, new Set());

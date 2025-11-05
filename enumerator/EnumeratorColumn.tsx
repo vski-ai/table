@@ -1,16 +1,16 @@
 import { ColumnHeader } from "@/columns/ColumnHeader.tsx";
 import { ColumnRendererCallback } from "@/plugin/types.ts";
 
-export const groupColumnRenderCallback: ColumnRendererCallback = (
+export const enumColumnRenderCallback: ColumnRendererCallback = (
   { store },
 ) => {
   return (
     <ColumnHeader
-      key="$group_by"
-      column="$group_by"
+      key="$$enumerator$$"
+      column="$$enumerator$$"
       store={store}
     >
-      <span>A / B / C</span>
+      <div class="text-center">#</div>
     </ColumnHeader>
   );
 };

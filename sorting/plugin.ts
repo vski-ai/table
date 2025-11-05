@@ -4,6 +4,18 @@ import {
   PluginInitCallback,
 } from "@/plugin/mod.ts";
 import { headerRenderCallback } from "./RowSorter.tsx";
+import { SortState } from "./types.ts";
+
+declare module "@/fetcher/types.ts" {
+  interface TableMeta {
+    sortableAll?: boolean;
+    sortableColumns?: string[];
+  }
+
+  interface DataLoadOptions {
+    sort?: SortState;
+  }
+}
 
 export const sorterPlugin = (): ITablePlugin => {
   const onInit: PluginInitCallback = ({

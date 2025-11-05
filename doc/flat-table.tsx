@@ -33,7 +33,7 @@ export const FlatTable = () => {
   const onDataLoad = async (
     { offset, limit, store }: any,
   ): Promise<{ rows: Row[]; total: number }> => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    //await new Promise((resolve) => setTimeout(resolve, 1000));
     const sorted = sorter({
       data: (data as Row[]),
       store,

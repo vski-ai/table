@@ -5,13 +5,6 @@ export type SortState = {
   sort: "asc" | "desc";
 };
 
-declare module "@/store/types.ts" {
-  interface TableState {
-    sorting: Signal<SortState>;
-    leafSorting: Signal<Record<string, SortState>>;
-  }
-}
-
 declare module "@/table/types.ts" {
   interface DataLoadOptions {
     sort?: SortState;

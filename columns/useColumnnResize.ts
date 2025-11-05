@@ -16,7 +16,6 @@ export function useColumnResizer({
       store.dispatch({
         type: CommandType.COLUMN_WIDTHS_SET,
         payload: {
-          ...store.state.columnWidths.value,
           [column]: newWidth,
         },
       });

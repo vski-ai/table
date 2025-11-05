@@ -9,7 +9,9 @@ import {
   sorterPlugin,
   store as sorterStore,
 } from "@/sorting/mod.ts";
+import { enumeratorPlugin, store as enumStore } from "../enumerator/mod.ts";
 import { groupingPlugin, store as groupingStore } from "@/grouping/mod.ts";
+import { DataLoadCallback } from "@/fetcher/types.ts";
 
 const sorter = createFrontendSorter();
 
@@ -22,6 +24,7 @@ export const GroupTable = () => {
     new LocalStorageAdapter(),
     "basic-table",
     [
+      enumStore,
       sorterStore,
       groupingStore,
     ],
@@ -30,12 +33,15 @@ export const GroupTable = () => {
   createPluginContainer(
     tableStore,
     [
+      enumeratorPlugin(),
       sorterPlugin(),
       groupingPlugin(),
     ],
   );
-  const onDataLoad = async ({ store, offset, limit, sorting }) => {
-    await new Promise((r) => setTimeout(r, 1000));
+  const onDataLoad: DataLoadCallback = async (
+    { store, offset, limit, sort },
+  ) => {
+    //await new Promise((r) => setTimeout(r, 1000));
 
     const sorted = sorter({
       data,
@@ -45,7 +51,7 @@ export const GroupTable = () => {
     const d = sorted.filter((r) =>
       r.$parent_id?.every(
         (id: string | number) =>
-          store.state.expandedLevels.value?.includes(id as never),
+          store.state?.expandedLevels?.value?.includes(id as never),
       ) || !r.$group_level
     );
 
@@ -53,7 +59,7 @@ export const GroupTable = () => {
       rows: (d as Row[]).slice(offset, offset + limit),
       total: d.length,
       meta: {
-        groupby: ["Year", "Month", "Company"],
+        groupBy: ["Year", "Month", "Company"],
         sortableColumns: ["Year", "Hourly Rate", "Year", "Month"],
         sortableGroupLevelColumns: [
           ["Month"],

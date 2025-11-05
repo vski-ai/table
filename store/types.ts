@@ -3,25 +3,14 @@ import { Command } from "./commands.ts";
 import { CellFormatting } from "@/format/types.ts";
 import { TableMeta } from "@/table/types.ts";
 
-export interface Store {
-  data?: Record<string, unknown>;
-  reducer?: <T>(
-    state: TableState,
-    command: Command<T>,
-  ) => TableState;
-}
-
-export type StickyPosition = "left" | "right" | false;
 export interface TableState {
-  [key: string]: any;
-  expandedLevels: Signal<string[] | number[]>;
+  [key: string]: unknown;
   filters: Signal<Record<string, string>>;
 
   selectedRows: Signal<string[]>;
   expandedRows: Signal<string[]>;
+
   cellFormatting: Signal<Record<string, CellFormatting>>;
-  rowHeights: Signal<Record<string, number>>;
-  resizingRow: Signal<{ rowId: string | number; height: number } | null>;
   focusedCell: Signal<{ tabIndex: number; rowIndex: number } | null>;
 }
 

@@ -26,7 +26,7 @@ export enum CommandType {
   COLUMN_STICK_SET = "COLUMN_STICK_SET",
 }
 
-export function state(init: Record<string, any> | null) {
+export function state<T>(init: Record<string, T> | null) {
   return {
     columns: signal([]),
     columnOrder: signal(init?.columnOrder || []),
@@ -65,7 +65,10 @@ export function reducer<T>(state: TableState, command: Command<T>) {
       };
       break;
     case CommandType.COLUMN_WIDTHS_SET:
-      state.columnWidths.value = command.payload;
+      state.columnWidths.value = {
+        ...state.columnWidths.value,
+        ...command.payload,
+      };
       break;
     case CommandType.COLUMN_STICK_SET: {
       const { column, position } = command

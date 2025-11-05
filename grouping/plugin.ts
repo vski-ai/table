@@ -1,11 +1,23 @@
 import {
   AfterLoadCallback,
+  BeforeLoadCallback,
   ITablePlugin,
   PluginInitCallback,
 } from "@/plugin/mod.ts";
 import { CommandType } from "../columns/store.ts";
 import { groupCellRenderCallback } from "./GroupCell.tsx";
-import { groupHeaderRenderCallback } from "./GroupColumn.tsx";
+import { groupColumnRenderCallback } from "./GroupColumn.tsx";
+
+declare module "@/fetcher/types.ts" {
+  interface TableMeta {
+    groupBy: string[];
+    sortableGroupLevelAll?: boolean;
+    sortableGroupLevelColumns?: string[][];
+  }
+  interface DataLoadOptions {
+    groupBy?: string[] | null;
+  }
+}
 
 export const groupingPlugin = (): ITablePlugin => {
   const onInit: PluginInitCallback = ({
@@ -15,8 +27,7 @@ export const groupingPlugin = (): ITablePlugin => {
     rowClasses,
     rowStyles,
   }) => {
-    leftTableHeaders.use(0, groupHeaderRenderCallback);
-
+    leftTableHeaders.use(0, groupColumnRenderCallback);
     leftTableCells.use(0, groupCellRenderCallback);
 
     rowClasses.use(1, ({ row }) => {
@@ -39,10 +50,15 @@ export const groupingPlugin = (): ITablePlugin => {
     });
   };
 
+  const beforeLoad: BeforeLoadCallback = ({ options, store }) => {
+    options.groupBy = store.state.groupBy.value;
+    return options;
+  };
+
   const afterLoad: AfterLoadCallback = ({ res, store }) => {
     store.dispatch({
       type: CommandType.COLUMN_VISIBILITY_SET,
-      payload: res.meta?.groupby?.reduce((acc, column) => ({
+      payload: res.meta?.groupBy.reduce((acc, column) => ({
         ...acc,
         [column]: false,
       }), {}) ?? {},
@@ -53,6 +69,7 @@ export const groupingPlugin = (): ITablePlugin => {
   return {
     name: "grouping",
     onInit,
+    beforeLoad,
     afterLoad,
   };
 };

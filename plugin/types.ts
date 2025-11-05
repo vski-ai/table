@@ -15,11 +15,14 @@ export type StyleResolverCallback = (opts: {
   store: TableStore;
 }) => [string, string | number][];
 
-export type CellRendererCallback = (opts: {
-  column: string;
-  row: Row;
-  store: TableStore;
-}) => preact.ComponentChildren;
+export type CellRendererCallback =
+  & { columnName?: string }
+  & ((opts: {
+    column: string;
+    row: Row;
+    store: TableStore;
+  }) => preact.ComponentChildren);
+
 export type ColumnRendererCallback = (opts: {
   column: string;
   store: TableStore;

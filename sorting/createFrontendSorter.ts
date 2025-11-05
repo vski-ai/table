@@ -22,7 +22,7 @@ const sortFn = (sorting: SortState) => (a: Row, b: Row) => {
  */
 const sortGroup = (data: Row[], store: TableStore): Row[] => {
   const sorting = store.state.sorting.value;
-  const leafSorting = store.state.leafSorting.value;
+  const groupSorting = store.state.groupSorting?.value ?? {};
 
   const roots = data.filter((row) => !row.$parent_id);
   const children: Record<string, Row[]> = {};
@@ -38,7 +38,7 @@ const sortGroup = (data: Row[], store: TableStore): Row[] => {
   }
 
   const sortLevel = (rows: Row[], parentId?: string): Row[] => {
-    const currentSorting = parentId ? leafSorting[parentId] : sorting;
+    const currentSorting = parentId ? groupSorting[parentId] : sorting;
     if (currentSorting) {
       rows.sort(sortFn(currentSorting));
     }
@@ -69,18 +69,18 @@ export function createFrontendSorter() {
     store: TableStore;
   }): Row[] {
     const sorting = store.state.sorting.value;
-    const leafSorting = store.state.leafSorting.value;
+    const groupSorting = store.state.groupSorting?.value ?? {};
     if (
       lastData === data &&
       lastSorting === sorting &&
-      lastLeafSorting === leafSorting
+      lastLeafSorting === groupSorting
     ) {
       return lastResult!;
     }
     const result = sortGroup(data, store);
     lastData = data;
     lastSorting = sorting;
-    lastLeafSorting = leafSorting;
+    lastLeafSorting = groupSorting;
     lastResult = result;
     return result;
   };

@@ -1,80 +1,49 @@
-import { forwardRef } from "preact/compat";
+import { TableStore } from "@/store/types.ts";
+import { useOrderedColumns } from "@/columns/mod.ts";
+import { usePluginContainer } from "../plugin/usePluginContainer.ts";
 
 interface RowPaddingProps {
   columns: string[];
-  tableAddon: any;
-  expandable?: boolean;
-  selectable?: boolean;
-  groupable?: boolean;
-  enumerable?: boolean;
   getColumnWidth: (col: string) => number;
   padding: number;
   name: string;
+  store: TableStore;
 }
 
-export const RowPadding = forwardRef<HTMLTableRowElement, RowPaddingProps>((
+export const RowPadding = (
   {
-    columns,
-    expandable,
-    selectable,
-    groupable,
-    enumerable,
     getColumnWidth,
     padding,
-    tableAddon,
     name,
-  },
-  ref,
+    store,
+  }: RowPaddingProps,
 ) => {
+  const columns = useOrderedColumns({ store });
+  const plugins = usePluginContainer({ store });
   return (
-    <tr data-name={name} ref={ref} style={{ height: `${padding}px` }}>
-      {enumerable && (
-        <td style={{ width: "50px", height: 0, border: 0, padding: 0 }}>
-        </td>
-      )}
-      {expandable && (
-        <td style={{ width: "50px", height: 0, border: 0, padding: 0 }}>
-        </td>
-      )}
-      {selectable && (
-        <td style={{ width: "50px", height: 0, border: 0, padding: 0 }}>
-        </td>
-      )}
-      {groupable && (
+    <tr data-name={name} style={{ height: `${padding}px` }}>
+      {plugins.leftTableCells.getSorted().map((cb) => (
         <td
+          class="bg-base-100"
           style={{
-            width: getColumnWidth("$group_by"),
+            width: getColumnWidth(cb.columnName!),
             height: 0,
-            border: 0,
-            padding: 0,
-          }}
-        >
-        </td>
-      )}
-      {columns.map((col) => (
-        <td
-          style={{
-            width: getColumnWidth(col),
-            height: 0,
-            border: 0,
             padding: 0,
           }}
         >
         </td>
       ))}
-      {tableAddon
-        ? (
-          <td
-            style={{
-              height: 0,
-              border: 0,
-              padding: 0,
-              width: "80px",
-            }}
-          >
-          </td>
-        )
-        : null}
+      {columns.map((col) => (
+        <td
+          class="bg-base-100"
+          style={{
+            width: getColumnWidth(col),
+            height: 0,
+            padding: 0,
+          }}
+        >
+        </td>
+      ))}
     </tr>
   );
-});
+};

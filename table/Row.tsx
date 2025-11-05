@@ -9,7 +9,6 @@ import { CellFormatting } from "@/format/types.ts";
 import { TableStore } from "@/store/types.ts";
 import { sanitizeColName } from "@/utils/sanitizeColName.ts";
 import { useStickyColOffset } from "@/columns/mod.ts";
-import { RowResizeHandle } from "./RowResizeHandle.tsx";
 import { PluginContainer } from "../plugin/mod.ts";
 import { usePluginContainer } from "../plugin/usePluginContainer.ts";
 
@@ -96,23 +95,8 @@ export const Row = memo((props: RowProps) => {
         ),
       }}
     >
-      {enumerable && (
-        <td
-          class="vt-cell"
-          style={{ width: "50px", position: "relative" }}
-          tabIndex={1}
-        >
-          {rowIndex}
-          <RowResizeHandle
-            rowId={row[rowKey]}
-            onResize={onResize}
-            onResizeEnd={onResizeEnd}
-            rowHeight={height!}
-          />
-        </td>
-      )}
-
-      {selectable && (
+      {
+        /* {selectable && (
         <td
           class="vt-cell"
           style={{ width: "50px" }}
@@ -126,7 +110,8 @@ export const Row = memo((props: RowProps) => {
             tabIndex={3}
           />
         </td>
-      )}
+      )} */
+      }
 
       {plugins.leftTableCells.render({
         column: "",

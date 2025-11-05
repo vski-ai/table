@@ -34,7 +34,6 @@ export const useLoader = ({
     try {
       const options = await plugins.beforeLoad({ offset, limit, store });
       const res = await onDataLoad(options);
-      console.log(res);
       const { rows, total: newTotal, meta } = await plugins.afterLoad(res);
 
       store.dispatch({

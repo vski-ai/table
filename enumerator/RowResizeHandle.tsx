@@ -26,12 +26,12 @@ export function RowResizeHandle(
 
     const onMouseUp = () => {
       onResizeEnd();
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup", onMouseUp);
+      globalThis.removeEventListener("mousemove", onMouseMove);
+      globalThis.removeEventListener("mouseup", onMouseUp);
     };
 
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
+    globalThis.addEventListener("mousemove", onMouseMove);
+    globalThis.addEventListener("mouseup", onMouseUp);
   }, [rowId, onResize, onResizeEnd, rowHeight]);
 
   return (

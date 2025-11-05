@@ -7,11 +7,9 @@ import { Row } from "@/table/types.ts";
 import { TableStore } from "@/store/types.ts";
 import { CommandType } from "./store.ts";
 import { CellRendererCallback } from "@/plugin/mod.ts";
-import { usePluginContainer } from "@/plugin/usePluginContainer.ts";
 import { useStickyColOffset } from "@/columns/mod.ts";
 import { CellFormatter } from "../format/CellFormatter.tsx";
 import { GroupSorter } from "./GroupSorter.tsx";
-import { useEffect, useMemo } from "preact/hooks";
 
 interface GroupCellProps {
   store: TableStore;
@@ -37,7 +35,7 @@ export const GroupCell = ({
   const key = "$group_by";
   const stickyColumns = useStickyColOffset({ store });
   const levels = store.state.expandedLevels;
-  const groupby = store.state.tableMeta.value?.groupby || [];
+  const groupby = store.state.tableMeta.value?.groupBy || [];
   const nextColInOrder = groupby.at(groupby.indexOf(row.$group_by!) + 1); // because of grouping it's a header of the next level
   const isStickyLeft = typeof stickyColumns.left[key] === "number";
 
@@ -143,3 +141,5 @@ export const groupCellRenderCallback: CellRendererCallback = ({
     </GroupCell>
   );
 };
+
+groupCellRenderCallback.columnName = "$group_by";

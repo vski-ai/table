@@ -66,7 +66,8 @@ export function StickyHeaderContainer({
       >
         <thead id="vt-main-head">
           <tr>
-            {enumerable && (
+            {
+              /* {enumerable && (
               <th
                 style={{ width: "50px" }}
                 class="vski-expanded-row-th"
@@ -106,7 +107,9 @@ export function StickyHeaderContainer({
                   }}
                 />
               </th>
-            )}
+            )} */
+            }
+
             {plugins.leftTableHeaders.render({
               column: "",
               store,

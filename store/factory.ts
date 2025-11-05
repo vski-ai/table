@@ -37,12 +37,10 @@ export function createTableStore(
 
   // @ts-expect-error: due to namespace extenstions - slow types
   const state: TableState = {
-    drilldowns: signal(initialState?.drilldowns || []),
     expandedLevels: signal(initialState?.expandedLevels || []),
     filters: signal(initialState?.filters || []),
     loading: signal(false),
     dataLoadKey: signal(0),
-    tableMeta: signal({}),
     selectedRows: signal(initialState?.selectedRows || []),
     expandedRows: signal(initialState?.expandedRows || []),
     cellFormatting: signal(initialState?.cellFormatting || {}),
@@ -83,51 +81,7 @@ export function createTableStore(
       history.shift();
     }
     history.push(command);
-
     modules.map((module) => module.reducer(state, command));
-
-    switch (command.type) {
-      // Filtering
-      case CommandType.FILTER_SET:
-        state.filters.value = command.payload;
-        break;
-
-      case CommandType.ROW_HEIGHTS_SET:
-        state.rowHeights.value = command.payload;
-        break;
-      case CommandType.ROW_RESIZING_SET:
-        state.resizingRow.value = command.payload;
-        break;
-
-      // View
-      case CommandType.LOADING_SET:
-        state.loading.value = command.payload;
-        break;
-      case CommandType.SELECTED_ROWS_SET:
-        state.selectedRows.value = command.payload;
-        break;
-      case CommandType.EXPANDED_ROWS_SET:
-        state.expandedRows.value = command.payload;
-        break;
-      case CommandType.ROW_EXPANSION_TOGGLE: {
-        const newExpandedRows = state.expandedRows.value.includes(
-            command.payload,
-          )
-          ? state.expandedRows.value.filter((row: any) =>
-            row !== command.payload
-          )
-          : [...state.expandedRows.value, command.payload];
-        state.expandedRows.value = newExpandedRows;
-        break;
-      }
-
-      case CommandType.CELL_FORMATTING_SET:
-        state.cellFormatting.value = command.payload;
-        break;
-
-      default:
-        break;
-    }
   };
 
   return {

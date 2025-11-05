@@ -22,11 +22,8 @@ export function TableView(props: VirtualTableViewProps) {
   const {
     store,
     scrollContainerRef,
-    tableAddon,
     selectable,
-    expandable,
     enumerable,
-    groupable,
     plugins,
     onDataLoad,
     rowHeight = 64,
@@ -61,10 +58,7 @@ export function TableView(props: VirtualTableViewProps) {
     getColumnWidth,
     columns,
     selectable,
-    expandable,
-    groupable,
     enumerable,
-    hasAddon: !!tableAddon,
   });
 
   const getRowHeight = useRowHeights({
@@ -78,9 +72,7 @@ export function TableView(props: VirtualTableViewProps) {
     rowKey,
     getRowHeight,
     columns: columnsInOrder,
-    expandable,
     selectable,
-    groupable,
     enumerable,
     plugins,
   });
@@ -103,11 +95,8 @@ export function TableView(props: VirtualTableViewProps) {
           plugins,
           data: data.value,
           enumerable,
-          expandable,
-          groupable,
           selectable,
           rowKey,
-          tableAddon,
           columns,
         }}
       />
@@ -151,11 +140,9 @@ export function TableView(props: VirtualTableViewProps) {
                     columns={columnsInOrder}
                     {...{
                       enumerable,
-                      expandable,
-                      groupable,
                       selectable,
-                      tableAddon,
                       getColumnWidth,
+                      store,
                     }}
                   />
                 );
@@ -170,11 +157,9 @@ export function TableView(props: VirtualTableViewProps) {
                     columns={columnsInOrder}
                     {...{
                       enumerable,
-                      expandable,
-                      groupable,
                       selectable,
-                      tableAddon,
                       getColumnWidth,
+                      store,
                     }}
                   />
                 );

@@ -32,7 +32,7 @@ export const GroupSorter = ({
     return null;
   }
 
-  const state = store.state.leafSorting.value[row.id] ??
+  const state = store.state.groupSorting.value[row.id] ??
     { column: "", sort: "" };
 
   const sort = (state: SortState) => {

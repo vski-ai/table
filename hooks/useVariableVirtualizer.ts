@@ -14,7 +14,7 @@ export function useVariableVirtualizer(
     scrollContainerRef,
     itemCount,
     rowHeights,
-    buffer = 5,
+    buffer = 50,
     spacing = 0,
     throttle = 50,
     debounce = 50,

@@ -7,7 +7,6 @@ import { SortState } from "./types.ts";
 declare module "@/store/types.ts" {
   interface TableState {
     sorting: Signal<SortState>;
-    leafSorting: Signal<Record<string, SortState>>;
   }
 }
 
@@ -15,17 +14,15 @@ export enum CommandType {
   SORT_ADD = "SORT_ADD",
   SORT_REMOVE = "SORT_REMOVE",
   SORT_SET = "SORT_SET",
-  LEAF_SORT_SET = "LEAF_SORT_SET",
 }
 
 export function state(init: Record<string, any> | null) {
   return {
     sorting: signal(init?.sorting ?? {}),
-    leafSorting: signal(init?.leafSorting ?? {}),
   };
 }
 
-export function persist(state: TableState) {
+export function persist(_: TableState) {
   return {};
 }
 
@@ -33,13 +30,6 @@ export function reducer<T>(state: TableState, command: Command<T>) {
   switch (command.type) {
     case CommandType.SORT_SET: {
       state.sorting.value = command.payload;
-      break;
-    }
-    case CommandType.LEAF_SORT_SET: {
-      state.leafSorting.value = {
-        ...state.leafSorting.value,
-        ...command.payload,
-      };
       break;
     }
   }
