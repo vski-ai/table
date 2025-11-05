@@ -7,11 +7,10 @@ interface GroupCaretProps {
   level: number;
   onClick?: () => void;
   height?: number;
-  tabIndex?: number;
 }
 
 export const GroupCaret = (
-  { active, size, onClick, level, height = 64, tabIndex = 0 }: GroupCaretProps,
+  { active, size, onClick, level, height = 64 }: GroupCaretProps,
 ) => {
   const style = { width: size, height: size };
   return (
@@ -23,7 +22,6 @@ export const GroupCaret = (
         style={{
           marginLeft: (size * (level ?? 0)) + "px",
         }}
-        tabIndex={tabIndex}
       >
         {active
           ? <ChevronDown style={style} />

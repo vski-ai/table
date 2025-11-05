@@ -33,7 +33,6 @@ export const Row = (props: RowProps) => {
   const plugins = usePluginContainer({ store });
   const height = rowHeight;
   const stickyColumns = useStickyColOffset({ store });
-  const tabIndex = plugins.leftTableCells.size + 1;
 
   const classes = plugins.rowClasses.render({
     row,
@@ -71,7 +70,6 @@ export const Row = (props: RowProps) => {
           <td
             key={col}
             data-column-name={col}
-            tabIndex={colIndex + tabIndex}
             style={{
               width: `var(--col-width-${sanitizeColName(col)})`,
               height: `${height}px`,

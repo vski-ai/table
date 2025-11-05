@@ -38,10 +38,7 @@ export function ColumnSelector(
   };
 
   return (
-    <ul
-      tabIndex={0}
-      class="menu flex-row p-2 mt-4 shadow-lg bg-base-100 border font-bold rounded-box max-w-64 max-h-96 overflow-y-auto overflow-x-hidden"
-    >
+    <ul class="menu flex-row p-2 mt-4 shadow-lg bg-base-100 border font-bold rounded-box max-w-64 max-h-96 overflow-y-auto overflow-x-hidden">
       {allColumns.map((column, _) => {
         const formattedName = formatColumnName?.(column) ?? column;
         return (

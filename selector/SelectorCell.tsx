@@ -40,14 +40,12 @@ export const SelectorCell = ({
         width: `var(--col-width-${KEY})`,
         position: "relative",
       }}
-      tabIndex={0}
     >
       <input
         type="checkbox"
         class="checkbox checkbox-sm"
         checked={isSelected}
         onChange={onSelectionChange}
-        tabIndex={0}
       />
     </td>
   );

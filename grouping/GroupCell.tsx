@@ -51,7 +51,6 @@ export const GroupCell = ({
         position: isStickyLeft ? "sticky" : undefined,
       }}
       class={["vt-g-cell", isStickyLeft ? "vt-s-left" : ""].join(" ")}
-      tabIndex={1}
     >
       <div class="flex justify-between w-full">
         <div class="vt-g-wrap">
@@ -64,7 +63,6 @@ export const GroupCell = ({
                 size={16}
                 level={row.$group_level!}
                 onClick={onLevelToggle}
-                tabIndex={1}
                 height={height}
               />
               <GroupLevelLine

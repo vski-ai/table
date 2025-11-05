@@ -13,7 +13,7 @@ export const ColumnMenu = ({
   store,
 }: MenuProps) => {
   return (
-    <div tabIndex={1} className="tabs-lift tabs w-full min-w-full">
+    <div className="tabs-lift tabs w-full min-w-full">
       <label className="tab">
         <input
           type="radio"

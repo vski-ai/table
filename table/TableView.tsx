@@ -1,4 +1,4 @@
-import { useFocusNavCallback } from "@/navigation/mod.ts";
+import { useNavCallback, useTableTabIndexEffect } from "@/navigation/mod.ts";
 import { useTableStyle } from "./useTableStyle.ts";
 import { useDataFetcher } from "@/fetcher/mod.ts";
 
@@ -9,6 +9,7 @@ import { ContextMenu } from "@/menu/ContextMenu.tsx";
 import { HeaderContainer } from "./HeaderContainer.tsx";
 
 import { RowPadding } from "./RowPadding.tsx";
+import { useRef } from "preact/hooks";
 
 export function TableView(props: VirtualTableViewProps) {
   const {
@@ -38,7 +39,11 @@ export function TableView(props: VirtualTableViewProps) {
     rowHeight,
   });
 
-  const focusNav = useFocusNavCallback({
+  const tableRef = useRef<HTMLTableElement>(null);
+  useTableTabIndexEffect({
+    target: tableRef,
+  }, [data.value, visibleRows]);
+  const focusNav = useNavCallback({
     store,
     startIndex: visibleRows[0]?.index ?? 0,
     endIndex: visibleRows[visibleRows.length - 1]?.index ?? 0,
@@ -77,6 +82,7 @@ export function TableView(props: VirtualTableViewProps) {
         style={style}
         id="vt-main"
         class="vt"
+        ref={tableRef}
         onKeyDown={focusNav.onKeyDown}
         onKeyUp={focusNav.onKeyUp}
       >

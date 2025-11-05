@@ -11,7 +11,7 @@ interface FocusCallbackProps {
   rowHeights: number[];
 }
 
-export function useFocusNavCallback(
+export function useNavCallback(
   {
     store,
     startIndex,
@@ -25,6 +25,7 @@ export function useFocusNavCallback(
   const isKeyHeldDown = useRef(false);
   const scrollTimeout = useRef<number | null>(null);
   const lastScrollTop = useRef(0);
+  const lastExecution = useRef(0);
 
   const getCell = useCallback((index: number, tabIndex: number) => {
     return document
@@ -107,6 +108,15 @@ export function useFocusNavCallback(
   }, [scrollContainerRef.current, rowHeights, store]);
 
   const onKeyDown = useCallback((ev: KeyboardEvent) => {
+    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(ev.key)) {
+      const now = Date.now();
+      if (now - lastExecution.current < 50) {
+        ev.preventDefault();
+        return;
+      }
+      lastExecution.current = now;
+    }
+
     if (ev.key === "ArrowUp" || ev.key === "ArrowDown") {
       isKeyHeldDown.current = true;
       lastScrollTop.current = scrollContainerRef.current!.scrollTop;

@@ -95,7 +95,6 @@ export const XYModal = ({
           top: topPosition.value + margin.top,
           left: leftPosition.value + margin.x,
         }}
-        tabIndex={0}
         ref={modalRef}
         className="modal-box p-0 bg-base-300 min-w-76 max-w-full absolute pointer-events-auto"
       >
