@@ -1,28 +1,40 @@
 import { useMemo } from "preact/hooks";
-import { effect, signal } from "@preact/signals";
+import { effect, Signal, signal } from "@preact/signals";
 import { Command, CommandType } from "./commands.ts";
-import { StorageAdapter } from "./storage.ts";
+import { StorageAdapter } from "./persistence.ts";
 import { Store, TableState, TableStore } from "./types.ts";
-import {
-  columnsPersist,
-  columnsReducer,
-  columnsState,
-} from "@/columns/columnsStore.ts";
+
+import { store as columnsStore } from "@/columns/mod.ts";
+import { store as fetcherStore } from "@/fetcher/mod.ts";
+
+type Module = {
+  state: (
+    init: Record<string, unknown> | null,
+  ) => { [key: string]: Signal<unknown> };
+  persist: (state: TableState) => { [key: string]: unknown };
+  reducer: (state: TableState, command: Command<unknown>) => TableState;
+};
+
+const stores: Module[] = [
+  fetcherStore,
+  columnsStore,
+];
 
 const MAX_HISTORY_SIZE = 100;
 
 export function createTableStore(
   storage?: StorageAdapter,
   tableId?: string,
-  plugins: Store[] = [],
+  modules: Module[] = [],
 ): TableStore {
+  modules = [...modules, ...stores];
+
   const initialState = storage && tableId
     ? storage.getItem<Record<string, any>>(
       `tableState_${tableId}`,
     )
     : null;
 
-  console.log(0, 0, 9);
   // @ts-expect-error: due to namespace extenstions - slow types
   const state: TableState = {
     drilldowns: signal(initialState?.drilldowns || []),
@@ -37,14 +49,11 @@ export function createTableStore(
     rowHeights: signal(initialState?.rowHeights || {}),
     resizingRow: signal(null),
     focusedCell: signal(null),
-    ...columnsState(initialState),
   };
 
-  for (const plugin of plugins) {
-    if (plugin.data) {
-      for (const key in plugin.data) {
-        state[key] = signal(initialState?.[key] || plugin.data[key]);
-      }
+  for (const module of modules.map((module) => module.state(initialState))) {
+    for (const key in module) {
+      state[key] = module[key];
     }
   }
 
@@ -53,18 +62,15 @@ export function createTableStore(
   effect(() => {
     if (storage && tableId) {
       const currentState: Record<string, unknown> = {
-        ...columnsPersist(state),
         expandedRows: state.expandedRows.value,
         expandedLevels: state.expandedLevels.value,
         filters: state.filters.value,
         rowHeights: state.rowHeights.value,
       };
 
-      for (const plugin of plugins) {
-        if (plugin.data) {
-          for (const key in plugin.data) {
-            currentState[key] = state[key].value;
-          }
+      for (const module of modules.map((module) => module.persist(state))) {
+        for (const key in module) {
+          currentState[key] = module[key];
         }
       }
 
@@ -78,13 +84,7 @@ export function createTableStore(
     }
     history.push(command);
 
-    columnsReducer(state, command);
-
-    for (const plugin of plugins) {
-      if (plugin.reducer) {
-        plugin.reducer(state, command);
-      }
-    }
+    modules.map((module) => module.reducer(state, command));
 
     switch (command.type) {
       // Filtering

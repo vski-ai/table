@@ -9,7 +9,7 @@ import { PLUGIN_CONTAINER_ACCESSOR } from "./private.ts";
 
 import { TableStore } from "../store/mod.ts";
 import { SortedAddon } from "./addon.ts";
-import { DataLoadOptions, DataLoadResult } from "../table/types.ts";
+import { DataLoadOptions, DataLoadResult } from "@/fetcher/types.ts";
 
 export const createPlugin = (plugin: ITablePlugin) => plugin;
 export type PluginContainer = ReturnType<typeof createPluginContainer>;
@@ -38,20 +38,22 @@ export const createPluginContainer = (
   const rowClasses = new SortedAddon<ClassResolverCallback>();
   const rowStyles = new SortedAddon<StyleResolverCallback>();
 
-  for (const plugin of sortedPlugins) {
-    plugin.onInit?.({
-      store,
-      headerPrefixes,
-      leftTableCells,
-      rightTableCells,
-      leftTableHeaders,
-      rightTableHeaders,
-      cellPrefixes,
-      cellSuffixes,
-      rowClasses,
-      rowStyles,
-    });
-  }
+  setTimeout(() => {
+    for (const plugin of sortedPlugins) {
+      plugin.onInit?.({
+        store,
+        headerPrefixes,
+        leftTableCells,
+        rightTableCells,
+        leftTableHeaders,
+        rightTableHeaders,
+        cellPrefixes,
+        cellSuffixes,
+        rowClasses,
+        rowStyles,
+      });
+    }
+  });
 
   const container = {
     beforeLoad: async (options: DataLoadOptions) => {
@@ -67,9 +69,7 @@ export const createPluginContainer = (
     afterLoad: async (res: DataLoadResult) => {
       let result = res;
       for (const plugin of sortedPlugins) {
-        console.log(1, plugin.name, result);
         result = (await plugin.afterLoad?.({ res: result, store })) ?? result;
-        console.log(2, plugin.name, result);
       }
       return result;
     },

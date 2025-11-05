@@ -1,5 +1,7 @@
-import { Signal } from "@preact/signals";
-import { Store } from "@/store/types.ts";
+import { Signal, signal } from "@preact/signals";
+import { Command, TableState } from "@/store/mod.ts";
+import { TableMeta } from "@/fetcher/types.ts";
+
 import { SortState } from "./types.ts";
 
 declare module "@/store/types.ts" {
@@ -16,26 +18,30 @@ export enum CommandType {
   LEAF_SORT_SET = "LEAF_SORT_SET",
 }
 
-export const sorterStore: Store = {
-  data: {
-    sorting: {},
-    leafSorting: {},
-  },
+export function state(init: Record<string, any> | null) {
+  return {
+    sorting: signal(init?.sorting ?? {}),
+    leafSorting: signal(init?.leafSorting ?? {}),
+  };
+}
 
-  reducer: (state, command) => {
-    switch (command.type) {
-      case CommandType.SORT_SET: {
-        state.sorting.value = command.payload;
-        break;
-      }
-      case CommandType.LEAF_SORT_SET: {
-        state.leafSorting.value = {
-          ...state.leafSorting.value,
-          ...command.payload,
-        };
-        break;
-      }
+export function persist(state: TableState) {
+  return {};
+}
+
+export function reducer<T>(state: TableState, command: Command<T>) {
+  switch (command.type) {
+    case CommandType.SORT_SET: {
+      state.sorting.value = command.payload;
+      break;
     }
-    return state;
-  },
-};
+    case CommandType.LEAF_SORT_SET: {
+      state.leafSorting.value = {
+        ...state.leafSorting.value,
+        ...command.payload,
+      };
+      break;
+    }
+  }
+  return state;
+}

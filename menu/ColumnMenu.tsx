@@ -1,6 +1,6 @@
 import { Formatting } from "@/format/index.tsx";
 import { TableStore } from "@/store/mod.ts";
-import { CommandType } from "../columns/columnsStore.ts";
+import { CommandType } from "../columns/store.ts";
 import { StickyPosition } from "@/store/types.ts";
 
 export interface MenuProps {

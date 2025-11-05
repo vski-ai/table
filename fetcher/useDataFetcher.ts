@@ -1,39 +1,35 @@
 import { useSignal } from "@preact/signals";
 import { MutableRef, useMemo } from "preact/hooks";
-import { useRowHeights } from "./useRowHeights.ts";
-import { useVariableVirtualizer } from "./useVariableVirtualizer.ts";
+import { useRowHeights } from "@/hooks/useRowHeights.ts";
+import { useVariableVirtualizer } from "@/hooks/useVariableVirtualizer.ts";
 
 import { TableStore } from "@/store/types.ts";
 import { PluginContainer } from "@/plugin/mod.ts";
-import { DataLoadResult, Row } from "@/table/types.ts";
+import { Row } from "@/table/types.ts";
+import { DataLoadCallback } from "./types.ts";
 
-import { useData } from "./useData.ts";
+import { useLoader } from "./useLoader.ts";
 
-interface DataLoaderProps {
+interface DataFetcherProps {
   store: TableStore;
   plugins: PluginContainer;
   scrollContainerRef: MutableRef<HTMLElement>;
   rowHeight: number;
   rowKey?: string;
   buffer?: number;
-  onDataLoad: (options: {
-    offset: number;
-    limit: number;
-    store: TableStore;
-  }) => Promise<DataLoadResult>;
+  onDataLoad: DataLoadCallback;
 }
 
-export function useDataLoader({
+export function useDataFetcher({
   store,
   plugins,
   scrollContainerRef,
   rowKey,
   rowHeight,
-  buffer = 60,
   onDataLoad,
-}: DataLoaderProps) {
+}: DataFetcherProps) {
   const latestData = useSignal<(Row | null)[]>([]);
-  const latestCount = useSignal(buffer);
+  const latestCount = useSignal(0);
 
   const getRowHeight = useRowHeights({
     store,
@@ -65,7 +61,7 @@ export function useDataLoader({
 
   // 3. Load and merge (todo: maybe separate concerns)
   //      - loads the data, fills nulled rows
-  const { data, total, isLoading } = useData({
+  const { data, total, isLoading } = useLoader({
     onDataLoad,
     store,
     plugins,

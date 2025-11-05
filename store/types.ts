@@ -16,9 +16,7 @@ export interface TableState {
   [key: string]: any;
   expandedLevels: Signal<string[] | number[]>;
   filters: Signal<Record<string, string>>;
-  loading: Signal<boolean>;
-  dataLoadKey: Signal<number>;
-  tableMeta: Signal<TableMeta>;
+
   selectedRows: Signal<string[]>;
   expandedRows: Signal<string[]>;
   cellFormatting: Signal<Record<string, CellFormatting>>;

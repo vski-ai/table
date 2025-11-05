@@ -7,26 +7,9 @@ import { createPluginContainer } from "@/plugin/mod.ts";
 import {
   createFrontendSorter,
   sorterPlugin,
-  sorterStore,
+  store as sorterStore,
 } from "@/sorting/mod.ts";
-import { groupingPlugin, groupingStore } from "@/grouping/mod.ts";
-
-const tableStore = createTableStore(
-  new LocalStorageAdapter(),
-  "basic-table",
-  [
-    sorterStore,
-    groupingStore,
-  ],
-);
-
-createPluginContainer(
-  tableStore,
-  [
-    sorterPlugin(),
-    groupingPlugin(),
-  ],
-);
+import { groupingPlugin, store as groupingStore } from "@/grouping/mod.ts";
 
 const sorter = createFrontendSorter();
 
@@ -35,7 +18,22 @@ export const GroupTable = () => {
   useEffect(() => {
     scrollRef.current = document.querySelector(".main-outlet")!;
   });
+  const tableStore = createTableStore(
+    new LocalStorageAdapter(),
+    "basic-table",
+    [
+      sorterStore,
+      groupingStore,
+    ],
+  );
 
+  createPluginContainer(
+    tableStore,
+    [
+      sorterPlugin(),
+      groupingPlugin(),
+    ],
+  );
   const onDataLoad = async ({ store, offset, limit, sorting }) => {
     await new Promise((r) => setTimeout(r, 1000));
 

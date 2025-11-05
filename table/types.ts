@@ -2,26 +2,7 @@ import { type JSX } from "preact";
 import { TableStore } from "@/store/types.ts";
 import { PluginContainer } from "@/plugin/mod.ts";
 import { MutableRef } from "preact/hooks";
-
-export interface DataLoadOptions {
-  offset: number;
-  limit: number;
-  store: TableStore;
-}
-
-export interface TableMeta {
-  id?: unknown;
-}
-
-export type DataLoadResult = {
-  rows: Row[];
-  total: number;
-  meta: TableMeta;
-};
-
-export type DataLoadCallback = (
-  options: DataLoadOptions,
-) => Promise<DataLoadResult>;
+import { DataLoadCallback } from "@/fetcher/types.ts";
 
 export type VirtualTableViewProps =
   & {

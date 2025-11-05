@@ -7,20 +7,8 @@ import { createPluginContainer } from "@/plugin/mod.ts";
 import {
   createFrontendSorter,
   sorterPlugin,
-  sorterStore,
+  store as sorterStore,
 } from "@/sorting/mod.ts";
-
-const tableStore = createTableStore(
-  new LocalStorageAdapter(),
-  "flat-table",
-  [
-    sorterStore,
-  ],
-);
-
-createPluginContainer(tableStore, [
-  sorterPlugin(),
-]);
 
 const sorter = createFrontendSorter();
 
@@ -30,6 +18,17 @@ export const FlatTable = () => {
   useEffect(() => {
     scrollRef.current = document.querySelector(".main-outlet");
   });
+  const tableStore = createTableStore(
+    new LocalStorageAdapter(),
+    "flat-table",
+    [
+      sorterStore,
+    ],
+  );
+
+  createPluginContainer(tableStore, [
+    sorterPlugin(),
+  ]);
 
   const onDataLoad = async (
     { offset, limit, store }: any,

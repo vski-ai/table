@@ -1,5 +1,6 @@
 import { TableStore } from "@/store/types.ts";
-import { DataLoadOptions, DataLoadResult, Row } from "@/table/types.ts";
+import { Row } from "@/table/types.ts";
+import { DataLoadOptions, DataLoadResult } from "@/fetcher/types.ts";
 import { SortedAddon } from "./addon.ts";
 
 export type ClassResolverCallback = (opts: {
@@ -72,7 +73,6 @@ export type ITablePlugin<T extends Record<string, any> = Record<string, any>> =
     name: string;
     dependencies?: string[];
     tableProps?: T;
-    addons?: Record<string, SortedAddon>;
 
     onInit?: PluginInitCallback;
 

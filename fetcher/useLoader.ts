@@ -1,27 +1,24 @@
 import { useSignal } from "@preact/signals";
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import { TableStore } from "@/store/mod.ts";
-import { CommandType } from "@/columns/columnsStore.ts";
+import { CommandType } from "../columns/store.ts";
 import { Row } from "@/table/types.ts";
 import { PluginContainer } from "@/plugin/mod.ts";
-import { DataLoadResult } from "@/table/types.ts";
+import { DataLoadCallback } from "./types.ts";
 import { usePluginContainer } from "@/plugin/usePluginContainer.ts";
-interface DataProps {
-  onDataLoad: (options: {
-    offset: number;
-    limit: number;
-    store: TableStore;
-  }) => Promise<DataLoadResult>;
+
+interface LoaderProps {
+  onDataLoad: DataLoadCallback;
   store: TableStore;
   plugins: PluginContainer;
   visibleRows: any[];
 }
 
-export const useData = ({
+export const useLoader = ({
   onDataLoad,
   store,
   visibleRows,
-}: DataProps) => {
+}: LoaderProps) => {
   const data = useSignal<(Row | null)[]>([]);
   const total = useSignal(0);
   const isLoading = useSignal(false);
@@ -39,11 +36,12 @@ export const useData = ({
       const res = await onDataLoad(options);
       console.log(res);
       const { rows, total: newTotal, meta } = await plugins.afterLoad(res);
-      console.log("r2", rows);
+
       store.dispatch({
         type: CommandType.COLUMNS_SET,
         payload: Object.keys(rows.find((r) => r !== null) ?? {}),
       });
+
       store.state.tableMeta.value = meta;
 
       if (total.value !== newTotal) {

@@ -3,7 +3,7 @@ import {
   ITablePlugin,
   PluginInitCallback,
 } from "@/plugin/mod.ts";
-import { CommandType } from "../columns/columnsStore.ts";
+import { CommandType } from "../columns/store.ts";
 import { groupCellRenderCallback } from "./GroupCell.tsx";
 import { groupHeaderRenderCallback } from "./GroupColumn.tsx";
 
@@ -47,7 +47,6 @@ export const groupingPlugin = (): ITablePlugin => {
         [column]: false,
       }), {}) ?? {},
     });
-    console.log("grouping", res);
     return res;
   };
 

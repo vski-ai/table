@@ -1,4 +1,4 @@
 export * from "./commands.ts";
-export * from "./storage.ts";
-export * from "./table.ts";
+export * from "./persistence.ts";
+export * from "./factory.ts";
 export * from "./types.ts";

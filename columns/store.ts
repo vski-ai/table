@@ -26,7 +26,7 @@ export enum CommandType {
   COLUMN_STICK_SET = "COLUMN_STICK_SET",
 }
 
-export function columnsState(init: Record<string, any> | null) {
+export function state(init: Record<string, any> | null) {
   return {
     columns: signal([]),
     columnOrder: signal(init?.columnOrder || []),
@@ -39,7 +39,7 @@ export function columnsState(init: Record<string, any> | null) {
   };
 }
 
-export function columnsPersist(state: TableState) {
+export function persist(state: TableState) {
   return {
     columnOrder: state.columnOrder.value,
     columnVisibility: state.columnVisibility.value,
@@ -49,7 +49,7 @@ export function columnsPersist(state: TableState) {
   };
 }
 
-export function columnsReducer<T>(state: TableState, command: Command<T>) {
+export function reducer<T>(state: TableState, command: Command<T>) {
   switch (command.type) {
     case CommandType.COLUMNS_SET: {
       state.columns.value = command.payload;

@@ -1,10 +1,11 @@
 import {
-  useDataLoader,
   useFocusNavCallback,
   useRowHeights,
   useRowKey,
   useTableStyle,
 } from "@/hooks/mod.ts";
+
+import { useDataFetcher } from "@/fetcher/mod.ts";
 
 import { useColumnResizer, useOrderedColumns } from "@/columns/mod.ts";
 
@@ -19,9 +20,7 @@ import { RowPadding } from "./RowPadding.tsx";
 
 export function TableView(props: VirtualTableViewProps) {
   const {
-    //columns,
     store,
-    initialWidth,
     scrollContainerRef,
     tableAddon,
     selectable,
@@ -44,15 +43,13 @@ export function TableView(props: VirtualTableViewProps) {
     rowHeights,
     paddingBottom,
     paddingTop,
-    isLoading,
-  } = useDataLoader({
+  } = useDataFetcher({
     store,
     plugins,
     scrollContainerRef,
     rowKey,
     rowHeight,
     onDataLoad,
-    buffer,
   });
 
   const columnsInOrder = useOrderedColumns({ store });
