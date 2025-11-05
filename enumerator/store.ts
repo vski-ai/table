@@ -15,15 +15,12 @@ export enum CommandType {
 
 export function state<T>(init: Record<string, T> | null) {
   return {
-    rowHeights: signal({}),
     resizingRow: signal({}),
   };
 }
 
 export function persist(state: TableState) {
-  return {
-    rowHeights: state.rowHeights.value,
-  };
+  return {};
 }
 
 export function reducer<T>(state: TableState, command: Command<T>) {

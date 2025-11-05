@@ -1,9 +1,10 @@
 import { memo } from "preact/compat";
 import { MutableRef, useRef } from "preact/hooks";
-import { useStickyGroupHeaders, useTableStyle } from "@/hooks/mod.ts";
+import { useStickyGroupHeaders } from "@/hooks/mod.ts";
 import { useColumnResizer } from "@/columns/useColumnnResize.ts";
 import { TableStore } from "@/store/types.ts";
 import { Row } from "./types.ts";
+import { useTableStyle } from "./useTableStyle.ts";
 
 interface StickyRowsContainerProps {
   store: TableStore;

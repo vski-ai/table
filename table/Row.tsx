@@ -1,5 +1,5 @@
 import { memo } from "preact/compat";
-import { useCallback, useMemo } from "preact/hooks";
+import { useCallback } from "preact/hooks";
 import { CellFormatter } from "@/format/CellFormatter.tsx";
 import { Row as RowType } from "./types.ts";
 import { RowLoading } from "./RowLoading.tsx";
@@ -7,8 +7,10 @@ import { CellFormatting } from "@/format/types.ts";
 import { TableStore } from "@/store/types.ts";
 import { sanitizeColName } from "@/utils/sanitizeColName.ts";
 import { useStickyColOffset } from "@/columns/mod.ts";
-import { PluginContainer } from "../plugin/mod.ts";
 import { usePluginContainer } from "../plugin/usePluginContainer.ts";
+import { useOrderedColumns } from "../columns/useOrderedColumns.ts";
+import { useRowHeights } from "../fetcher/useRowHeights.ts";
+import { useRowKey } from "../fetcher/useRowKey.ts";
 
 interface RowProps {
   row: RowType;
@@ -16,13 +18,8 @@ interface RowProps {
   rowKey: string;
   rowHeight: number;
   formatting: Record<string, CellFormatting>;
-  columns: string[];
   store: TableStore;
-  plugins: PluginContainer;
-  expandable?: boolean;
-  selectable?: boolean;
-  groupable?: boolean;
-  enumerable?: boolean;
+  columns: string[];
 }
 
 export const Row = memo((props: RowProps) => {
@@ -31,8 +28,8 @@ export const Row = memo((props: RowProps) => {
     rowIndex,
     rowHeight,
     formatting,
-    columns,
     store,
+    columns,
     rowKey,
   } = props;
 
@@ -92,36 +89,23 @@ export const Row = memo((props: RowProps) => {
             <div
               class="truncate flex w-full items-center justify-between"
               title={row[col]}
-              style={{
-                paddingLeft: row.$is_group_root
-                  ? `${row.$level * 20}px`
-                  : colIndex === 0
-                  ? `${(row.$level) * 20}px`
-                  : "0px",
-              }}
             >
-              {row.$is_group_root && (
-                <>
-                  {plugins.cellPrefixes.render({
-                    column: col,
-                    row,
-                    store,
-                  })}
-                </>
-              )}
+              {plugins.cellPrefixes.render({
+                column: col,
+                row,
+                store,
+              })}
+
               <CellFormatter
                 value={row[col]}
                 formatting={formatting?.[col]}
               />
-              {row.$is_group_root && (
-                <>
-                  {plugins.cellSuffixes?.render({
-                    column: col,
-                    row,
-                    store,
-                  })}
-                </>
-              )}
+
+              {plugins.cellSuffixes?.render({
+                column: col,
+                row,
+                store,
+              })}
             </div>
           </td>
         );
@@ -132,23 +116,23 @@ export const Row = memo((props: RowProps) => {
 
 interface RenderRowCallbackProps {
   store: TableStore;
-  rowKey?: string;
-  getRowHeight: (row: RowType) => number;
-  columns: string[];
-  plugins: PluginContainer;
+  rowHeight: number;
 }
 
-export function useRenderRowCallback({
-  store,
-  getRowHeight,
-  columns,
-  plugins,
-  rowKey = "id",
-}: RenderRowCallbackProps) {
+export function useRenderRowCallback(
+  { store, rowHeight }: RenderRowCallbackProps,
+) {
   const formatting = store.state.cellFormatting.value;
-
+  const columns = useOrderedColumns({ store });
+  const rowKey = useRowKey({ store });
+  const getRowHeight = useRowHeights({
+    store,
+    rowKey,
+    height: rowHeight,
+  });
   return useCallback((row: RowType, index: number) => {
     const rowHeight = getRowHeight(row);
+
     if (row.$loading) {
       return <RowLoading columns={columns} rowHeight={rowHeight} />;
     }
@@ -161,7 +145,6 @@ export function useRenderRowCallback({
         formatting={formatting}
         columns={columns}
         store={store}
-        plugins={plugins}
         rowKey={rowKey}
       />
     );

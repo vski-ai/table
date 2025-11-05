@@ -19,11 +19,14 @@ export function state(init: Record<string, any> | null) {
     tableMeta: signal(init?.tableMeta ?? {}),
     dataLoadKey: signal(0),
     loading: signal(false),
+    rowHeights: signal({}),
   };
 }
 
 export function persist(state: TableState) {
-  return {};
+  return {
+    rowHeights: state.rowHeights.value,
+  };
 }
 
 export function reducer<T>(state: TableState, command: Command<T>) {

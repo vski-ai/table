@@ -3,14 +3,12 @@ import { useCallback, useEffect, useRef } from "preact/hooks";
 import { TableStore } from "@/store/mod.ts";
 import { CommandType } from "../columns/store.ts";
 import { Row } from "@/table/types.ts";
-import { PluginContainer } from "@/plugin/mod.ts";
 import { DataLoadCallback } from "./types.ts";
 import { usePluginContainer } from "@/plugin/usePluginContainer.ts";
 
 interface LoaderProps {
   onDataLoad: DataLoadCallback;
   store: TableStore;
-  plugins: PluginContainer;
   visibleRows: any[];
 }
 

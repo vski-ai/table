@@ -1,36 +1,32 @@
 import { useSignal } from "@preact/signals";
 import { MutableRef, useMemo } from "preact/hooks";
-import { useRowHeights } from "@/hooks/useRowHeights.ts";
-import { useVariableVirtualizer } from "@/hooks/useVariableVirtualizer.ts";
+import { useRowHeights } from "./useRowHeights.ts";
+import { useVariableVirtualizer } from "./useVariableVirtualizer.ts";
 
 import { TableStore } from "@/store/types.ts";
-import { PluginContainer } from "@/plugin/mod.ts";
 import { Row } from "@/table/types.ts";
 import { DataLoadCallback } from "./types.ts";
 
 import { useLoader } from "./useLoader.ts";
+import { useRowKey } from "./useRowKey.ts";
 
 interface DataFetcherProps {
   store: TableStore;
-  plugins: PluginContainer;
   scrollContainerRef: MutableRef<HTMLElement>;
   rowHeight: number;
-  rowKey?: string;
   buffer?: number;
   onDataLoad: DataLoadCallback;
 }
 
 export function useDataFetcher({
   store,
-  plugins,
   scrollContainerRef,
-  rowKey,
   rowHeight,
   onDataLoad,
 }: DataFetcherProps) {
   const latestData = useSignal<(Row | null)[]>([]);
   const latestCount = useSignal(0);
-
+  const rowKey = useRowKey({ store });
   const getRowHeight = useRowHeights({
     store,
     rowKey,
@@ -64,7 +60,6 @@ export function useDataFetcher({
   const { data, total, isLoading } = useLoader({
     onDataLoad,
     store,
-    plugins,
     visibleRows,
   });
 

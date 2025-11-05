@@ -1,19 +1,12 @@
-import {
-  useFocusNavCallback,
-  useRowHeights,
-  useRowKey,
-  useTableStyle,
-} from "@/hooks/mod.ts";
-
-import { useDataFetcher } from "@/fetcher/mod.ts";
-
-import { useColumnResizer, useOrderedColumns } from "@/columns/mod.ts";
+import { useFocusNavCallback } from "@/hooks/mod.ts";
+import { useTableStyle } from "./useTableStyle.ts";
+import { useDataFetcher, useRowHeights } from "@/fetcher/mod.ts";
 
 import { Row } from "./types.ts";
 import { VirtualTableViewProps } from "./types.ts";
 import { useRenderRowCallback } from "./Row.tsx";
 import { ContextMenu } from "@/menu/ContextMenu.tsx";
-import { StickyHeaderContainer } from "./StickyHeaderContainer.tsx";
+import { HeaderContainer } from "./HeaderContainer.tsx";
 import { StickyRowsContainer } from "./StickyRowsContainer.tsx";
 
 import { RowPadding } from "./RowPadding.tsx";
@@ -22,17 +15,9 @@ export function TableView(props: VirtualTableViewProps) {
   const {
     store,
     scrollContainerRef,
-    selectable,
-    enumerable,
-    plugins,
     onDataLoad,
     rowHeight = 64,
-    rowIdentifier = "id",
-    buffer = 1,
   } = props;
-
-  const columns = store.state.columns.value;
-  const rowKey = useRowKey(columns, rowIdentifier);
 
   const {
     data,
@@ -42,37 +27,16 @@ export function TableView(props: VirtualTableViewProps) {
     paddingTop,
   } = useDataFetcher({
     store,
-    plugins,
     scrollContainerRef,
-    rowKey,
     rowHeight,
     onDataLoad,
   });
 
-  const columnsInOrder = useOrderedColumns({ store });
-
-  const { getColumnWidth } = useColumnResizer({ store });
-
-  const { style } = useTableStyle({
-    store,
-    getColumnWidth,
-    columns,
-    selectable,
-    enumerable,
-  });
-
-  const getRowHeight = useRowHeights({
-    store,
-    rowKey,
-    height: rowHeight,
-  });
+  const { style } = useTableStyle({ store });
 
   const renderRow = useRenderRowCallback({
     store,
-    rowKey,
-    getRowHeight,
-    columns: columnsInOrder,
-    plugins,
+    rowHeight,
   });
 
   const focusNav = useFocusNavCallback({
@@ -84,19 +48,11 @@ export function TableView(props: VirtualTableViewProps) {
     rowHeights,
   });
 
+  const initializing = !data.value.length;
   return (
     <>
       <ContextMenu store={store} target={scrollContainerRef} />
-      <StickyHeaderContainer
-        {...{
-          store,
-          plugins,
-          enumerable,
-          selectable,
-          rowKey,
-          columns,
-        }}
-      />
+      <HeaderContainer store={store} loading={initializing} />
       {
         /* <StickyRowsContainer
         {...{
@@ -126,6 +82,17 @@ export function TableView(props: VirtualTableViewProps) {
         onKeyUp={focusNav.onKeyUp}
       >
         <tbody>
+          {initializing && (
+            new Array(50).fill(0).map((_, i) => (
+              <tr>
+                {new Array(10).fill(0).map((_, i) => (
+                  <td key={i} style={{ width: 350 }}>
+                    <div class="skeleton h-8"></div>
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
           {[{ row: "top", index: -Infinity }, ...visibleRows, {
             row: "bottom",
             index: Infinity,
@@ -137,11 +104,7 @@ export function TableView(props: VirtualTableViewProps) {
                     key={paddingTop + i}
                     name="top"
                     padding={paddingTop}
-                    columns={columnsInOrder}
                     {...{
-                      enumerable,
-                      selectable,
-                      getColumnWidth,
                       store,
                     }}
                   />
@@ -154,11 +117,7 @@ export function TableView(props: VirtualTableViewProps) {
                     key={paddingBottom + i}
                     name="bottom"
                     padding={paddingBottom}
-                    columns={columnsInOrder}
                     {...{
-                      enumerable,
-                      selectable,
-                      getColumnWidth,
                       store,
                     }}
                   />

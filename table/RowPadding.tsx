@@ -1,10 +1,8 @@
 import { TableStore } from "@/store/types.ts";
-import { useOrderedColumns } from "@/columns/mod.ts";
+import { useColumnResizer, useOrderedColumns } from "@/columns/mod.ts";
 import { usePluginContainer } from "../plugin/usePluginContainer.ts";
 
 interface RowPaddingProps {
-  columns: string[];
-  getColumnWidth: (col: string) => number;
   padding: number;
   name: string;
   store: TableStore;
@@ -12,7 +10,6 @@ interface RowPaddingProps {
 
 export const RowPadding = (
   {
-    getColumnWidth,
     padding,
     name,
     store,
@@ -20,6 +17,7 @@ export const RowPadding = (
 ) => {
   const columns = useOrderedColumns({ store });
   const plugins = usePluginContainer({ store });
+  const { getColumnWidth } = useColumnResizer({ store });
   return (
     <tr data-name={name} style={{ height: `${padding}px` }}>
       {plugins.leftTableCells.getSorted().map((cb) => (

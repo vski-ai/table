@@ -1,30 +1,16 @@
 import { useMemo } from "preact/hooks";
 import { TableStore } from "@/store/types.ts";
 import { sanitizeColName } from "@/utils/sanitizeColName.ts";
+import { useColumnResizer, useOrderedColumns } from "@/columns/mod.ts";
+
 export interface TableStyleProps {
-  columns: string[];
   store: TableStore;
-  getColumnWidth: (col: string) => number;
-  selectable?: boolean;
-  expandable?: boolean;
-  groupable?: boolean;
-  enumerable?: boolean;
-  hasAddon?: boolean;
-  key?: any;
 }
 
-export function useTableStyle({
-  store,
-  getColumnWidth,
-  columns,
-  selectable,
-  expandable,
-  enumerable,
-  hasAddon,
-  key,
-}: TableStyleProps) {
-  const leftOffset = 0 + (enumerable ? 50 : 0) + (expandable ? 50 : 0) +
-    (selectable ? 50 : 0);
+export function useTableStyle({ store }: TableStyleProps) {
+  const { getColumnWidth } = useColumnResizer({ store });
+  const columns = useOrderedColumns({ store });
+
   const totalWidth = useMemo(
     () => {
       const { column, width: resizingColumnWidth } =
@@ -37,17 +23,15 @@ export function useTableStyle({
         .reduce(
           (sum, [col, _]) => sum + getColumnWidth(col),
           resizingColumnWidth ?? 0,
-        ) +
-        leftOffset +
-        (hasAddon ? 80 : 0);
+        );
     },
-    [store.state.columnWidths.value, store.state.resizingColumn.value, key],
+    [store.state.columnWidths.value, store.state.resizingColumn.value],
   );
 
   const style = useMemo(() => {
     const widths: Record<string, string> = {
       width: `${totalWidth}px`,
-      ...columns.reduce((acc, col, i) => {
+      ...columns.reduce((acc, col) => {
         acc[`--col-width-${sanitizeColName(col)}`] = `${getColumnWidth(col)}px`;
         return acc;
       }, {} as Record<string, string>),
@@ -64,11 +48,10 @@ export function useTableStyle({
     );
 
     return widths;
-  }, [totalWidth, columns, store.state.columnWidths.value, key]);
+  }, [totalWidth, columns, store.state.columnWidths.value]);
 
   return {
     style,
     totalWidth,
-    leftOffset,
   };
 }
