@@ -1,14 +1,13 @@
 import { useSignal } from "@preact/signals";
-import { useCallback, useEffect, useRef } from "preact/hooks";
+import { MutableRef, useCallback, useEffect, useRef } from "preact/hooks";
 import { TableStore } from "@/store/types.ts";
-import { RefObject } from "preact/compat";
 
 interface FocusCallbackProps {
   store: TableStore;
   startIndex: number;
   endIndex: number;
   key: any;
-  scrollContainerRef: RefObject<HTMLElement>;
+  scrollContainerRef: MutableRef<HTMLElement>;
   rowHeights: number[];
 }
 

@@ -1,4 +1,3 @@
-import { memo } from "preact/compat";
 import ChevronRight from "lucide-react/dist/esm/icons/chevron-right-circle.js";
 import ChevronDown from "lucide-react/dist/esm/icons/chevron-down-circle.js";
 
@@ -11,7 +10,7 @@ interface GroupCaretProps {
   tabIndex?: number;
 }
 
-export const GroupCaret = memo((
+export const GroupCaret = (
   { active, size, onClick, level, height = 64, tabIndex = 0 }: GroupCaretProps,
 ) => {
   const style = { width: size, height: size };
@@ -45,4 +44,4 @@ export const GroupCaret = memo((
         : null}
     </>
   );
-});
+};

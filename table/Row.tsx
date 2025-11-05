@@ -1,4 +1,3 @@
-import { memo } from "preact/compat";
 import { useCallback } from "preact/hooks";
 import { CellFormatter } from "@/format/CellFormatter.tsx";
 import { CellFormatting } from "@/format/types.ts";
@@ -20,7 +19,7 @@ interface RowProps {
   columns: string[];
 }
 
-export const Row = memo((props: RowProps) => {
+export const Row = (props: RowProps) => {
   const {
     row,
     rowIndex,
@@ -111,7 +110,7 @@ export const Row = memo((props: RowProps) => {
       })}
     </tr>
   );
-});
+};
 
 interface RenderRowCallbackProps {
   store: TableStore;
