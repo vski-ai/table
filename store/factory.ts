@@ -1,8 +1,7 @@
-import { useMemo } from "preact/hooks";
 import { effect, Signal, signal } from "@preact/signals";
-import { Command, CommandType } from "./commands.ts";
+import { Command } from "./commands.ts";
 import { StorageAdapter } from "./persistence.ts";
-import { Store, TableState, TableStore } from "./types.ts";
+import { TableState, TableStore } from "./types.ts";
 
 import { store as columnsStore } from "@/columns/mod.ts";
 import { store as fetcherStore } from "@/fetcher/mod.ts";
@@ -37,15 +36,8 @@ export function createTableStore(
 
   // @ts-expect-error: due to namespace extenstions - slow types
   const state: TableState = {
-    expandedLevels: signal(initialState?.expandedLevels || []),
-    filters: signal(initialState?.filters || []),
-    loading: signal(false),
-    dataLoadKey: signal(0),
-    selectedRows: signal(initialState?.selectedRows || []),
-    expandedRows: signal(initialState?.expandedRows || []),
+    rowHeights: signal({}),
     cellFormatting: signal(initialState?.cellFormatting || {}),
-    rowHeights: signal(initialState?.rowHeights || {}),
-    resizingRow: signal(null),
     focusedCell: signal(null),
   };
 
@@ -59,12 +51,7 @@ export function createTableStore(
 
   effect(() => {
     if (storage && tableId) {
-      const currentState: Record<string, unknown> = {
-        expandedRows: state.expandedRows.value,
-        expandedLevels: state.expandedLevels.value,
-        filters: state.filters.value,
-        rowHeights: state.rowHeights.value,
-      };
+      const currentState: Record<string, unknown> = {};
 
       for (const module of modules.map((module) => module.persist(state))) {
         for (const key in module) {

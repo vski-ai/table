@@ -3,7 +3,7 @@ import { CommandType } from "../columns/store.ts";
 import { enumCellRenderCallback } from "./EnumeratorCell.tsx";
 import { enumColumnRenderCallback } from "./EnumeratorColumn.tsx";
 
-export const enumeratorPlugin = (): ITablePlugin => {
+export const plugin = (): ITablePlugin => {
   const onInit: PluginInitCallback = ({
     leftTableCells,
     leftTableHeaders,

@@ -21,6 +21,7 @@ export type CellRendererCallback =
     column: string;
     row: Row;
     store: TableStore;
+    rowIndex?: number;
   }) => preact.ComponentChildren);
 
 export type ColumnRendererCallback = (opts: {

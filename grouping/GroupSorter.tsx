@@ -4,7 +4,7 @@ import ArrowDownUpIcon from "lucide-react/dist/esm/icons/arrow-down-up.js";
 
 import { TableStore } from "@/store/mod.ts";
 import { SortState } from "@/sorting/types.ts";
-import { CommandType } from "@/sorting/store.ts";
+import { CommandType } from "./store.ts";
 import { Row } from "@/table/types.ts";
 import { CellRendererCallback } from "../plugin/mod.ts";
 

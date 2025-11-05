@@ -2,13 +2,17 @@ import { useCallback } from "preact/hooks";
 import { RowResizeHandle } from "./RowResizeHandle.tsx";
 import { CommandType } from "./store.ts";
 import { CellRendererCallback } from "@/plugin/mod.ts";
+import { TableStore } from "@/store/types.ts";
+import { Row } from "@/table/types.ts";
 
 export const EnumeratorCell = ({
   store,
   row,
+  index,
 }: {
-  store: any;
-  row: any;
+  store: TableStore;
+  row: Row;
+  index: number;
 }) => {
   const resizingRow = store.state.resizingRow.value;
   const onResize = useCallback((rowId: string | number, newHeight: number) => {
@@ -43,9 +47,9 @@ export const EnumeratorCell = ({
         width: `var(--col-width-$$enumerator$$)`,
         position: "relative",
       }}
-      tabIndex={1}
+      tabIndex={0}
     >
-      {0}
+      {index! + 1}
       <RowResizeHandle
         rowId={row["id"]}
         onResize={onResize}
@@ -59,8 +63,9 @@ export const EnumeratorCell = ({
 export const enumCellRenderCallback: CellRendererCallback = ({
   store,
   row,
+  rowIndex,
 }) => {
-  return <EnumeratorCell {...{ store, row }} />;
+  return <EnumeratorCell {...{ store, row, index: rowIndex! }} />;
 };
 
 enumCellRenderCallback.columnName = "$$enumerator$$";

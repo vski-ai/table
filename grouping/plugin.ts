@@ -19,7 +19,7 @@ declare module "@/fetcher/types.ts" {
   }
 }
 
-export const groupingPlugin = (): ITablePlugin => {
+export const plugin = (): ITablePlugin => {
   const onInit: PluginInitCallback = ({
     store,
     leftTableCells,

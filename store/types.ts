@@ -5,10 +5,6 @@ import { TableMeta } from "@/table/types.ts";
 
 export interface TableState {
   [key: string]: unknown;
-  filters: Signal<Record<string, string>>;
-
-  selectedRows: Signal<string[]>;
-  expandedRows: Signal<string[]>;
 
   cellFormatting: Signal<Record<string, CellFormatting>>;
   focusedCell: Signal<{ tabIndex: number; rowIndex: number } | null>;

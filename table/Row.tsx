@@ -1,8 +1,6 @@
 import { memo } from "preact/compat";
-import { useCallback } from "preact/hooks";
+import { useCallback, useMemo } from "preact/hooks";
 import { CellFormatter } from "@/format/CellFormatter.tsx";
-import { GroupCell } from "@/grouping/mod.ts";
-import { CommandType } from "@/store/mod.ts";
 import { Row as RowType } from "./types.ts";
 import { RowLoading } from "./RowLoading.tsx";
 import { CellFormatting } from "@/format/types.ts";
@@ -14,13 +12,9 @@ import { usePluginContainer } from "../plugin/usePluginContainer.ts";
 
 interface RowProps {
   row: RowType;
-  rowIndex: number | string;
-  isSelected?: boolean;
-  isExpanded?: boolean;
+  rowIndex: number;
   rowKey: string;
   rowHeight: number;
-  onResize: (rowId: string | number, height: number) => void;
-  onResizeEnd: () => void;
   formatting: Record<string, CellFormatting>;
   columns: string[];
   store: TableStore;
@@ -35,56 +29,29 @@ export const Row = memo((props: RowProps) => {
   const {
     row,
     rowIndex,
-    isSelected,
     rowHeight,
-    onResize,
-    onResizeEnd,
     formatting,
     columns,
     store,
     rowKey,
-    selectable,
-    groupable,
-    enumerable,
   } = props;
 
   const plugins = usePluginContainer({ store });
-  const resizingRow = store.state.resizingRow.value;
-  const isResizing = resizingRow?.rowId === row[rowKey];
-  const height = isResizing ? resizingRow?.height : rowHeight;
-
+  const height = rowHeight;
   const stickyColumns = useStickyColOffset({ store });
+  const tabIndex = plugins.leftTableCells.size + 1;
 
-  const onSelectionChange = useCallback((e: Event) => {
-    const checked = (e.target as HTMLInputElement).checked;
-    const currentSelectedRows = store.state.selectedRows.value;
-    if (checked) {
-      store.dispatch({
-        type: CommandType.SELECTED_ROWS_SET,
-        payload: [...currentSelectedRows, row[rowKey]],
-      });
-    } else {
-      store.dispatch({
-        type: CommandType.SELECTED_ROWS_SET,
-        payload: currentSelectedRows.filter((id) => id !== row[rowKey]),
-      });
-    }
-  }, [store, row, rowKey]);
-
-  const tabIndex = 5;
+  const classes = plugins.rowClasses.render({
+    row,
+    store,
+  });
 
   return (
     <tr
       key={row.id}
       data-row-id={row[rowKey]}
       data-index={rowIndex}
-      class={[
-        isSelected ? "bg-base-200" : "",
-        plugins.rowClasses.render({
-          row,
-          store,
-        }),
-      ].flat().join(" ")}
+      class={classes.flat().join(" ")}
       style={{
         height: height,
         ...Object.fromEntries(
@@ -95,28 +62,11 @@ export const Row = memo((props: RowProps) => {
         ),
       }}
     >
-      {
-        /* {selectable && (
-        <td
-          class="vt-cell"
-          style={{ width: "50px" }}
-          tabIndex={3}
-        >
-          <input
-            type="checkbox"
-            class="checkbox checkbox-sm"
-            checked={isSelected}
-            onChange={onSelectionChange}
-            tabIndex={3}
-          />
-        </td>
-      )} */
-      }
-
       {plugins.leftTableCells.render({
         column: "",
         store,
         row,
+        rowIndex,
       })}
 
       {columns.map((col, colIndex) => {
@@ -185,10 +135,6 @@ interface RenderRowCallbackProps {
   rowKey?: string;
   getRowHeight: (row: RowType) => number;
   columns: string[];
-  expandable?: boolean;
-  selectable?: boolean;
-  groupable?: boolean;
-  enumerable?: boolean;
   plugins: PluginContainer;
 }
 
@@ -197,41 +143,9 @@ export function useRenderRowCallback({
   getRowHeight,
   columns,
   plugins,
-  selectable,
-  expandable,
-  groupable,
-  enumerable,
   rowKey = "id",
 }: RenderRowCallbackProps) {
   const formatting = store.state.cellFormatting.value;
-  const selected = store.state.selectedRows.value;
-  const expanded = store.state.expandedRows.value;
-  const resizingRow = store.state.resizingRow.value;
-
-  const onResize = useCallback((rowId: string | number, newHeight: number) => {
-    store.dispatch({
-      type: CommandType.ROW_RESIZING_SET,
-      payload: { rowId, height: newHeight },
-    });
-  }, [store]);
-
-  const onResizeEnd = useCallback(() => {
-    if (resizingRow) {
-      const { rowId, height } = resizingRow;
-      const newRowHeights = {
-        ...store.state.rowHeights.value,
-        [rowId]: height,
-      };
-      store.dispatch({
-        type: CommandType.ROW_HEIGHTS_SET,
-        payload: newRowHeights,
-      });
-      store.dispatch({
-        type: CommandType.ROW_RESIZING_SET,
-        payload: null,
-      });
-    }
-  }, [store, resizingRow]);
 
   return useCallback((row: RowType, index: number) => {
     const rowHeight = getRowHeight(row);
@@ -239,27 +153,12 @@ export function useRenderRowCallback({
       return <RowLoading columns={columns} rowHeight={rowHeight} />;
     }
 
-    const isSelected = selected.includes(
-      row[rowKey],
-    );
-    const isExpanded = expanded.includes(
-      row[rowKey],
-    );
-
     return (
       <Row
         row={row}
         rowIndex={index}
-        isSelected={isSelected}
-        isExpanded={isExpanded}
-        selectable={selectable}
-        expandable={expandable}
         rowHeight={rowHeight}
-        onResize={onResize}
-        onResizeEnd={onResizeEnd}
         formatting={formatting}
-        groupable={groupable}
-        enumerable={enumerable}
         columns={columns}
         store={store}
         plugins={plugins}
@@ -267,15 +166,9 @@ export function useRenderRowCallback({
       />
     );
   }, [
-    selected,
-    expanded,
     rowKey,
     getRowHeight,
     formatting,
     columns,
-    expandable,
-    selectable,
-    onResize,
-    onResizeEnd,
   ]);
 }

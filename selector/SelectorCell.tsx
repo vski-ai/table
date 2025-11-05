@@ -1,0 +1,62 @@
+import { useCallback } from "preact/hooks";
+import { CommandType } from "./store.ts";
+import { CellRendererCallback } from "@/plugin/mod.ts";
+import { TableStore } from "../store/types.ts";
+import { Row } from "../table/types.ts";
+import { KEY } from "./constants.ts";
+
+export const SelectorCell = ({
+  store,
+  row,
+}: {
+  store: TableStore;
+  row: Row;
+  index: number;
+}) => {
+  const onSelectionChange = useCallback((e: Event) => {
+    const checked = (e.target as HTMLInputElement).checked;
+    const currentSelectedRows = store.state.selectedRows.value;
+    if (checked) {
+      store.dispatch({
+        type: CommandType.SELECTED_ROWS_SET,
+        payload: [...currentSelectedRows, row["id"]],
+      });
+    } else {
+      store.dispatch({
+        type: CommandType.SELECTED_ROWS_SET,
+        payload: currentSelectedRows.filter((id) => id !== row["id"]),
+      });
+    }
+  }, [store, row]);
+
+  const isSelected = store.state.selectedRows.value.includes(row.id);
+
+  return (
+    <td
+      class="vt-cell"
+      style={{
+        width: `var(--col-width-${KEY})`,
+        position: "relative",
+      }}
+      tabIndex={0}
+    >
+      <input
+        type="checkbox"
+        class="checkbox checkbox-sm"
+        checked={isSelected}
+        onChange={onSelectionChange}
+        tabIndex={0}
+      />
+    </td>
+  );
+};
+
+export const selectorCellRenderCallback: CellRendererCallback = ({
+  store,
+  row,
+  rowIndex,
+}) => {
+  return <SelectorCell {...{ store, row, index: rowIndex! }} />;
+};
+
+selectorCellRenderCallback.columnName = KEY;

@@ -11,7 +11,6 @@ interface RowHeightsProps {
 
 export function useRowHeights({
   store,
-  expandable,
   height = 64,
   rowKey = "id",
 }: RowHeightsProps) {
@@ -27,12 +26,6 @@ export function useRowHeights({
       return rowHeights[rowId] || height;
     }
 
-    if (
-      expandable && store.state.expandedRows.value.includes(row[rowKey])
-    ) {
-      // TODO: Replace 100 with a dynamic height calculation
-      return height + 100; // 100 is a placeholder for the expanded content height
-    }
     return height;
-  }, [expandable, height, store.state.expandedRows.value, rowHeights]);
+  }, [height, rowHeights]);
 }

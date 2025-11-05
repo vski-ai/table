@@ -72,8 +72,6 @@ export function TableView(props: VirtualTableViewProps) {
     rowKey,
     getRowHeight,
     columns: columnsInOrder,
-    selectable,
-    enumerable,
     plugins,
   });
 
@@ -93,7 +91,6 @@ export function TableView(props: VirtualTableViewProps) {
         {...{
           store,
           plugins,
-          data: data.value,
           enumerable,
           selectable,
           rowKey,
@@ -129,7 +126,10 @@ export function TableView(props: VirtualTableViewProps) {
         onKeyUp={focusNav.onKeyUp}
       >
         <tbody>
-          {[{ row: "top" }, ...visibleRows, { row: "bottom" }].map(
+          {[{ row: "top", index: -Infinity }, ...visibleRows, {
+            row: "bottom",
+            index: Infinity,
+          }].map(
             (item, i) => {
               if (item.row === "top") {
                 return (
@@ -167,7 +167,7 @@ export function TableView(props: VirtualTableViewProps) {
 
               return renderRow(
                 (item.row as Row) ?? { $loading: true },
-                i,
+                item.index,
               );
             },
           )}

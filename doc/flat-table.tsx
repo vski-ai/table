@@ -6,14 +6,18 @@ import { Row } from "@/table/types.ts";
 import { createPluginContainer } from "@/plugin/mod.ts";
 import {
   createFrontendSorter,
-  sorterPlugin,
+  plugin as sorterPlugin,
   store as sorterStore,
 } from "@/sorting/mod.ts";
+
+import {
+  plugin as selectorPlugin,
+  store as selectorStore,
+} from "@/selector/mod.ts";
 
 const sorter = createFrontendSorter();
 
 export const FlatTable = () => {
-  const allColumns = Object.keys(data?.[0] ?? {});
   const scrollRef = useRef();
   useEffect(() => {
     scrollRef.current = document.querySelector(".main-outlet");
@@ -23,11 +27,13 @@ export const FlatTable = () => {
     "flat-table",
     [
       sorterStore,
+      selectorStore,
     ],
   );
 
   createPluginContainer(tableStore, [
     sorterPlugin(),
+    selectorPlugin(),
   ]);
 
   const onDataLoad = async (
@@ -50,7 +56,6 @@ export const FlatTable = () => {
   return (
     <TableView
       onDataLoad={onDataLoad}
-      columns={allColumns}
       store={tableStore}
       scrollContainerRef={scrollRef as any}
       selectable

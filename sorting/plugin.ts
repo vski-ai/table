@@ -17,7 +17,7 @@ declare module "@/fetcher/types.ts" {
   }
 }
 
-export const sorterPlugin = (): ITablePlugin => {
+export const plugin = (): ITablePlugin => {
   const onInit: PluginInitCallback = ({
     headerPrefixes,
   }) => {
