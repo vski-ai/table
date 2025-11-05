@@ -5,7 +5,7 @@ import { CommandType } from "@/columns/columnsStore.ts";
 import { Row } from "@/table/types.ts";
 import { PluginContainer } from "@/plugin/mod.ts";
 import { DataLoadResult } from "@/table/types.ts";
-
+import { usePluginContainer } from "@/plugin/usePluginContainer.ts";
 interface DataProps {
   onDataLoad: (options: {
     offset: number;
@@ -20,7 +20,6 @@ interface DataProps {
 export const useData = ({
   onDataLoad,
   store,
-  plugins,
   visibleRows,
 }: DataProps) => {
   const data = useSignal<(Row | null)[]>([]);
@@ -29,6 +28,7 @@ export const useData = ({
   const loadedRanges = useRef<{ start: number; end: number }[]>([]);
   const reloadKey = store.state.dataLoadKey;
   const lastReloadKey = useRef(reloadKey.value);
+  const plugins = usePluginContainer({ store });
 
   const load = useCallback(async (offset: number, limit: number) => {
     if (limit <= 0 || isLoading.value) return;
@@ -37,7 +37,9 @@ export const useData = ({
     try {
       const options = await plugins.beforeLoad({ offset, limit, store });
       const res = await onDataLoad(options);
+      console.log(res);
       const { rows, total: newTotal, meta } = await plugins.afterLoad(res);
+      console.log("r2", rows);
       store.dispatch({
         type: CommandType.COLUMNS_SET,
         payload: Object.keys(rows.find((r) => r !== null) ?? {}),

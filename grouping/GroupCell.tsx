@@ -8,13 +8,16 @@ import { TableStore } from "@/store/types.ts";
 import { CommandType } from "./store.ts";
 import { CellRendererCallback } from "@/plugin/mod.ts";
 import { usePluginContainer } from "@/plugin/usePluginContainer.ts";
+import { useStickyColOffset } from "@/columns/mod.ts";
+import { CellFormatter } from "../format/CellFormatter.tsx";
+import { GroupSorter } from "./GroupSorter.tsx";
+import { useEffect, useMemo } from "preact/hooks";
 
 interface GroupCellProps {
   store: TableStore;
   row: Row;
   height: number;
   children?: ComponentChildren;
-  stickyColumns: { [key: string]: Record<string, number> };
 }
 
 export const GroupCell = ({
@@ -22,7 +25,6 @@ export const GroupCell = ({
   height,
   children,
   store,
-  stickyColumns,
 }: GroupCellProps) => {
   const onLevelToggle = () => {
     store.dispatch({
@@ -33,12 +35,11 @@ export const GroupCell = ({
   };
 
   const key = "$group_by";
-
+  const stickyColumns = useStickyColOffset({ store });
   const levels = store.state.expandedLevels;
   const groupby = store.state.tableMeta.value?.groupby || [];
   const nextColInOrder = groupby.at(groupby.indexOf(row.$group_by!) + 1); // because of grouping it's a header of the next level
   const isStickyLeft = typeof stickyColumns.left[key] === "number";
-  const plugins = usePluginContainer({ store });
 
   return (
     <td
@@ -112,11 +113,11 @@ export const GroupCell = ({
           <span
             style={{ paddingRight: (row.$group_level! * 17) + "px" }}
           >
-            {plugins.groupHeaderCellSuffixes.render({
-              column: nextColInOrder,
-              row,
-              store,
-            })}
+            <GroupSorter
+              store={store}
+              column={nextColInOrder}
+              row={row}
+            />
           </span>
         )}
       </div>
@@ -128,5 +129,17 @@ export const groupCellRenderCallback: CellRendererCallback = ({
   store,
   row,
 }) => {
-  return <GroupCell {...{ store, row }} />;
+  const formatting = store.state.cellFormatting.value;
+  return (
+    <GroupCell
+      store={store}
+      height={64}
+      row={row}
+    >
+      <CellFormatter
+        value={row[row.$group_by!]}
+        formatting={formatting?.[row.$group_by!]}
+      />
+    </GroupCell>
+  );
 };

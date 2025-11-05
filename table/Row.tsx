@@ -11,6 +11,7 @@ import { sanitizeColName } from "@/utils/sanitizeColName.ts";
 import { useStickyColOffset } from "@/columns/mod.ts";
 import { RowResizeHandle } from "./RowResizeHandle.tsx";
 import { PluginContainer } from "../plugin/mod.ts";
+import { usePluginContainer } from "../plugin/usePluginContainer.ts";
 
 interface RowProps {
   row: RowType;
@@ -42,13 +43,13 @@ export const Row = memo((props: RowProps) => {
     formatting,
     columns,
     store,
-    plugins,
     rowKey,
     selectable,
     groupable,
     enumerable,
   } = props;
 
+  const plugins = usePluginContainer({ store });
   const resizingRow = store.state.resizingRow.value;
   const isResizing = resizingRow?.rowId === row[rowKey];
   const height = isResizing ? resizingRow?.height : rowHeight;
@@ -80,11 +81,19 @@ export const Row = memo((props: RowProps) => {
       data-index={rowIndex}
       class={[
         isSelected ? "bg-base-200" : "",
-        row.$is_group_root ? "vt-g-row" : "vt-row",
-      ].join(" ")}
+        plugins.rowClasses.render({
+          row,
+          store,
+        }),
+      ].flat().join(" ")}
       style={{
         height: height,
-        "--group-level": row.$group_level ?? 0,
+        ...Object.fromEntries(
+          plugins.rowStyles.render({
+            row,
+            store,
+          }).flat(1),
+        ),
       }}
     >
       {enumerable && (
@@ -119,23 +128,10 @@ export const Row = memo((props: RowProps) => {
         </td>
       )}
 
-      {groupable && (
-        <GroupCell
-          store={store}
-          height={height ?? rowHeight}
-          row={row}
-          stickyColumns={stickyColumns}
-        >
-          <CellFormatter
-            value={row[row.$group_by!]}
-            formatting={formatting?.[row.$group_by!]}
-          />
-        </GroupCell>
-      )}
-
       {plugins.leftTableCells.render({
         column: "",
         store,
+        row,
       })}
 
       {columns.map((col, colIndex) => {
@@ -171,7 +167,7 @@ export const Row = memo((props: RowProps) => {
             >
               {row.$is_group_root && (
                 <>
-                  {plugins.groupHeaderCellPrefixes.render({
+                  {plugins.cellPrefixes.render({
                     column: col,
                     row,
                     store,
@@ -184,7 +180,7 @@ export const Row = memo((props: RowProps) => {
               />
               {row.$is_group_root && (
                 <>
-                  {plugins.groupHeaderCellSuffixes.render({
+                  {plugins.cellSuffixes?.render({
                     column: col,
                     row,
                     store,

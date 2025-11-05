@@ -1,37 +1,59 @@
 import {
-  BeforeLoadCallback,
-  CellRendererCallback,
+  AfterLoadCallback,
   ITablePlugin,
   PluginInitCallback,
-  SortedAddon,
 } from "@/plugin/mod.ts";
-
-type GroupHeaderCellSuffixes = SortedAddon<CellRendererCallback>;
-type GroupHeaderCellPrefixes = SortedAddon<CellRendererCallback>;
-
-declare module "@/plugin/types.ts" {
-  interface PluginsInitOptions {
-    groupHeaderCellPrefixes: GroupHeaderCellPrefixes;
-    groupHeaderCellSuffixes: GroupHeaderCellSuffixes;
-    groupHeaderCellContent: GroupHeaderCellSuffixes;
-  }
-}
+import { CommandType } from "../columns/columnsStore.ts";
+import { groupCellRenderCallback } from "./GroupCell.tsx";
+import { groupHeaderRenderCallback } from "./GroupColumn.tsx";
 
 export const groupingPlugin = (): ITablePlugin => {
-  const onInit: PluginInitCallback = () => {
+  const onInit: PluginInitCallback = ({
+    store,
+    leftTableCells,
+    leftTableHeaders,
+    rowClasses,
+    rowStyles,
+  }) => {
+    leftTableHeaders.use(0, groupHeaderRenderCallback);
+
+    leftTableCells.use(0, groupCellRenderCallback);
+
+    rowClasses.use(1, ({ row }) => {
+      return [row?.$is_group_root ? "vt-g-row" : "vt-row"];
+    });
+
+    rowStyles.use(1, ({ row }) => {
+      return [
+        ["--group-level", row?.$group_level ?? 0],
+      ];
+    });
+
+    store.dispatch({
+      type: CommandType.COLUMN_VISIBILITY_SET,
+      payload: {
+        $is_group_root: false,
+        $group_level: false,
+        $group_by: false,
+      },
+    });
   };
 
-  const groupHeaderCellPrefixes = new SortedAddon();
-  const groupHeaderCellSuffixes = new SortedAddon();
-  const groupHeaderCellContent = new SortedAddon();
+  const afterLoad: AfterLoadCallback = ({ res, store }) => {
+    store.dispatch({
+      type: CommandType.COLUMN_VISIBILITY_SET,
+      payload: res.meta?.groupby?.reduce((acc, column) => ({
+        ...acc,
+        [column]: false,
+      }), {}) ?? {},
+    });
+    console.log("grouping", res);
+    return res;
+  };
 
   return {
     name: "grouping",
-    addons: {
-      groupHeaderCellPrefixes,
-      groupHeaderCellSuffixes,
-      groupHeaderCellContent,
-    },
     onInit,
+    afterLoad,
   };
 };

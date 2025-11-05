@@ -3,8 +3,8 @@ import { TableStore } from "@/store/mod.ts";
 import { SortState } from "./types.ts";
 
 const sortFn = (sorting: SortState) => (a: Row, b: Row) => {
-  const aValue = a[sorting.column];
-  const bValue = b[sorting.column];
+  const aValue = a[sorting.column] ?? 0;
+  const bValue = b[sorting.column] ?? 0;
 
   if (typeof aValue === "string" && typeof bValue === "string") {
     return sorting.sort === "asc"
@@ -39,7 +39,6 @@ const sortGroup = (data: Row[], store: TableStore): Row[] => {
 
   const sortLevel = (rows: Row[], parentId?: string): Row[] => {
     const currentSorting = parentId ? leafSorting[parentId] : sorting;
-
     if (currentSorting) {
       rows.sort(sortFn(currentSorting));
     }
@@ -58,19 +57,19 @@ const sortGroup = (data: Row[], store: TableStore): Row[] => {
   return sortLevel(roots);
 };
 
-export function createSorter() {
+// This is a reference implemetation to sort multilevel
+// tables on frontend
+export function createFrontendSorter() {
   let lastData: Row[] | undefined;
   let lastSorting: SortState | undefined;
   let lastLeafSorting: Record<string, SortState> | undefined;
   let lastResult: Row[] | undefined;
-
   return function sorter({ data, store }: {
     data: Row[];
     store: TableStore;
   }): Row[] {
     const sorting = store.state.sorting.value;
     const leafSorting = store.state.leafSorting.value;
-
     if (
       lastData === data &&
       lastSorting === sorting &&
@@ -78,14 +77,11 @@ export function createSorter() {
     ) {
       return lastResult!;
     }
-
     const result = sortGroup(data, store);
-
     lastData = data;
     lastSorting = sorting;
     lastLeafSorting = leafSorting;
     lastResult = result;
-
     return result;
   };
 }

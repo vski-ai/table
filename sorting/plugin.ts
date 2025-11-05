@@ -4,22 +4,12 @@ import {
   PluginInitCallback,
 } from "@/plugin/mod.ts";
 import { headerRenderCallback } from "./RowSorter.tsx";
-import { createSorter } from "./createSorter.ts";
-import { cellSuffixRender } from "./GroupSorter.tsx";
 
-type SorterPluginOpts = {
-  frontendSort?: boolean;
-};
-
-export const sorterPlugin = ({
-  frontendSort = true,
-}: SorterPluginOpts = {}): ITablePlugin => {
+export const sorterPlugin = (): ITablePlugin => {
   const onInit: PluginInitCallback = ({
     headerPrefixes,
-    groupHeaderCellSuffixes,
   }) => {
     headerPrefixes.use(0, headerRenderCallback);
-    groupHeaderCellSuffixes.use(0, cellSuffixRender);
   };
 
   const beforeLoad: BeforeLoadCallback = ({
@@ -32,21 +22,9 @@ export const sorterPlugin = ({
     return options;
   };
 
-  const conditional: Partial<ITablePlugin> = {};
-  if (frontendSort) {
-    const sorter = createSorter();
-    conditional.afterLoad = ({ res, store }) => {
-      res.rows = sorter({
-        data: res.rows,
-        store,
-      });
-    };
-  }
-
   return {
-    name: "FrontendSorter",
+    name: "sorting",
     onInit,
     beforeLoad,
-    ...conditional,
   };
 };

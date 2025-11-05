@@ -2,6 +2,18 @@ import { TableStore } from "@/store/types.ts";
 import { DataLoadOptions, DataLoadResult, Row } from "@/table/types.ts";
 import { SortedAddon } from "./addon.ts";
 
+export type ClassResolverCallback = (opts: {
+  row?: Row;
+  column?: string;
+  store: TableStore;
+}) => string[];
+
+export type StyleResolverCallback = (opts: {
+  row?: Row;
+  column?: string;
+  store: TableStore;
+}) => [string, string | number][];
+
 export type CellRendererCallback = (opts: {
   column: string;
   row: Row;
@@ -31,13 +43,14 @@ export type BeforeLoadCallback = (
 ) => Promise<DataLoadOptions> | DataLoadOptions;
 
 type HeaderPrefixes = SortedAddon<ColumnRendererCallback>;
-type LeftTableCells = SortedAddon<ColumnRendererCallback>;
-type RightTableCells = SortedAddon<ColumnRendererCallback>;
+type CellPrefixes = SortedAddon<CellRendererCallback>;
+type CellSuffixes = SortedAddon<CellRendererCallback>;
+type LeftTableCells = SortedAddon<CellRendererCallback>;
+type RightTableCells = SortedAddon<CellRendererCallback>;
 type LeftTableHeaders = SortedAddon<ColumnRendererCallback>;
 type RightTableHeaders = SortedAddon<ColumnRendererCallback>;
-type GroupHeaderCellSuffixes = SortedAddon<CellRendererCallback>;
-type GroupHeaderCellPrefixes = SortedAddon<CellRendererCallback>;
-type GroupHeaderCellContent = SortedAddon<CellRendererCallback>;
+type RowClasses = SortedAddon<ClassResolverCallback>;
+type RowStyles = SortedAddon<StyleResolverCallback>;
 
 export interface PluginsInitOptions {
   store: TableStore;
@@ -46,9 +59,10 @@ export interface PluginsInitOptions {
   rightTableCells: RightTableCells;
   leftTableHeaders: LeftTableHeaders;
   rightTableHeaders: RightTableHeaders;
-  groupHeaderCellPrefixes: GroupHeaderCellPrefixes;
-  groupHeaderCellSuffixes: GroupHeaderCellSuffixes;
-  groupHeaderCellContent: GroupHeaderCellSuffixes;
+  cellPrefixes: CellPrefixes;
+  cellSuffixes: CellSuffixes;
+  rowClasses: RowClasses;
+  rowStyles: RowStyles;
 }
 
 export type PluginInitCallback = (opts: PluginsInitOptions) => void;

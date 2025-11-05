@@ -9,6 +9,7 @@ import {
 } from "@/columns/mod.ts";
 import { useTableStyle } from "@/hooks/mod.ts";
 import { PluginContainer } from "@/plugin/mod.ts";
+import { usePluginContainer } from "../plugin/usePluginContainer.ts";
 
 interface StickyHeaderContainerProps {
   data: (Row | null)[];
@@ -25,7 +26,6 @@ interface StickyHeaderContainerProps {
 export function StickyHeaderContainer({
   data,
   store,
-  plugins,
   columns,
   enumerable,
   expandable,
@@ -35,17 +35,12 @@ export function StickyHeaderContainer({
 }: StickyHeaderContainerProps) {
   const {
     getColumnWidth,
-    handleResizeUpdateCallback,
-    handleResizeCallback,
   } = useColumnResizer({
     store,
   });
 
-  const orderColumnsCallback = useColumnsOrderCallback({ store });
-
+  const plugins = usePluginContainer({ store });
   const columnsInOrder = useOrderedColumns({ store });
-
-  const stickyColumns = useStickyColOffset({ store });
 
   const { style } = useTableStyle({
     store,
@@ -55,6 +50,7 @@ export function StickyHeaderContainer({
     enumerable,
     expandable,
   });
+
   return (
     <div
       style={{
@@ -111,16 +107,10 @@ export function StickyHeaderContainer({
                 />
               </th>
             )}
-
-            {groupable && (
-              <ColumnHeader
-                key="$group_by"
-                column="$group_by"
-                store={store}
-              >
-              </ColumnHeader>
-            )}
-
+            {plugins.leftTableHeaders.render({
+              column: "",
+              store,
+            })}
             {columnsInOrder.map((col) => (
               <ColumnHeader
                 key={col}

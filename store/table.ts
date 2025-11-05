@@ -1,3 +1,4 @@
+import { useMemo } from "preact/hooks";
 import { effect, signal } from "@preact/signals";
 import { Command, CommandType } from "./commands.ts";
 import { StorageAdapter } from "./storage.ts";
@@ -21,6 +22,8 @@ export function createTableStore(
     )
     : null;
 
+  console.log(0, 0, 9);
+  // @ts-expect-error: due to namespace extenstions - slow types
   const state: TableState = {
     drilldowns: signal(initialState?.drilldowns || []),
     expandedLevels: signal(initialState?.expandedLevels || []),
@@ -55,7 +58,6 @@ export function createTableStore(
         expandedLevels: state.expandedLevels.value,
         filters: state.filters.value,
         rowHeights: state.rowHeights.value,
-        stickyColumns: state.stickyColumns.value,
       };
 
       for (const plugin of plugins) {

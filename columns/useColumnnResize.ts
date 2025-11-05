@@ -38,7 +38,7 @@ export function useColumnResizer({
     ) {
       return store.state.resizingColumn.value.width;
     }
-    return store.state.columnWidths.value[col];
+    return store.state.columnWidths.value[col] ?? 250;
   }, []);
   return {
     resizingColumn: store.state.resizingColumn,

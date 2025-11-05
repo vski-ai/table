@@ -33,8 +33,6 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
 
   useEffect(() => {
     const scrollContainer = scrollContainerRef?.current;
-
-    console.log(123123123);
     if (!scrollContainer) return;
 
     const rowTops = visibleRows.reduce((acc, _, index) => {
@@ -44,7 +42,7 @@ export const useStickyGroupHeaders = (props: UseStickyGroupHeadersProps) => {
       acc.push({ top: prevHeight });
       return acc;
     }, [] as { top: number }[]);
-    console.log(rowTops);
+
     const handleScroll = () => {
       const scrollTop = scrollContainer.scrollTop;
       const newStickyHeaders: StickyHeaders = {};

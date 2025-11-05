@@ -36,7 +36,6 @@ export function TableView(props: VirtualTableViewProps) {
   } = props;
 
   const columns = store.state.columns.value;
-  console.log(columns);
   const rowKey = useRowKey(columns, rowIdentifier);
 
   const {
@@ -115,7 +114,8 @@ export function TableView(props: VirtualTableViewProps) {
           columns,
         }}
       />
-      <StickyRowsContainer
+      {
+        /* <StickyRowsContainer
         {...{
           store,
           plugins,
@@ -132,7 +132,8 @@ export function TableView(props: VirtualTableViewProps) {
           columns,
           scrollContainerRef,
         }}
-      />
+      /> */
+      }
 
       <table
         style={style}

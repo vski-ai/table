@@ -59,7 +59,10 @@ export function columnsReducer<T>(state: TableState, command: Command<T>) {
       state.columnOrder.value = command.payload;
       break;
     case CommandType.COLUMN_VISIBILITY_SET:
-      state.columnVisibility.value = command.payload;
+      state.columnVisibility.value = {
+        ...state.columnVisibility.value,
+        ...command.payload,
+      };
       break;
     case CommandType.COLUMN_WIDTHS_SET:
       state.columnWidths.value = command.payload;

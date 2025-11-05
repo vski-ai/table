@@ -54,7 +54,7 @@ export function useTableStyle({
     };
 
     const currentState = store.state.columnWidths.value;
-    console.log("sss", currentState);
+
     Object.entries(currentState).reduce(
       (sum, [col, _]) => {
         widths[`--col-left-${sanitizeColName(col)}`] = sum + "px";
