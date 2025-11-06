@@ -17,7 +17,7 @@ export type MenuContext = {
   index?: string;
   placement: "body" | "outside";
   store: TableStore;
-} | null;
+};
 
 export interface MenuItem {
   label: (ctx: MenuContext) => ComponentChildren;

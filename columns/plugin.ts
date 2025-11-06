@@ -1,6 +1,12 @@
 import { ITablePlugin, PluginInitCallback } from "@/plugin/types.ts";
 import { addMenuItems } from "@/contextmenu/addMenuItems.ts";
-import { Stick, StickLeft, StickReset, StickRight } from "./menu.tsx";
+import {
+  Stick,
+  StickLeft,
+  StickReset,
+  StickRight,
+  UnpinColumn,
+} from "./menu.tsx";
 
 const onInit: PluginInitCallback = ({
   store,
@@ -12,6 +18,7 @@ const onInit: PluginInitCallback = ({
       StickLeft,
       StickRight,
       StickReset,
+      UnpinColumn,
     ],
   });
 };

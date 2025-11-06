@@ -15,7 +15,7 @@ export function Home() {
           and{" "}
           <i>ai-enabled</i>table is a dauniting task. This is why most
           developers avoid working with tables. <br />
-          <strong class="inline-block mt-2">We are here to fix it.</strong>
+          <strong class="inline-block mt-2">we are here to fix it</strong>
         </p>
         <Features />
         <footer class="footer footer-center p-4 bg-base-300 text-base-content">

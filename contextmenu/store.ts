@@ -31,7 +31,6 @@ export function state<T>(_: Record<string, T> | null) {
     const buildMenu = (menuId: string): ContextMenu => {
       const menuItems = itemsByParent[menuId] || [];
       menuItems.sort((a, b) => (a.order || 0) - (b.order || 0));
-
       return {
         items: menuItems.map((item) => {
           let submenu: ContextMenu | undefined = undefined;

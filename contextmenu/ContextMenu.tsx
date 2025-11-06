@@ -64,11 +64,10 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
     : null;
   const isSubmenu = contextMenuState.value.history.length > 1;
   const contextMenuOpacity = useSignal(0);
-  const context = useSignal<MenuContext>(null);
+  const context = useSignal<MenuContext>({ store, placement: "outside" });
 
   useLayoutEffect(() => {
     const handleContextMenu = (e: MouseEvent) => {
-      console.log(document.getSelection());
       e.preventDefault();
       const target = e.target as HTMLTableCellElement;
       const ctx = {
@@ -157,11 +156,11 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
       className="menu card rounded-none border border-accent/25 shadow-lg p-3 bg-base-100 absolute z-100 transition-opacity duration-400 w-64"
     >
       {isSubmenu && (
-        <div className="flex items-center gap-2 p-2 -mt-2 mb-1 border-b border-base-300">
-          <a href="#" class="btn btn-xs -ml-2 mr-2" onClick={pop}>
+        <div className="relative flex items-center gap-2 p-2 -mt-2 mb-1 border-b border-base-100/50">
+          <a href="#" class="-ml-2 mr-2" onClick={pop}>
             <BackIcon />
           </a>
-          <p class="font-bold m-0!">{currentMenu.title?.(context.value)}</p>
+          {currentMenu.title?.(context.value)}
         </div>
       )}
       <ul>
@@ -170,9 +169,10 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
             <li key={index}>
               <a
                 href="#"
+                class="p-2"
                 onClick={(e) => {
                   e.preventDefault();
-                  if (item.submenu) {
+                  if (item.submenu?.items?.length) {
                     push(item.submenu);
                   } else if (item.action) {
                     item.action(context.value);

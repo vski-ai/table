@@ -47,8 +47,8 @@ export const Background = () => {
                 <path
                   d="M 40 0 L 0 0 0 40"
                   fill="none"
-                  style={{ stroke: "var(--color-accent)" }}
-                  strokeWidth="0.5"
+                  style={{ stroke: "var(--color-black)" }}
+                  strokeWidth="1"
                   opacity="0.2"
                 />
                 <rect

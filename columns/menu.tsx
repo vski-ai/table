@@ -1,22 +1,34 @@
-import { ContextMenuItem } from "@/contextmenu/types.ts";
+import { ContextMenuItem, MenuContext } from "@/contextmenu/types.ts";
 import RightIcon from "lucide-react/dist/esm/icons/panel-right.js";
 import LeftIcon from "lucide-react/dist/esm/icons/panel-left.js";
-import Reset from "lucide-react/dist/esm/icons/rotate-ccw.js";
+import UnPin from "lucide-react/dist/esm/icons/pin-off.js";
+import Pin from "lucide-react/dist/esm/icons/pin.js";
+import { CommandType } from "./store.ts";
 
 const STICKY_COLUMN = "sticky_column";
 
 export const Stick: ContextMenuItem = {
   menu: STICKY_COLUMN,
-  title: (ctx) => (
-    <span>
-      Fix Column
-      <span class="badge badge-xs badge-accent absolute right-3 top-3">
-        {ctx?.column}
+  title: ({ column }) => (
+    <div class="flex justify-between w-full">
+      Pin Column
+      <span class="badge badge-xs badge-accent">
+        {column}
       </span>
-    </span>
+    </div>
   ),
-  visibility: (ctx) => !!ctx?.column,
-  label: () => "Sticky Columns",
+  visibility: ({ column, placement }) => !!column && placement === "outside",
+  label({ column }) {
+    return (
+      <>
+        <Pin />
+        Pin
+        <span class="badge badge-xs badge-accent absolute ml-3">
+          {column}
+        </span>
+      </>
+    );
+  },
   action() {},
 };
 
@@ -24,43 +36,91 @@ export const StickLeft: ContextMenuItem = {
   menu: "column-stick-left",
   parent: STICKY_COLUMN,
   visibility: (ctx) => !!ctx?.column,
-  label(ctx) {
+  label() {
     return (
       <>
         <LeftIcon />
-        Stick Left
+        Pin Left
       </>
     );
   },
-  action() {},
+  action({ store, column }) {
+    store.dispatch({
+      type: CommandType.COLUMN_STICK_SET,
+      payload: {
+        column,
+        position: "left",
+      },
+    });
+  },
 };
 
 export const StickRight: ContextMenuItem = {
   menu: "column-stick-right",
   parent: STICKY_COLUMN,
   visibility: (ctx) => !!ctx?.column,
-  label(ctx) {
+  label() {
     return (
       <>
         <RightIcon />
-        Stick Right
+        Pin Right
       </>
     );
   },
-  action() {},
+  action({ store, column }) {
+    store.dispatch({
+      type: CommandType.COLUMN_STICK_SET,
+      payload: {
+        column: column,
+        position: "right",
+      },
+    });
+  },
+};
+
+const unpinVisibility = ({ store, column }: MenuContext) =>
+  !!column && !!store.state.stickyColumns.value[column];
+
+const unpinLabel = () => {
+  return (
+    <>
+      <UnPin />
+      Unpin
+    </>
+  );
+};
+
+const unpinAction = ({ store, column }: MenuContext) => {
+  store.dispatch({
+    type: CommandType.COLUMN_STICK_SET,
+    payload: {
+      column,
+      position: false,
+    },
+  });
 };
 
 export const StickReset: ContextMenuItem = {
   menu: "column-stick-reset",
   parent: STICKY_COLUMN,
-  visibility: (ctx) => !!ctx?.column,
-  label(ctx) {
-    return (
-      <>
-        <Reset />
-        Reset
-      </>
-    );
-  },
-  action() {},
+  order: Infinity,
+  visibility: unpinVisibility,
+  label: unpinLabel,
+  action: unpinAction,
+};
+
+export const UnpinColumn: ContextMenuItem = {
+  menu: "main",
+  order: Infinity,
+  title: (ctx) => (
+    <span>
+      Unpin
+      <span class="badge badge-xs badge-accent absolute ml-3">
+        {ctx?.column}
+      </span>
+    </span>
+  ),
+  visibility: unpinVisibility,
+  label: unpinLabel,
+  action: unpinAction,
 };
