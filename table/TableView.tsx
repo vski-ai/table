@@ -10,7 +10,6 @@ import { HeaderContainer } from "./HeaderContainer.tsx";
 import { RowPadding } from "./RowPadding.tsx";
 import { useRef } from "preact/hooks";
 import { usePluginContainer } from "../plugin/mod.ts";
-import { useAddMenuItems } from "../contextmenu/mod.ts";
 
 export function TableView(props: VirtualTableViewProps) {
   const {
@@ -19,18 +18,6 @@ export function TableView(props: VirtualTableViewProps) {
     onDataLoad,
     rowHeight = 64,
   } = props;
-
-  useAddMenuItems({
-    store,
-    items: {
-      id: "test",
-      menu: "main",
-      label: <span>icon</span>,
-      action() {
-        console.log("o0o");
-      },
-    },
-  });
 
   const {
     data,
@@ -82,6 +69,7 @@ export function TableView(props: VirtualTableViewProps) {
         ref={tableRef}
         onKeyDown={focusNav.onKeyDown}
         onKeyUp={focusNav.onKeyUp}
+        onFocus={focusNav.onFocus}
       >
         <tbody>
           {initializing && (

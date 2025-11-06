@@ -6,14 +6,11 @@ import data from "./mock/group-1m-rows.json" with { type: "json" };
 import { createPluginContainer } from "@/plugin/mod.ts";
 import {
   createFrontendSorter,
-  plugin as sorterPlugin,
-  store as sorterStore,
+  SortingPlugin,
+  SortingStore,
 } from "@/sorting/mod.ts";
-import { plugin as enumPlugin, store as enumStore } from "../enumerator/mod.ts";
-import {
-  plugin as groupingPlugin,
-  store as groupingStore,
-} from "@/grouping/mod.ts";
+import { EnumeratorPlugin, EnumeratorStore } from "../enumerator/mod.ts";
+import { GroupingPlugin, GroupingStore } from "@/grouping/mod.ts";
 import { DataLoadCallback } from "@/fetcher/types.ts";
 
 const sorter = createFrontendSorter();
@@ -23,24 +20,26 @@ export const GroupTable = () => {
   useEffect(() => {
     scrollRef.current = document.querySelector(".main-outlet")!;
   });
+
   const tableStore = createTableStore(
     new LocalStorageAdapter(),
     "basic-table",
     [
-      enumStore,
-      sorterStore,
-      groupingStore,
+      EnumeratorStore,
+      SortingStore,
+      GroupingStore,
     ],
   );
 
   createPluginContainer(
     tableStore,
     [
-      enumPlugin(),
-      groupingPlugin(),
-      sorterPlugin(),
+      EnumeratorPlugin,
+      GroupingPlugin,
+      SortingPlugin,
     ],
   );
+
   const onDataLoad: DataLoadCallback = async (
     { store, offset, limit, sort },
   ) => {

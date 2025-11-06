@@ -41,7 +41,7 @@ export function state<T>(_: Record<string, T> | null) {
 
           return {
             id: item.id,
-            icon: item.icon,
+            visibility: item.visibility,
             label: item.label,
             action: item.action,
             submenu: submenu,
@@ -67,7 +67,7 @@ export function reducer<T>(state: TableState, command: Command<T>) {
   switch (command.type) {
     case CommandType.CONTEXT_MENU_ADD_ITEM: {
       if (state.contextMenuItems.value[command.payload.id]) {
-        return;
+        return state;
       }
       state.contextMenuItems.value = {
         ...state.contextMenuItems.value,

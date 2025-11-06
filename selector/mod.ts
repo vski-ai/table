@@ -1,2 +1,2 @@
-export * as store from "./store.ts";
+export * as SelectorStore from "./store.ts";
 export * from "./plugin.ts";

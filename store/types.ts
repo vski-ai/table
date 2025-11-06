@@ -1,17 +1,23 @@
 import { Signal } from "@preact/signals";
-import { Command } from "./commands.ts";
-import { CellFormatting } from "@/format/types.ts";
-import { TableMeta } from "@/table/types.ts";
 
+export type Module = {
+  state: (
+    init: Record<string, unknown> | null,
+  ) => { [key: string]: Signal<unknown> };
+  persist: (state: TableState) => { [key: string]: unknown };
+  reducer: (state: TableState, command: Command<unknown>) => TableState;
+  methods?: (state: TableState) => Record<string, (...args: any[]) => any>;
+};
+
+export interface Command<T, P = any> {
+  type: T;
+  payload: P;
+}
 export interface TableState {
-  [key: string]: unknown;
-
-  cellFormatting: Signal<Record<string, CellFormatting>>;
-  focusedCell: Signal<{ tabIndex: number; rowIndex: number } | null>;
+  [key: string]: Signal<unknown>;
 }
 
 export interface TableStore {
   state: TableState;
   dispatch: <T>(command: Command<T>) => void;
-  shouldReload: () => void;
 }

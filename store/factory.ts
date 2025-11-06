@@ -1,22 +1,19 @@
-import { effect, Signal, signal } from "@preact/signals";
-import { Command } from "./commands.ts";
+import { effect } from "@preact/signals";
 import { StorageAdapter } from "./persistence.ts";
-import { TableState, TableStore } from "./types.ts";
+import { Command, Module, TableState, TableStore } from "./types.ts";
 
-import { store as columnsStore } from "@/columns/mod.ts";
-import { store as fetcherStore } from "@/fetcher/mod.ts";
+import { FormattingStore } from "@/formatting/mod.ts";
+import { ColumnsStore } from "@/columns/mod.ts";
+import { FetcherStore } from "@/fetcher/mod.ts";
+import { NavigationStore } from "@/navigation/mod.ts";
+import { ContextMenuStore } from "@/contextmenu/mod.ts";
 
-type Module = {
-  state: (
-    init: Record<string, unknown> | null,
-  ) => { [key: string]: Signal<unknown> };
-  persist: (state: TableState) => { [key: string]: unknown };
-  reducer: (state: TableState, command: Command<unknown>) => TableState;
-};
-
-const stores: Module[] = [
-  fetcherStore,
-  columnsStore,
+const builtInStore: Module[] = [
+  FormattingStore,
+  FetcherStore,
+  ColumnsStore,
+  NavigationStore,
+  ContextMenuStore,
 ];
 
 const MAX_HISTORY_SIZE = 100;
@@ -26,7 +23,7 @@ export function createTableStore(
   tableId?: string,
   modules: Module[] = [],
 ): TableStore {
-  modules = [...modules, ...stores];
+  modules = [...modules, ...builtInStore];
 
   const initialState = storage && tableId
     ? storage.getItem<Record<string, any>>(
@@ -35,11 +32,7 @@ export function createTableStore(
     : null;
 
   // @ts-expect-error: due to namespace extenstions - slow types
-  const state: TableState = {
-    rowHeights: signal({}),
-    cellFormatting: signal(initialState?.cellFormatting || {}),
-    focusedCell: signal(null),
-  };
+  const state: TableState = {};
 
   for (const module of modules.map((module) => module.state(initialState))) {
     for (const key in module) {
@@ -63,7 +56,7 @@ export function createTableStore(
     }
   });
 
-  const dispatch = <T>(command: Command<T>) => {
+  const dispatch = <T, P>(command: Command<T, P>) => {
     if (history.length >= MAX_HISTORY_SIZE) {
       history.shift();
     }
@@ -71,11 +64,13 @@ export function createTableStore(
     modules.map((module) => module.reducer(state, command));
   };
 
+  const methods = modules
+    .map((module) => module.methods?.(state) ?? {})
+    .reduce((acc, obj) => ({ ...acc, ...obj }), {});
+
   return {
     state,
     dispatch,
-    shouldReload() {
-      state.dataLoadKey.value = new Date().getTime();
-    },
-  };
+    ...methods,
+  } as TableStore;
 }

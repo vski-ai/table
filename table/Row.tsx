@@ -1,5 +1,5 @@
 import { useCallback } from "preact/hooks";
-import { CellFormatter } from "@/format/CellFormatter.tsx";
+import { CellFormatter } from "@/formatting/CellFormatter.tsx";
 import { CellFormatting } from "@/format/types.ts";
 import { TableStore } from "@/store/types.ts";
 import { sanitizeColName } from "@/common/sanitizeColName.ts";
@@ -65,6 +65,8 @@ export const Row = (props: RowProps) => {
       {columns.map((column) => {
         const isStickyLeft = typeof stickyColumns.left[column] === "number";
         const isStickyRight = typeof stickyColumns.right[column] === "number";
+        const isSelected = store.state.selectedCells?.value?.[row[rowKey]]
+          ?.[column];
         return (
           <td
             key={column}
@@ -79,7 +81,7 @@ export const Row = (props: RowProps) => {
             }}
             class={`vt-g-cell ${isStickyLeft ? "vt-s-left" : ""} ${
               isStickyRight ? "vt-s-right" : ""
-            }`}
+            } ${isSelected ? "outline-2 outline-dotted outline-accent" : ""}`}
           >
             <div
               class="truncate flex w-full items-center justify-between"

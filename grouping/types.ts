@@ -1,4 +1,3 @@
-
 declare module "@/fetcher/types.ts" {
   interface TableMeta {
     groupBy: string[];

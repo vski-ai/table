@@ -43,7 +43,6 @@ export function persist(state: TableState) {
   return {
     columnOrder: state.columnOrder.value,
     columnVisibility: state.columnVisibility.value,
-    cellFormatting: state.cellFormatting.value,
     columnWidths: state.columnWidths.value,
     stickyColumns: state.stickyColumns.value,
   };

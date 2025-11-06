@@ -1,2 +1,2 @@
-export * as store from "./store.ts";
+export * as EnumeratorStore from "./store.ts";
 export * from "./plugin.ts";

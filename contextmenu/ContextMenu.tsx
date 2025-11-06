@@ -1,8 +1,9 @@
-import { signal } from "@preact/signals";
+import { signal, useSignal } from "@preact/signals";
 import { MutableRef, useLayoutEffect, useRef } from "preact/hooks";
 import { computePosition, flip, shift } from "@floating-ui/dom";
 import { TableStore } from "@/store/types.ts";
-import { CommonRendererCallback } from "../plugin/types.ts";
+import { CommonRendererCallback } from "@/plugin/types.ts";
+import { MenuContext, MenuItem } from "./types.ts";
 
 interface ContextMenuProps {
   store: TableStore;
@@ -61,10 +62,21 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
     ? contextMenuState.value.history[contextMenuState.value.history.length - 1]
     : null;
   const isSubmenu = contextMenuState.value.history.length > 1;
+  const contextMenuOpacity = useSignal(0);
+  const context = useSignal<MenuContext>(null);
 
   useLayoutEffect(() => {
     const handleContextMenu = (e: MouseEvent) => {
       e.preventDefault();
+      const target = e.target as HTMLTableCellElement;
+      const ctx = {
+        column: target.closest("td")?.dataset.columnName ??
+          target.closest("th")?.dataset.columnName,
+        rowId: target.closest("tr")?.dataset.rowId,
+        index: target.closest("tr")?.dataset.index,
+        placement: (!target.closest("td") ? "outside" : "body") as any,
+      };
+      context.value = ctx;
       const rootMenu = store.state.contextMenu.value;
       const virtualElement = {
         getBoundingClientRect: () => ({
@@ -78,12 +90,15 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
           bottom: e.clientY,
         }),
       };
+
       open(rootMenu, virtualElement);
+      contextMenuOpacity.value = 0;
     };
 
     const handleClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         close();
+        contextMenuOpacity.value = 0.1;
       }
     };
 
@@ -111,6 +126,7 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
           ...contextMenuState.value,
           position: { x, y },
         };
+        contextMenuOpacity.value = 1;
       });
     }
   }, [
@@ -123,14 +139,19 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
     return null;
   }
 
+  if (!currentMenu.items) {
+    return null;
+  }
+
   return (
     <div
       ref={menuRef}
       style={{
         left: contextMenuState.value.position.x,
         top: contextMenuState.value.position.y,
+        opacity: contextMenuOpacity.value,
       }}
-      className="menu card border border-accent/25 shadow-lg p-3 bg-base-100 absolute z-100 transition-[top] duration-300 w-64"
+      className="menu card rounded-none border border-accent/25 shadow-lg p-3 bg-base-100 absolute z-100 transition-opacity duration-400 w-64"
     >
       <div className="flex items-center gap-2 mb-1">
         {isSubmenu && (
@@ -141,24 +162,25 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
         <p class="font-bold m-0!">{currentMenu.title}</p>
       </div>
       <ul>
-        {currentMenu.items.map((item: any, index: number) => (
-          <li key={index}>
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                if (item.submenu) {
-                  push(item.submenu);
-                } else if (item.action) {
-                  item.action();
-                  close();
-                }
-              }}
-            >
-              {item.icon}
-              {item.label}
-            </a>
-          </li>
+        {currentMenu.items.map((item: MenuItem, index: number) => (
+          !item.visibility(context.value) ? null : (
+            <li key={index}>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (item.submenu) {
+                    push(item.submenu);
+                  } else if (item.action) {
+                    item.action(context.value);
+                    close();
+                  }
+                }}
+              >
+                {item.label(context.value)}
+              </a>
+            </li>
+          )
         ))}
       </ul>
     </div>

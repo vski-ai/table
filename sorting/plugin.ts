@@ -17,26 +17,22 @@ declare module "@/fetcher/types.ts" {
   }
 }
 
-export const plugin = (): ITablePlugin => {
-  const onInit: PluginInitCallback = ({
-    headerPrefixes,
-  }) => {
-    headerPrefixes.use(0, headerRenderCallback);
-  };
+const onInit: PluginInitCallback = ({ headerPrefixes }) => {
+  headerPrefixes.use(0, headerRenderCallback);
+};
 
-  const beforeLoad: BeforeLoadCallback = ({
-    options,
-    store,
-  }) => {
-    const sorting = store.state.sorting.value;
-    if (!options) return options;
-    options.sort = sorting;
-    return options;
-  };
+const beforeLoad: BeforeLoadCallback = ({
+  options,
+  store,
+}) => {
+  const sorting = store.state.sorting.value;
+  if (!options) return options;
+  options.sort = sorting;
+  return options;
+};
 
-  return {
-    name: "sorting",
-    onInit,
-    beforeLoad,
-  };
+export const SortingPlugin: ITablePlugin = {
+  name: "sorting",
+  onInit,
+  beforeLoad,
 };

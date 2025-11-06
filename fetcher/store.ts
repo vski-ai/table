@@ -8,6 +8,9 @@ declare module "@/store/types.ts" {
     dataLoadKey: Signal<number>;
     tableMeta: Signal<TableMeta>;
   }
+  interface TableStore {
+    shouldReload: () => void;
+  }
 }
 
 export enum CommandType {
@@ -37,4 +40,12 @@ export function reducer<T>(state: TableState, command: Command<T>) {
     }
   }
   return state;
+}
+
+export function methods(state: TableState) {
+  return {
+    shouldReload() {
+      state.dataLoadKey.value = new Date().getTime();
+    },
+  };
 }

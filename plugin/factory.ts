@@ -12,13 +12,22 @@ import { TableStore } from "../store/mod.ts";
 import { SortedAddon } from "./addon.ts";
 import { DataLoadOptions, DataLoadResult } from "@/fetcher/types.ts";
 
+import { FormattingPlugin } from "@/formatting/plugin.ts";
+import { ContextMenuPlugin } from "@/contextmenu/plugin.ts";
+
 export const createPlugin = (plugin: ITablePlugin) => plugin;
 export type PluginContainer = ReturnType<typeof createPluginContainer>;
+
+const buildInPlugins = [
+  FormattingPlugin,
+  ContextMenuPlugin,
+];
 
 export const createPluginContainer = (
   store: TableStore,
   plugins: ITablePlugin[],
 ) => {
+  plugins = [...buildInPlugins, ...plugins];
   const sortedPlugins = [...plugins].sort((a, b) => {
     if (a.dependencies?.includes(b.name)) {
       return 1;
@@ -60,24 +69,28 @@ export const createPluginContainer = (
     }
   });
 
+  const beforeLoad = async (options: DataLoadOptions) => {
+    let result = options;
+    for (const plugin of sortedPlugins) {
+      result = (await plugin.beforeLoad?.({
+        options: result,
+        store,
+      })) ?? result;
+    }
+    return result;
+  };
+
+  const afterLoad = async (res: DataLoadResult) => {
+    let result = res;
+    for (const plugin of sortedPlugins) {
+      result = (await plugin.afterLoad?.({ res: result, store })) ?? result;
+    }
+    return result;
+  };
+
   const container = {
-    beforeLoad: async (options: DataLoadOptions) => {
-      let result = options;
-      for (const plugin of sortedPlugins) {
-        result = (await plugin.beforeLoad?.({
-          options: result,
-          store,
-        })) ?? result;
-      }
-      return result;
-    },
-    afterLoad: async (res: DataLoadResult) => {
-      let result = res;
-      for (const plugin of sortedPlugins) {
-        result = (await plugin.afterLoad?.({ res: result, store })) ?? result;
-      }
-      return result;
-    },
+    beforeLoad,
+    afterLoad,
     headerPrefixes,
     leftTableCells,
     rightTableCells,

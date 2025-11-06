@@ -1,4 +1,4 @@
-export * as store from "./store.ts";
+export * as ColumnsStore from "./store.ts";
 export * from "./useColumnnResize.ts";
 export * from "./useColumnsOrderCallback.ts";
 export * from "./useOrderedColumns.ts";

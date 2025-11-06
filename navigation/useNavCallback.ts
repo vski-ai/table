@@ -26,6 +26,33 @@ export function useNavCallback(
   const scrollTimeout = useRef<number | null>(null);
   const lastScrollTop = useRef(0);
   const lastExecution = useRef(0);
+  const shiftPressed = useSignal(false);
+  const tabPressed = useSignal(false);
+
+  useEffect(() => {
+    const onKeyDown = (ev: KeyboardEvent) => {
+      if (ev.key === "Shift") {
+        shiftPressed.value = true;
+      }
+      if (ev.key === "Tab") {
+        tabPressed.value = true;
+      }
+    };
+    const onKeyUp = (ev: KeyboardEvent) => {
+      if (ev.key === "Shift") {
+        shiftPressed.value = false;
+      }
+      if (ev.key === "Tab") {
+        tabPressed.value = false;
+      }
+    };
+    globalThis.addEventListener("keydown", onKeyDown);
+    globalThis.addEventListener("keyup", onKeyUp);
+    return () => {
+      globalThis.removeEventListener("keydown", onKeyDown);
+      globalThis.removeEventListener("keyup", onKeyUp);
+    };
+  }, []);
 
   const getCell = useCallback((index: number, tabIndex: number) => {
     return document
@@ -107,6 +134,31 @@ export function useNavCallback(
     return () => scrollContainer.removeEventListener("scrollend", handleScroll);
   }, [scrollContainerRef.current, rowHeights, store]);
 
+  const onFocus = useCallback(
+    (ev: FocusEvent) => {
+      if (!shiftPressed.value || tabPressed.value) return;
+      document.getSelection()?.removeAllRanges();
+      const target = ev.target as HTMLTableCellElement;
+      if (target.tagName !== "TD") {
+        return;
+      }
+
+      const rowId = (target.parentNode as HTMLTableRowElement)?.dataset.rowId;
+      const columnName = target.dataset.columnName;
+
+      if (rowId && columnName) {
+        const current = store.state.selectedCells.value;
+        const row = current[rowId] ?? {};
+        row[columnName] = true;
+        store.state.selectedCells.value = {
+          ...current,
+          [rowId]: row,
+        };
+      }
+    },
+    [store],
+  );
+
   const onKeyDown = useCallback((ev: KeyboardEvent) => {
     if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(ev.key)) {
       const now = Date.now();
@@ -117,6 +169,9 @@ export function useNavCallback(
       lastExecution.current = now;
     }
 
+    if (ev.key === "Escape") {
+      store.state.selectedCells.value = {};
+    }
     if (ev.key === "ArrowUp" || ev.key === "ArrowDown") {
       isKeyHeldDown.current = true;
       lastScrollTop.current = scrollContainerRef.current!.scrollTop;
@@ -204,5 +259,5 @@ export function useNavCallback(
     }
   }, []);
 
-  return { onKeyDown, onKeyUp };
+  return { onKeyDown, onKeyUp, onFocus };
 }

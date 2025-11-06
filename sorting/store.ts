@@ -1,7 +1,5 @@
 import { Signal, signal } from "@preact/signals";
 import { Command, TableState } from "@/store/mod.ts";
-import { TableMeta } from "@/fetcher/types.ts";
-
 import { SortState } from "./types.ts";
 
 declare module "@/store/types.ts" {

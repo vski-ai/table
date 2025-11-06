@@ -9,7 +9,8 @@ export function Hero() {
             VSKI TABLE
           </h1>
           <p class="py-6 text-2xl">
-            A powerful and flexible table for your data-driven applications.
+            A powerful and flexible table engine for your data-driven
+            applications.
           </p>
           <a class="btn btn-outline" href="/about">Roadmap</a>
           {/* <a href="/flat" class="btn btn-ghost">Get Started</a> */}
