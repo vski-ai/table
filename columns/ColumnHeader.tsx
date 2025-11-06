@@ -2,11 +2,12 @@ import { ComponentChildren } from "preact";
 import { useSignal } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
 import { usePluginContainer } from "@/plugin/mod.ts";
-import { TableStore } from "../store/types.ts";
+import { TableStore } from "@/store/types.ts";
 import { Draggable } from "@/common/Draggable.tsx";
 import { useColumnsOrderCallback } from "./useColumnsOrderCallback.ts";
 import { useColumnResizer } from "./useColumnnResize.ts";
-import { useStickyColOffset } from "./useStickyColOffset.ts";
+import { useStickyColumn } from "./useStickyColumn.ts";
+import { cn } from "@/common/className.ts";
 
 export interface ColumnHeaderProps {
   column: string;
@@ -30,8 +31,6 @@ export function ColumnHeader(
   } = useColumnResizer({
     store,
   });
-
-  const stickyColumns = useStickyColOffset({ store });
 
   const width = getColumnWidth(column);
   const isResizing = useSignal(false);
@@ -75,28 +74,29 @@ export function ColumnHeader(
     };
   }, [isResizing.value]);
 
-  const isStickyLeft = typeof stickyColumns.left[column] === "number";
-  const isStickyRight = typeof stickyColumns.right[column] === "number";
+  const { left, right, isSticky, isStickyLeft, isStickyRight } =
+    useStickyColumn({ store, column });
 
   return (
     <th
       data-column-name={column}
       style={{
         width: `${width}px`,
-        left: isStickyLeft ? stickyColumns.left[column] : undefined,
-        right: isStickyRight ? stickyColumns.right[column] : undefined,
-        zIndex: isStickyLeft || isStickyRight ? 100 : 10,
-        position: isStickyLeft || isStickyRight ? "sticky" : undefined,
+        left,
+        right,
+        zIndex: isSticky ? 100 : 10,
+        position: isSticky ? "sticky" : undefined,
       }}
       id={`column-header-${column}`}
-      class={[
-        isStickyLeft ? "vt-s-left" : "",
-        isStickyRight ? "vt-s-right" : "",
-      ].join(" ")}
+      class={cn({
+        "vt-col": true,
+        "stick-left": isStickyLeft,
+        "stick-right": isStickyRight,
+      })}
     >
       <Draggable onDrop={onColumnDrop} id={column}>
         {children ? children : (
-          <div class="flex justify-start items-center">
+          <div class="vt-col-wrap">
             {plugins.headerPrefixes.render({
               column,
               store,
@@ -104,7 +104,7 @@ export function ColumnHeader(
             {!edit.value
               ? (
                 <div
-                  class="truncate p-1 min-w-32 w-full"
+                  class="vt-col-content"
                   title={formattedName}
                   onDblClick={() => {
                     edit.value = true;
@@ -142,7 +142,7 @@ export function ColumnHeader(
         )}
       </Draggable>
       <div
-        class="absolute -right-2 top-0 h-full w-4 cursor-col-resize select-none bg-transparent"
+        class="vt-col-resize"
         onMouseDown={handleMouseDown}
       />
     </th>

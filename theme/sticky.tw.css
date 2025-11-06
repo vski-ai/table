@@ -1,4 +1,4 @@
-@layer components {
+/* @layer components {
   th.vt-s-left {
     @apply bg-base-300! border-r! border-r-accent/10!;
     box-shadow: 2px 0px 0px 0px #72f3f554;
@@ -15,4 +15,4 @@
     @apply bg-base-200! border-l! border-l-accent/10!;
     box-shadow: -2px 0px 0px 0px #72f3f554;
   }
-}
+} */
