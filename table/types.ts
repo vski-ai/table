@@ -7,23 +7,14 @@ import { DataLoadCallback } from "@/fetcher/types.ts";
 export type VirtualTableViewProps = {
   onDataLoad: DataLoadCallback;
   store: TableStore;
-  selectable?: boolean;
   initialWidth?: number;
   rowHeight?: number;
   buffer?: number;
   scrollContainerRef: MutableRef<HTMLElement>;
   rowIdentifier?: string;
   enumerable?: boolean;
-  formatColumnName?: (a: string) => string;
-  columnExtensions?: (col: string) => JSX.Element;
-  columnAction?: (col: string) => JSX.Element;
-  plugins: PluginContainer;
 };
 
 export interface Row extends Record<string, any> {
   id: string | number;
-  $group_by?: string;
-  $is_group_root?: boolean;
-  $group_level?: number;
-  $parent_id?: string[] | number[];
 }

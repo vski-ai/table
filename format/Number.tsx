@@ -2,7 +2,7 @@ import { memo } from "preact/compat";
 import { useCallback, useEffect } from "preact/hooks";
 import { Signal, useSignal } from "@preact/signals";
 import { NumberFormatting as NumberFormattingType } from "./types.ts";
-import { LocaleSelector } from "@/menu/LocaleSelector.tsx";
+import { LocaleSelector } from "../common/LocaleSelector.tsx";
 
 export const NumberFormatting = memo((
   { column, formatting }: { column: string; formatting: Signal<any> },

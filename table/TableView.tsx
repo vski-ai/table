@@ -5,11 +5,12 @@ import { useDataFetcher } from "@/fetcher/mod.ts";
 import { Row } from "./types.ts";
 import { VirtualTableViewProps } from "./types.ts";
 import { useRenderRowCallback } from "./Row.tsx";
-import { ContextMenu } from "@/menu/ContextMenu.tsx";
 import { HeaderContainer } from "./HeaderContainer.tsx";
 
 import { RowPadding } from "./RowPadding.tsx";
 import { useRef } from "preact/hooks";
+import { usePluginContainer } from "../plugin/mod.ts";
+import { useAddMenuItems } from "../contextmenu/mod.ts";
 
 export function TableView(props: VirtualTableViewProps) {
   const {
@@ -18,6 +19,18 @@ export function TableView(props: VirtualTableViewProps) {
     onDataLoad,
     rowHeight = 64,
   } = props;
+
+  useAddMenuItems({
+    store,
+    items: {
+      id: "test",
+      menu: "main",
+      label: <span>icon</span>,
+      action() {
+        console.log("o0o");
+      },
+    },
+  });
 
   const {
     data,
@@ -43,6 +56,7 @@ export function TableView(props: VirtualTableViewProps) {
   useTableTabIndexEffect({
     target: tableRef,
   }, [data.value, visibleRows]);
+
   const focusNav = useNavCallback({
     store,
     startIndex: visibleRows[0]?.index ?? 0,
@@ -52,32 +66,15 @@ export function TableView(props: VirtualTableViewProps) {
     rowHeights,
   });
 
+  const plugins = usePluginContainer({ store });
   const initializing = !data.value.length;
   return (
     <>
-      <ContextMenu store={store} target={scrollContainerRef} />
+      {plugins.beforeTable.render({
+        ref: scrollContainerRef,
+        store,
+      })}
       <HeaderContainer store={store} loading={initializing} />
-      {
-        /* <StickyRowsContainer
-        {...{
-          store,
-          plugins,
-          data: data.value,
-          visibleRows,
-          renderRow,
-          rowHeights,
-          enumerable,
-          expandable,
-          groupable,
-          selectable,
-          rowKey,
-          tableAddon,
-          columns,
-          scrollContainerRef,
-        }}
-      /> */
-      }
-
       <table
         style={style}
         id="vt-main"
@@ -137,6 +134,10 @@ export function TableView(props: VirtualTableViewProps) {
           )}
         </tbody>
       </table>
+      {plugins.afterTable.render({
+        ref: scrollContainerRef,
+        store,
+      })}
     </>
   );
 }

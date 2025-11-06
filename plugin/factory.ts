@@ -2,6 +2,7 @@ import {
   CellRendererCallback,
   ClassResolverCallback,
   ColumnRendererCallback,
+  CommonRendererCallback,
   ITablePlugin,
   StyleResolverCallback,
 } from "./types.ts";
@@ -28,6 +29,8 @@ export const createPluginContainer = (
     return 0;
   });
 
+  const beforeTable = new SortedAddon<CommonRendererCallback>();
+  const afterTable = new SortedAddon<CommonRendererCallback>();
   const headerPrefixes = new SortedAddon<ColumnRendererCallback>();
   const leftTableCells = new SortedAddon<CellRendererCallback>();
   const cellPrefixes = new SortedAddon<CellRendererCallback>();
@@ -51,6 +54,8 @@ export const createPluginContainer = (
         cellSuffixes,
         rowClasses,
         rowStyles,
+        beforeTable,
+        afterTable,
       });
     }
   });
@@ -82,6 +87,8 @@ export const createPluginContainer = (
     cellSuffixes,
     rowClasses,
     rowStyles,
+    beforeTable,
+    afterTable,
   };
 
   // @ts-ignore: some privats

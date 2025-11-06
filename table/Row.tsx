@@ -33,7 +33,6 @@ export const Row = (props: RowProps) => {
   const plugins = usePluginContainer({ store });
   const height = rowHeight;
   const stickyColumns = useStickyColOffset({ store });
-
   const classes = plugins.rowClasses.render({
     row,
     store,
@@ -63,18 +62,18 @@ export const Row = (props: RowProps) => {
         rowIndex,
       })}
 
-      {columns.map((col, colIndex) => {
-        const isStickyLeft = typeof stickyColumns.left[col] === "number";
-        const isStickyRight = typeof stickyColumns.right[col] === "number";
+      {columns.map((column) => {
+        const isStickyLeft = typeof stickyColumns.left[column] === "number";
+        const isStickyRight = typeof stickyColumns.right[column] === "number";
         return (
           <td
-            key={col}
-            data-column-name={col}
+            key={column}
+            data-column-name={column}
             style={{
-              width: `var(--col-width-${sanitizeColName(col)})`,
+              width: `var(--col-width-${sanitizeColName(column)})`,
               height: `${height}px`,
-              left: isStickyLeft ? stickyColumns.left[col] : undefined,
-              right: isStickyRight ? stickyColumns.right[col] : undefined,
+              left: isStickyLeft ? stickyColumns.left[column] : undefined,
+              right: isStickyRight ? stickyColumns.right[column] : undefined,
               zIndex: isStickyLeft || isStickyRight ? 1 : 0,
               position: isStickyLeft || isStickyRight ? "sticky" : undefined,
             }}
@@ -84,21 +83,21 @@ export const Row = (props: RowProps) => {
           >
             <div
               class="truncate flex w-full items-center justify-between"
-              title={row[col]}
+              title={row[column]}
             >
               {plugins.cellPrefixes.render({
-                column: col,
+                column: column,
                 row,
                 store,
               })}
 
               <CellFormatter
-                value={row[col]}
-                formatting={formatting?.[col]}
+                value={row[column]}
+                formatting={formatting?.[column]}
               />
 
               {plugins.cellSuffixes?.render({
-                column: col,
+                column: column,
                 row,
                 store,
               })}

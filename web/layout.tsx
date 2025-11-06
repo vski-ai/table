@@ -2,8 +2,7 @@ import { AsideSwitch } from "./navbar/AsideSwitch.tsx";
 import { AsideFold } from "./navbar/AsideFold.tsx";
 import { ThemeSwitch } from "./navbar/ThemeSwitch.tsx";
 
-import UserIcon from "lucide-react/dist/esm/icons/user.js";
-import FolderKeyIcon from "lucide-react/dist/esm/icons/folder-key.js";
+import HomeIcon from "lucide-react/dist/esm/icons/home.js";
 import LayoutDashboardIcon from "lucide-react/dist/esm/icons/layout-dashboard.js";
 import PlugZapIcon from "lucide-react/dist/esm/icons/plug-zap.js";
 import ChartIcon from "lucide-react/dist/esm/icons/chart-column-increasing.js";
@@ -22,29 +21,36 @@ export default function ({ children }: { children: any }) {
           <div class="h-12"></div>
           <ul className="main-aside-menu">
             <li>
-              <a href="/app" class="aria-[current=page]:active">
+              <a href="/" class="aria-[current=page]:active">
+                <HomeIcon />
+                Home
+              </a>
+            </li>
+            <li>
+              <a href="/flat" class="aria-[current=page]:active">
                 <LayoutDashboardIcon />
-                Dashboard
+                Flat Table
               </a>
             </li>
             <li>
-              <a href="/app/reports" class="aria-[current=page]:active">
+              <a
+                href="/flat-with-column-management"
+                class="aria-[current=page]:active"
+              >
+                <LayoutDashboardIcon />
+                Flat Table (CM)
+              </a>
+            </li>
+            <li>
+              <a href="/groupable" class="aria-[current=page]:active">
                 <ChartIcon />
-                Reports
+                Groupable Table
               </a>
-              <ul class="dense:ml-0 dense:pl-0">
-                <li>
-                  <a href="/app/sources" class="aria-[current=page]:active">
-                    <PlugZapIcon />
-                    Event Sources
-                  </a>
-                </li>
-              </ul>
             </li>
             <li>
-              <a href="/app/keys" class="aria-[current=page]:active">
-                <FolderKeyIcon />
-                API Keys
+              <a href="/lorem-ipsum" class="aria-[current=page]:active">
+                <PlugZapIcon />
+                Lorem Ipsum
               </a>
             </li>
           </ul>

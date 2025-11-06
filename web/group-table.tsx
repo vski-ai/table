@@ -1,6 +1,6 @@
 import { TableView } from "@/table/mod.ts";
 import { createTableStore, LocalStorageAdapter } from "@/store/mod.ts";
-import { useEffect, useMemo, useRef } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 import { Row } from "@/table/types.ts";
 import data from "./mock/group-1m-rows.json" with { type: "json" };
 import { createPluginContainer } from "@/plugin/mod.ts";

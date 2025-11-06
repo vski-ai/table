@@ -2,28 +2,44 @@ import { TableStore } from "@/store/types.ts";
 import { Row } from "@/table/types.ts";
 import { DataLoadOptions, DataLoadResult } from "@/fetcher/types.ts";
 import { SortedAddon } from "./addon.ts";
+import { MutableRef } from "preact/hooks";
 
-export type ClassResolverCallback = (opts: {
-  row?: Row;
-  rowKey?: string;
-  column?: string;
-  store: TableStore;
-}) => string[];
+type WithRef = {
+  ref?: MutableRef<HTMLElement>;
+};
+export type ClassResolverCallback = (
+  opts: {
+    row?: Row;
+    rowKey?: string;
+    column?: string;
+    store: TableStore;
+  } & WithRef,
+) => string[];
 
-export type StyleResolverCallback = (opts: {
-  row?: Row;
-  column?: string;
-  store: TableStore;
-}) => [string, string | number][];
+export type StyleResolverCallback = (
+  opts: {
+    row?: Row;
+    column?: string;
+    store: TableStore;
+  } & WithRef,
+) => [string, string | number][];
 
 export type CellRendererCallback =
   & { columnName?: string }
-  & ((opts: {
-    column: string;
-    row: Row;
+  & ((
+    opts: {
+      column: string;
+      row: Row;
+      store: TableStore;
+      rowIndex?: number;
+    } & WithRef,
+  ) => preact.ComponentChildren);
+
+export type CommonRendererCallback = (
+  opts: {
     store: TableStore;
-    rowIndex?: number;
-  }) => preact.ComponentChildren);
+  } & WithRef,
+) => preact.ComponentChildren;
 
 export type ColumnRendererCallback = (opts: {
   column: string;
@@ -48,6 +64,8 @@ export type BeforeLoadCallback = (
   opts: BeforeLoadOptions,
 ) => Promise<DataLoadOptions> | DataLoadOptions;
 
+type BeforeTable = SortedAddon<CommonRendererCallback>;
+type AfterTable = SortedAddon<CommonRendererCallback>;
 type HeaderPrefixes = SortedAddon<ColumnRendererCallback>;
 type CellPrefixes = SortedAddon<CellRendererCallback>;
 type CellSuffixes = SortedAddon<CellRendererCallback>;
@@ -69,6 +87,8 @@ export interface PluginsInitOptions {
   cellSuffixes: CellSuffixes;
   rowClasses: RowClasses;
   rowStyles: RowStyles;
+  beforeTable: BeforeTable;
+  afterTable: AfterTable;
 }
 
 export type PluginInitCallback = (opts: PluginsInitOptions) => void;

@@ -1,3 +1,4 @@
+export * from "./types.ts";
 export * from "./GroupCaret.tsx";
 export * from "./GroupMargin.tsx";
 export * from "./GroupLevelLine.tsx";

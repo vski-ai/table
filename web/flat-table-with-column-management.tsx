@@ -17,14 +17,14 @@ import {
 
 const sorter = createFrontendSorter();
 
-export const FlatTable = () => {
+export const FlatTableWithColumnManagement = () => {
   const scrollRef = useRef();
   useEffect(() => {
     scrollRef.current = document.querySelector(".main-outlet");
   });
   const tableStore = createTableStore(
     new LocalStorageAdapter(),
-    "flat-table",
+    "flat-table-with-column-management",
     [
       sorterStore,
       selectorStore,

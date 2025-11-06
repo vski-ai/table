@@ -6,7 +6,7 @@
     @apply -left-64 dense:-left-14 w-64 dense:w-14 min-w-64 dense:min-w-14
       aside-open:block fixed z-99 h-[calc(100vh)] top-0 overflow-y-auto
       overflow-x-hidden bg-base-200 border-r border-base-300 aside-open:left-0
-      aside-open:dense:left-0 transition-[left] ease-in-out duration-200;
+      aside-open:dense:left-0 transition-none;
   }
   .main-aside-menu {
     @apply menu menu-lg bg-base-200 rounded-box w-full dense:!w-12;

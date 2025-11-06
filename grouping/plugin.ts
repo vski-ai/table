@@ -8,16 +8,6 @@ import { CommandType } from "../columns/store.ts";
 import { groupCellRenderCallback } from "./GroupCell.tsx";
 import { groupColumnRenderCallback } from "./GroupColumn.tsx";
 
-declare module "@/fetcher/types.ts" {
-  interface TableMeta {
-    groupBy: string[];
-    sortableGroupLevelAll?: boolean;
-    sortableGroupLevelColumns?: string[][];
-  }
-  interface DataLoadOptions {
-    groupBy?: string[] | null;
-  }
-}
 
 export const plugin = (): ITablePlugin => {
   const onInit: PluginInitCallback = ({
