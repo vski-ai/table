@@ -1,6 +1,6 @@
 import { useCallback } from "preact/hooks";
 import { TableStore } from "@/store/mod.ts";
-import { CommandType } from "./store.ts";
+import { ColumnOrderCommand } from "./store.ts";
 import { useOrderedColumns } from "./useOrderedColumns.ts";
 
 interface ColumnsOrderCallbackProps {
@@ -27,8 +27,8 @@ export function useColumnsOrderCallback(
       const [draggedItem] = newColumnOrder.splice(draggedIndex, 1);
       newColumnOrder.splice(targetIndex, 0, draggedItem);
 
-      store.dispatch({
-        type: CommandType.COLUMN_ORDER_SET,
+      store.dispatch<ColumnOrderCommand>({
+        type: "COLUMN_ORDER_SET",
         payload: newColumnOrder,
       });
     },

@@ -1,5 +1,5 @@
 import { useCallback } from "preact/hooks";
-import { CommandType } from "./store.ts";
+import { RowsSelectCommand } from "./store.ts";
 import { CellRendererCallback } from "@/plugin/mod.ts";
 import { TableStore } from "@/store/types.ts";
 import { Row } from "@/table/types.ts";
@@ -19,13 +19,13 @@ export const SelectorCell = ({
     const checked = (e.target as HTMLInputElement).checked;
     const currentSelectedRows = store.state.selectedRows.value;
     if (checked) {
-      store.dispatch({
-        type: CommandType.SELECTED_ROWS_SET,
+      store.dispatch<RowsSelectCommand>({
+        type: "SELECTED_ROWS_SET",
         payload: [...currentSelectedRows, row[rowKey]],
       });
     } else {
-      store.dispatch({
-        type: CommandType.SELECTED_ROWS_SET,
+      store.dispatch<RowsSelectCommand>({
+        type: "SELECTED_ROWS_SET",
         payload: currentSelectedRows.filter((id) => id !== row[rowKey]),
       });
     }

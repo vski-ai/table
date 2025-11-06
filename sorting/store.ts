@@ -8,11 +8,8 @@ declare module "@/store/types.ts" {
   }
 }
 
-export enum CommandType {
-  SORT_ADD = "SORT_ADD",
-  SORT_REMOVE = "SORT_REMOVE",
-  SORT_SET = "SORT_SET",
-}
+const SORT_SET = "SORT_SET";
+export type SortSetCommand = Command<typeof SORT_SET, SortState>;
 
 export function state(init: Record<string, any> | null) {
   return {
@@ -24,9 +21,9 @@ export function persist(_: TableState) {
   return {};
 }
 
-export function reducer<T>(state: TableState, command: Command<T>) {
+export function reducer(state: TableState, command: SortSetCommand) {
   switch (command.type) {
-    case CommandType.SORT_SET: {
+    case "SORT_SET": {
       state.sorting.value = command.payload;
       break;
     }

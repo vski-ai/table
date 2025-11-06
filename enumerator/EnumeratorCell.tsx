@@ -5,7 +5,7 @@ import { TableStore } from "@/store/types.ts";
 import { Row } from "@/table/types.ts";
 import { useRowKey } from "@/fetcher/mod.ts";
 import { RowResizeHandle } from "./RowResizeHandle.tsx";
-import { CommandType } from "./store.ts";
+import { RowHeightCommand, RowResizeCommand } from "./store.ts";
 
 export const EnumeratorCell = ({
   store,
@@ -19,8 +19,8 @@ export const EnumeratorCell = ({
   const rowKey = useRowKey({ store });
   const resizingRow = store.state.resizingRow.value;
   const onResize = useCallback((rowId: string | number, newHeight: number) => {
-    store.dispatch({
-      type: CommandType.ROW_RESIZING_SET,
+    store.dispatch<RowResizeCommand>({
+      type: "ROW_RESIZING_SET",
       payload: { rowId, height: newHeight },
     });
   }, [store]);
@@ -33,11 +33,11 @@ export const EnumeratorCell = ({
         [rowId]: height,
       };
       store.dispatch({
-        type: CommandType.ROW_HEIGHTS_SET,
+        type: "RowHeightCommand",
         payload: newRowHeights,
       });
-      store.dispatch({
-        type: CommandType.ROW_RESIZING_SET,
+      store.dispatch<RowResizeCommand>({
+        type: "ROW_RESIZING_SET",
         payload: null,
       });
     }

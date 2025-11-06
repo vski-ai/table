@@ -5,7 +5,7 @@ import { GroupLinePointer } from "./GroupLevelLine.tsx";
 import { GroupMargin } from "./GroupMargin.tsx";
 import { Row } from "@/table/types.ts";
 import { TableStore } from "@/store/types.ts";
-import { CommandType } from "./store.ts";
+import { ExpandSetCommand } from "./store.ts";
 import { CellRendererCallback } from "@/plugin/mod.ts";
 import { useStickyColOffset } from "@/columns/mod.ts";
 import { CellFormatter } from "@/formatting/CellFormatter.tsx";
@@ -25,9 +25,9 @@ export const GroupCell = ({
   store,
 }: GroupCellProps) => {
   const onLevelToggle = () => {
-    store.dispatch({
-      type: CommandType.EXPANDED_LEVELS_SET,
-      payload: row.id,
+    store.dispatch<ExpandSetCommand>({
+      type: "EXPANDED_LEVELS_SET",
+      payload: row.id.toString(),
     });
     store.shouldReload();
   };

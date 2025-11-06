@@ -3,7 +3,7 @@ import RightIcon from "lucide-react/dist/esm/icons/panel-right.js";
 import LeftIcon from "lucide-react/dist/esm/icons/panel-left.js";
 import UnPin from "lucide-react/dist/esm/icons/pin-off.js";
 import Pin from "lucide-react/dist/esm/icons/pin.js";
-import { CommandType } from "./store.ts";
+import { ColumnStickCommand } from "./store.ts";
 
 const STICKY_COLUMN = "sticky_column";
 
@@ -23,7 +23,7 @@ export const Stick: ContextMenuItem = {
       <>
         <Pin />
         Pin
-        <span class="badge badge-xs badge-accent absolute ml-3">
+        <span class="badge badge-xs badge-accent absolute right-3">
           {column}
         </span>
       </>
@@ -45,8 +45,9 @@ export const StickLeft: ContextMenuItem = {
     );
   },
   action({ store, column }) {
-    store.dispatch({
-      type: CommandType.COLUMN_STICK_SET,
+    if (!column) return;
+    store.dispatch<ColumnStickCommand>({
+      type: "COLUMN_STICK_SET",
       payload: {
         column,
         position: "left",
@@ -68,10 +69,11 @@ export const StickRight: ContextMenuItem = {
     );
   },
   action({ store, column }) {
-    store.dispatch({
-      type: CommandType.COLUMN_STICK_SET,
+    if (!column) return;
+    store.dispatch<ColumnStickCommand>({
+      type: "COLUMN_STICK_SET",
       payload: {
-        column: column,
+        column,
         position: "right",
       },
     });
@@ -91,8 +93,9 @@ const unpinLabel = () => {
 };
 
 const unpinAction = ({ store, column }: MenuContext) => {
-  store.dispatch({
-    type: CommandType.COLUMN_STICK_SET,
+  if (!column) return;
+  store.dispatch<ColumnStickCommand>({
+    type: "COLUMN_STICK_SET",
     payload: {
       column,
       position: false,

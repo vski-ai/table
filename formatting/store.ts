@@ -8,9 +8,7 @@ declare module "@/store/types.ts" {
   }
 }
 
-export enum CommandType {
-  CELL_FORMATTING_SET = "CELL_FORMATTING_SET",
-}
+const CELL_FORMATTING_SET = "CELL_FORMATTING_SET";
 
 export function state(init: Record<string, any> | null) {
   const cellFormatting = signal(init?.cellFormatting || {});

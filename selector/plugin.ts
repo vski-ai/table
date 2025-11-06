@@ -1,5 +1,5 @@
 import { ITablePlugin, PluginInitCallback } from "@/plugin/mod.ts";
-import { CommandType } from "../columns/store.ts";
+import { ColumnWidthCommand } from "../columns/store.ts";
 import { selectorCellRenderCallback } from "./SelectorCell.tsx";
 import { selectorColumnRenderCallback } from "./SelectorColumn.tsx";
 import { KEY } from "./constants.ts";
@@ -19,8 +19,8 @@ const onInit: PluginInitCallback = ({
         : "",
     ];
   });
-  store.dispatch({
-    type: CommandType.COLUMN_WIDTHS_SET,
+  store.dispatch<ColumnWidthCommand>({
+    type: "COLUMN_WIDTHS_SET",
     payload: {
       [KEY]: 50,
     },

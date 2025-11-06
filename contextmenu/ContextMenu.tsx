@@ -165,25 +165,27 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
       )}
       <ul>
         {currentMenu.items.map((item: MenuItem, index: number) => (
-          !item.visibility(context.value) ? null : (
-            <li key={index}>
-              <a
-                href="#"
-                class="p-2"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (item.submenu?.items?.length) {
-                    push(item.submenu);
-                  } else if (item.action) {
-                    item.action(context.value);
-                    close();
-                  }
-                }}
-              >
-                {item.label(context.value)}
-              </a>
-            </li>
-          )
+          !item.visibility(context.value)
+            ? null
+            : (
+              <li key={index} class="relative">
+                <a
+                  href="#"
+                  class="p-2"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (item.submenu?.items?.length) {
+                      push(item.submenu);
+                    } else if (item.action) {
+                      item.action(context.value);
+                      close();
+                    }
+                  }}
+                >
+                  {item.label(context.value)}
+                </a>
+              </li>
+            )
         ))}
       </ul>
     </div>

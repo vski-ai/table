@@ -1,10 +1,11 @@
 import { useSignal } from "@preact/signals";
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import { TableStore } from "@/store/mod.ts";
-import { CommandType } from "../columns/store.ts";
+import { ColumnSetCommand } from "@/columns/store.ts";
 import { Row } from "@/table/types.ts";
 import { DataLoadCallback } from "./types.ts";
 import { usePluginContainer } from "@/plugin/usePluginContainer.ts";
+import { TableMetaCommnand } from "./store.ts";
 
 interface LoaderProps {
   onDataLoad: DataLoadCallback;
@@ -34,12 +35,15 @@ export const useLoader = ({
       const res = await onDataLoad(options);
       const { rows, total: newTotal, meta } = await plugins.afterLoad(res);
 
-      store.dispatch({
-        type: CommandType.COLUMNS_SET,
+      store.dispatch<ColumnSetCommand>({
+        type: "COLUMNS_SET",
         payload: Object.keys(rows.find((r) => r !== null) ?? {}),
       });
 
-      store.state.tableMeta.value = meta;
+      store.dispatch<TableMetaCommnand>({
+        type: "TABLE_META_SET",
+        payload: meta,
+      });
 
       if (total.value !== newTotal) {
         total.value = newTotal;

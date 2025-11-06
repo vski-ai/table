@@ -1,6 +1,6 @@
 import { type JSX } from "preact";
 import { memo } from "preact/compat";
-import { useMemo } from "preact/hooks";
+
 import {
   type CellFormatting,
   type CellStyle,

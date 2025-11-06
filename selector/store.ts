@@ -1,6 +1,5 @@
 import { Signal, signal } from "@preact/signals";
 import { Command, TableState } from "@/store/mod.ts";
-import { TableMeta } from "@/fetcher/types.ts";
 
 declare module "@/store/types.ts" {
   interface TableState {
@@ -8,9 +7,11 @@ declare module "@/store/types.ts" {
   }
 }
 
-export enum CommandType {
-  SELECTED_ROWS_SET = "SELECTED_ROWS_SET",
-}
+const SELECTED_ROWS_SET = "SELECTED_ROWS_SET";
+export type RowsSelectCommand = Command<
+  typeof SELECTED_ROWS_SET,
+  (string | number)[]
+>;
 
 export function state(init: Record<string, any> | null) {
   return {
@@ -24,9 +25,9 @@ export function persist(state: TableState) {
   };
 }
 
-export function reducer<T>(state: TableState, command: Command<T>) {
+export function reducer(state: TableState, command: RowsSelectCommand) {
   switch (command.type) {
-    case CommandType.SELECTED_ROWS_SET: {
+    case "SELECTED_ROWS_SET": {
       state.selectedRows.value = command.payload;
       break;
     }

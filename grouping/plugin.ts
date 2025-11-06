@@ -4,7 +4,7 @@ import {
   ITablePlugin,
   PluginInitCallback,
 } from "@/plugin/mod.ts";
-import { CommandType } from "../columns/store.ts";
+import { ColumnVisibilityCommand } from "../columns/store.ts";
 import { groupCellRenderCallback } from "./GroupCell.tsx";
 import { groupColumnRenderCallback } from "./GroupColumn.tsx";
 
@@ -28,8 +28,8 @@ const onInit: PluginInitCallback = ({
     ];
   });
 
-  store.dispatch({
-    type: CommandType.COLUMN_VISIBILITY_SET,
+  store.dispatch<ColumnVisibilityCommand>({
+    type: "COLUMN_VISIBILITY_SET",
     payload: {
       $is_group_root: false,
       $group_level: false,
@@ -45,8 +45,8 @@ const beforeLoad: BeforeLoadCallback = ({ options, store }) => {
 };
 
 const afterLoad: AfterLoadCallback = ({ res, store }) => {
-  store.dispatch({
-    type: CommandType.COLUMN_VISIBILITY_SET,
+  store.dispatch<ColumnVisibilityCommand>({
+    type: "COLUMN_VISIBILITY_SET",
     payload: res.meta?.groupBy.reduce((acc, column) => ({
       ...acc,
       [column]: false,

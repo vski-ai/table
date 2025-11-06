@@ -4,16 +4,21 @@ import { SortState } from "@/sorting/types.ts";
 
 declare module "@/store/types.ts" {
   interface TableState {
-    expandedLevels: Signal<string[] | number[]>;
+    expandedLevels: Signal<string[]>;
     groupBy: Signal<string[] | null>;
     groupSorting: Signal<Record<string, SortState>>;
   }
 }
 
-export enum CommandType {
-  EXPANDED_LEVELS_SET = "EXPANDED_LEVELS_SET",
-  LEAF_SORT_SET = "LEAF_SORT_SET",
-}
+const EXPANDED_LEVELS_SET = "EXPANDED_LEVELS_SET";
+const LEAF_SORT_SET = "LEAF_SORT_SET";
+
+export type ExpandSetCommand = Command<typeof EXPANDED_LEVELS_SET, string>;
+export type LeafSortCommand = Command<
+  typeof LEAF_SORT_SET,
+  Record<string, SortState>
+>;
+export type GroupingCommand = ExpandSetCommand | LeafSortCommand;
 
 export function state<T>(init: Record<string, T> | null) {
   return {
@@ -30,15 +35,15 @@ export function persist(state: TableState) {
   };
 }
 
-export function reducer<T>(state: TableState, command: Command<T>) {
+export function reducer(state: TableState, command: GroupingCommand) {
   switch (command.type) {
-    case CommandType.EXPANDED_LEVELS_SET:
+    case "EXPANDED_LEVELS_SET":
       state.expandedLevels.value =
         state.expandedLevels.value.includes(command.payload as never)
           ? state.expandedLevels.value.filter((id) => id !== command.payload)
           : [...state.expandedLevels.value, command.payload];
       break;
-    case CommandType.LEAF_SORT_SET: {
+    case "LEAF_SORT_SET": {
       state.groupSorting.value = {
         ...state.groupSorting.value,
         ...command.payload,

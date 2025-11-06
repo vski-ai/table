@@ -13,9 +13,9 @@ declare module "@/store/types.ts" {
   }
 }
 
-export enum CommandType {
-  TABLE_META_SET = "TABLE_META_SET",
-}
+const TABLE_META_SET = "TABLE_META_SET";
+
+export type TableMetaCommnand = Command<typeof TABLE_META_SET, TableMeta>;
 
 export function state(init: Record<string, any> | null) {
   return {
@@ -32,9 +32,9 @@ export function persist(state: TableState) {
   };
 }
 
-export function reducer<T>(state: TableState, command: Command<T>) {
+export function reducer(state: TableState, command: TableMetaCommnand) {
   switch (command.type) {
-    case CommandType.TABLE_META_SET: {
+    case "TABLE_META_SET": {
       state.tableMeta.value = command.payload;
       break;
     }

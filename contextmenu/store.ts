@@ -9,9 +9,11 @@ declare module "@/store/types.ts" {
   }
 }
 
-export enum CommandType {
-  CONTEXT_MENU_ADD_ITEM = "CONTEXT_MENU_ADD_ITEM",
-}
+const CONTEXT_MENU_ADD_ITEM = "CONTEXT_MENU_ADD_ITEM";
+export type ContextMenuAddCommand = Command<
+  typeof CONTEXT_MENU_ADD_ITEM,
+  ContextMenuItem
+>;
 
 export function state<T>(_: Record<string, T> | null) {
   const contextMenuItems = signal<Record<string, ContextMenuItem>>({});
@@ -62,9 +64,9 @@ export function persist(_: TableState) {
   return {};
 }
 
-export function reducer<T>(state: TableState, command: Command<T>) {
+export function reducer(state: TableState, command: ContextMenuAddCommand) {
   switch (command.type) {
-    case CommandType.CONTEXT_MENU_ADD_ITEM: {
+    case "CONTEXT_MENU_ADD_ITEM": {
       if (state.contextMenuItems.value[command.payload.menu]) {
         return state;
       }

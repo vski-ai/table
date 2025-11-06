@@ -5,7 +5,7 @@ import ArrowDownUpIcon from "lucide-react/dist/esm/icons/arrow-down-up.js";
 import { TableStore } from "@/store/mod.ts";
 import { SortState } from "./types.ts";
 import { ColumnRendererCallback } from "@/plugin/types.ts";
-import { CommandType } from "./store.ts";
+import { SortSetCommand } from "./store.ts";
 
 interface RowSorterProps {
   className?: string;
@@ -28,8 +28,8 @@ export const RowSorter = ({
   const state = store.state.sorting.value ?? { column: "", sort: "" };
 
   const sort = (state: SortState) => {
-    store.dispatch({
-      type: CommandType.SORT_SET,
+    store.dispatch<SortSetCommand>({
+      type: "SORT_SET",
       payload: state,
     });
     store.shouldReload();

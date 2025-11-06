@@ -1,4 +1,4 @@
-import { CommandType } from "./store.ts";
+import { ContextMenuAddCommand } from "./store.ts";
 import { TableStore } from "@/store/types.ts";
 import { ContextMenuItem } from "./types.ts";
 
@@ -19,8 +19,8 @@ export function addMenuItems({
     if (store.state.contextMenuItems.value[item.menu]) {
       continue;
     }
-    store.dispatch({
-      type: CommandType.CONTEXT_MENU_ADD_ITEM,
+    store.dispatch<ContextMenuAddCommand>({
+      type: "CONTEXT_MENU_ADD_ITEM",
       payload: item,
     });
   }

@@ -47,9 +47,9 @@ export const Background = () => {
                 <path
                   d="M 40 0 L 0 0 0 40"
                   fill="none"
-                  style={{ stroke: "var(--color-black)" }}
+                  style={{ stroke: "var(--color-secondary)" }}
                   strokeWidth="1"
-                  opacity="0.2"
+                  opacity="0.1"
                 />
                 <rect
                   x="5"
