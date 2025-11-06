@@ -1,10 +1,11 @@
-import { ComponentChildren, h } from "preact";
+import { TableStore } from "../store/types.ts";
+import { ComponentChildren } from "preact";
 
 export interface ContextMenuItem {
-  id: string;
   parent?: string | "main";
   menu: string | "main";
   order?: number;
+  title?: (ctx: MenuContext) => ComponentChildren;
   label: (ctx: MenuContext) => ComponentChildren;
   visibility: (ctx: MenuContext) => boolean;
   action: (ctx: MenuContext) => void;
@@ -15,16 +16,16 @@ export type MenuContext = {
   rowId?: string;
   index?: string;
   placement: "body" | "outside";
+  store: TableStore;
 } | null;
 
 export interface MenuItem {
-  id: string;
   label: (ctx: MenuContext) => ComponentChildren;
   visibility: (ctx: MenuContext) => boolean;
   action?: (ctx: MenuContext) => void;
   submenu?: ContextMenu;
 }
 export interface ContextMenu {
-  title?: string;
+  title?: (ctx: MenuContext) => ComponentChildren;
   items: MenuItem[];
 }

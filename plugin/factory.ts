@@ -14,11 +14,13 @@ import { DataLoadOptions, DataLoadResult } from "@/fetcher/types.ts";
 
 import { FormattingPlugin } from "@/formatting/plugin.ts";
 import { ContextMenuPlugin } from "@/contextmenu/plugin.ts";
+import { ColumnsPlugin } from "@/columns/plugin.ts";
 
 export const createPlugin = (plugin: ITablePlugin) => plugin;
 export type PluginContainer = ReturnType<typeof createPluginContainer>;
 
 const buildInPlugins = [
+  ColumnsPlugin,
   FormattingPlugin,
   ContextMenuPlugin,
 ];

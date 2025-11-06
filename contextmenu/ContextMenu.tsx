@@ -4,6 +4,7 @@ import { computePosition, flip, shift } from "@floating-ui/dom";
 import { TableStore } from "@/store/types.ts";
 import { CommonRendererCallback } from "@/plugin/types.ts";
 import { MenuContext, MenuItem } from "./types.ts";
+import BackIcon from "lucide-react/dist/esm/icons/chevron-left.js";
 
 interface ContextMenuProps {
   store: TableStore;
@@ -67,6 +68,7 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
 
   useLayoutEffect(() => {
     const handleContextMenu = (e: MouseEvent) => {
+      console.log(document.getSelection());
       e.preventDefault();
       const target = e.target as HTMLTableCellElement;
       const ctx = {
@@ -75,6 +77,7 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
         rowId: target.closest("tr")?.dataset.rowId,
         index: target.closest("tr")?.dataset.index,
         placement: (!target.closest("td") ? "outside" : "body") as any,
+        store,
       };
       context.value = ctx;
       const rootMenu = store.state.contextMenu.value;
@@ -153,14 +156,14 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
       }}
       className="menu card rounded-none border border-accent/25 shadow-lg p-3 bg-base-100 absolute z-100 transition-opacity duration-400 w-64"
     >
-      <div className="flex items-center gap-2 mb-1">
-        {isSubmenu && (
-          <a href="#" class="btn btn-xs" onClick={pop}>
-            Back
+      {isSubmenu && (
+        <div className="flex items-center gap-2 p-2 -mt-2 mb-1 border-b border-base-300">
+          <a href="#" class="btn btn-xs -ml-2 mr-2" onClick={pop}>
+            <BackIcon />
           </a>
-        )}
-        <p class="font-bold m-0!">{currentMenu.title}</p>
-      </div>
+          <p class="font-bold m-0!">{currentMenu.title?.(context.value)}</p>
+        </div>
+      )}
       <ul>
         {currentMenu.items.map((item: MenuItem, index: number) => (
           !item.visibility(context.value) ? null : (

@@ -37,10 +37,10 @@ export function state<T>(_: Record<string, T> | null) {
           let submenu: ContextMenu | undefined = undefined;
           if (item.menu && item.menu !== "main") {
             submenu = buildMenu(item.menu);
+            submenu.title = item.title;
           }
-
           return {
-            id: item.id,
+            title: item.title,
             visibility: item.visibility,
             label: item.label,
             action: item.action,
@@ -66,12 +66,12 @@ export function persist(_: TableState) {
 export function reducer<T>(state: TableState, command: Command<T>) {
   switch (command.type) {
     case CommandType.CONTEXT_MENU_ADD_ITEM: {
-      if (state.contextMenuItems.value[command.payload.id]) {
+      if (state.contextMenuItems.value[command.payload.menu]) {
         return state;
       }
       state.contextMenuItems.value = {
         ...state.contextMenuItems.value,
-        [command.payload.id]: command.payload,
+        [command.payload.menu]: command.payload,
       };
       break;
     }
