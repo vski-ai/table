@@ -1,5 +1,5 @@
 import { useCallback } from "preact/hooks";
-import { Row } from "@/table/types.ts";
+import { RowData } from "@/row/types.ts";
 import { TableStore } from "@/store/types.ts";
 
 interface RowHeightsProps {
@@ -16,7 +16,7 @@ export function useRowHeights({
 }: RowHeightsProps) {
   const rowHeights = store.state.rowHeights.value;
 
-  return useCallback((row: Row | null) => {
+  return useCallback((row: RowData | null) => {
     if (!row) {
       return height;
     }

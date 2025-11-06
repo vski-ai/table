@@ -15,7 +15,7 @@ const onInit: PluginInitCallback = ({
   rowClasses.use(1, ({ row, store, rowKey }) => {
     return [
       store.state.selectedRows.value.includes(row?.[rowKey ?? ""]!)
-        ? "bg-accent/25"
+        ? "after:border-1 after:border-y-white"
         : "",
     ];
   });

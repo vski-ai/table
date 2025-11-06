@@ -3,7 +3,7 @@ import { GroupCaret } from "./GroupCaret.tsx";
 import { GroupLevelLine } from "./GroupLevelLine.tsx";
 import { GroupLinePointer } from "./GroupLevelLine.tsx";
 import { GroupMargin } from "./GroupMargin.tsx";
-import { Row } from "@/table/types.ts";
+import { RowData } from "@/row/types.ts";
 import { TableStore } from "@/store/types.ts";
 import { ExpandSetCommand } from "./store.ts";
 import { CellRendererCallback } from "@/plugin/mod.ts";
@@ -13,7 +13,7 @@ import { GroupSorter } from "./GroupSorter.tsx";
 
 interface GroupCellProps {
   store: TableStore;
-  row: Row;
+  row: RowData;
   height: number;
   children?: ComponentChildren;
 }

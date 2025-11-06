@@ -2,7 +2,7 @@ import { useCallback } from "preact/hooks";
 
 import { CellRendererCallback } from "@/plugin/mod.ts";
 import { TableStore } from "@/store/types.ts";
-import { Row } from "@/table/types.ts";
+import { RowData } from "@/row/types.ts";
 import { useRowKey } from "@/fetcher/mod.ts";
 import { RowResizeHandle } from "./RowResizeHandle.tsx";
 import { RowHeightCommand, RowResizeCommand } from "./store.ts";
@@ -13,7 +13,7 @@ export const EnumeratorCell = ({
   index,
 }: {
   store: TableStore;
-  row: Row;
+  row: RowData;
   index: number;
 }) => {
   const rowKey = useRowKey({ store });

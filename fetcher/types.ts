@@ -1,5 +1,5 @@
 import { TableStore } from "@/store/types.ts";
-import { Row } from "@/table/types.ts";
+import { RowData } from "@/row/types.ts";
 
 export interface DataLoadOptions {
   offset: number;
@@ -12,7 +12,7 @@ export interface TableMeta {
 }
 
 export type DataLoadResult = {
-  rows: Row[];
+  rows: RowData[];
   total: number;
   meta: TableMeta;
 };

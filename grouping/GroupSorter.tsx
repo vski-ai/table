@@ -5,7 +5,7 @@ import ArrowDownUpIcon from "lucide-react/dist/esm/icons/arrow-down-up.js";
 import { TableStore } from "@/store/mod.ts";
 import { SortState } from "@/sorting/types.ts";
 import { LeafSortCommand } from "./store.ts";
-import { Row } from "@/table/types.ts";
+import { RowData } from "@/row/types.ts";
 import { CellRendererCallback } from "../plugin/mod.ts";
 
 interface RowSorterProps {
@@ -13,7 +13,7 @@ interface RowSorterProps {
   activeClassName?: string;
   column: string;
   store: TableStore;
-  row: Row;
+  row: RowData;
   onChange?: (state: SortState) => void;
 }
 

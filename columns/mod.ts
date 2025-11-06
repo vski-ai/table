@@ -4,4 +4,6 @@ export * from "./useColumnnResize.ts";
 export * from "./useColumnsOrderCallback.ts";
 export * from "./useOrderedColumns.ts";
 export * from "./useStickyColumn.ts";
-export * from "./ColumnHeader.tsx";
+export * from "./useTableColumnStyle.ts";
+export * from "./Column.tsx";
+export * from "./Header.tsx";

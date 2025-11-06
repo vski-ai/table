@@ -4,7 +4,7 @@ import { useRowHeights } from "./useRowHeights.ts";
 import { useVariableVirtualizer } from "./useVariableVirtualizer.ts";
 
 import { TableStore } from "@/store/types.ts";
-import { Row } from "@/table/types.ts";
+import { RowData } from "@/row/types.ts";
 import { DataLoadCallback } from "./types.ts";
 
 import { useLoader } from "./useLoader.ts";
@@ -24,7 +24,7 @@ export function useDataFetcher({
   rowHeight,
   onDataLoad,
 }: DataFetcherProps) {
-  const latestData = useSignal<(Row | null)[]>([]);
+  const latestData = useSignal<(RowData | null)[]>([]);
   const latestCount = useSignal(0);
   const rowKey = useRowKey({ store });
   const getRowHeight = useRowHeights({

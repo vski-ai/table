@@ -9,8 +9,8 @@ declare module "@/fetcher/types.ts" {
   }
 }
 
-declare module "@/table/types.ts" {
-  interface Row {
+declare module "@/row/types.ts" {
+  interface RowData {
     $group_by?: string;
     $is_group_root?: boolean;
     $group_level?: number;

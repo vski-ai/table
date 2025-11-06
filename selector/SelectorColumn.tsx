@@ -1,4 +1,4 @@
-import { ColumnHeader } from "@/columns/ColumnHeader.tsx";
+import { Column } from "../columns/Column.tsx";
 import { ColumnRendererCallback } from "@/plugin/types.ts";
 import { RowsSelectCommand } from "./store.ts";
 import { KEY } from "./constants.ts";
@@ -7,7 +7,7 @@ export const selectorColumnRenderCallback: ColumnRendererCallback = (
   { store },
 ) => {
   return (
-    <ColumnHeader
+    <Column
       key={KEY}
       column={KEY}
       store={store}
@@ -30,6 +30,6 @@ export const selectorColumnRenderCallback: ColumnRendererCallback = (
           }
         }}
       />
-    </ColumnHeader>
+    </Column>
   );
 };

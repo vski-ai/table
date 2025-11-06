@@ -4,15 +4,15 @@ import { Command, Module, TableState, TableStore } from "./types.ts";
 
 import { FormattingStore } from "@/formatting/mod.ts";
 import { ColumnsStore } from "@/columns/mod.ts";
+import { CellStore } from "@/cell/mod.ts";
 import { FetcherStore } from "@/fetcher/mod.ts";
-import { NavigationStore } from "@/navigation/mod.ts";
 import { ContextMenuStore } from "@/contextmenu/mod.ts";
 
 const builtInStore: Module[] = [
   FormattingStore,
   FetcherStore,
   ColumnsStore,
-  NavigationStore,
+  CellStore,
   ContextMenuStore,
 ];
 

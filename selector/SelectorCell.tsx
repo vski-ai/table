@@ -2,7 +2,7 @@ import { useCallback } from "preact/hooks";
 import { RowsSelectCommand } from "./store.ts";
 import { CellRendererCallback } from "@/plugin/mod.ts";
 import { TableStore } from "@/store/types.ts";
-import { Row } from "@/table/types.ts";
+import { RowData } from "@/row/types.ts";
 import { useRowKey } from "@/fetcher/mod.ts";
 import { KEY } from "./constants.ts";
 
@@ -11,7 +11,7 @@ export const SelectorCell = ({
   row,
 }: {
   store: TableStore;
-  row: Row;
+  row: RowData;
   index: number;
 }) => {
   const rowKey = useRowKey({ store });

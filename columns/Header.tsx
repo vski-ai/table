@@ -1,20 +1,21 @@
 import { TableStore } from "@/store/mod.ts";
-import { ColumnHeader, useOrderedColumns } from "@/columns/mod.ts";
-import { useTableStyle } from "./useTableStyle.ts";
+import { useTableColumnStyle } from "./useTableColumnStyle.ts";
 import { usePluginContainer } from "@/plugin/usePluginContainer.ts";
+import { useOrderedColumns } from "./useOrderedColumns.ts";
+import { Column } from "./Column.tsx";
 
-interface StickyHeaderContainerProps {
+interface HeaderProps {
   store: TableStore;
   loading: boolean;
 }
 
-export function HeaderContainer({
+export function Header({
   store,
   loading,
-}: StickyHeaderContainerProps) {
+}: HeaderProps) {
   const plugins = usePluginContainer({ store });
   const columnsInOrder = useOrderedColumns({ store });
-  const { style } = useTableStyle({ store });
+  const { style } = useTableColumnStyle({ store });
 
   return (
     <div
@@ -26,7 +27,7 @@ export function HeaderContainer({
     >
       <table
         style={style}
-        class="vt shadow-xl"
+        class="vt vt-header"
       >
         <thead id="vt-main-head">
           {loading
@@ -34,7 +35,7 @@ export function HeaderContainer({
               <tr>
                 {new Array(10).fill(0).map((_, i) => (
                   <th key={i} style={{ width: 350 }}>
-                    <div class="skeleton h-8"></div>
+                    <div class="vt-header-skeleton"></div>
                   </th>
                 ))}
               </tr>
@@ -46,7 +47,7 @@ export function HeaderContainer({
                   store,
                 })}
                 {columnsInOrder.map((col) => (
-                  <ColumnHeader
+                  <Column
                     key={col}
                     column={col}
                     store={store}

@@ -1,8 +1,8 @@
-import { TableView } from "@/table/mod.ts";
+import { Table } from "@/table.tsx";
 import { createTableStore, LocalStorageAdapter } from "@/store/mod.ts";
 import { useEffect, useRef } from "preact/hooks";
 import data from "./mock/flat-1m-rows.json" with { type: "json" };
-import { Row } from "@/table/types.ts";
+import { RowData } from "@/row/types.ts";
 import { createPluginContainer } from "@/plugin/mod.ts";
 import {
   createFrontendSorter,
@@ -35,10 +35,10 @@ export const FlatTable = () => {
 
   const onDataLoad = async (
     { offset, limit, store }: any,
-  ): Promise<{ rows: Row[]; total: number }> => {
+  ): Promise<{ rows: RowData[]; total: number }> => {
     //await new Promise((resolve) => setTimeout(resolve, 1000));
     const sorted = sorter({
-      data: (data as Row[]),
+      data: (data as RowData[]),
       store,
     });
     return {
@@ -51,7 +51,7 @@ export const FlatTable = () => {
   };
 
   return (
-    <TableView
+    <Table
       onDataLoad={onDataLoad}
       store={tableStore}
       scrollContainerRef={scrollRef as any}

@@ -1,5 +1,5 @@
 import { TableStore } from "@/store/types.ts";
-import { Row } from "@/table/types.ts";
+import { RowData } from "@/row/types.ts";
 import { DataLoadOptions, DataLoadResult } from "@/fetcher/types.ts";
 import { SortedAddon } from "./addon.ts";
 import { MutableRef } from "preact/hooks";
@@ -9,7 +9,7 @@ type WithRef = {
 };
 export type ClassResolverCallback = (
   opts: {
-    row?: Row;
+    row?: RowData;
     rowKey?: string;
     column?: string;
     store: TableStore;
@@ -18,7 +18,7 @@ export type ClassResolverCallback = (
 
 export type StyleResolverCallback = (
   opts: {
-    row?: Row;
+    row?: RowData;
     column?: string;
     store: TableStore;
   } & WithRef,
@@ -29,7 +29,7 @@ export type CellRendererCallback =
   & ((
     opts: {
       column: string;
-      row: Row;
+      row: RowData;
       store: TableStore;
       rowIndex?: number;
     } & WithRef,

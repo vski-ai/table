@@ -2,7 +2,7 @@ import { useSignal } from "@preact/signals";
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import { TableStore } from "@/store/mod.ts";
 import { ColumnSetCommand } from "@/columns/store.ts";
-import { Row } from "@/table/types.ts";
+import { RowData } from "@/row/types.ts";
 import { DataLoadCallback } from "./types.ts";
 import { usePluginContainer } from "@/plugin/usePluginContainer.ts";
 import { TableMetaCommnand } from "./store.ts";
@@ -18,7 +18,7 @@ export const useLoader = ({
   store,
   visibleRows,
 }: LoaderProps) => {
-  const data = useSignal<(Row | null)[]>([]);
+  const data = useSignal<(RowData | null)[]>([]);
   const total = useSignal(0);
   const isLoading = useSignal(false);
   const loadedRanges = useRef<{ start: number; end: number }[]>([]);

@@ -1,17 +1,22 @@
-import { useNavCallback, useTableTabIndexEffect } from "@/navigation/mod.ts";
-import { useTableStyle } from "./useTableStyle.ts";
-import { useDataFetcher } from "@/fetcher/mod.ts";
+import { MutableRef, useRef } from "preact/hooks";
+import { useTableTabIndexEffect } from "@/common/useTableTabIndexEffect.ts";
+import { DataLoadCallback, useDataFetcher } from "@/fetcher/mod.ts";
+import { usePluginContainer } from "@/plugin/mod.ts";
+import { Header, useTableColumnStyle } from "@/columns/mod.ts";
+import { useNavCallback } from "@/cell/mod.ts";
+import { RowData, RowPadding, useRenderRowCallback } from "@/row/mod.ts";
+import { TableStore } from "@/store/types.ts";
 
-import { Row } from "./types.ts";
-import { VirtualTableViewProps } from "./types.ts";
-import { useRenderRowCallback } from "./Row.tsx";
-import { HeaderContainer } from "./HeaderContainer.tsx";
+export type TableProps = {
+  onDataLoad: DataLoadCallback;
+  store: TableStore;
+  initialWidth?: number;
+  rowHeight?: number;
+  scrollContainerRef: MutableRef<HTMLElement>;
+  rowIdentifier?: string;
+};
 
-import { RowPadding } from "./RowPadding.tsx";
-import { useRef } from "preact/hooks";
-import { usePluginContainer } from "../plugin/mod.ts";
-
-export function TableView(props: VirtualTableViewProps) {
+export function Table(props: TableProps) {
   const {
     store,
     scrollContainerRef,
@@ -32,7 +37,7 @@ export function TableView(props: VirtualTableViewProps) {
     onDataLoad,
   });
 
-  const { style } = useTableStyle({ store });
+  const { style } = useTableColumnStyle({ store });
 
   const renderRow = useRenderRowCallback({
     store,
@@ -61,7 +66,7 @@ export function TableView(props: VirtualTableViewProps) {
         ref: scrollContainerRef,
         store,
       })}
-      <HeaderContainer store={store} loading={initializing} />
+      <Header store={store} loading={initializing} />
       <table
         style={style}
         id="vt-main"
@@ -115,7 +120,7 @@ export function TableView(props: VirtualTableViewProps) {
               }
 
               return renderRow(
-                (item.row as Row) ?? { $loading: true },
+                (item.row as RowData) ?? { $loading: true },
                 item.index,
               );
             },

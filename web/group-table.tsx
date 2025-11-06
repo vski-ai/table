@@ -1,7 +1,7 @@
-import { TableView } from "@/table/mod.ts";
+import { Table } from "@/table.tsx";
 import { createTableStore, LocalStorageAdapter } from "@/store/mod.ts";
 import { useEffect, useRef } from "preact/hooks";
-import { Row } from "@/table/types.ts";
+import { RowData } from "@/row/types.ts";
 import data from "./mock/group-1m-rows.json" with { type: "json" };
 import { createPluginContainer } from "@/plugin/mod.ts";
 import {
@@ -58,7 +58,7 @@ export const GroupTable = () => {
     );
 
     return {
-      rows: (d as Row[]).slice(offset, offset + limit),
+      rows: (d as RowData[]).slice(offset, offset + limit),
       total: d.length,
       meta: {
         groupBy: ["Year", "Month", "Company"],
@@ -73,7 +73,7 @@ export const GroupTable = () => {
   };
 
   return (
-    <TableView
+    <Table
       onDataLoad={onDataLoad}
       store={tableStore}
       scrollContainerRef={scrollRef}

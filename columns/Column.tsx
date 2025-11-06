@@ -9,18 +9,18 @@ import { useColumnResizer } from "./useColumnnResize.ts";
 import { useStickyColumn } from "./useStickyColumn.ts";
 import { cn } from "@/common/className.ts";
 
-export interface ColumnHeaderProps {
+export interface ColumnProps {
   column: string;
   store: TableStore;
   children?: ComponentChildren;
 }
 
-export function ColumnHeader(
+export function Column(
   {
     column,
     children,
     store,
-  }: ColumnHeaderProps,
+  }: ColumnProps,
 ) {
   const plugins = usePluginContainer({ store });
   const onColumnDrop = useColumnsOrderCallback({ store });

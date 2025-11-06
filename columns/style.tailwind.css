@@ -1,16 +1,17 @@
 @layer components {
   .vt-col {
-    @apply sticky top-0 z-10 bg-gray-200 dark:bg-gray-800 text-base-content
-      after:border-r-1 after:border-gray-300 dark:after:border-gray-700;
+    @apply sticky top-0 z-10 border-0 bg-gray-200 dark:bg-gray-800
+      text-base-content after:border-r-1 after:border-gray-300
+      dark:after:border-gray-700;
 
     &.stick-left {
-      @apply bg-gray-300 dark:bg-gray-700 after:border-gray-400
-        dark:after:border-gray-900;
+      @apply bg-gray-300 dark:bg-gray-700 after:border-gray-500
+        dark:after:border-gray-500;
     }
 
     &.stick-right {
       @apply bg-gray-300 dark:bg-gray-700 after:border-l-1 after:border-r-0
-        after:border-gray-400 dark:after:border-gray-900;
+        after:border-gray-500 dark:after:border-gray-500;
     }
 
     &::after {
@@ -33,6 +34,14 @@
     .vt-col-resize {
       @apply absolute -right-2 top-0 h-full w-4 cursor-col-resize select-none
         bg-transparent;
+    }
+  }
+  .vt-header {
+    @apply border-b border-b-gray-400 dark:border-b-gray-900 shadow
+      dark:shadow-lg;
+
+    .vt-header-skeleton {
+      @apply skeleton h-8;
     }
   }
 }

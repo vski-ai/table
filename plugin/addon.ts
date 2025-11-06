@@ -18,4 +18,12 @@ export class SortedAddon<T extends (...args: any) => any = any> {
   render(...opts: Parameters<T>): ReturnType<T>[] {
     return this.getSorted().map((cb) => cb(...opts));
   }
+
+  data(...opts: Parameters<T>): Record<string, any> {
+    return Object.fromEntries(this.render(...opts).flat(1));
+  }
+
+  string(...opts: Parameters<T>): string {
+    return this.render(...opts).flat(1).join(" ");
+  }
 }

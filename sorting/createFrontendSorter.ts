@@ -1,8 +1,8 @@
-import { Row } from "@/table/types.ts";
+import { RowData } from "@/row/types.ts";
 import { TableStore } from "@/store/mod.ts";
 import { SortState } from "./types.ts";
 
-const sortFn = (sorting: SortState) => (a: Row, b: Row) => {
+const sortFn = (sorting: SortState) => (a: RowData, b: RowData) => {
   const aValue = a[sorting.column] ?? 0;
   const bValue = b[sorting.column] ?? 0;
 
@@ -20,12 +20,12 @@ const sortFn = (sorting: SortState) => (a: Row, b: Row) => {
  * is a bit tricky - we have to rebuilt tree and visit branches
  * recursevely.
  */
-const sortGroup = (data: Row[], store: TableStore): Row[] => {
+const sortGroup = (data: RowData[], store: TableStore): RowData[] => {
   const sorting = store.state.sorting.value;
   const groupSorting = store.state.groupSorting?.value ?? {};
 
   const roots = data.filter((row) => !row.$parent_id);
-  const children: Record<string, Row[]> = {};
+  const children: Record<string, RowData[]> = {};
 
   for (const row of data) {
     if (row.$parent_id) {
@@ -37,13 +37,13 @@ const sortGroup = (data: Row[], store: TableStore): Row[] => {
     }
   }
 
-  const sortLevel = (rows: Row[], parentId?: string): Row[] => {
+  const sortLevel = (rows: RowData[], parentId?: string): RowData[] => {
     const currentSorting = parentId ? groupSorting[parentId] : sorting;
     if (currentSorting) {
       rows.sort(sortFn(currentSorting));
     }
 
-    const result: Row[] = [];
+    const result: RowData[] = [];
     for (const row of rows) {
       result.push(row);
       if (children[row.id]) {
@@ -60,14 +60,14 @@ const sortGroup = (data: Row[], store: TableStore): Row[] => {
 // This is a reference implemetation to sort multilevel
 // tables on frontend
 export function createFrontendSorter() {
-  let lastData: Row[] | undefined;
+  let lastData: RowData[] | undefined;
   let lastSorting: SortState | undefined;
   let lastLeafSorting: Record<string, SortState> | undefined;
-  let lastResult: Row[] | undefined;
+  let lastResult: RowData[] | undefined;
   return function sorter({ data, store }: {
-    data: Row[];
+    data: RowData[];
     store: TableStore;
-  }): Row[] {
+  }): RowData[] {
     const sorting = store.state.sorting.value;
     const groupSorting = store.state.groupSorting?.value ?? {};
     if (
