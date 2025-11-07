@@ -35,7 +35,7 @@ export const SelectorCell = ({
 
   return (
     <td
-      class="vt-cell"
+      class="vt-cell vt-select"
       style={{
         width: `var(--col-width-${KEY})`,
         position: "relative",

@@ -1,9 +1,12 @@
 @layer components {
   .vt-row {
+    .vt-select {
+      text-align: center;
+    }
     &.selected {
       td {
-        @apply before:border-t-4 before:border-t-sky-300/30
-          before:bg-sky-300/20;
+        @apply before:border-t-2 before:border-t-sky-300/30 before:bg-sky-300/20
+          dark:before:border-t-sky-300/10 dark:before:bg-sky-300/5;
       }
     }
   }

@@ -4,8 +4,8 @@ export const RowLoading = (
   return (
     <tr class="vt-loading" style={{ height: rowHeight + "px" }}>
       {columns.map(() => (
-        <td style={{ height: rowHeight }}>
-          <div class="skeleton h-8"></div>
+        <td class="vt-cell" style={{ height: rowHeight }}>
+          <div class="vt-loading"></div>
         </td>
       ))}
     </tr>

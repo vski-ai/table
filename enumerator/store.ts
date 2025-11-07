@@ -4,7 +4,6 @@ import { Command, TableState } from "@/store/mod.ts";
 type ResizingRow = { rowId: string | number; height: number } | null;
 declare module "@/store/types.ts" {
   interface TableState {
-    rowHeights: Signal<Record<string, number>>;
     resizingRow: Signal<ResizingRow>;
   }
 }
@@ -17,6 +16,7 @@ export type RowHeightCommand = Command<
   typeof ROW_HEIGHTS_SET,
   Record<string, number>
 >;
+type RowCommand = RowResizeCommand | RowHeightCommand;
 
 export function state<T>(init: Record<string, T> | null) {
   return {
@@ -28,8 +28,17 @@ export function persist(state: TableState) {
   return {};
 }
 
-export function reducer<T>(state: TableState, command: Command<T>) {
-  // switch (command.type) {
-  // }
+export function reducer(state: TableState, command: RowCommand) {
+  switch (command.type) {
+    case "ROW_RESIZING_SET":
+      state.resizingRow.value = command.payload;
+      break;
+    case "ROW_HEIGHTS_SET":
+      state.rowHeights.value = {
+        ...state.rowHeights.value,
+        ...command.payload,
+      };
+      break;
+  }
   return state;
 }

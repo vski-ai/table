@@ -7,6 +7,7 @@ declare module "@/store/types.ts" {
     loading: Signal<boolean>;
     dataLoadKey: Signal<number>;
     tableMeta: Signal<TableMeta>;
+    rowHeights: Signal<Record<string, number>>;
   }
   interface TableStore {
     shouldReload: () => void;
@@ -22,7 +23,7 @@ export function state(init: Record<string, any> | null) {
     tableMeta: signal(init?.tableMeta ?? {}),
     dataLoadKey: signal(0),
     loading: signal(false),
-    rowHeights: signal({}),
+    rowHeights: signal(init?.rowHeights ?? {}),
   };
 }
 

@@ -22,7 +22,7 @@ export const RowPadding = (
     <tr data-name={name} style={{ height: `${padding}px` }}>
       {plugins.leftTableCells.getSorted().map((cb) => (
         <td
-          class="bg-base-100"
+          class="vt-cell"
           style={{
             width: getColumnWidth(cb.columnName!),
             height: 0,
@@ -33,7 +33,7 @@ export const RowPadding = (
       ))}
       {columns.map((col) => (
         <td
-          class="bg-base-100"
+          class="vt-cell"
           style={{
             width: getColumnWidth(col),
             height: 0,

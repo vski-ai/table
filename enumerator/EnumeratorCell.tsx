@@ -3,9 +3,10 @@ import { useCallback } from "preact/hooks";
 import { CellRendererCallback } from "@/plugin/mod.ts";
 import { TableStore } from "@/store/types.ts";
 import { RowData } from "@/row/types.ts";
-import { useRowKey } from "@/fetcher/mod.ts";
+import { useRowHeights, useRowKey } from "@/fetcher/mod.ts";
 import { RowResizeHandle } from "./RowResizeHandle.tsx";
-import { RowHeightCommand, RowResizeCommand } from "./store.ts";
+import { RowHeightCommand } from "./store.ts";
+import { useSignal } from "@preact/signals";
 
 export const EnumeratorCell = ({
   store,
@@ -17,35 +18,21 @@ export const EnumeratorCell = ({
   index: number;
 }) => {
   const rowKey = useRowKey({ store });
-  const resizingRow = store.state.resizingRow.value;
+  const getRowHeight = useRowHeights({
+    rowKey,
+    store,
+  });
+  const height = getRowHeight(row);
+  const update = useSignal(0);
   const onResize = useCallback((rowId: string | number, newHeight: number) => {
-    store.dispatch<RowResizeCommand>({
-      type: "ROW_RESIZING_SET",
-      payload: { rowId, height: newHeight },
+    store.dispatch<RowHeightCommand>({
+      type: "ROW_HEIGHTS_SET",
+      payload: { [rowId]: newHeight },
     });
-  }, [store]);
-
-  const onResizeEnd = useCallback(() => {
-    if (resizingRow) {
-      const { rowId, height } = resizingRow;
-      const newRowHeights = {
-        ...store.state.rowHeights.value,
-        [rowId]: height,
-      };
-      store.dispatch({
-        type: "RowHeightCommand",
-        payload: newRowHeights,
-      });
-      store.dispatch<RowResizeCommand>({
-        type: "ROW_RESIZING_SET",
-        payload: null,
-      });
-    }
-  }, [store, resizingRow]);
-
+  }, []);
   return (
     <td
-      class="vt-cell"
+      class="vt-cell vt-enum"
       style={{
         width: `var(--col-width-$$enumerator$$)`,
         position: "relative",
@@ -54,10 +41,11 @@ export const EnumeratorCell = ({
     >
       {index! + 1}
       <RowResizeHandle
+        key={update.value}
         rowId={row[rowKey]}
         onResize={onResize}
-        onResizeEnd={onResizeEnd}
-        rowHeight={64}
+        onResizeEnd={() => update.value = new Date().getTime()}
+        rowHeight={height}
       />
     </td>
   );

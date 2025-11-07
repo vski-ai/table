@@ -12,24 +12,26 @@ export const selectorColumnRenderCallback: ColumnRendererCallback = (
       column={KEY}
       store={store}
     >
-      <input
-        type="checkbox"
-        class="checkbox"
-        checked={false}
-        onChange={(e) => {
-          if ((e.target as HTMLInputElement).checked) {
-            store.dispatch<RowsSelectCommand>({
-              type: "SELECTED_ROWS_SET",
-              payload: [],
-            });
-          } else {
-            store.dispatch<RowsSelectCommand>({
-              type: "SELECTED_ROWS_SET",
-              payload: [],
-            });
-          }
-        }}
-      />
+      <div class="vt-select w-full -ml-0 text-center">
+        <input
+          type="checkbox"
+          class="checkbox checkbox-sm"
+          checked={false}
+          onChange={(e) => {
+            if ((e.target as HTMLInputElement).checked) {
+              store.dispatch<RowsSelectCommand>({
+                type: "SELECTED_ROWS_SET",
+                payload: [],
+              });
+            } else {
+              store.dispatch<RowsSelectCommand>({
+                type: "SELECTED_ROWS_SET",
+                payload: [],
+              });
+            }
+          }}
+        />
+      </div>
     </Column>
   );
 };

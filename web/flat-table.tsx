@@ -11,6 +11,7 @@ import {
 } from "@/sorting/mod.ts";
 
 import { SelectorPlugin, SelectorStore } from "@/selector/mod.ts";
+import { EnumeratorPlugin, EnumeratorStore } from "../enumerator/mod.ts";
 
 const sorter = createFrontendSorter();
 
@@ -25,12 +26,14 @@ export const FlatTable = () => {
     [
       SortingStore,
       SelectorStore,
+      EnumeratorStore,
     ],
   );
 
   createPluginContainer(tableStore, [
     SortingPlugin,
     SelectorPlugin,
+    EnumeratorPlugin,
   ]);
 
   const onDataLoad = async (

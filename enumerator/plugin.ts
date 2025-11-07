@@ -13,7 +13,7 @@ const onInit: PluginInitCallback = ({
   store.dispatch<ColumnWidthCommand>({
     type: "COLUMN_WIDTHS_SET",
     payload: {
-      $$enumerator$$: 50,
+      $$enumerator$$: 58,
     },
   });
 };

@@ -22,7 +22,7 @@ const onInit: PluginInitCallback = ({
   store.dispatch<ColumnWidthCommand>({
     type: "COLUMN_WIDTHS_SET",
     payload: {
-      [KEY]: 50,
+      [KEY]: 58,
     },
   });
 };

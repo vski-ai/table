@@ -3,7 +3,7 @@ import { useCallback } from "preact/hooks";
 interface RowResizeHandleProps {
   rowId: string | number;
   onResize: (rowId: string | number, height: number) => void;
-  onResizeEnd: () => void;
+  onResizeEnd?: () => void;
   rowHeight: number;
 }
 
@@ -25,14 +25,14 @@ export function RowResizeHandle(
     };
 
     const onMouseUp = () => {
-      onResizeEnd();
+      onResizeEnd?.();
       globalThis.removeEventListener("mousemove", onMouseMove);
       globalThis.removeEventListener("mouseup", onMouseUp);
     };
 
     globalThis.addEventListener("mousemove", onMouseMove);
     globalThis.addEventListener("mouseup", onMouseUp);
-  }, [rowId, onResize, onResizeEnd, rowHeight]);
+  }, [rowId, onResize, onResizeEnd]);
 
   return (
     <div
