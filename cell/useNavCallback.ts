@@ -25,7 +25,6 @@ export function useNavCallback(
   const isKeyHeldDown = useRef(false);
   const scrollTimeout = useRef<number | null>(null);
   const lastScrollTop = useRef(0);
-  const lastExecution = useRef(0);
   const shiftPressed = useSignal(false);
   const tabPressed = useSignal(false);
 
@@ -160,15 +159,6 @@ export function useNavCallback(
   );
 
   const onKeyDown = useCallback((ev: KeyboardEvent) => {
-    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(ev.key)) {
-      const now = Date.now();
-      if (now - lastExecution.current < 50) {
-        ev.preventDefault();
-        return;
-      }
-      lastExecution.current = now;
-    }
-
     if (ev.key === "Escape") {
       store.state.selectedCells.value = {};
     }

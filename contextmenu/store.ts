@@ -67,9 +67,6 @@ export function persist(_: TableState) {
 export function reducer(state: TableState, command: ContextMenuAddCommand) {
   switch (command.type) {
     case "CONTEXT_MENU_ADD_ITEM": {
-      if (state.contextMenuItems.value[command.payload.menu]) {
-        return state;
-      }
       state.contextMenuItems.value = {
         ...state.contextMenuItems.value,
         [command.payload.menu]: command.payload,

@@ -15,7 +15,7 @@ const onInit: PluginInitCallback = ({
   rowClasses.use(1, ({ row, store, rowKey }) => {
     return [
       store.state.selectedRows.value.includes(row?.[rowKey ?? ""]!)
-        ? "after:border-1 after:border-y-white"
+        ? "selected"
         : "",
     ];
   });

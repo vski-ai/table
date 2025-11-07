@@ -1,0 +1,10 @@
+@layer components {
+  .vt-row {
+    &.selected {
+      td {
+        @apply before:border-t-4 before:border-t-sky-300/30
+          before:bg-sky-300/20;
+      }
+    }
+  }
+}

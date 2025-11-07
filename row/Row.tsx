@@ -41,7 +41,7 @@ export const Row = (props: RowProps) => {
         key={row[rowKey]}
         data-row-id={row[rowKey]}
         data-index={rowIndex}
-        class={classes}
+        class={"vt-row " + classes}
         style={{
           height: height,
           ...plugins.rowStyles.data({
