@@ -40,6 +40,8 @@ export function useDataFetcher({
     virtualItems,
     paddingTop,
     paddingBottom,
+    startIndex,
+    endIndex,
   } = useVariableVirtualizer({
     scrollContainerRef,
     itemCount: latestCount.value,
@@ -53,7 +55,7 @@ export function useDataFetcher({
       ...item,
       row: latestData.value[item.index] ?? null,
     }));
-  }, [latestData.value, virtualItems]);
+  }, [latestData.value, virtualItems, startIndex, endIndex]);
 
   // 3. Load and merge (todo: maybe separate concerns)
   //      - loads the data, fills nulled rows

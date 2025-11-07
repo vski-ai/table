@@ -145,11 +145,23 @@ export function useVariableVirtualizer(
     ),
   );
 
+  const virtualItemsRef = useRef<any[]>([]);
+
   const virtualItems = useMemo(() => {
-    const items = [];
-    for (let i = range.startIndex; i <= range.endIndex; i++) {
-      items.push({ index: i });
+    const newSize = range.endIndex - range.startIndex + 1;
+    const items = virtualItemsRef.current;
+
+    while (items.length < newSize) {
+      items.push({ index: 0 });
     }
+    if (items.length > newSize) {
+      items.length = newSize;
+    }
+
+    for (let i = 0; i < newSize; i++) {
+      items[i].index = range.startIndex + i;
+    }
+
     return items;
   }, [range.startIndex, range.endIndex]);
 
