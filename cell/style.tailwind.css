@@ -32,5 +32,8 @@
       display: block;
       background: transparent;
     }
+    .vt-loading {
+      @apply h-8 skeleton;
+    }
   }
 }

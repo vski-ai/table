@@ -1,6 +1,6 @@
 export type SortState = {
-  column: string;
-  sort: "asc" | "desc";
+  column?: string;
+  sort?: "asc" | "desc";
 };
 
 declare module "@/fetcher/types.ts" {

@@ -30,6 +30,7 @@ export const useLoader = ({
     if (limit <= 0 || isLoading.value) return;
 
     isLoading.value = true;
+    store.state.loading.value = true;
     try {
       const options = await plugins.beforeLoad({ offset, limit, store });
       const res = await onDataLoad(options);
@@ -80,6 +81,7 @@ export const useLoader = ({
       console.error("Failed to load data", error);
     } finally {
       isLoading.value = false;
+      store.state.loading.value = false;
     }
   }, [
     onDataLoad,

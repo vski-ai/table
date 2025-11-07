@@ -6,26 +6,26 @@ import { TableStore } from "@/store/mod.ts";
 import { SortState } from "./types.ts";
 import { ColumnRendererCallback } from "@/plugin/types.ts";
 import { SortSetCommand } from "./store.ts";
+import { cn } from "@/common/className.ts";
+import { useCallback, useEffect } from "preact/hooks";
+import { useSignal } from "@preact/signals";
 
 interface RowSorterProps {
-  className?: string;
-  activeClassName?: string;
   column: string;
   store: TableStore;
-  onChange?: (state: SortState) => void;
 }
 
 export const RowSorter = ({
   column,
   store,
-  onChange,
 }: RowSorterProps) => {
   const meta = store.state.tableMeta.value;
   if (!meta?.sortableAll && !meta?.sortableColumns?.includes(column)) {
     return null;
   }
 
-  const state = store.state.sorting.value ?? { column: "", sort: "" };
+  const isLoading = useSignal(false);
+  const state = store.state.sorting.value ?? {};
 
   const sort = (state: SortState) => {
     store.dispatch<SortSetCommand>({
@@ -35,31 +35,48 @@ export const RowSorter = ({
     store.shouldReload();
   };
 
+  const handler = useCallback(() => {
+    const state = store.state.sorting.value;
+    if (!state?.sort) {
+      sort({
+        column,
+        sort: "asc",
+      });
+    }
+
+    if (state.sort === "asc") {
+      sort({
+        column,
+        sort: "desc",
+      });
+    }
+
+    if (state.sort === "desc") {
+      sort({});
+    }
+
+    isLoading.value = true;
+
+    const endIsLoading = () => {
+      if (!store.state.loading.value) {
+        isLoading.value = false;
+        return;
+      }
+      setTimeout(endIsLoading, 300);
+    };
+    setTimeout(endIsLoading, 300);
+  }, []);
+
   return (
     <button
       key={state?.column}
       type="button"
-      class={[
-        "btn btn-xs btn-ghost w-8 h-8",
-        state?.column === column && "btn-active",
-      ].join(" ")}
-      onClick={() => {
-        if (!state) {
-          return;
-        }
-        if (state.column === column) {
-          sort({
-            column,
-            sort: state.sort === "asc" ? "desc" : "asc",
-          });
-        } else {
-          sort({
-            column,
-            sort: "asc",
-          });
-        }
-        onChange?.(state);
-      }}
+      class={cn({
+        "vt-sorter": true,
+        "enabled": state?.column === column,
+        "vt-loading": isLoading.value,
+      })}
+      onClick={handler}
     >
       {state?.column === column
         ? state?.sort === "asc" ? <ArrowDownIcon /> : <ArrowUpIcon />

@@ -4,7 +4,12 @@ import { DataLoadCallback, useDataFetcher } from "@/fetcher/mod.ts";
 import { usePluginContainer } from "@/plugin/mod.ts";
 import { Header, useTableColumnStyle } from "@/columns/mod.ts";
 import { useNavCallback } from "@/cell/mod.ts";
-import { RowData, RowPadding, useRenderRowCallback } from "@/row/mod.ts";
+import {
+  RowData,
+  RowPadding,
+  RowSkeleton,
+  useRenderRowCallback,
+} from "@/row/mod.ts";
 import { TableStore } from "@/store/types.ts";
 
 export type TableProps = {
@@ -77,17 +82,7 @@ export function Table(props: TableProps) {
         onFocus={focusNav.onFocus}
       >
         <tbody>
-          {initializing && (
-            new Array(50).fill(0).map((_, i) => (
-              <tr>
-                {new Array(10).fill(0).map((_, i) => (
-                  <td key={i} style={{ width: 350 }}>
-                    <div class="skeleton h-8"></div>
-                  </td>
-                ))}
-              </tr>
-            ))
-          )}
+          {initializing && <RowSkeleton />}
           {[{ row: "top", index: -Infinity }, ...visibleRows, {
             row: "bottom",
             index: Infinity,

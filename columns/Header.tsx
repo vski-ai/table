@@ -34,7 +34,7 @@ export function Header({
             ? (
               <tr>
                 {new Array(10).fill(0).map((_, i) => (
-                  <th key={i} style={{ width: 350 }}>
+                  <th class="vt-col" key={i} style={{ width: 350 }}>
                     <div class="vt-header-skeleton"></div>
                   </th>
                 ))}

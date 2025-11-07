@@ -1,0 +1,9 @@
+@layer components {
+  .vt-sorter {
+    @apply btn btn-xs btn-ghost w-8 h-8 rounded-lg transition-none;
+
+    &.enabled {
+      @apply bg-gray-400 dark:bg-gray-900;
+    }
+  }
+}

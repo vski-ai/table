@@ -6,5 +6,4 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @import "./layout.tailwind.css";
-@import "../theme/index.css";
 @import "../style.tailwind.css";

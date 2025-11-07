@@ -17,8 +17,10 @@ export function state(init: Record<string, any> | null) {
   };
 }
 
-export function persist(_: TableState) {
-  return {};
+export function persist(state: TableState) {
+  return {
+    sorting: state.sorting.value,
+  };
 }
 
 export function reducer(state: TableState, command: SortSetCommand) {
