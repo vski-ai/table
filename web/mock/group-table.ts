@@ -100,9 +100,11 @@ function generateRows() {
   return result;
 }
 
-console.log("Generating 1M rows...");
-Deno.writeTextFileSync(
-  "./group-1m-rows.json",
-  JSON.stringify(generateRows()),
-);
-console.log("Done");
+export const generate = () => {
+  console.log("Generating 1M rows...");
+  Deno.writeTextFileSync(
+    "./group-1m-rows.json",
+    JSON.stringify(generateRows()),
+  );
+  console.log("Done");
+};

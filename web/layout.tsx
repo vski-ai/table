@@ -33,18 +33,9 @@ export default function ({ children }: { children: any }) {
               </a>
             </li>
             <li>
-              <a
-                href="/flat-with-column-management"
-                class="aria-[current=page]:active"
-              >
-                <LayoutDashboardIcon />
-                Flat Table (CM)
-              </a>
-            </li>
-            <li>
               <a href="/groupable" class="aria-[current=page]:active">
                 <ChartIcon />
-                Groupable Table
+                Group Table
               </a>
             </li>
             <li>

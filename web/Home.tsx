@@ -2,22 +2,45 @@ import { Hero } from "./components/Hero.tsx";
 import { Background } from "./components/Background.tsx";
 import { Features } from "./components/Features.tsx";
 import { Header } from "./components/Header.tsx";
+import { Demo } from "./components/Demo.tsx";
+import { useEffect, useRef } from "preact/hooks";
+
+import NextIcon from "lucide-react/dist/esm/icons/chevron-down.js";
 
 export function Home() {
+  const demoRef = useRef<HTMLDivElement>(null);
+  const goDemo = () => demoRef.current?.scrollIntoView({ behavior: "smooth" });
+
+  const featuresRef = useRef<HTMLDivElement>(null);
+  const goFeatures = () =>
+    featuresRef.current?.scrollIntoView({ behavior: "smooth" });
+
   return (
     <div class="relative">
       <Header />
       <section class="absolute top-25 left-0 right-0 z-20">
         <Hero />
+        <p class="-mt-12 mb-6 text-center w-full">
+          <a onClick={goDemo} class="btn btn-circle btn-outline">
+            <NextIcon />
+          </a>
+        </p>
         <p class="my-1 text-center w-full">
-          Tables are <i>incredibly complex</i>. Building a <i>feature-rich</i>
-          {" "}
-          and{" "}
-          <i>ai-enabled</i>table is a dauniting task. This is why most
-          developers avoid working with tables. <br />
+          Tables are <i>complex</i>. Building a <i>feature-rich</i> and{" "}
+          <i>ai-enabled</i> table is a dauniting task. <br />
           <strong class="inline-block mt-2">we are here to fix it</strong>
         </p>
-        <Features />
+        <div ref={demoRef}>
+          <Demo />
+        </div>
+        <p class="-mt-6 mb-6 text-center w-full">
+          <a onClick={goFeatures} class="btn btn-circle btn-outline">
+            <NextIcon />
+          </a>
+        </p>
+        <div ref={featuresRef}>
+          <Features />
+        </div>
         <footer class="footer footer-center p-4 bg-base-300 text-base-content">
           <div>
             <p>Copyright © 2025 - All right reserved by ACME Industries Ltd</p>

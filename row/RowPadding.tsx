@@ -19,7 +19,11 @@ export const RowPadding = (
   const plugins = usePluginContainer({ store });
   const { getColumnWidth } = useColumnResizer({ store });
   return (
-    <tr data-name={name} style={{ height: `${padding}px` }}>
+    <tr
+      class="vt-row vt-row-padding"
+      data-name={name}
+      style={{ height: `${padding}px` }}
+    >
       {plugins.leftTableCells.getSorted().map((cb) => (
         <td
           class="vt-cell"

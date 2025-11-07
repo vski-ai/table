@@ -1,7 +1,6 @@
 import { Table } from "@/table.tsx";
 import { createTableStore, LocalStorageAdapter } from "@/store/mod.ts";
 import { useEffect, useRef } from "preact/hooks";
-import data from "./mock/flat-1m-rows.json" with { type: "json" };
 import { RowData } from "@/row/types.ts";
 import { createPluginContainer } from "@/plugin/mod.ts";
 import {
@@ -12,7 +11,9 @@ import {
 
 import { SelectorPlugin, SelectorStore } from "@/selector/mod.ts";
 import { EnumeratorPlugin, EnumeratorStore } from "../enumerator/mod.ts";
+import { generateRows } from "./mock/flat-table.ts";
 
+const data = generateRows(10000);
 const sorter = createFrontendSorter();
 
 export const FlatTable = () => {

@@ -4,7 +4,7 @@ import TwitterIcon from "lucide-react/dist/esm/icons/twitter.js";
 
 export function Header() {
   return (
-    <div class="absolute md:fixed top-5 right-12 flex items-center gap-2 z-100">
+    <div class="absolute top-5 right-12 flex items-center gap-2 z-100">
       <div class="badge badge-lg badge-warning">pre-alpha</div>
       <a
         href="https://github.com/vski/table"

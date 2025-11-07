@@ -1,6 +1,6 @@
 @layer components {
   .vt-col {
-    @apply sticky top-0 z-10 border-0 bg-gray-200 dark:bg-gray-800
+    @apply sticky top-0 z-10 border-0 bg-gray-100 dark:bg-gray-800
       text-base-content after:border-r-1 after:border-gray-300
       dark:after:border-gray-700;
 

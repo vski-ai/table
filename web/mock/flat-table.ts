@@ -19,9 +19,11 @@ export function generateRows(length = 1000000) {
   });
 }
 
-console.log("Generating 1M rows...");
-Deno.writeTextFileSync(
-  "./flat-1m-rows.json",
-  JSON.stringify(generateRows(100000)),
-);
-console.log("Done");
+export function generate() {
+  console.log("Generating 1M rows...");
+  Deno.writeTextFileSync(
+    "./flat-1m-rows.json",
+    JSON.stringify(generateRows(100000)),
+  );
+  console.log("Done");
+}

@@ -2,5 +2,13 @@
   .vt-row {
     /* safary says no */
     position: relative;
+    .placeholder {
+      opacity: 0.35;
+    }
+    &.vt-row-padding {
+      transition: none;
+      transform: none;
+      animation: none;
+    }
   }
 }
