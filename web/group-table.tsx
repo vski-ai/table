@@ -2,7 +2,7 @@ import { Table } from "@/table.tsx";
 import { createTableStore, LocalStorageAdapter } from "@/store/mod.ts";
 import { useEffect, useRef } from "preact/hooks";
 import { RowData } from "@/row/types.ts";
-import { generateGroupData } from "./mock/groupable-table.ts";
+import { generateRows } from "./mock/group-table.ts";
 import { createPluginContainer } from "@/plugin/mod.ts";
 import {
   createFrontendSorter,
@@ -14,7 +14,7 @@ import { GroupingPlugin, GroupingStore } from "@/grouping/mod.ts";
 import { DataLoadCallback } from "@/fetcher/types.ts";
 
 const sorter = createFrontendSorter();
-const data = generateGroupData();
+const data = generateRows();
 
 export const GroupTable = () => {
   const scrollRef = useRef<HTMLElement>(null);

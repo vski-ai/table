@@ -80,7 +80,7 @@ function generateLevel3(length = 10) {
   });
 }
 
-function generateRows() {
+export function generateRows() {
   const result = [];
   for (const l1 of generateLevel1()) {
     result.push(l1);
