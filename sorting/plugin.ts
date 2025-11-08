@@ -5,6 +5,7 @@ import {
 } from "@/plugin/mod.ts";
 import { headerRenderCallback } from "./RowSorter.tsx";
 import { SortState } from "./types.ts";
+import * as store from "./store.ts";
 
 declare module "@/fetcher/types.ts" {
   interface TableMeta {
@@ -35,4 +36,5 @@ export const SortingPlugin: ITablePlugin = {
   name: "sorting",
   onInit,
   beforeLoad,
+  store,
 };

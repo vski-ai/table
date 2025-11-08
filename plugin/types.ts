@@ -3,6 +3,7 @@ import { RowData } from "@/row/types.ts";
 import { DataLoadOptions, DataLoadResult } from "@/fetcher/types.ts";
 import { SortedAddon } from "./addon.ts";
 import { MutableRef } from "preact/hooks";
+import { StoreModule } from "@/store/types.ts";
 
 type WithRef = {
   ref?: MutableRef<HTMLElement>;
@@ -106,4 +107,6 @@ export type ITablePlugin<T extends Record<string, any> = Record<string, any>> =
 
     // A hook that is called after data is loaded
     afterLoad?: AfterLoadCallback;
+
+    store?: StoreModule;
   };

@@ -2,6 +2,7 @@ import { ITablePlugin, PluginInitCallback } from "@/plugin/mod.ts";
 import { ColumnWidthCommand } from "../columns/store.ts";
 import { enumCellRenderCallback } from "./EnumeratorCell.tsx";
 import { enumColumnRenderCallback } from "./EnumeratorColumn.tsx";
+import * as store from "./store.ts";
 
 const onInit: PluginInitCallback = ({
   leftTableCells,
@@ -20,5 +21,6 @@ const onInit: PluginInitCallback = ({
 
 export const EnumeratorPlugin: ITablePlugin = {
   name: "enumerator",
+  store,
   onInit,
 };

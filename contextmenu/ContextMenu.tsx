@@ -141,10 +141,6 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
     return null;
   }
 
-  if (!currentMenu.items) {
-    return null;
-  }
-
   return (
     <div
       ref={menuRef}
@@ -174,6 +170,7 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
                   class="p-2"
                   onClick={(e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     if (item.submenu?.items?.length) {
                       push(item.submenu);
                     } else if (item.action) {

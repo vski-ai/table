@@ -1,6 +1,6 @@
 import { Signal } from "@preact/signals";
 
-export type Module = {
+export type StoreModule = {
   state: (
     init: Record<string, unknown> | null,
   ) => { [key: string]: Signal<unknown> };

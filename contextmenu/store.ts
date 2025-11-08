@@ -50,7 +50,6 @@ export function state<T>(_: Record<string, T> | null) {
         }),
       };
     };
-
     return buildMenu("main");
   });
 

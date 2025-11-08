@@ -3,6 +3,7 @@ import { ColumnWidthCommand } from "../columns/store.ts";
 import { selectorCellRenderCallback } from "./SelectorCell.tsx";
 import { selectorColumnRenderCallback } from "./SelectorColumn.tsx";
 import { KEY } from "./constants.ts";
+import * as store from "./store.ts";
 
 const onInit: PluginInitCallback = ({
   leftTableCells,
@@ -29,5 +30,6 @@ const onInit: PluginInitCallback = ({
 
 export const SelectorPlugin: ITablePlugin = {
   name: "selector",
+  store,
   onInit,
 };

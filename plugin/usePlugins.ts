@@ -2,7 +2,7 @@ import { TableStore } from "@/store/types.ts";
 import { PLUGIN_CONTAINER_ACCESSOR } from "./private.ts";
 import { PluginContainer } from "./factory.ts";
 
-export function usePluginContainer(
+export function usePlugins(
   { store }: { store: TableStore },
 ): PluginContainer {
   // @ts-ignore: some privats

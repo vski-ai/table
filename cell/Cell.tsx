@@ -4,7 +4,7 @@ import { useStickyColumn } from "@/columns/mod.ts";
 import { TableStore } from "@/store/types.ts";
 import { RowData } from "@/row/types.ts";
 import { useRowKey } from "@/fetcher/useRowKey.ts";
-import { usePluginContainer } from "@/plugin/usePluginContainer.ts";
+import { usePlugins } from "../plugin/usePlugins.ts";
 
 interface CellProps {
   store: TableStore;
@@ -17,7 +17,7 @@ export const Cell = ({
   column,
   row,
 }: CellProps) => {
-  const plugins = usePluginContainer({ store });
+  const plugins = usePlugins({ store });
   const height = 64;
   const rowKey = useRowKey({ store });
   const {

@@ -1,7 +1,7 @@
 import { useCallback } from "preact/hooks";
 import { TableStore } from "@/store/types.ts";
 import { useOrderedColumns } from "@/columns/mod.ts";
-import { usePluginContainer } from "@/plugin/usePluginContainer.ts";
+import { usePlugins } from "../plugin/usePlugins.ts";
 import { useRowHeights, useRowKey } from "@/fetcher/mod.ts";
 import { RowData } from "./types.ts";
 import { RowLoading } from "./RowLoading.tsx";
@@ -26,7 +26,7 @@ export const Row = (props: RowProps) => {
     rowKey,
   } = props;
 
-  const plugins = usePluginContainer({ store });
+  const plugins = usePlugins({ store });
   const height = rowHeight;
 
   const classes = plugins.rowClasses.string({

@@ -1,6 +1,6 @@
 import { TableStore } from "@/store/mod.ts";
 import { useTableColumnStyle } from "./useTableColumnStyle.ts";
-import { usePluginContainer } from "@/plugin/usePluginContainer.ts";
+import { usePlugins } from "../plugin/usePlugins.ts";
 import { useOrderedColumns } from "./useOrderedColumns.ts";
 import { Column } from "./Column.tsx";
 
@@ -13,7 +13,7 @@ export function Header({
   store,
   loading,
 }: HeaderProps) {
-  const plugins = usePluginContainer({ store });
+  const plugins = usePlugins({ store });
   const columnsInOrder = useOrderedColumns({ store });
   const { style } = useTableColumnStyle({ store });
 

@@ -1,17 +1,13 @@
 import PlayIcon from "lucide-react/dist/esm/icons/play.js";
 import { useRef } from "preact/hooks";
-import { Table } from "@/table.tsx";
-import { SelectorPlugin, SelectorStore } from "@/selector/mod.ts";
-import { EnumeratorPlugin, EnumeratorStore } from "@/enumerator/mod.ts";
-import { createTableStore, LocalStorageAdapter } from "@/store/mod.ts";
-import { createPluginContainer } from "@/plugin/mod.ts";
-import {
-  createFrontendSorter,
-  SortingPlugin,
-  SortingStore,
-} from "@/sorting/mod.ts";
+import { SelectorPlugin } from "@/selector/mod.ts";
+import { EnumeratorPlugin } from "@/enumerator/mod.ts";
+import { createFrontendSorter, SortingPlugin } from "@/sorting/mod.ts";
+import { createTable } from "@/table/mod.ts";
+
 import { generateRows } from "../mock/flat-table.ts";
 import { useSignal } from "@preact/signals";
+
 import { resizableColumns, resizableRows } from "./demos/resizing.ts";
 import {
   stickyColumns,
@@ -24,21 +20,14 @@ import { delay } from "./demos/common.ts";
 const data = generateRows(1000);
 const sorter = createFrontendSorter();
 
-const tableStore = createTableStore(
-  new LocalStorageAdapter(),
-  "home-table",
-  [
-    SortingStore,
-    SelectorStore,
-    EnumeratorStore,
+const { store, Table } = createTable({
+  id: "demo",
+  plugins: [
+    SortingPlugin,
+    SelectorPlugin,
+    EnumeratorPlugin,
   ],
-);
-
-createPluginContainer(tableStore, [
-  SortingPlugin,
-  SelectorPlugin,
-  EnumeratorPlugin,
-]);
+});
 
 export const Demo = () => {
   const scrollRef = useRef<any>(null);
@@ -51,19 +40,19 @@ export const Demo = () => {
   };
   const playAll = async () => {
     selectedAction.value = "column_width";
-    await resizableColumns(tableStore);
+    await resizableColumns(store);
     await delay(500);
 
     selectedAction.value = "row_height";
-    await resizableRows(tableStore);
+    await resizableRows(store);
     await delay(500);
 
     selectedAction.value = "sticky_columns";
-    await stickyColumns(tableStore, scrollRef);
+    await stickyColumns(store, scrollRef);
     await delay(500);
 
     selectedAction.value = "sticky_right";
-    await stickyRightColumns(tableStore, scrollRef);
+    await stickyRightColumns(store, scrollRef);
     await delay(500);
 
     selectedAction.value = "navigation";
@@ -86,16 +75,16 @@ export const Demo = () => {
         await playAll();
         break;
       case "column_width":
-        await resizableColumns(tableStore);
+        await resizableColumns(store);
         break;
       case "row_height":
-        await resizableRows(tableStore);
+        await resizableRows(store);
         break;
       case "sticky_columns":
-        await stickyColumns(tableStore, scrollRef);
+        await stickyColumns(store, scrollRef);
         break;
       case "sticky_right":
-        await stickyRightColumns(tableStore, scrollRef);
+        await stickyRightColumns(store, scrollRef);
         break;
       case "navigation":
         await navigation();
@@ -188,11 +177,7 @@ export const Demo = () => {
           className="border-1 mt-2 border-accent/10 h-180 w-full overflow-auto rounded-lg"
           ref={scrollRef}
         >
-          <Table
-            onDataLoad={onDataLoad}
-            store={tableStore}
-            scrollContainerRef={scrollRef as any}
-          />
+          <Table onDataLoad={onDataLoad} container={scrollRef as any} />
         </div>
       </div>
     </div>

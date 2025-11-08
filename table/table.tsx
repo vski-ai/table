@@ -1,7 +1,7 @@
 import { MutableRef, useRef } from "preact/hooks";
 import { useTableTabIndexEffect } from "@/common/useTableTabIndexEffect.ts";
 import { DataLoadCallback, useDataFetcher } from "@/fetcher/mod.ts";
-import { usePluginContainer } from "@/plugin/mod.ts";
+import { usePlugins } from "@/plugin/mod.ts";
 import { Header, useTableColumnStyle } from "@/columns/mod.ts";
 import { useNavCallback } from "@/cell/mod.ts";
 import {
@@ -15,7 +15,6 @@ import { TableStore } from "@/store/types.ts";
 export type TableProps = {
   onDataLoad: DataLoadCallback;
   store: TableStore;
-  initialWidth?: number;
   rowHeight?: number;
   scrollContainerRef: MutableRef<HTMLElement>;
   rowIdentifier?: string;
@@ -63,7 +62,7 @@ export function Table(props: TableProps) {
     rowHeights,
   });
 
-  const plugins = usePluginContainer({ store });
+  const plugins = usePlugins({ store });
   const initializing = !data.value.length;
   return (
     <>

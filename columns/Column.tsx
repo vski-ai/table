@@ -1,7 +1,7 @@
 import { ComponentChildren } from "preact";
 import { useSignal } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
-import { usePluginContainer } from "@/plugin/mod.ts";
+import { usePlugins } from "@/plugin/mod.ts";
 import { TableStore } from "@/store/types.ts";
 import { Draggable } from "@/common/Draggable.tsx";
 import { useColumnsOrderCallback } from "./useColumnsOrderCallback.ts";
@@ -22,7 +22,7 @@ export function Column(
     store,
   }: ColumnProps,
 ) {
-  const plugins = usePluginContainer({ store });
+  const plugins = usePlugins({ store });
   const onColumnDrop = useColumnsOrderCallback({ store });
   const {
     getColumnWidth,

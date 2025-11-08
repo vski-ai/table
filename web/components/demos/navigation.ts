@@ -67,6 +67,7 @@ export async function multiselect() {
   await pressKey("ArrowLeft");
   await pressKey("Shift");
   await pressKey("ArrowUp", false);
+  await pressKey("KeyUp", false);
 
   await delay(300);
   await pressKey("Escape", false);

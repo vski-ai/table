@@ -1,4 +1,4 @@
-import { Table } from "@/table.tsx";
+import { Table } from "../table/table.tsx";
 import { createTableStore, LocalStorageAdapter } from "@/store/mod.ts";
 import { useEffect, useRef } from "preact/hooks";
 import { RowData } from "@/row/types.ts";
@@ -9,7 +9,7 @@ import {
   SortingPlugin,
   SortingStore,
 } from "@/sorting/mod.ts";
-import { EnumeratorPlugin, EnumeratorStore } from "../enumerator/mod.ts";
+import { EnumeratorPlugin, EnumeratorStore } from "@/enumerator/mod.ts";
 import { GroupingPlugin, GroupingStore } from "@/grouping/mod.ts";
 import { DataLoadCallback } from "@/fetcher/types.ts";
 

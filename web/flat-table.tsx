@@ -1,4 +1,4 @@
-import { Table } from "@/table.tsx";
+import { Table } from "../table/table.tsx";
 import { createTableStore, LocalStorageAdapter } from "@/store/mod.ts";
 import { useEffect, useRef } from "preact/hooks";
 import { RowData } from "@/row/types.ts";

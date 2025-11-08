@@ -1,19 +1,21 @@
 import { effect } from "@preact/signals";
 import { StorageAdapter } from "./persistence.ts";
-import { Command, Module, TableState, TableStore } from "./types.ts";
+import { Command, StoreModule, TableState, TableStore } from "./types.ts";
 
 import { FormattingStore } from "@/formatting/mod.ts";
 import { ColumnsStore } from "@/columns/mod.ts";
+import { RowsStore } from "@/row/mod.ts";
 import { CellStore } from "@/cell/mod.ts";
 import { FetcherStore } from "@/fetcher/mod.ts";
 import { ContextMenuStore } from "@/contextmenu/mod.ts";
 
-const builtInStore: Module[] = [
+const builtInStore: StoreModule[] = [
   FormattingStore,
   FetcherStore,
   ColumnsStore,
   CellStore,
   ContextMenuStore,
+  RowsStore,
 ];
 
 const MAX_HISTORY_SIZE = 100;
@@ -21,17 +23,15 @@ const MAX_HISTORY_SIZE = 100;
 export function createTableStore(
   storage?: StorageAdapter,
   tableId?: string,
-  modules: Module[] = [],
+  modules: StoreModule[] = [],
 ): TableStore {
   modules = [...modules, ...builtInStore];
 
   const initialState = storage && tableId
-    ? storage.getItem<Record<string, any>>(
-      `tableState_${tableId}`,
-    )
+    ? storage.getItem<Record<string, any>>(tableId)
     : null;
 
-  // @ts-expect-error: due to namespace extenstions - slow types
+  // @ts-expect-error:
   const state: TableState = {};
 
   for (const module of modules.map((module) => module.state(initialState))) {
@@ -52,7 +52,7 @@ export function createTableStore(
         }
       }
 
-      storage.setItem(`tableState_${tableId}`, currentState);
+      storage.setItem(tableId, currentState);
     }
   });
 
