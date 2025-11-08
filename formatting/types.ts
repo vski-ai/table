@@ -1,3 +1,7 @@
+import { RowData } from "../row/types.ts";
+import { TableStore } from "../store/types.ts";
+import { ComponentChildren } from "preact";
+
 export enum FormattingType {
   Style = "style",
   Date = "date",
@@ -22,36 +26,15 @@ export interface CellStyle extends Record<string, string | undefined> {
   "text-Decoration"?: "none" | "underline";
 }
 
-export interface StyleCondition {
-  operator: ConditionOperator;
-  value: any;
-  style: CellStyle;
+export interface TypeFormatOpts {
+  store: TableStore;
+  row: RowData;
+  column: string;
 }
 
-export interface DateFormatting {
-  granularity: string;
-  locale?: string;
-}
-
-export interface NumberFormatting {
-  locale?: string;
-  style?: "decimal" | "currency" | "percent" | "unit";
-  currency?: string;
-  currencyDisplay?: "symbol" | "narrowSymbol" | "code" | "name";
-  minimumFractionDigits?: number;
-  maximumFractionDigits?: number;
-  unit?: string;
-  unitDisplay?: "short" | "long" | "narrow";
-}
-
-export interface CellFormatting {
-  type?: FormattingType;
-  style?: {
-    default: CellStyle;
-    conditions: StyleCondition[];
-  };
-  date?: DateFormatting;
-  number?: NumberFormatting;
-  prefix?: string;
-  suffix?: string;
+export type TypeFormatRender = (opts: TypeFormatOpts) => ComponentChildren;
+export interface TypeFormat<T extends string> {
+  datatype: T;
+  display: TypeFormatRender;
+  edit: TypeFormatRender;
 }

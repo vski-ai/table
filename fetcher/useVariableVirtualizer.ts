@@ -14,10 +14,10 @@ export function useVariableVirtualizer(
     scrollContainerRef,
     itemCount,
     rowHeights,
-    buffer = 50,
+    buffer = 5,
     spacing = 0,
-    throttle = 50,
-    debounce = 50,
+    throttle = 10,
+    debounce = 10,
   }: {
     scrollContainerRef: MutableRef<HTMLElement>;
     itemCount: number;

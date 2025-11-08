@@ -1,7 +1,9 @@
 import { Signal, signal } from "@preact/signals";
 import { Command, TableState } from "@/store/mod.ts";
-import { CellFormatting, CellStyle } from "./types.ts";
-
+import { CellStyle, TypeFormat } from "./types.ts";
+import { Default as DefaultTypeFormatter } from "./datatypes/default.tsx";
+import { RowData } from "../row/types.ts";
+const TYPE_FORMATTERS_ACCESSOR = Symbol("formatters");
 type CSSStyleObject = Record<string, string | undefined>;
 
 declare module "@/store/types.ts" {
@@ -12,11 +14,19 @@ declare module "@/store/types.ts" {
     cellStyles: Signal<
       Record<string, Record<string, CSSStyleObject>>
     >;
-    cellFormatting: Signal<Record<string, CellFormatting>>;
+    cellDataTypes: Signal<Record<string, string>>;
+    cellEditing: Signal<Record<string, boolean>>;
+    cellFormatting: Signal<Record<string, any>>;
+    [TYPE_FORMATTERS_ACCESSOR]: Record<string, TypeFormat<string>>;
+  }
+
+  interface TableStore {
+    getFormater: <T extends string>(datetype: T) => TypeFormat<T>;
+    addFormater: <T extends string>(formatter: TypeFormat<T>) => void;
+    getCellKey: (opts: { column: string, row: RowData }) => string
   }
 }
 
-const CELL_FORMATTING_SET = "CELL_FORMATTING_SET";
 const TABLE_STYLE_SET = "TABLE_STYLE_SET";
 const ROW_STYLE_SET = "ROW_STYLE_SET";
 const COLUMN_STYLE_SET = "COLUMN_STYLE_SET";
@@ -25,11 +35,19 @@ const TABLE_STYLE_RESET = "TABLE_STYLE_RESET";
 const ROW_STYLE_RESET = "ROW_STYLE_RESET";
 const COLUMN_STYLE_RESET = "COLUMN_STYLE_RESET";
 const CELL_STYLE_RESET = "CELL_STYLE_RESET";
+const CELL_DATATYPES_SET = "CELL_DATATYPE_SET";
+const CELL_EDITING_SET = "CELL_EDITING_SET";
 
-export type CellFormattingSetCommand = Command<
-  typeof CELL_FORMATTING_SET,
-  Record<string, CellFormatting>
+export type CellDatatypeSetCommand = Command<
+  typeof CELL_DATATYPES_SET,
+  Record<string, string>
 >;
+
+export type CellEditingSetCommand = Command<
+  typeof CELL_EDITING_SET,
+  Record<string, boolean>
+>;
+
 export type TableStyleSetCommand = Command<
   typeof TABLE_STYLE_SET,
   Partial<CellStyle>
@@ -61,7 +79,8 @@ export type CellStyleResetCommand = Command<
 >;
 
 export type FormattingCommandType =
-  | CellFormattingSetCommand
+  | CellEditingSetCommand
+  | CellDatatypeSetCommand
   | TableStyleSetCommand
   | RowStyleSetCommand
   | ColumnStyleSetCommand
@@ -77,22 +96,30 @@ export function state(init: Record<string, any> | null) {
   const columnStyles = signal(init?.columnStyles ?? {});
   const rowStyles = signal(init?.rowStyles ?? {});
   const cellStyles = signal(init?.cellStyles ?? {});
+  const cellDataTypes = signal(init?.cellDataTypes ?? {});
+  const cellEditing = signal({});
   return {
     cellFormatting,
     tableStyles,
     columnStyles,
     rowStyles,
     cellStyles,
+    cellDataTypes,
+    cellEditing
   };
 }
 
 export function persist(state: TableState): Record<keyof TableState, any> {
   return {
+    [TYPE_FORMATTERS_ACCESSOR]: {
+      "default": DefaultTypeFormatter,
+    },
     tableStyles: state.tableStyles.value,
     columnStyles: state.columnStyles.value,
     rowStyles: state.rowStyles.value,
     cellStyles: state.cellStyles.value,
     cellFormatting: state.cellFormatting.value,
+    cellDataTypes: state.cellDataTypes.value,
   };
 }
 
@@ -159,11 +186,32 @@ export function mutate(state: TableState, command: FormattingCommandType) {
         state.cellStyles.value = { ...rest, [command.payload.rowKey]: restRow };
       }
       break;
-    case "CELL_FORMATTING_SET":
-      state.cellFormatting.value = {
-        ...state.cellFormatting.value,
+    case "CELL_DATATYPE_SET":
+      state.cellDataTypes.value = {
+        ...state.cellDataTypes.value,
+        ...command.payload,
+      };
+      break;
+    case "CELL_EDITING_SET":
+      state.cellEditing.value = {
+        ...state.cellEditing.value,
         ...command.payload,
       };
       break;
   }
+}
+
+export function methods(state: TableState) {
+  return {
+    getCellKey({ column, row  } : { column: string, row: RowData }) {
+      return row.id + '/' + column;
+    },
+    getFormater(datatype: string) {
+      return state[TYPE_FORMATTERS_ACCESSOR]?.[datatype] ??
+        DefaultTypeFormatter;
+    },
+    addFormater<T extends string>(formatter: TypeFormat<T>) {
+      state[TYPE_FORMATTERS_ACCESSOR][formatter.datatype] = formatter;
+    },
+  };
 }

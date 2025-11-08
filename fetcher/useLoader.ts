@@ -140,5 +140,8 @@ export const useLoader = ({
     }
   }, [visibleRows, load, reloadKey.value]);
 
+  if (data.value.length) {
+    store.state.isInitialized.value = true;
+  }
   return { data, total, isLoading };
 };

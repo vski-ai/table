@@ -5,6 +5,8 @@ import { TableStore } from "@/store/types.ts";
 import { RowData } from "@/row/types.ts";
 import { useRowKey } from "@/fetcher/useRowKey.ts";
 import { usePlugins } from "../plugin/usePlugins.ts";
+import { TypeFormat } from "@/formatting/TypeFormat.tsx";
+import { useRowHeights } from '@/fetcher/useRowHeights.ts'
 
 interface CellProps {
   store: TableStore;
@@ -18,7 +20,10 @@ export const Cell = ({
   row,
 }: CellProps) => {
   const plugins = usePlugins({ store });
-  const height = 64;
+  const getHeight = useRowHeights({
+    store,
+    height: 64
+  });
   const rowKey = useRowKey({ store });
   const {
     isSticky,
@@ -34,7 +39,7 @@ export const Cell = ({
       data-column-name={column}
       style={{
         width: `var(--col-width-${sanitizeColName(column)})`,
-        height: `${height}px`,
+        height: `${getHeight(row)}px`,
         left,
         right,
         zIndex: isSticky ? 1 : 0,
@@ -46,6 +51,17 @@ export const Cell = ({
         "stick-right": isStickyRight,
         "multifocus": isSelected,
       })}
+      onDblClick={() => {
+        store.state.cellEditing.value = { [store.getCellKey({ row, column })]: true }
+      }}
+      onKeyDown={(ev)=> {
+        if(!ev.altKey) {
+         ev.stopPropagation()
+        }
+        if (ev.key === 'Escape') {
+          store.state.cellEditing.value = {}
+        }
+      }}
     >
       <div
         class="vt-cell-wrap"
@@ -57,7 +73,7 @@ export const Cell = ({
           store,
         })}
 
-        {row[column]}
+        <TypeFormat {...{store, column, row}}/>
 
         {plugins.cellsuffixes?.render({
           column: column,

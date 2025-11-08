@@ -11,7 +11,7 @@ interface StickyRowsProps {
 export const StickyTopRows = ({ store }: StickyRowsProps) => {
   const rows = store.state.stickyTopRows.value;
 
-  if (!rows.length) {
+  if (!rows.length || !store.state.currentData.length) {
     return null;
   }
 
@@ -48,7 +48,7 @@ export const topStickRowsRenderCallback: CommonRendererCallback = (
 export const StickyBottomRows = ({ store }: StickyRowsProps) => {
   const rows = store.state.stickyBottomRows.value;
 
-  if (!rows.length) {
+  if (!rows.length || !store.state.isInitialized.value) {
     return null;
   }
 

@@ -6,6 +6,7 @@ import { RowData } from "@/row/types.ts";
 declare module "@/store/types.ts" {
   interface TableState {
     loading: Signal<boolean>;
+    isInitialized: Signal<boolean>;
     dataLoadKey: Signal<number>;
     tableMeta: Signal<TableMeta>;
     rowHeights: Signal<Record<string, number>>;
@@ -25,7 +26,8 @@ export function state(init: Record<string, any> | null) {
   return {
     tableMeta: signal(init?.tableMeta ?? {}),
     dataLoadKey: signal(0),
-    loading: signal(false),
+    loading: signal(true),
+    isInitialized: signal(false),
     rowHeights: signal(init?.rowHeights ?? {}),
     currentData: [],
   };

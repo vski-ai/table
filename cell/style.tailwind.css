@@ -1,6 +1,6 @@
 @layer components {
   .vt-cell {
-    @apply p-3 bg-white dark:bg-gray-800 border-0 relative after:border-r-1
+    @apply p-0 bg-white dark:bg-gray-800 border-0 relative after:border-r-1
       after:border-b-1 after:border-gray-200 dark:after:border-gray-700
       text-base-content;
 
@@ -19,7 +19,7 @@
       @apply after:bg-sky-300/20 dark:after:bg-sky-300/5;
     }
     .vt-cell-wrap {
-      @apply truncate;
+      @apply truncate h-[inherit] p-0;
     }
     &::after {
       content: "";
