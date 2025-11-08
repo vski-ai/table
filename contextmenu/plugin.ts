@@ -3,8 +3,8 @@ import { contextMenuRenderCallback } from "./ContextMenu.tsx";
 import { addMenuItems } from "./addMenuItems.ts";
 import { Copy } from "./default.tsx";
 
-const onInit: PluginInitCallback = ({ beforeTable, store }) => {
-  beforeTable.use(0, contextMenuRenderCallback);
+const onInit: PluginInitCallback = ({ beforetable, store }) => {
+  beforetable.use(0, contextMenuRenderCallback);
   addMenuItems({
     store,
     items: [

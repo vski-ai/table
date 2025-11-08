@@ -149,11 +149,11 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
         top: contextMenuState.value.position.y,
         opacity: contextMenuOpacity.value,
       }}
-      className="menu card rounded-none border border-accent/25 shadow-lg p-3 bg-base-100 absolute z-100 transition-opacity duration-400 w-64"
+      className="vt-menu"
     >
       {isSubmenu && (
-        <div className="relative flex items-center gap-2 p-2 -mt-2 mb-1 border-b border-base-100/50">
-          <a href="#" class="-ml-2 mr-2" onClick={pop}>
+        <div className="vt-menu-title">
+          <a href="#" onClick={pop}>
             <BackIcon />
           </a>
           {currentMenu.title?.(context.value)}

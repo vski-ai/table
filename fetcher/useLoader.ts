@@ -59,7 +59,7 @@ export const useLoader = ({
         }
       }
       data.value = finalData;
-
+      store.state.currentData = finalData.filter((r) => !!r);
       // Merge ranges
       const newRange = { start: offset, end: offset + limit };
       const mergedRanges: { start: number; end: number }[] = [];

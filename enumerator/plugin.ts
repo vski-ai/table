@@ -5,12 +5,12 @@ import { enumColumnRenderCallback } from "./EnumeratorColumn.tsx";
 import * as store from "./store.ts";
 
 const onInit: PluginInitCallback = ({
-  leftTableCells,
-  leftTableHeaders,
+  lefttablecells,
+  lefttableheaders,
   store,
 }) => {
-  leftTableHeaders.use(0, enumColumnRenderCallback);
-  leftTableCells.use(0, enumCellRenderCallback);
+  lefttableheaders.use(0, enumColumnRenderCallback);
+  lefttablecells.use(0, enumCellRenderCallback);
   store.dispatch<ColumnWidthCommand>({
     type: "COLUMN_WIDTHS_SET",
     payload: {

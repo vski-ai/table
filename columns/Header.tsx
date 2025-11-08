@@ -42,7 +42,7 @@ export function Header({
             )
             : (
               <tr>
-                {plugins.leftTableHeaders.render({
+                {plugins.lefttableheaders.render({
                   column: "",
                   store,
                 })}

@@ -9,6 +9,9 @@ const STICKY_COLUMN = "sticky_column";
 
 export const Stick: ContextMenuItem = {
   menu: STICKY_COLUMN,
+  visibility: ({ column, placement, store }) =>
+    (!!column && placement === "outside") &&
+    !store.state.stickyColumns.value[column],
   title: ({ column }) => (
     <div class="flex justify-between w-full">
       Pin Column
@@ -17,7 +20,7 @@ export const Stick: ContextMenuItem = {
       </span>
     </div>
   ),
-  visibility: ({ column, placement }) => !!column && placement === "outside",
+
   label({ column }) {
     return (
       <>
@@ -83,11 +86,14 @@ export const StickRight: ContextMenuItem = {
 const unpinVisibility = ({ store, column }: MenuContext) =>
   !!column && !!store.state.stickyColumns.value[column];
 
-const unpinLabel = () => {
+const unpinLabel = ({ column }: MenuContext) => {
   return (
     <>
       <UnPin />
       Unpin
+      <span class="badge badge-xs badge-accent">
+        {column}
+      </span>
     </>
   );
 };

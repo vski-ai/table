@@ -79,17 +79,17 @@ type RowStyles = SortedAddon<StyleResolverCallback>;
 
 export interface PluginsInitOptions {
   store: TableStore;
-  headerPrefixes: HeaderPrefixes;
-  leftTableCells: LeftTableCells;
-  rightTableCells: RightTableCells;
-  leftTableHeaders: LeftTableHeaders;
-  rightTableHeaders: RightTableHeaders;
-  cellPrefixes: CellPrefixes;
-  cellSuffixes: CellSuffixes;
-  rowClasses: RowClasses;
-  rowStyles: RowStyles;
-  beforeTable: BeforeTable;
-  afterTable: AfterTable;
+  headerprefixes: HeaderPrefixes;
+  lefttablecells: LeftTableCells;
+  righttablecells: RightTableCells;
+  lefttableheaders: LeftTableHeaders;
+  righttableheaders: RightTableHeaders;
+  cellprefixes: CellPrefixes;
+  cellsuffixes: CellSuffixes;
+  rowclasses: RowClasses;
+  rowstyles: RowStyles;
+  beforetable: BeforeTable;
+  aftertable: AfterTable;
 }
 
 export type PluginInitCallback = (opts: PluginsInitOptions) => void;

@@ -51,7 +51,7 @@ export const Cell = ({
         class="vt-cell-wrap"
         title={row[column].toString()}
       >
-        {plugins.cellPrefixes.render({
+        {plugins.cellprefixes.render({
           column: column,
           row,
           store,
@@ -59,7 +59,7 @@ export const Cell = ({
 
         {row[column]}
 
-        {plugins.cellSuffixes?.render({
+        {plugins.cellsuffixes?.render({
           column: column,
           row,
           store,

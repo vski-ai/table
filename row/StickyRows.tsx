@@ -1,6 +1,8 @@
 import { CommonRendererCallback } from "@/plugin/types.ts";
 import { TableStore } from "@/store/types.ts";
-import { Row } from "./Row.tsx";
+import { useRenderRowCallback } from "./Row.tsx";
+import { useTableColumnStyle } from "@/columns/mod.ts";
+import { RowPadding } from "./RowPadding.tsx";
 
 interface StickyRowsProps {
   store: TableStore;
@@ -13,20 +15,24 @@ export const StickyTopRows = ({ store }: StickyRowsProps) => {
     return null;
   }
 
+  const { style } = useTableColumnStyle({ store });
+
+  const renderRow = useRenderRowCallback({
+    store,
+    rowHeight: 64,
+  });
+
   return (
-    <div class="vt-sticky-rows-top">
-      <table>
+    <div
+      class="vt-sticky-rows-top"
+      style={{
+        top: 60, // header heihgt
+      }}
+    >
+      <table style={style} class="vt">
         <tbody>
-          {rows.map((row, index) => (
-            <Row
-              row={row}
-              rowIndex={index}
-              rowHeight={30}
-              columns={store.state.orderedColumns.value}
-              store={store}
-              rowKey={store.state.rowKey.value}
-            />
-          ))}
+          <RowPadding padding={0} name="top-rows" store={store} />
+          {rows.map((row, index) => renderRow(row, index))}
         </tbody>
       </table>
     </div>
@@ -46,20 +52,19 @@ export const StickyBottomRows = ({ store }: StickyRowsProps) => {
     return null;
   }
 
+  const { style } = useTableColumnStyle({ store });
+
+  const renderRow = useRenderRowCallback({
+    store,
+    rowHeight: 64,
+  });
+
   return (
     <div class="vt-sticky-rows-bottom">
-      <table>
+      <table style={style} class="vt">
         <tbody>
-          {rows.map((row, index) => (
-            <Row
-              row={row}
-              rowIndex={index}
-              rowHeight={30}
-              columns={store.state.orderedColumns.value}
-              store={store}
-              rowKey={store.state.rowKey.value}
-            />
-          ))}
+          <RowPadding padding={0} name="bottom-rows" store={store} />
+          {rows.map((row, index) => renderRow(row, index))}
         </tbody>
       </table>
     </div>

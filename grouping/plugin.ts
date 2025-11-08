@@ -10,19 +10,19 @@ import { groupColumnRenderCallback } from "./GroupColumn.tsx";
 
 const onInit: PluginInitCallback = ({
   store,
-  leftTableCells,
-  leftTableHeaders,
-  rowClasses,
-  rowStyles,
+  lefttablecells,
+  lefttableheaders,
+  rowclasses,
+  rowstyles,
 }) => {
-  leftTableHeaders.use(0, groupColumnRenderCallback);
-  leftTableCells.use(0, groupCellRenderCallback);
+  lefttableheaders.use(0, groupColumnRenderCallback);
+  lefttablecells.use(0, groupCellRenderCallback);
 
-  rowClasses.use(1, ({ row }) => {
+  rowclasses.use(1, ({ row }) => {
     return [row?.$is_group_root ? "vt-g-row" : "vt-row"];
   });
 
-  rowStyles.use(1, ({ row }) => {
+  rowstyles.use(1, ({ row }) => {
     return [
       ["--group-level", row?.$group_level ?? 0],
     ];

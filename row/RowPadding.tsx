@@ -24,7 +24,7 @@ export const RowPadding = (
       data-name={name}
       style={{ height: `${padding}px` }}
     >
-      {plugins.leftTableCells.getSorted().map((cb) => (
+      {plugins.lefttablecells.getSorted().map((cb) => (
         <td
           class="vt-cell"
           style={{

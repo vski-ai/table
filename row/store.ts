@@ -25,13 +25,16 @@ type StickyRowsCommand = StickyTopRowsSetCommand | StickyBottomRowsSetCommand;
 
 export function state<T>(init: Record<string, T> | null) {
   return {
-    stickyTopRows: signal([]),
-    stickyBottomRows: signal([]),
+    stickyTopRows: signal(init?.stickyTopRows ?? []),
+    stickyBottomRows: signal(init?.stickyBottomRows ?? []),
   };
 }
 
 export function persist(state: TableState) {
-  return {};
+  return {
+    stickyTopRows: state.stickyTopRows.value,
+    stickyBottomRows: state.stickyBottomRows.value,
+  };
 }
 
 export function reducer(state: TableState, command: StickyRowsCommand) {

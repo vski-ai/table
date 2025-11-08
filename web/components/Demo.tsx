@@ -24,7 +24,7 @@ const { store, Table } = createTable({
   id: "demo",
   plugins: [
     SortingPlugin,
-    SelectorPlugin,
+    //SelectorPlugin,
     EnumeratorPlugin,
   ],
 });
@@ -118,8 +118,8 @@ export const Demo = () => {
   };
 
   return (
-    <div class="flex justify-center p-12">
-      <div class="mockup-window shadow-md bg-sky-900/50 dark:bg-sky-800/50  border border-sky-500/50 w-full max-w-340">
+    <div class="flex justify-center p-12 overflow-hidden">
+      <div class="mockup-window overflow-hidden shadow-md bg-sky-900/50 dark:bg-sky-800/50  border border-sky-500/50 w-full max-w-340">
         <div class="hidden xl:block bg-tansparent absolute left-0 right-0 w-full text-center top-3.5 h-12 p-0 w-200">
           <h4 class="font-semibold">
             {(() => {

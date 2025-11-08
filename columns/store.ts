@@ -49,7 +49,11 @@ export function state<T>(init: Record<string, T> | null) {
   return {
     columns: signal([]),
     columnOrder: signal(init?.columnOrder || []),
-    columnVisibility: signal(init?.columnVisibility || {}),
+    columnVisibility: signal(
+      init?.columnVisibility || {
+        id: false,
+      },
+    ),
     columnWidths: signal(init?.columnWidths || {}),
     stickyColumns: signal<Record<string, StickyPosition>>(
       init?.stickyColumns || {},

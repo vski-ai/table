@@ -5,13 +5,12 @@
       dark:after:border-gray-700;
 
     &.stick-left {
-      @apply bg-gray-300 dark:bg-gray-700 after:border-gray-500
-        dark:after:border-gray-500;
+      @apply after:border-gray-600 dark:after:border-gray-600;
     }
 
     &.stick-right {
-      @apply bg-gray-300 dark:bg-gray-700 after:border-l-1 after:border-r-0
-        after:border-gray-500 dark:after:border-gray-500;
+      @apply after:border-l-1 after:border-r-0 after:border-gray-600
+        dark:after:border-gray-600;
     }
 
     &::after {

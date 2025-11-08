@@ -1,1 +1,14 @@
-
+@layer components {
+  .vt-menu {
+    @apply menu w-64 p-1 shadow-md rounded-sm border border-sky-600/25
+      bg-gray-50 dark:bg-gray-700 absolute z-100 transition-opacity
+      duration-400;
+    ul {
+      @apply p-1;
+    }
+  }
+  .vt-menu-title {
+    @apply relative flex items-center gap-2 p-2 pt-3 -mt-2 mb-1 border-b-2
+      border-sky-50 dark:border-gray-600/50;
+  }
+}

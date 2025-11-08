@@ -49,6 +49,7 @@ export function Table(props: TableProps) {
   });
 
   const tableRef = useRef<HTMLTableElement>(null);
+
   useTableTabIndexEffect({
     target: tableRef,
   }, [data.value, visibleRows]);
@@ -66,11 +67,12 @@ export function Table(props: TableProps) {
   const initializing = !data.value.length;
   return (
     <>
-      {plugins.beforeTable.render({
+      <Header store={store} loading={initializing} />
+      {plugins.beforetable.render({
         ref: scrollContainerRef,
         store,
       })}
-      <Header store={store} loading={initializing} />
+
       <table
         style={style}
         id="vt-main"
@@ -121,7 +123,7 @@ export function Table(props: TableProps) {
           )}
         </tbody>
       </table>
-      {plugins.afterTable.render({
+      {plugins.aftertable.render({
         ref: scrollContainerRef,
         store,
       })}

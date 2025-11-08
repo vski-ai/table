@@ -1,7 +1,7 @@
 import { useCallback } from "preact/hooks";
 import { TableStore } from "@/store/types.ts";
 import { useOrderedColumns } from "@/columns/mod.ts";
-import { usePlugins } from "../plugin/usePlugins.ts";
+import { usePlugins } from "@/plugin/usePlugins.ts";
 import { useRowHeights, useRowKey } from "@/fetcher/mod.ts";
 import { RowData } from "./types.ts";
 import { RowLoading } from "./RowLoading.tsx";
@@ -29,7 +29,7 @@ export const Row = (props: RowProps) => {
   const plugins = usePlugins({ store });
   const height = rowHeight;
 
-  const classes = plugins.rowClasses.string({
+  const classes = plugins.rowclasses.string({
     row,
     store,
     rowKey,
@@ -44,13 +44,13 @@ export const Row = (props: RowProps) => {
         class={"vt-row " + classes}
         style={{
           height: height,
-          ...plugins.rowStyles.data({
+          ...plugins.rowstyles.data({
             row,
             store,
           }),
         }}
       >
-        {plugins.leftTableCells.render({
+        {plugins.lefttablecells.render({
           column: "",
           store,
           row,
@@ -61,7 +61,7 @@ export const Row = (props: RowProps) => {
           <Cell key={column} store={store} row={row} column={column} />
         ))}
 
-        {plugins.rightTableCells.render({
+        {plugins.righttablecells.render({
           column: "",
           store,
           row,
@@ -91,7 +91,9 @@ export function useRenderRowCallback(
     const rowHeight = getRowHeight(row);
 
     if (row.$loading) {
-      return <RowLoading columns={columns} rowHeight={rowHeight} />;
+      return (
+        <RowLoading store={store} columns={columns} rowHeight={rowHeight} />
+      );
     }
 
     return (

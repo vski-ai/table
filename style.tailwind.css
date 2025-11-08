@@ -1,6 +1,7 @@
 @import "./cell/style.tailwind.css";
 @import "./row/style.tailwind.css";
 @import "./columns/style.tailwind.css";
+@import "./contextmenu/style.tailwind.css";
 @import "./enumerator/style.tailwind.css";
 @import "./sorting/style.tailwind.css";
 @import "./grouping/style.tailwind.css";

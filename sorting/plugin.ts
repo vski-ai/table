@@ -18,8 +18,8 @@ declare module "@/fetcher/types.ts" {
   }
 }
 
-const onInit: PluginInitCallback = ({ headerPrefixes }) => {
-  headerPrefixes.use(0, headerRenderCallback);
+const onInit: PluginInitCallback = ({ headerprefixes }) => {
+  headerprefixes.use(0, headerRenderCallback);
 };
 
 const beforeLoad: BeforeLoadCallback = ({

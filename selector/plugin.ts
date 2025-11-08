@@ -6,14 +6,14 @@ import { KEY } from "./constants.ts";
 import * as store from "./store.ts";
 
 const onInit: PluginInitCallback = ({
-  leftTableCells,
-  leftTableHeaders,
-  rowClasses,
+  lefttablecells,
+  lefttableheaders,
+  rowclasses,
   store,
 }) => {
-  leftTableHeaders.use(1, selectorColumnRenderCallback);
-  leftTableCells.use(1, selectorCellRenderCallback);
-  rowClasses.use(1, ({ row, store, rowKey }) => {
+  lefttableheaders.use(1, selectorColumnRenderCallback);
+  lefttablecells.use(1, selectorCellRenderCallback);
+  rowclasses.use(1, ({ row, store, rowKey }) => {
     return [
       store.state.selectedRows.value.includes(row?.[rowKey ?? ""]!)
         ? "selected"

@@ -42,33 +42,33 @@ export const createPluginContainer = (
     return 0;
   });
 
-  const beforeTable = new SortedAddon<CommonRendererCallback>();
-  const afterTable = new SortedAddon<CommonRendererCallback>();
-  const headerPrefixes = new SortedAddon<ColumnRendererCallback>();
-  const leftTableCells = new SortedAddon<CellRendererCallback>();
-  const cellPrefixes = new SortedAddon<CellRendererCallback>();
-  const cellSuffixes = new SortedAddon<CellRendererCallback>();
-  const rightTableCells = new SortedAddon<CellRendererCallback>();
-  const leftTableHeaders = new SortedAddon<ColumnRendererCallback>();
-  const rightTableHeaders = new SortedAddon<ColumnRendererCallback>();
-  const rowClasses = new SortedAddon<ClassResolverCallback>();
-  const rowStyles = new SortedAddon<StyleResolverCallback>();
+  const beforetable = new SortedAddon<CommonRendererCallback>();
+  const aftertable = new SortedAddon<CommonRendererCallback>();
+  const headerprefixes = new SortedAddon<ColumnRendererCallback>();
+  const lefttablecells = new SortedAddon<CellRendererCallback>();
+  const cellprefixes = new SortedAddon<CellRendererCallback>();
+  const cellsuffixes = new SortedAddon<CellRendererCallback>();
+  const righttablecells = new SortedAddon<CellRendererCallback>();
+  const lefttableheaders = new SortedAddon<ColumnRendererCallback>();
+  const righttableheaders = new SortedAddon<ColumnRendererCallback>();
+  const rowclasses = new SortedAddon<ClassResolverCallback>();
+  const rowstyles = new SortedAddon<StyleResolverCallback>();
 
   setTimeout(() => {
     for (const plugin of sortedPlugins) {
       plugin.onInit?.({
         store,
-        headerPrefixes,
-        leftTableCells,
-        rightTableCells,
-        leftTableHeaders,
-        rightTableHeaders,
-        cellPrefixes,
-        cellSuffixes,
-        rowClasses,
-        rowStyles,
-        beforeTable,
-        afterTable,
+        headerprefixes,
+        lefttablecells,
+        righttablecells,
+        lefttableheaders,
+        righttableheaders,
+        cellprefixes,
+        cellsuffixes,
+        rowclasses,
+        rowstyles,
+        beforetable,
+        aftertable,
       });
     }
   });
@@ -95,17 +95,17 @@ export const createPluginContainer = (
   const container = {
     beforeLoad,
     afterLoad,
-    headerPrefixes,
-    leftTableCells,
-    rightTableCells,
-    leftTableHeaders,
-    rightTableHeaders,
-    cellPrefixes,
-    cellSuffixes,
-    rowClasses,
-    rowStyles,
-    beforeTable,
-    afterTable,
+    headerprefixes,
+    lefttablecells,
+    righttablecells,
+    lefttableheaders,
+    righttableheaders,
+    cellprefixes,
+    cellsuffixes,
+    rowclasses,
+    rowstyles,
+    beforetable,
+    aftertable,
   };
 
   // @ts-ignore: some privats

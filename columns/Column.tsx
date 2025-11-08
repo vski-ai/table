@@ -97,7 +97,7 @@ export function Column(
       <Draggable onDrop={onColumnDrop} id={column}>
         {children ? children : (
           <div class="vt-col-wrap">
-            {plugins.headerPrefixes.render({
+            {plugins.headerprefixes.render({
               column,
               store,
             })}
