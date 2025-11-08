@@ -7,7 +7,7 @@ import {
   ConditionOperator,
   type DateFormatting,
   type NumberFormatting,
-} from "./types.ts";
+} from "../types.ts";
 
 interface CellFormatterProps {
   value: any;

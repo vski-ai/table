@@ -32,7 +32,9 @@ export function createTableStore(
     : null;
 
   // @ts-expect-error:
-  const state: TableState = {};
+  const state: TableState = {
+    tableId,
+  };
 
   for (const module of modules.map((module) => module.state(initialState))) {
     for (const key in module) {
@@ -61,7 +63,7 @@ export function createTableStore(
       history.shift();
     }
     history.push(command);
-    modules.map((module) => module.reducer(state, command));
+    modules.map((module) => module.mutate(state, command));
   };
 
   const methods = modules

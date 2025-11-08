@@ -66,6 +66,7 @@ export type BeforeLoadCallback = (
 ) => Promise<DataLoadOptions> | DataLoadOptions;
 
 type BeforeTable = SortedAddon<CommonRendererCallback>;
+type InsideTable = SortedAddon<CommonRendererCallback>;
 type AfterTable = SortedAddon<CommonRendererCallback>;
 type HeaderPrefixes = SortedAddon<ColumnRendererCallback>;
 type CellPrefixes = SortedAddon<CellRendererCallback>;
@@ -89,6 +90,7 @@ export interface PluginsInitOptions {
   rowclasses: RowClasses;
   rowstyles: RowStyles;
   beforetable: BeforeTable;
+  insidetable: InsideTable;
   aftertable: AfterTable;
 }
 

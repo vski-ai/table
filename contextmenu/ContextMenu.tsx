@@ -70,14 +70,23 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
     const handleContextMenu = (e: MouseEvent) => {
       e.preventDefault();
       const target = e.target as HTMLTableCellElement;
+
       const ctx = {
         column: target.closest("td")?.dataset.columnName ??
           target.closest("th")?.dataset.columnName,
         rowId: target.closest("tr")?.dataset.rowId,
         index: target.closest("tr")?.dataset.index,
+        tabIndex: target.closest("td")?.tabIndex,
         placement: (!target.closest("td") ? "outside" : "body") as any,
         store,
       };
+      if (
+        Object.values({ ...ctx, store: undefined, placement: undefined }).every(
+          (e) => !e,
+        )
+      ) {
+        return;
+      }
       context.value = ctx;
       const rootMenu = store.state.contextMenu.value;
       const virtualElement = {
@@ -161,28 +170,30 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
       )}
       <ul>
         {currentMenu.items.map((item: MenuItem, index: number) => (
-          !item.visibility(context.value)
-            ? null
-            : (
-              <li key={index} class="relative">
-                <a
-                  href="#"
-                  class="p-2"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (item.submenu?.items?.length) {
-                      push(item.submenu);
-                    } else if (item.action) {
-                      item.action(context.value);
-                      close();
-                    }
-                  }}
-                >
-                  {item.label(context.value)}
-                </a>
-              </li>
-            )
+          !item.visibility(context.value) ? null : (
+            item.action
+              ? (
+                <li key={index} class="relative">
+                  <a
+                    href="#"
+                    class="p-2"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (item.submenu?.items?.length) {
+                        push(item.submenu);
+                      } else if (item.action) {
+                        item.action(context.value);
+                        close();
+                      }
+                    }}
+                  >
+                    {item.label(context.value)}
+                  </a>
+                </li>
+              )
+              : item.label(context.value)
+          )
         ))}
       </ul>
     </div>

@@ -1,4 +1,5 @@
 import { ComponentChildren } from "preact";
+import { cn } from "@/common/className.ts";
 
 type TodoItemProps = {
   done?: boolean;
@@ -8,16 +9,28 @@ type TodoItemProps = {
 
 export const TodoItem = ({
   done,
-  start,
+  start = true,
   children,
 }: TodoItemProps) => {
   return (
-    <li class="m-0!" style={{ alignItems: !start ? "center" : "start" }}>
-      <hr />
-      <div class="timeline-end timeline-box w-100">
+    <li class="m-0!">
+      <div class="bg-sky-700/20 w-1 absolute h-[calc(100%+1.5em)]!" />
+      <div
+        class={cn({
+          "timeline-start": start,
+          "timeline-end": !start,
+          "timeline-box w-100": true,
+          "bg-gray-50/50 dark:bg-gray-700/50": true,
+        })}
+      >
         {children}
       </div>
-      <div class="timeline-start">
+      <div
+        class={cn({
+          "timeline-end": start,
+          "timeline-start": !start,
+        })}
+      >
         {done
           ? (
             <svg
@@ -46,7 +59,6 @@ export const TodoItem = ({
             </svg>
           )}
       </div>
-      <hr />
     </li>
   );
 };

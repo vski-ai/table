@@ -38,14 +38,13 @@ export function persist(state: TableState) {
   };
 }
 
-export function reducer(state: TableState, command: TableMetaCommnand) {
+export function mutate(state: TableState, command: TableMetaCommnand) {
   switch (command.type) {
     case "TABLE_META_SET": {
       state.tableMeta.value = command.payload;
       break;
     }
   }
-  return state;
 }
 
 export function methods(state: TableState) {

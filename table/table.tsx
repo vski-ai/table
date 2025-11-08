@@ -75,8 +75,8 @@ export function Table(props: TableProps) {
 
       <table
         style={style}
-        id="vt-main"
-        class="vt"
+        x-id={`vt_${store.state.tableId}`}
+        class="vt vt-main"
         ref={tableRef}
         onKeyDown={focusNav.onKeyDown}
         onKeyUp={focusNav.onKeyUp}

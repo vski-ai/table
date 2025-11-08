@@ -49,7 +49,7 @@ export const Cell = ({
     >
       <div
         class="vt-cell-wrap"
-        title={row[column].toString()}
+        title={row[column]?.toString()}
       >
         {plugins.cellprefixes.render({
           column: column,

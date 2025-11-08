@@ -43,6 +43,7 @@ export const createPluginContainer = (
   });
 
   const beforetable = new SortedAddon<CommonRendererCallback>();
+  const insidetable = new SortedAddon<CommonRendererCallback>();
   const aftertable = new SortedAddon<CommonRendererCallback>();
   const headerprefixes = new SortedAddon<ColumnRendererCallback>();
   const lefttablecells = new SortedAddon<CellRendererCallback>();
@@ -68,6 +69,7 @@ export const createPluginContainer = (
         rowclasses,
         rowstyles,
         beforetable,
+        insidetable,
         aftertable,
       });
     }
@@ -105,6 +107,7 @@ export const createPluginContainer = (
     rowclasses,
     rowstyles,
     beforetable,
+    insidetable,
     aftertable,
   };
 

@@ -19,7 +19,7 @@
       @apply after:bg-sky-300/20 dark:after:bg-sky-300/5;
     }
     .vt-cell-wrap {
-      @apply truncate flex w-full items-center justify-between;
+      @apply truncate;
     }
     &::after {
       content: "";

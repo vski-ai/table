@@ -8,13 +8,14 @@ export interface ContextMenuItem {
   title?: (ctx: MenuContext) => ComponentChildren;
   label: (ctx: MenuContext) => ComponentChildren;
   visibility: (ctx: MenuContext) => boolean;
-  action: (ctx: MenuContext) => void;
+  action?: (ctx: MenuContext) => void;
 }
 
 export type MenuContext = {
   column?: string;
   rowId?: string;
   index?: string;
+  tabIndex?: number;
   placement: "body" | "outside";
   store: TableStore;
 };

@@ -17,7 +17,7 @@ import {
 import { multiselect, navigation } from "./demos/navigation.ts";
 import { delay } from "./demos/common.ts";
 
-const data = generateRows(1000);
+const { data, pinnedRows } = generateRows(1000);
 const sorter = createFrontendSorter();
 
 const { store, Table } = createTable({
@@ -113,6 +113,7 @@ export const Demo = () => {
       total: sorted.length,
       meta: {
         sortableAll: true,
+        pinnedRows,
       },
     } as any;
   };

@@ -63,7 +63,7 @@ export function persist(_: TableState) {
   return {};
 }
 
-export function reducer(state: TableState, command: ContextMenuAddCommand) {
+export function mutate(state: TableState, command: ContextMenuAddCommand) {
   switch (command.type) {
     case "CONTEXT_MENU_ADD_ITEM": {
       state.contextMenuItems.value = {
@@ -73,5 +73,4 @@ export function reducer(state: TableState, command: ContextMenuAddCommand) {
       break;
     }
   }
-  return state;
 }

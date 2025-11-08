@@ -3,7 +3,8 @@ import { Background } from "./components/Background.tsx";
 import { Features } from "./components/Features.tsx";
 import { Header } from "./components/Header.tsx";
 import { Demo } from "./components/Demo.tsx";
-import { useEffect, useRef } from "preact/hooks";
+import { About } from "./About.tsx";
+import { useRef } from "preact/hooks";
 
 import NextIcon from "lucide-react/dist/esm/icons/chevron-down.js";
 
@@ -38,6 +39,9 @@ export function Home() {
             <NextIcon />
           </a>
         </p>
+        <div>
+          <About />
+        </div>
         <div ref={featuresRef}>
           <Features />
         </div>

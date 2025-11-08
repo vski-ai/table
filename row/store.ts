@@ -37,7 +37,7 @@ export function persist(state: TableState) {
   };
 }
 
-export function reducer(state: TableState, command: StickyRowsCommand) {
+export function mutate(state: TableState, command: StickyRowsCommand) {
   switch (command.type) {
     case "STICKY_TOP_ROWS_SET":
       state.stickyTopRows.value = command.payload;
@@ -46,5 +46,4 @@ export function reducer(state: TableState, command: StickyRowsCommand) {
       state.stickyBottomRows.value = command.payload;
       break;
   }
-  return state;
 }

@@ -28,7 +28,7 @@ export function persist(state: TableState) {
   return {};
 }
 
-export function reducer(state: TableState, command: RowCommand) {
+export function mutate(state: TableState, command: RowCommand) {
   switch (command.type) {
     case "ROW_RESIZING_SET":
       state.resizingRow.value = command.payload;
@@ -40,5 +40,4 @@ export function reducer(state: TableState, command: RowCommand) {
       };
       break;
   }
-  return state;
 }

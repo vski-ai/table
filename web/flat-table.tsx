@@ -13,7 +13,7 @@ import { SelectorPlugin, SelectorStore } from "@/selector/mod.ts";
 import { EnumeratorPlugin, EnumeratorStore } from "../enumerator/mod.ts";
 import { generateRows } from "./mock/flat-table.ts";
 
-const data = generateRows(10000);
+const { data, pinnedRows } = generateRows(10000);
 const sorter = createFrontendSorter();
 
 export const FlatTable = () => {
@@ -50,6 +50,7 @@ export const FlatTable = () => {
       total: sorted.length,
       meta: {
         sortableAll: true,
+        pinnedRows,
       },
     } as any;
   };

@@ -21,6 +21,6 @@ export function persist(_: TableState) {
   return {};
 }
 
-export function reducer<T>(state: TableState, _: Command<T>) {
+export function mutate<T>(state: TableState, _: Command<T>) {
   return state;
 }

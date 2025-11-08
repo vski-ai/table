@@ -1,22 +1,13 @@
 import { ITablePlugin, PluginInitCallback } from "@/plugin/types.ts";
 import { addMenuItems } from "@/contextmenu/mod.ts";
+import { renderStyleFormat } from "./StyleFormat.tsx";
+import { MenuItems } from "./menu.tsx";
 
-const onInit: PluginInitCallback = ({ store }) => {
+const onInit: PluginInitCallback = ({ store, beforetable }) => {
+  beforetable.use(-1, renderStyleFormat);
   addMenuItems({
     store,
-    items: [
-      {
-        id: "ololo",
-        menu: "main",
-        visibility: () => true,
-        label(ctx) {
-          return ctx?.column;
-        },
-        action(ctx) {
-          console.log(ctx);
-        },
-      },
-    ],
+    items: MenuItems,
   });
 };
 

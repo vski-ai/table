@@ -1,29 +1,62 @@
 import { faker } from "@faker-js/faker";
 
-export function generateRows(length = 1000000) {
-  return new Array(length).fill(0).map((_, i) => {
+const columns = [
+  { key: "productName", name: "Product Name" },
+  { key: "category", name: "Category" },
+  { key: "orderDate", name: "Order Date" },
+  { key: "inStock", name: "In Stock" },
+  { key: "unitPrice", name: "Unit Price" },
+  { key: "quantity", name: "Quantity" },
+  { key: "discount", name: "Discount" },
+  { key: "totalAmount", name: "Total Amount" },
+  { key: "region", name: "Region" },
+  { key: "contact", name: "Contact" },
+];
+
+export function generateRows(length = 100) {
+  const data = new Array(length).fill(0).map((_, id) => {
+    const unitPrice = parseFloat(faker.commerce.price({ min: 10, max: 200 }));
+    const quantity = faker.number.int({ min: 1, max: 50 });
+    const discount = parseFloat(
+      faker.finance.amount({ min: 0, max: 50, dec: 2 }),
+    );
+    const totalAmount = (unitPrice * quantity) - discount;
+
     return {
-      id: i,
-      "First Name": faker.person.firstName(),
-      "Last Name": faker.person.lastName(),
-      "Birth Date": faker.date.between({
-        from: new Date(0),
-        to: new Date(new Date().setFullYear(2010)),
-      }).toISOString(),
-      "Company": faker.company.name(),
-      "Job title": faker.person.jobTitle(),
-      "Hourly Rate": faker.finance.amount(),
-      "Country": faker.location.countryCode(),
-      "City ": faker.location.city(),
+      id,
+      "Product Name": faker.commerce.productName(),
+      "Category": faker.commerce.department(),
+      "Order Date": faker.date.past({ years: 2 }).toISOString(),
+      "In Stock": faker.datatype.boolean().toString(),
+      "Price": unitPrice,
+      "Quantity": quantity,
+      "Discount": discount,
+      "Total": totalAmount,
+      "Region": faker.location.country(),
+      "Contact": faker.internet.email(),
     };
   });
-}
 
-export function generate() {
-  console.log("Generating 1M rows...");
-  Deno.writeTextFileSync(
-    "./flat-1m-rows.json",
-    JSON.stringify(generateRows(100000)),
-  );
-  console.log("Done");
+  const summaryRow = {
+    id: "summary-123",
+    "Product Name": "Summary",
+    "Category": "Totals",
+    "Order Date": "",
+    "In Stock": "",
+    Price: data.reduce((acc, row) => acc + row.Price, 0) / data.length,
+    Quantity: data.reduce((acc, row) => acc + row.Quantity, 0),
+    Discount: data.reduce((acc, row) => acc + row.Discount, 0) / data.length,
+    Total: data.reduce((acc, row) => acc + row.Total, 0),
+    Region: "N/A",
+    Contact: "",
+  };
+
+  const finalData = [...data];
+
+  return {
+    data: finalData,
+    pinnedRows: {
+      bottom: [summaryRow],
+    },
+  };
 }

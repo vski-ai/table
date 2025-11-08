@@ -8,7 +8,7 @@ import { TableStore } from "@/store/types.ts";
 import { ExpandSetCommand } from "./store.ts";
 import { CellRendererCallback } from "@/plugin/mod.ts";
 import { useStickyColOffset } from "@/columns/mod.ts";
-import { CellFormatter } from "@/formatting/CellFormatter.tsx";
+import { CellFormatter } from "../formatting/deprecated/CellFormatter.tsx";
 import { GroupSorter } from "./GroupSorter.tsx";
 
 interface GroupCellProps {

@@ -5,7 +5,7 @@ export type StoreModule = {
     init: Record<string, unknown> | null,
   ) => { [key: string]: Signal<unknown> | unknown };
   persist: (state: TableState) => { [key: string]: unknown };
-  reducer: (state: TableState, command: Command) => TableState;
+  mutate: (state: TableState, command: Command) => void;
   methods?: (state: TableState) => Record<string, (...args: any[]) => any>;
 };
 
@@ -16,6 +16,7 @@ export interface Command<T = any, P = any> {
 
 export interface TableState {
   [key: string]: Signal<unknown> | unknown;
+  tableId?: string;
 }
 
 export interface TableStore {

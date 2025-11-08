@@ -1,0 +1,50 @@
+@layer components {
+  .vt-fmt-menu-title {
+    @apply text-xs flex w-full justify-between font-bold items-center
+      text-gray-900 dark:text-gray-100 p-1;
+    svg {
+      @apply w-4 h-4;
+    }
+  }
+  .vt-font-style-menu-wrap {
+    @apply grid grid-rows-1 grid-cols-4 gap-3 w-full h-6;
+  }
+  .vt-fmt-text-align-wrap {
+    @apply grid grid-rows-1 grid-cols-3 gap-3 w-full h-6;
+  }
+  .vt-fmt-color-wrap {
+    @apply grid grid-rows-1 grid-cols-2 gap-3 w-full h-8;
+  }
+  .vt-fmt-menu-btn {
+    @apply cursor-pointer flex items-center justify-center shadow-sm rounded-sm
+      bg-gray-50 dark:bg-gray-800 outline-gray-500 transition-all;
+    svg {
+      @apply h-3;
+    }
+    &.enabled {
+      @apply bg-gray-100 dark:bg-gray-900 outline-1;
+    }
+  }
+  .vt-fmt-color-w {
+    @apply w-full relative;
+    .color-i {
+      @apply w-full h-6 border-1 border-sky-500/50 rounded-none outline-none;
+    }
+  }
+  .vt-fmt-color-i {
+    @apply absolute w-4 h-4 top-1 pointer-events-none border-1 bg-black
+      text-white rounded-none;
+    &.left {
+      @apply left-1;
+    }
+    &.right {
+      @apply right-1;
+    }
+  }
+  .vt-fmt-style-settings-w {
+    @apply flex flex-col gap-3 p-3;
+  }
+  .vt-fmt-reset {
+    @apply p-2;
+  }
+}

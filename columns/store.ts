@@ -71,7 +71,7 @@ export function persist(state: TableState) {
   };
 }
 
-export function reducer(state: TableState, command: ColumnCommandType) {
+export function mutate(state: TableState, command: ColumnCommandType) {
   switch (command.type) {
     case "COLUMNS_SET": {
       state.columns.value = command.payload;
@@ -102,5 +102,4 @@ export function reducer(state: TableState, command: ColumnCommandType) {
       break;
     }
   }
-  return state;
 }

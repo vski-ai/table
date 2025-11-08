@@ -47,6 +47,7 @@ const afterLoad: AfterLoadCallback = ({ store, res }) => {
       payload: res.meta.pinnedRows.bottom,
     });
   }
+  console.log(res);
   return res;
 };
 

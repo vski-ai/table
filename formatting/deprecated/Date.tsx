@@ -1,9 +1,9 @@
 import { memo } from "preact/compat";
 import { useCallback, useEffect } from "preact/hooks";
 import { Signal, useSignal } from "@preact/signals";
-import { DateFormatting as DateFormattingType } from "./types.ts";
-import { LocaleSelector } from "../common/LocaleSelector.tsx";
-import { GranularitySelector } from "../common/GranularitySelector.tsx";
+import { DateFormatting as DateFormattingType } from "../types.ts";
+import { LocaleSelector } from "../../common/LocaleSelector.tsx";
+import { GranularitySelector } from "../../common/GranularitySelector.tsx";
 
 export const DateFormatting = memo((
   { column, formatting }: { column: string; formatting: Signal<any> },

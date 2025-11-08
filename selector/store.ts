@@ -25,12 +25,11 @@ export function persist(state: TableState) {
   };
 }
 
-export function reducer(state: TableState, command: RowsSelectCommand) {
+export function mutate(state: TableState, command: RowsSelectCommand) {
   switch (command.type) {
     case "SELECTED_ROWS_SET": {
       state.selectedRows.value = command.payload;
       break;
     }
   }
-  return state;
 }

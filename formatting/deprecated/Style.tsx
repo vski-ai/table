@@ -1,7 +1,7 @@
 import { memo } from "preact/compat";
 import { useCallback } from "preact/hooks";
 import { Signal } from "@preact/signals";
-import { CellStyle, ConditionOperator, StyleCondition } from "./types.ts";
+import { CellStyle, ConditionOperator, StyleCondition } from "../types.ts";
 
 import Trash2Icon from "lucide-react/dist/esm/icons/trash-2.js";
 

@@ -5,6 +5,11 @@
       duration-400;
     ul {
       @apply p-1;
+      li {
+        svg {
+          @apply w-4;
+        }
+      }
     }
   }
   .vt-menu-title {

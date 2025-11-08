@@ -3,7 +3,7 @@
     @apply btn btn-xs btn-ghost w-8 h-8 rounded-lg transition-none;
 
     &.enabled {
-      @apply bg-gray-400 dark:bg-gray-900;
+      @apply bg-sky-200/50 dark:bg-gray-900;
     }
   }
 }

@@ -27,6 +27,7 @@ export function Header({
     >
       <table
         style={style}
+        x-id={`vt_${store.state.tableId}`}
         class="vt vt-header"
       >
         <thead id="vt-main-head">

@@ -35,7 +35,7 @@ export function persist(state: TableState) {
   };
 }
 
-export function reducer(state: TableState, command: GroupingCommand) {
+export function mutate(state: TableState, command: GroupingCommand) {
   switch (command.type) {
     case "EXPANDED_LEVELS_SET":
       state.expandedLevels.value =
@@ -51,5 +51,4 @@ export function reducer(state: TableState, command: GroupingCommand) {
       break;
     }
   }
-  return state;
 }

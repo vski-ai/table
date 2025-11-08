@@ -55,7 +55,7 @@ export function useNavCallback(
 
   const getCell = useCallback((index: number, tabIndex: number) => {
     return document
-      .querySelector(`#vt-main tr[data-index="${index}"]`)
+      .querySelector(`.vt-main tr[data-index="${index}"]`)
       ?.querySelector(`td[tabindex="${tabIndex}"]`) as HTMLTableCellElement;
   }, []);
 

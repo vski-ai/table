@@ -23,12 +23,11 @@ export function persist(state: TableState) {
   };
 }
 
-export function reducer(state: TableState, command: SortSetCommand) {
+export function mutate(state: TableState, command: SortSetCommand) {
   switch (command.type) {
     case "SORT_SET": {
       state.sorting.value = command.payload;
       break;
     }
   }
-  return state;
 }
