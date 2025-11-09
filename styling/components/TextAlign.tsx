@@ -1,15 +1,14 @@
-import { TableStore } from "@/store/types.ts";
 import { cn } from "@/common/className.ts";
 
 import AlignStart from "lucide-react/dist/esm/icons/text-align-start.js";
 import AlignCenter from "lucide-react/dist/esm/icons/text-align-center.js";
 import AlignEnd from "lucide-react/dist/esm/icons/text-align-end.js";
 
-import type { StyleProps } from "./styleAction.ts";
-import * as styleAction from "./styleAction.ts";
+import type { StyleProps } from "./mutations.ts";
+import * as mutations from "./mutations.ts";
 
 export const TextAlign = (props: StyleProps) => {
-  const currentStyle = styleAction.getStyle(props);
+  const currentStyle = mutations.getStyle(props);
 
   const isLeft = currentStyle["text-align"]
     ? currentStyle["text-align"] === "left"
@@ -21,21 +20,21 @@ export const TextAlign = (props: StyleProps) => {
     const style = {
       "text-align": "left",
     };
-    styleAction.setStyle({ ...props, style });
+    mutations.setStyle({ ...props, style });
   };
 
   const toggleRight = () => {
     const style = {
       "text-align": isRight ? "left" as const : "right" as const,
     };
-    styleAction.setStyle({ ...props, style });
+    mutations.setStyle({ ...props, style });
   };
 
   const toggleCenter = () => {
     const style = {
       "text-align": isCenter ? "left" as const : "center" as const,
     };
-    styleAction.setStyle({ ...props, style });
+    mutations.setStyle({ ...props, style });
   };
 
   return (

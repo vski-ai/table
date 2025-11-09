@@ -12,6 +12,7 @@ import { TableStore } from "../store/mod.ts";
 import { SortedAddon } from "./addon.ts";
 import { DataLoadOptions, DataLoadResult } from "@/fetcher/types.ts";
 
+import { DatatypePlugin } from "@/datatype/plugin.ts";
 import { StylingPlugin } from "@/styling/plugin.ts";
 import { ContextMenuPlugin } from "@/contextmenu/plugin.ts";
 import { ColumnsPlugin } from "@/columns/plugin.ts";
@@ -20,9 +21,10 @@ import { RowsPlugin } from "@/row/plugin.ts";
 export const createPlugin = (plugin: ITablePlugin) => plugin;
 export type PluginContainer = ReturnType<typeof createPluginContainer>;
 
-const buildInPlugins = [
-  ColumnsPlugin,
+export const buildInPlugins = [
   StylingPlugin,
+  ColumnsPlugin,
+  DatatypePlugin,
   ContextMenuPlugin,
   RowsPlugin,
 ];

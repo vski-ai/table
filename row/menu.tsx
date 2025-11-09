@@ -13,6 +13,7 @@ const STICKY_ROW = "sticky_rows";
 
 export const Stick: ContextMenuItem = {
   menu: STICKY_ROW,
+  order: Infinity,
   title: () => (
     <div class="flex justify-between w-full font-bold">
       Pin Row

@@ -1,32 +1,39 @@
 import { Signal, signal } from "@preact/signals";
 import { Command, TableState } from "@/store/mod.ts";
-import { TypeFormat } from "./types.ts";
-import { DefaultFormater } from "./DefaultFormater.tsx";
-import { RowData } from "../row/types.ts";
+import { TypeFormatComponent } from "./types.ts";
+import { DefaultFormater } from "./components/DefaultFormater.tsx";
 
 const TYPE_FORMATTERS_ACCESSOR = Symbol("formatters");
 
 declare module "@/store/types.ts" {
   interface TableState {
-    cellDataTypes: Signal<Record<string, string>>;
-    cellFormatting: Signal<Record<string, any>>;
-    [TYPE_FORMATTERS_ACCESSOR]: Record<string, TypeFormat<string>>;
+    columnDataType: Signal<Record<string, string>>;
+    columnDataTypeOptions: Signal<Record<string, any>>;
+    [TYPE_FORMATTERS_ACCESSOR]: Record<string, TypeFormatComponent<string>>;
   }
 
   interface TableStore {
-    getFormater: <T extends string>(datetype: T) => TypeFormat<T>;
-    addFormater: <T extends string>(formatter: TypeFormat<T>) => void;
+    getFormater: <T extends string>(datetype: T) => TypeFormatComponent<T>;
+    addFormater: <T extends string>(formatter: TypeFormatComponent<T>) => void;
   }
 }
 
-const CELL_DATATYPES_SET = "CELL_DATATYPE_SET";
+const COLUMN_DATATYPE_SET = "COLUMN_DATATYPE_SET";
+const COLUMN_DATATYPE_OPTIONS_SET = "COLUMN_DATATYPE_OPTIONS_SET";
 
-export type CellDatatypeSetCommand = Command<
-  typeof CELL_DATATYPES_SET,
+export type ColumnDataTypeSetCommand = Command<
+  typeof COLUMN_DATATYPE_SET,
   Record<string, string>
 >;
 
-export type FormattingCommandType = CellDatatypeSetCommand;
+export type ColumnDataTypeOptionsSetCommand = Command<
+  typeof COLUMN_DATATYPE_OPTIONS_SET,
+  Record<string, any>
+>;
+
+export type FormattingCommandType =
+  | ColumnDataTypeSetCommand
+  | ColumnDataTypeOptionsSetCommand;
 
 export function inject(_: TableState) {
   return {
@@ -37,23 +44,32 @@ export function inject(_: TableState) {
 }
 
 export function state(init: Record<string, any> | null) {
-  const cellDataTypes = signal(init?.cellDataTypes ?? {});
-  const cellEditing = signal({});
+  const columnDataType = signal(init?.columnDataType ?? {});
+  const columnDataTypeOptions = signal(init?.columnDataTypeOptions ?? {});
   return {
-    cellDataTypes,
-    cellEditing,
+    columnDataType,
+    columnDataTypeOptions,
   };
 }
 
 export function persist(state: TableState) {
-  return {};
+  return {
+    columnDataType: state.columnDataType.value,
+    columnDataTypeOptions: state.columnDataTypeOptions.value,
+  };
 }
 
 export function mutate(state: TableState, command: FormattingCommandType) {
   switch (command.type) {
-    case "CELL_DATATYPE_SET":
-      state.cellDataTypes.value = {
-        ...state.cellDataTypes.value,
+    case "COLUMN_DATATYPE_SET":
+      state.columnDataType.value = {
+        ...state.columnDataType.value,
+        ...command.payload,
+      };
+      break;
+    case "COLUMN_DATATYPE_OPTIONS_SET":
+      state.columnDataTypeOptions.value = {
+        ...state.columnDataTypeOptions.value,
         ...command.payload,
       };
       break;
@@ -66,7 +82,8 @@ export function methods(state: TableState) {
       return state[TYPE_FORMATTERS_ACCESSOR]?.[datatype] ??
         DefaultFormater;
     },
-    addFormater<T extends string>(formatter: TypeFormat<T>) {
+    addFormater<T extends string>(formatter: TypeFormatComponent<T>) {
+      console.log(3, state[TYPE_FORMATTERS_ACCESSOR]);
       state[TYPE_FORMATTERS_ACCESSOR][formatter.datatype] = formatter;
     },
   };

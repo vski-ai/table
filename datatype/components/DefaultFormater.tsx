@@ -1,5 +1,5 @@
 import { cn } from "@/common/className.ts";
-import { TypeFormat, TypeFormatOpts } from "./types.ts";
+import { TypeFormatComponent, TypeFormatOpts } from "../types.ts";
 import { useCallback, useRef } from "preact/hooks";
 import { useAutoFocus } from "@/common/useAutoFocus.ts";
 import { RowEditCommand } from "@/editing/store.ts";
@@ -33,7 +33,7 @@ export function edit({ store, column, row }: TypeFormatOpts) {
   useAutoFocus(ref, updateKey);
 
   const onInput = useCallback((ev: InputEvent) => {
-    const value = (ev.target as HTMLTextAreaElement).value;
+    const value = (ev.target as HTMLTextAreaElement).value.trim();
     const currentRow = store.getCurrentRowValue({ row });
     store.dispatch<RowEditCommand>({
       type: "ROW_EDIT_UPDATE",
@@ -60,7 +60,7 @@ export function edit({ store, column, row }: TypeFormatOpts) {
   );
 }
 
-export const DefaultFormater: TypeFormat<"default"> = {
+export const DefaultFormater: TypeFormatComponent<"default"> = {
   datatype: "default",
   display,
   edit,

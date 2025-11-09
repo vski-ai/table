@@ -5,7 +5,7 @@ import { TableStore } from "@/store/types.ts";
 import { RowData } from "@/row/types.ts";
 import { useRowKey } from "@/fetcher/useRowKey.ts";
 import { usePlugins } from "@/plugin/usePlugins.ts";
-import { TypeFormat } from "@/datatype/TypeFormat.tsx";
+import { TypeFormat } from "@/datatype/mod.ts";
 import { useRowHeights } from "@/fetcher/useRowHeights.ts";
 import { useCellKeyBingins } from "@/editing/useCellKeyBindings.ts";
 

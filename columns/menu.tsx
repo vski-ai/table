@@ -9,6 +9,7 @@ const STICKY_COLUMN = "sticky_column";
 
 export const Stick: ContextMenuItem = {
   menu: STICKY_COLUMN,
+  order: Infinity,
   visibility: ({ column, placement, store }) =>
     (!!column && placement === "outside") &&
     !store.state.stickyColumns.value[column],

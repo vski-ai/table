@@ -1,16 +1,11 @@
-import { Table } from "../table/table.tsx";
-import { createTableStore, LocalStorageAdapter } from "@/store/mod.ts";
+import { LocalStorageAdapter } from "@/store/mod.ts";
 import { useEffect, useRef } from "preact/hooks";
 import { RowData } from "@/row/types.ts";
-import { createPluginContainer } from "@/plugin/mod.ts";
-import {
-  createFrontendSorter,
-  SortingPlugin,
-  SortingStore,
-} from "@/sorting/mod.ts";
+import { createTable } from "../mod.ts";
+import { createFrontendSorter, SortingPlugin } from "@/sorting/mod.ts";
 
-import { SelectorPlugin, SelectorStore } from "@/selector/mod.ts";
-import { EnumeratorPlugin, EnumeratorStore } from "../enumerator/mod.ts";
+import { SelectorPlugin } from "@/selector/mod.ts";
+import { EnumeratorPlugin } from "../enumerator/mod.ts";
 import { generateRows } from "./mock/flat-table.ts";
 import mock from "./mock/flat-persistent-data.json" with { type: "json" };
 
@@ -21,22 +16,17 @@ export const FlatTable = () => {
   const scrollRef = useRef<any>(null);
   useEffect(() => {
     scrollRef.current = document.querySelector(".main-outlet");
-  });
-  const tableStore = createTableStore(
-    new LocalStorageAdapter(),
-    "flat-table",
-    [
-      SortingStore,
-      SelectorStore,
-      EnumeratorStore,
-    ],
-  );
+  }, []);
 
-  createPluginContainer(tableStore, [
-    SortingPlugin,
-    SelectorPlugin,
-    EnumeratorPlugin,
-  ]);
+  const { Table } = createTable({
+    id: "flat",
+    plugins: [
+      SortingPlugin,
+      //SelectorPlugin,
+      EnumeratorPlugin,
+    ],
+    persistence: new LocalStorageAdapter(),
+  });
 
   const onDataLoad = async (
     { offset, limit, store }: any,
@@ -57,10 +47,11 @@ export const FlatTable = () => {
   };
 
   return (
-    <Table
-      onDataLoad={onDataLoad}
-      store={tableStore}
-      scrollContainerRef={scrollRef as any}
-    />
+    <div ref={scrollRef}>
+      <Table
+        onDataLoad={onDataLoad}
+        container={scrollRef as any}
+      />
+    </div>
   );
 };

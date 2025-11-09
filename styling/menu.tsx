@@ -24,6 +24,7 @@ const Item = ({ children }: { children: ComponentChildren }) => {
 
 export const RowMenu: ContextMenuItem = {
   menu: "row_style",
+  order: 1,
   visibility: ({ placement, tabIndex, rowId }) =>
     !!rowId && tabIndex === 0 && placement !== "outside",
   title: () => <Title>Row style</Title>,
@@ -44,6 +45,7 @@ export const RowMenuContent: ContextMenuItem = {
 
 export const ColumnMenu: ContextMenuItem = {
   menu: "col_style",
+  order: 1,
   visibility: ({ placement, column }) => !!column && placement === "outside",
   title: () => <Title>Column style</Title>,
   label: () => <Item>Column style</Item>,

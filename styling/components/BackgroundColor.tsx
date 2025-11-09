@@ -1,7 +1,7 @@
 import TypeIcon from "lucide-react/dist/esm/icons/squares-subtract.js";
 
-import type { StyleProps } from "./styleAction.ts";
-import * as styleAction from "./styleAction.ts";
+import type { StyleProps } from "./mutations.ts";
+import * as mutations from "./mutations.ts";
 import { TargetedEvent } from "preact";
 
 const getDefaultColor = () =>
@@ -12,7 +12,7 @@ const getDefaultColor = () =>
     : "#fff";
 
 export const BackgroundColor = (props: StyleProps) => {
-  const currentStyle = styleAction.getStyle(props);
+  const currentStyle = mutations.getStyle(props);
   const currentValue = currentStyle["background-color"];
 
   const onChange = (ev: TargetedEvent<HTMLInputElement, InputEvent>) => {
@@ -20,7 +20,7 @@ export const BackgroundColor = (props: StyleProps) => {
     const style = {
       "background-color": target?.value,
     };
-    styleAction.setStyle({ ...props, style });
+    mutations.setStyle({ ...props, style });
   };
 
   return (

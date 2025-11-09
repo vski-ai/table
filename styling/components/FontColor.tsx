@@ -1,10 +1,7 @@
-import { TableStore } from "@/store/types.ts";
-import { cn } from "@/common/className.ts";
-
 import TypeIcon from "lucide-react/dist/esm/icons/type.js";
 
-import type { StyleProps } from "./styleAction.ts";
-import * as styleAction from "./styleAction.ts";
+import type { StyleProps } from "./mutations.ts";
+import * as mutations from "./mutations.ts";
 import { TargetedEvent } from "preact";
 
 const getDefaultColor = () =>
@@ -15,7 +12,7 @@ const getDefaultColor = () =>
     : "#555";
 
 export const FontColor = (props: StyleProps) => {
-  const currentStyle = styleAction.getStyle(props);
+  const currentStyle = mutations.getStyle(props);
   const currentValue = currentStyle.color;
 
   const onChange = (ev: TargetedEvent<HTMLInputElement, InputEvent>) => {
@@ -23,7 +20,7 @@ export const FontColor = (props: StyleProps) => {
     const style = {
       "color": target?.value,
     };
-    styleAction.setStyle({ ...props, style });
+    mutations.setStyle({ ...props, style });
   };
 
   return (

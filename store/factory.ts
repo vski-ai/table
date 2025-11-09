@@ -7,8 +7,6 @@ import { RowsStore } from "@/row/mod.ts";
 import { CellStore } from "@/cell/mod.ts";
 import { FetcherStore } from "@/fetcher/mod.ts";
 import { ContextMenuStore } from "@/contextmenu/mod.ts";
-import { StylingStore } from "@/styling/mod.ts";
-import { DatatypeStore } from "@/datatype/mod.ts";
 import { EditingStore } from "@/editing/mod.ts";
 
 const builtInStore: StoreModule[] = [
@@ -17,8 +15,6 @@ const builtInStore: StoreModule[] = [
   CellStore,
   ContextMenuStore,
   RowsStore,
-  StylingStore,
-  DatatypeStore,
   EditingStore,
 ];
 
@@ -39,20 +35,23 @@ export function createTableStore(
   const state: TableState = {
     tableId,
   };
+  modules.map((module) => module.inject?.(state))
+    .filter(Boolean)
+    .forEach((module) => {
+      for (const sym of Object.getOwnPropertySymbols(module)) {
+        // @ts-ignore
+        state[sym] = module[sym];
+      }
+      for (const key in module) {
+        state[key] = module[key];
+      }
+    });
 
   for (const module of modules.map((module) => module.state(initialState))) {
     for (const key in module) {
       state[key] = module[key];
     }
   }
-
-  modules.map((module) => module.inject?.(state))
-    .filter(Boolean)
-    .forEach((module) => {
-      for (const key in module) {
-        state[key] = module[key];
-      }
-    });
 
   const history: Command<unknown>[] = [];
 

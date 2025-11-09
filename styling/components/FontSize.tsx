@@ -1,19 +1,16 @@
-import { TableStore } from "@/store/types.ts";
-import { cn } from "@/common/className.ts";
-
-import type { StyleProps } from "./styleAction.ts";
-import * as styleAction from "./styleAction.ts";
+import type { StyleProps } from "./mutations.ts";
+import * as mutations from "./mutations.ts";
 import { TargetedEvent } from "preact";
 
 export const FontSize = (props: StyleProps) => {
-  const currentStyle = styleAction.getStyle(props);
+  const currentStyle = mutations.getStyle(props);
 
   const onChange = (ev: TargetedEvent<HTMLInputElement, InputEvent>) => {
     const target = ev.target as HTMLInputElement;
     const style = {
       "font-size": (parseFloat(target.value) / 100 * 2) + "em",
     };
-    styleAction.setStyle({ ...props, style });
+    mutations.setStyle({ ...props, style });
   };
 
   return (

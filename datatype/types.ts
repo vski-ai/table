@@ -23,7 +23,8 @@ export interface TypeFormatOpts {
 }
 
 export type TypeFormatRender = (opts: TypeFormatOpts) => ComponentChildren;
-export interface TypeFormat<T extends string> {
+
+export interface TypeFormatComponent<T extends string> {
   datatype: T;
   display: TypeFormatRender;
   edit: TypeFormatRender;
