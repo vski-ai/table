@@ -186,7 +186,25 @@ export function useNavCallback(
       currentTr = target.parentNode;
     }
 
+    const selectCurrentCell = () => {
+      const rowId = (target.parentNode as HTMLTableRowElement)?.dataset.rowId;
+      const columnName = target.dataset.columnName;
+      if (!rowId || !columnName) {
+        return;
+      }
+      const row = store.state.selectedCells.value[rowId] ?? {};
+      row[columnName] = true;
+      store.state.selectedCells.value = {
+        ...store.state.selectedCells.value,
+        [rowId]: row,
+      };
+    };
+
     switch (ev.key) {
+      case "Shift":
+        ev.preventDefault();
+        selectCurrentCell();
+        break;
       case "ArrowRight":
         ev.preventDefault();
         preventScroll.value = false;

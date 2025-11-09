@@ -13,6 +13,7 @@ export function useCellKeyBingins(
   { store, row, column }: CellKeyBindingsProps,
 ) {
   const key = store.getCellKey({ row, column });
+  const isEditing = !!store.state.cellEditing.value[key];
 
   const setEditing = useCallback(() => {
     store.dispatch<CellEditingSetCommand>({
@@ -24,26 +25,38 @@ export function useCellKeyBingins(
   }, [key]);
 
   const unSetEditing = useCallback(() => {
-    store.state.cellEditing.value = {};
+    store.dispatch<CellEditingSetCommand>({
+      type: "CELL_EDITING_SET",
+      payload: {
+        [key]: false,
+      },
+    });
   }, [key]);
 
   const isNavigationUnfocus = useCallback((ev: KeyboardEvent) => {
-    const isEditing = !!store.state.cellEditing.value[key];
     if (ev.ctrlKey && ev.key !== "Control" && isEditing) {
       ev.preventDefault();
       return true;
     }
-  }, [key]);
+  }, [key, isEditing]);
 
   const onKeyDown = useCallback((ev: KeyboardEvent) => {
-    const isEditing = !!store.state.cellEditing.value[key];
     const unfocus = isNavigationUnfocus(ev);
     if (unfocus) {
-      setTimeout(unSetEditing, 200);
+      setTimeout(unSetEditing, 0);
       return;
-    } else if (isEditing) {
-      ev.stopPropagation();
     }
+
+    if (!isEditing) {
+      if (ev.key === "Enter") {
+        ev.stopPropagation();
+        ev.preventDefault();
+        setEditing();
+      }
+      return;
+    }
+
+    ev.stopPropagation();
 
     switch (ev.key) {
       case "Escape": {
@@ -52,18 +65,16 @@ export function useCellKeyBingins(
         unSetEditing();
         break;
       }
-      case "Enter": {
-        ev.stopPropagation();
-        ev.preventDefault();
-        setEditing();
+      case "Tab": {
+        unSetEditing();
         break;
       }
     }
-  }, []);
+  }, [isEditing]);
 
   const onDblClick = useCallback(() => {
     setEditing();
-  }, []);
+  }, [isEditing]);
 
   return {
     onKeyDown,

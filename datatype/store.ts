@@ -1,7 +1,7 @@
 import { Signal, signal } from "@preact/signals";
 import { Command, TableState } from "@/store/mod.ts";
 import { TypeFormat } from "./types.ts";
-import { DefaultFormatter as DefaultTypeFormatter } from "./DefaultFormatter.tsx";
+import { DefaultFormater } from "./DefaultFormater.tsx";
 import { RowData } from "../row/types.ts";
 
 const TYPE_FORMATTERS_ACCESSOR = Symbol("formatters");
@@ -31,7 +31,7 @@ export type FormattingCommandType = CellDatatypeSetCommand;
 export function inject(_: TableState) {
   return {
     [TYPE_FORMATTERS_ACCESSOR]: {
-      "default": DefaultTypeFormatter,
+      "default": DefaultFormater,
     },
   };
 }
@@ -64,7 +64,7 @@ export function methods(state: TableState) {
   return {
     getFormater(datatype: string) {
       return state[TYPE_FORMATTERS_ACCESSOR]?.[datatype] ??
-        DefaultTypeFormatter;
+        DefaultFormater;
     },
     addFormater<T extends string>(formatter: TypeFormat<T>) {
       state[TYPE_FORMATTERS_ACCESSOR][formatter.datatype] = formatter;

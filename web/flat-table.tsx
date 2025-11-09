@@ -12,8 +12,9 @@ import {
 import { SelectorPlugin, SelectorStore } from "@/selector/mod.ts";
 import { EnumeratorPlugin, EnumeratorStore } from "../enumerator/mod.ts";
 import { generateRows } from "./mock/flat-table.ts";
+import mock from "./mock/flat-persistent-data.json" with { type: "json" };
 
-const { data, pinnedRows } = generateRows(10000);
+const { data, pinnedRows } = mock; // generateRows(10000);
 const sorter = createFrontendSorter();
 
 export const FlatTable = () => {
