@@ -4,9 +4,10 @@ import { useStickyColumn } from "@/columns/mod.ts";
 import { TableStore } from "@/store/types.ts";
 import { RowData } from "@/row/types.ts";
 import { useRowKey } from "@/fetcher/useRowKey.ts";
-import { usePlugins } from "../plugin/usePlugins.ts";
-import { TypeFormat } from "@/formatting/TypeFormat.tsx";
-import { useRowHeights } from '@/fetcher/useRowHeights.ts'
+import { usePlugins } from "@/plugin/usePlugins.ts";
+import { TypeFormat } from "@/datatype/TypeFormat.tsx";
+import { useRowHeights } from "@/fetcher/useRowHeights.ts";
+import { useCellKeyBingins } from "@/editing/useCellKeyBindings.ts";
 
 interface CellProps {
   store: TableStore;
@@ -22,7 +23,7 @@ export const Cell = ({
   const plugins = usePlugins({ store });
   const getHeight = useRowHeights({
     store,
-    height: 64
+    height: 64,
   });
   const rowKey = useRowKey({ store });
   const {
@@ -33,6 +34,8 @@ export const Cell = ({
     right,
   } = useStickyColumn({ store, column });
   const isSelected = store.state.selectedCells?.value?.[row[rowKey]]?.[column];
+  const keyBindings = useCellKeyBingins({ store, row, column });
+
   return (
     <td
       key={column}
@@ -51,17 +54,7 @@ export const Cell = ({
         "stick-right": isStickyRight,
         "multifocus": isSelected,
       })}
-      onDblClick={() => {
-        store.state.cellEditing.value = { [store.getCellKey({ row, column })]: true }
-      }}
-      onKeyDown={(ev)=> {
-        if(!ev.altKey) {
-         ev.stopPropagation()
-        }
-        if (ev.key === 'Escape') {
-          store.state.cellEditing.value = {}
-        }
-      }}
+      {...keyBindings}
     >
       <div
         class="vt-cell-wrap"
@@ -73,7 +66,7 @@ export const Cell = ({
           store,
         })}
 
-        <TypeFormat {...{store, column, row}}/>
+        <TypeFormat {...{ store, column, row }} />
 
         {plugins.cellsuffixes?.render({
           column: column,

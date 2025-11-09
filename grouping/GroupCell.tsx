@@ -8,7 +8,6 @@ import { TableStore } from "@/store/types.ts";
 import { ExpandSetCommand } from "./store.ts";
 import { CellRendererCallback } from "@/plugin/mod.ts";
 import { useStickyColOffset } from "@/columns/mod.ts";
-import { CellFormatter } from "../formatting/deprecated/CellFormatter.tsx";
 import { GroupSorter } from "./GroupSorter.tsx";
 
 interface GroupCellProps {
@@ -125,17 +124,13 @@ export const groupCellRenderCallback: CellRendererCallback = ({
   store,
   row,
 }) => {
-  const formatting = store.state.cellFormatting.value;
   return (
     <GroupCell
       store={store}
       height={64}
       row={row}
     >
-      <CellFormatter
-        value={row[row.$group_by!]}
-        formatting={formatting?.[row.$group_by!]}
-      />
+      {row[row.$group_by!]}
     </GroupCell>
   );
 };

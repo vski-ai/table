@@ -11,7 +11,7 @@ const onInit: PluginInitCallback = ({ store, beforetable }) => {
   });
 };
 
-export const FormattingPlugin: ITablePlugin = {
-  name: "formatting",
+export const StylingPlugin: ITablePlugin = {
+  name: "styling",
   onInit,
 };

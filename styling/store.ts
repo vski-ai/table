@@ -1,9 +1,7 @@
 import { Signal, signal } from "@preact/signals";
 import { Command, TableState } from "@/store/mod.ts";
-import { CellStyle, TypeFormat } from "./types.ts";
-import { Default as DefaultTypeFormatter } from "./datatypes/default.tsx";
-import { RowData } from "../row/types.ts";
-const TYPE_FORMATTERS_ACCESSOR = Symbol("formatters");
+import { CellStyle } from "./types.ts";
+
 type CSSStyleObject = Record<string, string | undefined>;
 
 declare module "@/store/types.ts" {
@@ -14,16 +12,6 @@ declare module "@/store/types.ts" {
     cellStyles: Signal<
       Record<string, Record<string, CSSStyleObject>>
     >;
-    cellDataTypes: Signal<Record<string, string>>;
-    cellEditing: Signal<Record<string, boolean>>;
-    cellFormatting: Signal<Record<string, any>>;
-    [TYPE_FORMATTERS_ACCESSOR]: Record<string, TypeFormat<string>>;
-  }
-
-  interface TableStore {
-    getFormater: <T extends string>(datetype: T) => TypeFormat<T>;
-    addFormater: <T extends string>(formatter: TypeFormat<T>) => void;
-    getCellKey: (opts: { column: string, row: RowData }) => string
   }
 }
 
@@ -78,7 +66,7 @@ export type CellStyleResetCommand = Command<
   { rowKey: string; columnId: string }
 >;
 
-export type FormattingCommandType =
+export type StylingCommandType =
   | CellEditingSetCommand
   | CellDatatypeSetCommand
   | TableStyleSetCommand
@@ -91,39 +79,28 @@ export type FormattingCommandType =
   | CellStyleResetCommand;
 
 export function state(init: Record<string, any> | null) {
-  const cellFormatting = signal(init?.cellFormatting || {});
   const tableStyles = signal(init?.tableStyles ?? {});
   const columnStyles = signal(init?.columnStyles ?? {});
   const rowStyles = signal(init?.rowStyles ?? {});
   const cellStyles = signal(init?.cellStyles ?? {});
-  const cellDataTypes = signal(init?.cellDataTypes ?? {});
-  const cellEditing = signal({});
   return {
-    cellFormatting,
     tableStyles,
     columnStyles,
     rowStyles,
     cellStyles,
-    cellDataTypes,
-    cellEditing
   };
 }
 
-export function persist(state: TableState): Record<keyof TableState, any> {
+export function persist(state: TableState) {
   return {
-    [TYPE_FORMATTERS_ACCESSOR]: {
-      "default": DefaultTypeFormatter,
-    },
     tableStyles: state.tableStyles.value,
     columnStyles: state.columnStyles.value,
     rowStyles: state.rowStyles.value,
     cellStyles: state.cellStyles.value,
-    cellFormatting: state.cellFormatting.value,
-    cellDataTypes: state.cellDataTypes.value,
   };
 }
 
-export function mutate(state: TableState, command: FormattingCommandType) {
+export function mutate(state: TableState, command: StylingCommandType) {
   switch (command.type) {
     case "TABLE_STYLE_SET":
       state.tableStyles.value = {
@@ -199,19 +176,4 @@ export function mutate(state: TableState, command: FormattingCommandType) {
       };
       break;
   }
-}
-
-export function methods(state: TableState) {
-  return {
-    getCellKey({ column, row  } : { column: string, row: RowData }) {
-      return row.id + '/' + column;
-    },
-    getFormater(datatype: string) {
-      return state[TYPE_FORMATTERS_ACCESSOR]?.[datatype] ??
-        DefaultTypeFormatter;
-    },
-    addFormater<T extends string>(formatter: TypeFormat<T>) {
-      state[TYPE_FORMATTERS_ACCESSOR][formatter.datatype] = formatter;
-    },
-  };
 }

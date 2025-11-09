@@ -138,7 +138,7 @@ export function useNavCallback(
       if (!shiftPressed.value || tabPressed.value) return;
       document.getSelection()?.removeAllRanges();
       const target = ev.target as HTMLTableCellElement;
-      if (target.tagName !== "TD" && !target.classList.contains('vt-edit')) {
+      if (target.tagName !== "TD" && !target.classList.contains("vt-edit")) {
         return;
       }
 
@@ -159,7 +159,6 @@ export function useNavCallback(
   );
 
   const onKeyDown = useCallback((ev: KeyboardEvent) => {
-    
     if (ev.key === "Escape") {
       store.state.selectedCells.value = {};
     }
@@ -169,18 +168,23 @@ export function useNavCallback(
     }
 
     const target: HTMLTableCellElement = ev.target as HTMLTableCellElement;
-    if (target.tagName !== "TD" && !target.classList.contains('vt-edit')) {
+    if (target.tagName !== "TD" && !target.classList.contains("vt-edit")) {
       return;
     }
 
     const tabIndex = target.tabIndex;
-    const idx = (target as HTMLTableCellElement)?.closest('tr')?.dataset.index ?? (target.parentNode as HTMLTableRowElement)?.closest('tr')?.dataset.index
-    console.log(idx)
-    if (!idx) return;
-    const rowIndex = Number(
-      idx
-    );
-  
+    let rowIndex = 0;
+    let currentTr: any = target?.closest("tr");
+
+    for (let i = 0; i < 500; i++) {
+      if (currentTr?.tagName === "TR") {
+        if (currentTr?.dataset?.index) {
+          rowIndex = Number(currentTr?.dataset?.index);
+        }
+        break;
+      }
+      currentTr = target.parentNode;
+    }
 
     switch (ev.key) {
       case "ArrowRight":

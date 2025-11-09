@@ -2,20 +2,24 @@ import { effect } from "@preact/signals";
 import { StorageAdapter } from "./persistence.ts";
 import { Command, StoreModule, TableState, TableStore } from "./types.ts";
 
-import { FormattingStore } from "@/formatting/mod.ts";
 import { ColumnsStore } from "@/columns/mod.ts";
 import { RowsStore } from "@/row/mod.ts";
 import { CellStore } from "@/cell/mod.ts";
 import { FetcherStore } from "@/fetcher/mod.ts";
 import { ContextMenuStore } from "@/contextmenu/mod.ts";
+import { StylingStore } from "@/styling/mod.ts";
+import { DatatypeStore } from "@/datatype/mod.ts";
+import { EditingStore } from "@/editing/mod.ts";
 
 const builtInStore: StoreModule[] = [
-  FormattingStore,
   FetcherStore,
   ColumnsStore,
   CellStore,
   ContextMenuStore,
   RowsStore,
+  StylingStore,
+  DatatypeStore,
+  EditingStore,
 ];
 
 const MAX_HISTORY_SIZE = 100;
@@ -41,6 +45,14 @@ export function createTableStore(
       state[key] = module[key];
     }
   }
+
+  modules.map((module) => module.inject?.(state))
+    .filter(Boolean)
+    .forEach((module) => {
+      for (const key in module) {
+        state[key] = module[key];
+      }
+    });
 
   const history: Command<unknown>[] = [];
 
