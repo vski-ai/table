@@ -7,9 +7,19 @@ import { createFrontendSorter, SortingPlugin } from "@/sorting/mod.ts";
 import { SelectorPlugin } from "@/selector/mod.ts";
 import { EnumeratorPlugin } from "../enumerator/mod.ts";
 import { generateRows } from "./mock/flat-table.ts";
-import mock from "./mock/flat-persistent-data.json" with { type: "json" };
 
-const { data, pinnedRows } = mock; // generateRows(10000);
+let generated;
+try {
+  JSON.parse(localStorage.getItem("flat_table") ?? "null");
+  if (!generated) {
+    generated = generateRows(5000);
+    localStorage.setItem("flat_table", JSON.stringify(generated));
+  }
+} catch (e) {
+  generated = generateRows(10000);
+}
+
+const { data, pinnedRows } = generated;
 const sorter = createFrontendSorter();
 
 export const FlatTable = () => {

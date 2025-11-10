@@ -5,4 +5,5 @@ import deno from "@deno/vite-plugin";
 
 export default defineConfig({
   plugins: [deno(), tailwindcss(), preact()],
+  publicDir: "web/public",
 });

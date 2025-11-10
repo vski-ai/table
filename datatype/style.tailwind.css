@@ -1,6 +1,9 @@
 @layer components {
   .vt-fmt {
-    @apply p-4;
+    height: inherit;
+    display: table-cell;
+    vertical-align: middle;
+    @apply px-3;
   }
 
   .vt-default-edit {

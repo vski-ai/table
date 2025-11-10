@@ -1,4 +1,4 @@
-import { useCallback } from "preact/hooks";
+import { useCallback, useRef } from "preact/hooks";
 import { TableStore } from "@/store/types.ts";
 import { RowData } from "@/row/types.ts";
 import { CellEditingSetCommand } from "./store.ts";
@@ -34,6 +34,10 @@ export function useCellKeyBingins(
   }, [key]);
 
   const isNavigationUnfocus = useCallback((ev: KeyboardEvent) => {
+    if (ev.metaKey && ev.key !== "Meta" && isEditing) {
+      ev.preventDefault();
+      return true;
+    }
     if (ev.ctrlKey && ev.key !== "Control" && isEditing) {
       ev.preventDefault();
       return true;
@@ -63,6 +67,7 @@ export function useCellKeyBingins(
         ev.stopPropagation();
         ev.preventDefault();
         unSetEditing();
+        focusTarget.current?.focus();
         break;
       }
       case "Tab": {
@@ -76,8 +81,17 @@ export function useCellKeyBingins(
     setEditing();
   }, [isEditing]);
 
+  // tricky part:
+  //   on edit we focus the root element
+  //   so we have to return focus when we cancel edit
+  const focusTarget = useRef<HTMLTableCellElement>(null);
+  const onBlur = (e: KeyboardEvent) => {
+    focusTarget.current = e.target as HTMLTableCellElement;
+  };
+
   return {
     onKeyDown,
     onDblClick,
+    onBlur,
   };
 }

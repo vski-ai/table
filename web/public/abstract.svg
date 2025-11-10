@@ -1,0 +1,107 @@
+<svg
+  width="1200"
+  height="630"
+  viewBox="0 0 1200 630"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Definitions for gradients and masks -->
+  <defs>
+    <!-- Main background radial gradient -->
+    <radialGradient
+      id="bg-gradient"
+      cx="0"
+      cy="0"
+      r="1"
+      gradientUnits="userSpaceOnUse"
+      gradientTransform="translate(600 315) rotate(90) scale(315 600)"
+    >
+      <stop stop-color="#1E293B" />
+      <stop offset="1" stop-color="#0F172A" />
+    </radialGradient>
+
+    <!-- Subtle grid pattern for technical feel -->
+    <pattern
+      id="grid"
+      x="0"
+      y="0"
+      width="40"
+      height="40"
+      patternUnits="userSpaceOnUse"
+    >
+      <path
+        d="M 40 0 L 0 0 0 40"
+        fill="none"
+        stroke="#334155"
+        stroke-width="0.5"
+        opacity="0.3"
+      />
+    </pattern>
+
+    <!-- Accent gradient for the dot and decorative elements -->
+    <linearGradient
+      id="accent-gradient"
+      x1="0"
+      y1="0"
+      x2="1200"
+      y2="630"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop stop-color="#06B6D4" />
+      <stop offset="1" stop-color="#3B82F6" />
+    </linearGradient>
+
+    <!-- Glow filter for the middle dot -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="15" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Layer -->
+  <rect width="1200" height="630" fill="url(#bg-gradient)" />
+  <rect width="1200" height="630" fill="url(#grid)" />
+
+  <!-- Abstract Decorative Elements (suggesting data/tables) -->
+  <g opacity="0.1">
+    <rect x="100" y="100" width="150" height="20" rx="4" fill="white" />
+    <rect x="100" y="130" width="80" height="20" rx="4" fill="white" />
+    <rect x="100" y="160" width="120" height="20" rx="4" fill="white" />
+
+    <rect x="950" y="450" width="150" height="20" rx="4" fill="white" />
+    <rect x="1020" y="480" width="80" height="20" rx="4" fill="white" />
+    <rect x="980" y="510" width="120" height="20" rx="4" fill="white" />
+  </g>
+
+  <!-- Main Content Group -->
+  <g
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    font-weight="800"
+  >
+    <!-- Left Text part -->
+    <text x="440" y="350" fill="white" font-size="140" letter-spacing="-2"
+    >vski</text>
+
+    <!-- The "Middle Dot" - Stylized as a glowing interactive element -->
+    <g filter="url(#glow)">
+      <circle cx="600" cy="315" r="25" fill="url(#accent-gradient)" />
+    </g>
+    <!-- Inner crisp dot -->
+    <circle cx="600" cy="315" r="12" fill="white" opacity="0.9" />
+
+    <!-- Right Text part -->
+    <text x="760" y="350" fill="white" font-size="140" letter-spacing="-2"
+    >table</text>
+  </g>
+
+  <!-- Subtle footer/accent line -->
+  <rect
+    x="0"
+    y="620"
+    width="1200"
+    height="10"
+    fill="url(#accent-gradient)"
+    opacity="0.8"
+  />
+</svg>

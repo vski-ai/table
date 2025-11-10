@@ -47,6 +47,7 @@ export function createTable(
   return {
     store,
     Table({ container, onDataLoad }: TableProps) {
+      store.scrollContainerRef = container;
       return (
         <TableView
           store={store}

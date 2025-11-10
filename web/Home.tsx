@@ -3,7 +3,7 @@ import { Background } from "./components/Background.tsx";
 import { Features } from "./components/Features.tsx";
 import { Header } from "./components/Header.tsx";
 import { Demo } from "./components/Demo.tsx";
-import { About } from "./About.tsx";
+import { Roadmap } from "./components/Roadmap.tsx";
 import { useRef } from "preact/hooks";
 
 import NextIcon from "lucide-react/dist/esm/icons/chevron-down.js";
@@ -11,6 +11,12 @@ import NextIcon from "lucide-react/dist/esm/icons/chevron-down.js";
 export function Home() {
   const demoRef = useRef<HTMLDivElement>(null);
   const goDemo = () => demoRef.current?.scrollIntoView({ behavior: "smooth" });
+
+  const roadmapRef = useRef<HTMLDivElement>(null);
+  const goRoadmap = () => {
+    roadmapRef.current?.scrollIntoView({ behavior: "smooth" });
+    console.log(roadmapRef.current);
+  };
 
   const featuresRef = useRef<HTMLDivElement>(null);
   const goFeatures = () =>
@@ -20,7 +26,7 @@ export function Home() {
     <div class="relative">
       <Header />
       <section class="absolute top-25 left-0 right-0 z-20">
-        <Hero />
+        <Hero cta={goRoadmap} />
         <p class="-mt-12 mb-6 text-center w-full">
           <a onClick={goDemo} class="btn btn-circle btn-outline">
             <NextIcon />
@@ -35,19 +41,19 @@ export function Home() {
           <Demo />
         </div>
         <p class="-mt-6 mb-6 text-center w-full">
-          <a onClick={goFeatures} class="btn btn-circle btn-outline">
+          <a onClick={goRoadmap} class="btn btn-circle btn-outline">
             <NextIcon />
           </a>
         </p>
         <div>
-          <About />
+          <Roadmap refEl={roadmapRef} />
         </div>
         <div ref={featuresRef}>
           <Features />
         </div>
         <footer class="footer footer-center p-4 bg-base-300 text-base-content">
           <div>
-            <p>Copyright © 2025 - All right reserved by ACME Industries Ltd</p>
+            <p>Copyright © 2025 - Anton A Nesterov</p>
           </div>
         </footer>
       </section>

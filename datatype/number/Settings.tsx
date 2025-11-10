@@ -6,6 +6,10 @@ import { UnitSelector } from "./UnitSelector.tsx";
 import { MenuContext } from "@/contextmenu/types.ts";
 import { resetFormatting, setFormatting } from "../mutations.ts";
 
+import HashIcon from "lucide-react/dist/esm/icons/hash.js";
+import DollarIcon from "lucide-react/dist/esm/icons/dollar-sign.js";
+import UnitIcon from "lucide-react/dist/esm/icons/drafting-compass.js";
+
 export function Settings({ store, column }: MenuContext) {
   const current = useSignal<"number" | "unit" | "currency">("number");
   const locale = useSignal(navigator.language);
@@ -78,7 +82,7 @@ export function Settings({ store, column }: MenuContext) {
           }}
           class={radioClass("number")}
         >
-          N
+          <HashIcon className="w-3 h-3" />
         </button>
         <button
           type="button"
@@ -87,7 +91,7 @@ export function Settings({ store, column }: MenuContext) {
           }}
           class={radioClass("currency")}
         >
-          C
+          <DollarIcon className="w-3 h-3" />
         </button>
         <button
           type="button"
@@ -96,7 +100,7 @@ export function Settings({ store, column }: MenuContext) {
           }}
           class={radioClass("unit")}
         >
-          U
+          <UnitIcon className="w-3 h-3" />
         </button>
       </div>
 

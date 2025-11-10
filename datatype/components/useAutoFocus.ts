@@ -1,8 +1,10 @@
+import { TableStore } from "@/store/types.ts";
 import { MutableRef, useEffect } from "preact/hooks";
 
 export function useAutoFocus(
   ref: MutableRef<HTMLElement | null>,
   key: string | number = "",
+  store: TableStore,
   inferTabIndex = true,
 ) {
   useEffect(() => {
@@ -13,10 +15,18 @@ export function useAutoFocus(
       for (let i = 0; ++i; i < 100) {
         if (tabIndex > 0) break;
         tabIndex = parent?.tabIndex;
-        parent = parent.parentNode;
+        parent = parent?.parentNode;
+        if (!parent) break;
       }
       ref.current.tabIndex = tabIndex ?? 0;
     }
     ref.current?.focus();
+    const onScroll = () => {
+      store.state.cellEditing.value = {};
+    };
+    store.scrollContainerRef.current?.addEventListener("scroll", onScroll);
+    return () => {
+      store.scrollContainerRef.current?.removeEventListener("scroll", onScroll);
+    };
   }, [ref.current, key]);
 }

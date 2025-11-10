@@ -1,6 +1,4 @@
 import { hydrate, LocationProvider, Route, Router } from "preact-iso";
-
-import { About } from "./About.tsx";
 import { HireMe } from "./HireMe.tsx";
 import { LoremIpsum } from "./LoremIpsum.tsx";
 import { NotFound } from "./404.tsx";
@@ -15,7 +13,6 @@ export function App() {
       <Layout>
         <Router>
           <Route path="/" component={Home} />
-          <Route path="/about" component={About} />
           <Route path="/flat" component={FlatTable} />
           <Route path="/groupable" component={GroupTable} />
           <Route path="/lorem-ipsum" component={LoremIpsum} />

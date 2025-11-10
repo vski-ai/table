@@ -1,4 +1,5 @@
 import { Signal } from "@preact/signals";
+import { MutableRef } from "preact/hooks";
 
 export type StoreModule = {
   state: (
@@ -24,4 +25,5 @@ export interface TableState {
 export interface TableStore {
   state: TableState;
   dispatch: <T>(command: T) => void;
+  scrollContainerRef: MutableRef<any>;
 }

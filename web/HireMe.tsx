@@ -2,63 +2,78 @@ import { h } from "preact";
 import { TextPageLayout } from "./components/TextPageLayout.tsx";
 import GithubIcon from "lucide-react/dist/esm/icons/github.js";
 import LinkedinIcon from "lucide-react/dist/esm/icons/linkedin.js";
+import Mail from "lucide-react/dist/esm/icons/at-sign.js";
+import HireIcon from "lucide-react/dist/esm/icons/flame.js";
 
 export function HireMe() {
   return (
     <TextPageLayout>
-      <div class="flex flex-row justify-center items-center gap-6">
-        <div class="avatar">
+      <div class="flex flex-row justify-center items-center gap-12">
+        {
+          /* <div class="avatar">
           <img
             class="w-28 rounded-full"
-            src="https://avatars.githubusercontent.com/u/1024025?v=4"
+            src={face}
           />
-        </div>
-        <div class="flex flex-col">
-          <h2 class="text-md font-bold pb-2 m-0!">
-            Anton V.
+        </div> */
+        }
+        <div class="flex flex-col mt-12">
+          <h2 class="text-sm font-bold pb-2">
+            Anton Nesterov
           </h2>
-          <div class="flex gap-4">
+          <div class="flex gap-4 justify-around">
             <a
-              href="https://github.com/vski"
+              href="https://github.com/nesterow"
               target="_blank"
               rel="noopener noreferrer"
-              class="btn btn-ghost btn-circle"
+              class="btn btn-ghost btn-circle text-accent"
             >
               <GithubIcon />
             </a>
             <a
-              href="https://www.linkedin.com/in/anton-v-baker/"
+              href="https://www.linkedin.com/in/anton-alex-nesterov/"
               target="_blank"
               rel="noopener noreferrer"
-              class="btn btn-ghost btn-circle"
+              class="btn btn-ghost btn-circle text-sky-500"
             >
               <LinkedinIcon />
+            </a>
+            <a
+              class="btn btn-ghost btn-circle text-primary"
+              href="mailto:an+hire@vski.sh"
+            >
+              <Mail />
             </a>
           </div>
         </div>
       </div>
 
-      <div class="mt-8 text-center">
+      <div class="mt-2 p-12 text-center">
         <p class="text-2xl font-semibold">
-          "Want to make things that actually work?"
+          Want to make things that actually work?
         </p>
-        <p class="mt-4">
-          Full-stack engineer with more than a decade of experience. Residing in
-          Europe - Valencia, Spain.
-        </p>
+        <span class="inline-block mt-4 p-1 text-md">
+          Hi! I am sofware engineer living in Valencia, Spain, but Usually
+          working US hours. Over decade of experience building best solutions.
+        </span>
       </div>
 
-      <div class="mt-12">
-        <h2 class="text-3xl font-bold text-center">Tech Stack</h2>
-        <div class="flex flex-wrap justify-center gap-4 mt-4">
-          <div class="badge badge-lg badge-outline">React</div>
-          <div class="badge badge-lg badge-outline">TypeScript</div>
-          <div class="badge badge-lg badge-outline">Node.js</div>
-          <div class="badge badge-lg badge-outline">Deno</div>
-          <div class="badge badge-lg badge-outline">Go</div>
-          <div class="badge badge-lg badge-outline">PostgreSQL</div>
-          <div class="badge badge-lg badge-outline">AWS</div>
-        </div>
+      <div class="mt-0 text-center">
+        <a
+          class="btn btn-sm btn-outline"
+          href="https://www.linkedin.com/in/anton-alex-nesterov/"
+        >
+          <HireIcon />
+          Contact
+        </a>
+      </div>
+
+      <div class="mt-22 flex justify-center text-sm">
+        see my other projects:
+      </div>
+      <div class="mt-2 flex justify-center gap-1 text-xs">
+        <a href="https://vski.science/">vski·science</a> -{" "}
+        <a href="https://vski.sh">vski·sh</a>
       </div>
     </TextPageLayout>
   );

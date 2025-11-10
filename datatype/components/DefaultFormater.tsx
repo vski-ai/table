@@ -1,8 +1,8 @@
 import { cn } from "@/common/className.ts";
 import { TypeFormatComponent, TypeFormatOpts } from "../types.ts";
-import { useCallback, useRef } from "preact/hooks";
-import { useAutoFocus } from "@/common/useAutoFocus.ts";
-import { RowEditCommand } from "@/editing/store.ts";
+import { useRef } from "preact/hooks";
+import { useAutoFocus } from "./useAutoFocus.ts";
+import { useEditCallback } from "./useEditCallback.ts";
 
 export function display({ column, row, store }: TypeFormatOpts) {
   const value = store.getCurrentCellValue({
@@ -25,31 +25,21 @@ export function display({ column, row, store }: TypeFormatOpts) {
   );
 }
 
-export function edit({ store, column, row }: TypeFormatOpts) {
-  const cellKey = store.getCellKey({ column, row });
+export function edit(opts: TypeFormatOpts) {
+  const { store } = opts;
+  const cellKey = store.getCellKey(opts);
   const ref = useRef<HTMLTextAreaElement>(null);
   const updateKey = new Date().getTime();
 
-  useAutoFocus(ref, updateKey);
+  useAutoFocus(ref, updateKey, store);
 
-  const onInput = useCallback((ev: InputEvent) => {
-    const value = (ev.target as HTMLTextAreaElement).value.trim();
-    const currentRow = store.getCurrentRowValue({ row });
-    store.dispatch<RowEditCommand>({
-      type: "ROW_EDIT_UPDATE",
-      payload: { ...currentRow, [column]: value },
-    });
-  }, []);
-
-  const value = store.getCurrentCellValue({
-    row,
-    column,
-  });
+  const { value, onInput } = useEditCallback(opts);
 
   return (
     <textarea
       ref={ref}
       onInput={onInput}
+      onBlur={onInput as any}
       class="vt-edit vt-default-edit"
       name={cellKey}
       value={value}
