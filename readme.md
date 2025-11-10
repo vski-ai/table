@@ -31,4 +31,4 @@ There are no complex abstractions. There are callbacks, mutations and factories.
 
 ## WIP
 
-The project state is "pre-alpha", meaning that everything is subject to change, and not everything is shaped to according to my vision (yet).  
+The project state is "pre-alpha". Meaning that everything is subject to change and not everything is shaped to according to my vision (yet).  
