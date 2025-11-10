@@ -16,14 +16,14 @@ export function useTableKb({ store, visibleRows, tableRef }: RowKbProps) {
   });
 
   useEffect(() => {
-    const reFocus = setTimeout(() => {
-      if (!tableRef.current) return;
-      if (store.state.loading.value) return;
-      const row = getRowAtIndex(tableRef.current, lastFocused.current.y + 1);
-      if (!row) return;
-      getCellAtIndex(row, lastFocused.current.x + 1)?.focus();
-    }, 500);
-    return () => clearTimeout(reFocus);
+    // const reFocus = setTimeout(() => {
+    //   if (!tableRef.current) return;
+    //   if (store.state.loading.value) return;
+    //   const row = getRowAtIndex(tableRef.current, lastFocused.current.y + 1);
+    //   if (!row) return;
+    //   getCellAtIndex(row, lastFocused.current.x + 1)?.focus();
+    // }, 500);
+    // return () => clearTimeout(reFocus);
   }, [visibleRows, store.state.loading.value]);
 
   const onFocus = useCallback((ev: FocusEvent) => {
