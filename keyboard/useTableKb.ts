@@ -12,39 +12,51 @@ type RowKbProps = {
 export function useTableKb({ store, visibleRows, tableRef }: RowKbProps) {
   const lastFocused = useRef<{ x: number; y: number }>({
     x: 0,
-    y: BUFFER_SIZE + 2,
+    y: 0,
   });
 
   useEffect(() => {
-    // const reFocus = setTimeout(() => {
-    //   if (!tableRef.current) return;
-    //   if (store.state.loading.value) return;
-    //   const row = getRowAtIndex(tableRef.current, lastFocused.current.y + 1);
-    //   if (!row) return;
-    //   getCellAtIndex(row, lastFocused.current.x + 1)?.focus();
-    // }, 500);
-    // return () => clearTimeout(reFocus);
-  }, [visibleRows, store.state.loading.value]);
+    const keyIntercept = () => {
+      if(document.activeElement === document.body) {
+        tableRef.current?.focus()
+      }
+    }
+    globalThis.addEventListener('keyup', keyIntercept)
+    return () => {
+      globalThis.removeEventListener('keyup', keyIntercept)
+    }
+  }, [
+    visibleRows, 
+    lastFocused.current,
+  ]);
 
   const onFocus = useCallback((ev: FocusEvent) => {
     const target = ev.target as HTMLTableCellElement;
+    if (target.tagName !== "TD") {
+      return
+    }
     const x = target.cellIndex;
     const y = (target.parentElement as HTMLTableRowElement).rowIndex;
     lastFocused.current = { x, y };
   }, []) as any;
 
+
   const onKeyDown = useCallback((ev: KeyboardEvent) => {
     const target = ev.target as HTMLTableCellElement;
-    const x = target.tabIndex;
-
+    if (target.tagName !== "TD") {
+      getCellAtXY(tableRef.current!, 1, BUFFER_SIZE + 3)?.focus()
+      return
+    }
+    
+    const x = target.cellIndex;
     switch (ev.key) {
       case "ArrowUp":
         ev.preventDefault();
-        getCellAbove(target, x)?.focus();
+        getCellAbove(target, x + 1)?.focus();
         break;
       case "ArrowDown":
         ev.preventDefault();
-        getCellBelow(target, x)?.focus();
+        getCellBelow(target, x + 1)?.focus();
         break;
       case "ArrowLeft":
         ev.preventDefault();
@@ -74,13 +86,13 @@ function getPrevCell(target: HTMLTableCellElement) {
 function getCellAbove(target: HTMLTableCellElement, x: number) {
   const row = getRowAbove(target);
   if (!row) return;
-  return row.querySelector(`td[tabindex="${x}"]`) as HTMLTableCellElement;
+  return getCellAtIndex(row, x) as HTMLTableCellElement;
 }
 
 function getCellBelow(target: HTMLTableCellElement, x: number) {
   const row = getRowBelow(target);
   if (!row) return;
-  return row.querySelector(`td[tabindex="${x}"]`) as HTMLTableCellElement;
+  return getCellAtIndex(row, x);
 }
 
 function getRowAbove(target: HTMLTableCellElement) {
@@ -99,4 +111,10 @@ function getRowAtIndex(table: HTMLTableElement, index: number) {
 
 function getCellAtIndex(row: HTMLTableRowElement, index: number) {
   return row.querySelector(`td:nth-child(${index})`) as HTMLTableCellElement;
+}
+
+function getCellAtXY(table: HTMLTableElement, x: number, y: number) {
+  const row = getRowAtIndex(table, y)
+  if (!row) return;
+  return getCellAtIndex(row, x)
 }

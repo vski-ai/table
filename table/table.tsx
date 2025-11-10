@@ -1,5 +1,4 @@
 import { MutableRef, useRef } from "preact/hooks";
-import { useTableTabIndexEffect } from "@/common/useTableTabIndexEffect.ts";
 import { DataLoadCallback, useDataFetcher } from "@/fetcher/mod.ts";
 import { usePlugins } from "@/plugin/mod.ts";
 import { Header, useTableColumnStyle } from "@/columns/mod.ts";
@@ -49,10 +48,6 @@ export function Table(props: TableProps) {
 
   const tableRef = useRef<HTMLTableElement>(null);
 
-  useTableTabIndexEffect({
-    target: tableRef,
-  }, [data.value, visibleRows]);
-
   const kb = useTableKb({ store, tableRef, visibleRows });
 
   const plugins = usePlugins({ store });
@@ -70,6 +65,7 @@ export function Table(props: TableProps) {
         x-id={`vt_${store.state.tableId}`}
         class="vt vt-main"
         ref={tableRef}
+        tabIndex={-1}
         {...kb}
       >
         <tbody>

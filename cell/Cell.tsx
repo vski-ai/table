@@ -40,6 +40,7 @@ export const Cell = ({
     <td
       key={column}
       data-column-name={column}
+      tabIndex={-1}
       style={{
         width: `var(--col-width-${sanitizeColName(column)})`,
         height: `${getHeight(row)}px`,
