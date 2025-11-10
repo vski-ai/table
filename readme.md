@@ -10,6 +10,8 @@ A high performant data table for Preact.
 ## About
 
 This is a pre-alpha software being shaped into something usable. 
+
+
 There's no a perfect table component, so I am making another one. This project main goal is to make a state driven 
 datagrid that enables user-agent feedback flows. Extensibility and portability are also in priority, among other things.
 
