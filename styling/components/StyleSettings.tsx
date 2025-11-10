@@ -3,6 +3,7 @@ import { FontColor } from "./FontColor.tsx";
 import { FontSize } from "./FontSize.tsx";
 import { FontStyle } from "./FontStyle.tsx";
 import { TextAlign } from "./TextAlign.tsx";
+import { VerticalAlign } from "./VerticalAlign.tsx";
 import type { StyleProps } from "./mutations.ts";
 import * as mutations from "./mutations.ts";
 
@@ -13,6 +14,7 @@ export function StyleSettings(props: StyleProps) {
     <div class="vt-fmt-style-settings-w">
       <FontStyle {...props} />
       <TextAlign {...props} />
+      <VerticalAlign {...props} />
 
       <div class="vt-fmt-color-wrap">
         <FontColor {...props} />

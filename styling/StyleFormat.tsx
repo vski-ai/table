@@ -1,13 +1,14 @@
 import { TableStore } from "@/store/types.ts";
 import { CommonRendererCallback } from "@/plugin/mod.ts";
 
-const ROOT_SEL = (id: string) => `table[x-id="vt_${id}"]`;
+const ROOT_SEL = (id: string) => `table[x-id="vt_${id}"] `;
 const ROW_SEL = (root: string, rowId: string) =>
-  root + ` tr[data-row-id="${rowId}"] td `;
+  root + ` tr[data-row-id="${rowId}"] td .vt-fmt `;
 const COL_SEL = (root: string, column: string) =>
-  root + ` td[data-column-name="${column}"] `;
+  root + ` td[data-column-name="${column}"] .vt-fmt `;
 const CELL_SEL = (root: string, rowId: string, column: string) =>
-  root + ` tr[data-row-id="${rowId}"] td[data-column-name="${column}"] `;
+  root +
+  ` tr[data-row-id="${rowId}"] td[data-column-name="${column}"] .vt-fmt `;
 
 export interface StyleFormatProps {
   store: TableStore;
