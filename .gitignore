@@ -3,3 +3,4 @@ node_modules/
 dist/
 flat-1m-rows.json
 group-1m-rows.json
+.DS_Store
