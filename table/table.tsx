@@ -3,7 +3,6 @@ import { useTableTabIndexEffect } from "@/common/useTableTabIndexEffect.ts";
 import { DataLoadCallback, useDataFetcher } from "@/fetcher/mod.ts";
 import { usePlugins } from "@/plugin/mod.ts";
 import { Header, useTableColumnStyle } from "@/columns/mod.ts";
-import { useNavCallback } from "@/cell/mod.ts";
 import {
   RowData,
   RowPadding,
@@ -11,6 +10,7 @@ import {
   useRenderRowCallback,
 } from "@/row/mod.ts";
 import { TableStore } from "@/store/types.ts";
+import { useTableKb } from "../keyboard/mod.ts";
 
 export type TableProps = {
   onDataLoad: DataLoadCallback;
@@ -31,7 +31,6 @@ export function Table(props: TableProps) {
   const {
     data,
     visibleRows,
-    rowHeights,
     paddingBottom,
     paddingTop,
   } = useDataFetcher({
@@ -54,14 +53,7 @@ export function Table(props: TableProps) {
     target: tableRef,
   }, [data.value, visibleRows]);
 
-  const focusNav = useNavCallback({
-    store,
-    startIndex: visibleRows[0]?.index ?? 0,
-    endIndex: visibleRows[visibleRows.length - 1]?.index ?? 0,
-    key: paddingTop + paddingBottom,
-    scrollContainerRef: scrollContainerRef!,
-    rowHeights,
-  });
+  const kb = useTableKb({ store, tableRef, visibleRows });
 
   const plugins = usePlugins({ store });
   const initializing = !data.value.length;
@@ -78,9 +70,7 @@ export function Table(props: TableProps) {
         x-id={`vt_${store.state.tableId}`}
         class="vt vt-main"
         ref={tableRef}
-        onKeyDown={focusNav.onKeyDown}
-        onKeyUp={focusNav.onKeyUp}
-        onFocus={focusNav.onFocus}
+        {...kb}
       >
         <tbody>
           {initializing && <RowSkeleton />}

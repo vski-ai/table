@@ -1,7 +1,7 @@
 import { useCallback, useRef } from "preact/hooks";
 import { TableStore } from "@/store/types.ts";
 import { RowData } from "@/row/types.ts";
-import { CellEditingSetCommand } from "./store.ts";
+import { CellEditingSetCommand } from "@/editing/store.ts";
 
 type CellKeyBindingsProps = {
   store: TableStore;
@@ -9,7 +9,7 @@ type CellKeyBindingsProps = {
   column: string;
 };
 
-export function useCellKeyBingins(
+export function useCellKb(
   { store, row, column }: CellKeyBindingsProps,
 ) {
   const key = store.getCellKey({ row, column });
@@ -75,19 +75,20 @@ export function useCellKeyBingins(
         break;
       }
     }
-  }, [isEditing]);
+  }, [isEditing]) as any;
 
   const onDblClick = useCallback(() => {
     setEditing();
-  }, [isEditing]);
+  }, [isEditing]) as any;
 
   // tricky part:
   //   on edit we focus the root element
   //   so we have to return focus when we cancel edit
   const focusTarget = useRef<HTMLTableCellElement>(null);
-  const onBlur = (e: KeyboardEvent) => {
-    focusTarget.current = e.target as HTMLTableCellElement;
-  };
+  const onBlur = ((e: KeyboardEvent) => {
+    //focusTarget.current = e.target as HTMLTableCellElement;
+    e.preventDefault();
+  }) as any;
 
   return {
     onKeyDown,

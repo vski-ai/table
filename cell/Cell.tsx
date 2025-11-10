@@ -7,7 +7,7 @@ import { useRowKey } from "@/fetcher/useRowKey.ts";
 import { usePlugins } from "@/plugin/usePlugins.ts";
 import { TypeFormat } from "@/datatype/mod.ts";
 import { useRowHeights } from "@/fetcher/useRowHeights.ts";
-import { useCellKeyBingins } from "@/editing/useCellKeyBindings.ts";
+import { useCellKb } from "@/keyboard/useCellKb.ts";
 
 interface CellProps {
   store: TableStore;
@@ -34,7 +34,7 @@ export const Cell = ({
     right,
   } = useStickyColumn({ store, column });
   const isSelected = store.state.selectedCells?.value?.[row[rowKey]]?.[column];
-  const keyBindings = useCellKeyBingins({ store, row, column });
+  const keyBindings = useCellKb({ store, row, column });
 
   return (
     <td
