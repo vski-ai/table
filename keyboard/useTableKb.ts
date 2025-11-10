@@ -6,10 +6,9 @@ const BUFFER_SIZE = 5;
 type RowKbProps = {
   store: TableStore;
   tableRef: MutableRef<HTMLTableElement | null>;
-  visibleRows: any;
 };
 
-export function useTableKb({ store, visibleRows, tableRef }: RowKbProps) {
+export function useTableKb({ tableRef }: RowKbProps) {
   const lastFocused = useRef<{ x: number; y: number }>({
     x: 0,
     y: 0,
@@ -17,37 +16,33 @@ export function useTableKb({ store, visibleRows, tableRef }: RowKbProps) {
 
   useEffect(() => {
     const keyIntercept = () => {
-      if(document.activeElement === document.body) {
-        tableRef.current?.focus()
+      if (document.activeElement === document.body) {
+        tableRef.current?.focus();
       }
-    }
-    globalThis.addEventListener('keyup', keyIntercept)
+    };
+    globalThis.addEventListener("keyup", keyIntercept);
     return () => {
-      globalThis.removeEventListener('keyup', keyIntercept)
-    }
-  }, [
-    visibleRows, 
-    lastFocused.current,
-  ]);
+      globalThis.removeEventListener("keyup", keyIntercept);
+    };
+  }, [tableRef.current]);
 
   const onFocus = useCallback((ev: FocusEvent) => {
     const target = ev.target as HTMLTableCellElement;
     if (target.tagName !== "TD") {
-      return
+      return;
     }
     const x = target.cellIndex;
     const y = (target.parentElement as HTMLTableRowElement).rowIndex;
     lastFocused.current = { x, y };
   }, []) as any;
 
-
   const onKeyDown = useCallback((ev: KeyboardEvent) => {
     const target = ev.target as HTMLTableCellElement;
     if (target.tagName !== "TD") {
-      getCellAtXY(tableRef.current!, 1, BUFFER_SIZE + 3)?.focus()
-      return
+      getCellAtXY(tableRef.current!, 1, BUFFER_SIZE + 3)?.focus();
+      return;
     }
-    
+
     const x = target.cellIndex;
     switch (ev.key) {
       case "ArrowUp":
@@ -114,7 +109,7 @@ function getCellAtIndex(row: HTMLTableRowElement, index: number) {
 }
 
 function getCellAtXY(table: HTMLTableElement, x: number, y: number) {
-  const row = getRowAtIndex(table, y)
+  const row = getRowAtIndex(table, y);
   if (!row) return;
-  return getCellAtIndex(row, x)
+  return getCellAtIndex(row, x);
 }

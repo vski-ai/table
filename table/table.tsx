@@ -48,7 +48,7 @@ export function Table(props: TableProps) {
 
   const tableRef = useRef<HTMLTableElement>(null);
 
-  const kb = useTableKb({ store, tableRef, visibleRows });
+  const kb = useTableKb({ store, tableRef });
 
   const plugins = usePlugins({ store });
   const initializing = !data.value.length;
