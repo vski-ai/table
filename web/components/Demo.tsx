@@ -105,8 +105,7 @@ export const Demo = () => {
             Edit
           </div>
           <div class="flex gap-1 items-center">
-            <kbd className="kbd">⌘</kbd>
-            <kbd className="kbd">▶︎</kbd>
+            <kbd className="kbd">Tab</kbd>
             Jump Out Edit
           </div>
           <div class="flex gap-1 items-center">

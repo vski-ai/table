@@ -82,6 +82,12 @@ export function useCellKb(
     setEditing();
   }, [isEditing]) as any;
 
+  const onClick = useCallback(() => {
+    if (Object.values(store.state.cellEditing.value).every(Boolean)) {
+      setEditing();
+    }
+  }, [store.state.cellEditing.value]);
+
   // tricky part:
   //   on edit we focus the root element
   //   so we have to return focus when we cancel edit
@@ -105,5 +111,6 @@ export function useCellKb(
     onDblClick,
     onBlur,
     onFocus,
+    onClick,
   };
 }
