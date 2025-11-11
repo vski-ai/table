@@ -169,14 +169,19 @@ export async function playAll(
     ...store.state.rowStyles.value,
     "summary-123": {
       "color": "#ff9200",
-      "text-align": "center",
+      "text-align": "left",
       "text-decoration": "none",
       "font-style": "italic",
       "font-weight": "bold",
-      "font-size": "1em",
+      "font-size": "0.7em",
     },
   };
-
+  store.dispatch({
+    type: "ROW_HEIGHTS_SET",
+    payload: {
+      "summary-123": 30,
+    },
+  });
   await delay(1000);
 
   store.dispatch({
