@@ -98,7 +98,7 @@ export function useCellKb(
         payload: store.getCellKey({ row, column }),
       });
     }
-  }, []) as any;
+  }, [store.state.keyboard.altKey.value]) as any;
 
   return {
     onKeyDown,

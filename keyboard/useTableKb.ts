@@ -27,8 +27,10 @@ export function useTableKb({ store, tableRef }: RowKbProps) {
         });
       }
     };
-    const unSetAltKey = (_ev: KeyboardEvent) => {
-      store.state.keyboard.altKey.value = false;
+    const unSetAltKey = (ev: KeyboardEvent) => {
+      if (!ev.altKey) {
+        store.state.keyboard.altKey.value = false;
+      }
     };
     globalThis.addEventListener("keydown", setAltKey);
     globalThis.addEventListener("keyup", unSetAltKey);
