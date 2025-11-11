@@ -3,7 +3,6 @@ import { cn } from "@/common/className.ts";
 import { useStickyColumn } from "@/columns/mod.ts";
 import { TableStore } from "@/store/types.ts";
 import { RowData } from "@/row/types.ts";
-import { useRowKey } from "@/fetcher/useRowKey.ts";
 import { usePlugins } from "@/plugin/usePlugins.ts";
 import { TypeFormat } from "@/datatype/mod.ts";
 import { useRowHeights } from "@/fetcher/useRowHeights.ts";
@@ -42,7 +41,7 @@ export const Cell = ({
     <td
       key={column}
       data-column-name={column}
-      tabIndex={-1}
+      tabIndex={0}
       style={{
         width: `var(--col-width-${sanitizeColName(column)})`,
         height: `${getHeight(row)}px`,

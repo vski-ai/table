@@ -16,7 +16,7 @@ export function useTableKb({ store, tableRef }: RowKbProps) {
   });
 
   useEffect(() => {
-    const setAltKey = (ev: KeyboardEvent) => {
+    const globalKeyDown = (ev: KeyboardEvent) => {
       if (ev.altKey) {
         store.state.keyboard.altKey.value = true;
       }
@@ -27,16 +27,17 @@ export function useTableKb({ store, tableRef }: RowKbProps) {
         });
       }
     };
-    const unSetAltKey = (ev: KeyboardEvent) => {
+    const globalKeyUp = (ev: KeyboardEvent) => {
       if (!ev.altKey) {
         store.state.keyboard.altKey.value = false;
       }
     };
-    globalThis.addEventListener("keydown", setAltKey);
-    globalThis.addEventListener("keyup", unSetAltKey);
+
+    globalThis.addEventListener("keydown", globalKeyDown);
+    globalThis.addEventListener("keyup", globalKeyUp);
     return () => {
-      globalThis.removeEventListener("keydown", setAltKey);
-      globalThis.removeEventListener("keyup", unSetAltKey);
+      globalThis.removeEventListener("keydown", globalKeyDown);
+      globalThis.removeEventListener("keyup", globalKeyUp);
     };
   });
 
@@ -57,15 +58,27 @@ export function useTableKb({ store, tableRef }: RowKbProps) {
     if (target.tagName !== "TD") {
       return;
     }
-    const x = target.cellIndex;
-    const y = (target.parentElement as HTMLTableRowElement).rowIndex;
+    ev.stopPropagation();
+    const x = lastFocused.current.x !== 0
+      ? lastFocused.current.x
+      : target.cellIndex;
+    const y = lastFocused.current.y !== 0 ? lastFocused.current.y : (
+      target.parentElement as HTMLTableRowElement
+    ).rowIndex;
     lastFocused.current = { x, y };
   }, []) as any;
 
   const onKeyDown = useCallback((ev: KeyboardEvent) => {
     const target = ev.target as HTMLTableCellElement;
     if (target.tagName !== "TD") {
-      getCellAtXY(tableRef.current!, 1, BUFFER_SIZE + 3)?.focus();
+      const { x, y } = lastFocused.current;
+      ev.preventDefault();
+      ev.stopPropagation();
+      getCellAtXY(
+        tableRef.current!,
+        x !== 0 ? x : 1,
+        y !== 0 ? y + BUFFER_SIZE : BUFFER_SIZE + 3,
+      )?.focus();
       return;
     }
 
