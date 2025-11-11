@@ -37,7 +37,7 @@ export const EnumeratorCell = ({
         width: `var(--col-width-$$enumerator$$)`,
         position: "relative",
       }}
-      tabIndex={0}
+      tabIndex={-1}
     >
       {index! + 1}
       <RowResizeHandle

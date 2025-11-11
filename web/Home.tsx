@@ -15,7 +15,6 @@ export function Home() {
   const roadmapRef = useRef<HTMLDivElement>(null);
   const goRoadmap = () => {
     roadmapRef.current?.scrollIntoView({ behavior: "smooth" });
-    console.log(roadmapRef.current);
   };
 
   const featuresRef = useRef<HTMLDivElement>(null);

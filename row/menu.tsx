@@ -53,7 +53,6 @@ export const StickTop: ContextMenuItem = {
   },
   action({ store, rowId }) {
     const row = store.getRow(rowId!);
-    console.log(1, row, rowId, store.state.cu);
     if (!row) return;
     const currentSticky = store.state.stickyTopRows.value;
     store.dispatch<StickyTopRowsSetCommand>({

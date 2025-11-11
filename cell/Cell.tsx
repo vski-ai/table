@@ -21,11 +21,13 @@ export const Cell = ({
   row,
 }: CellProps) => {
   const plugins = usePlugins({ store });
+  const key = store.getCellKey({ row, column });
+
   const getHeight = useRowHeights({
     store,
     height: 64,
   });
-  const rowKey = useRowKey({ store });
+
   const {
     isSticky,
     isStickyLeft,
@@ -33,7 +35,7 @@ export const Cell = ({
     left,
     right,
   } = useStickyColumn({ store, column });
-  const isSelected = store.state.selectedCells?.value?.[row[rowKey]]?.[column];
+  const isSelected = store.state.selectedCells?.value?.[key];
   const keyBindings = useCellKb({ store, row, column });
 
   return (

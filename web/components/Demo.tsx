@@ -110,7 +110,7 @@ export const Demo = () => {
             Jump Out Edit
           </div>
           <div class="flex gap-1 items-center">
-            <kbd className="kbd">Shift</kbd>
+            <kbd className="kbd">Alt</kbd>
             Select Cells
           </div>
           <div class="flex gap-1 items-center">

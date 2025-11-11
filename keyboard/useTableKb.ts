@@ -1,5 +1,6 @@
 import { TableStore } from "@/store/types.ts";
 import { MutableRef, useCallback, useEffect, useRef } from "preact/hooks";
+import { CellSelectResetCmd } from "@/cell/store.ts";
 
 const BUFFER_SIZE = 5;
 
@@ -8,10 +9,33 @@ type RowKbProps = {
   tableRef: MutableRef<HTMLTableElement | null>;
 };
 
-export function useTableKb({ tableRef }: RowKbProps) {
+export function useTableKb({ store, tableRef }: RowKbProps) {
   const lastFocused = useRef<{ x: number; y: number }>({
     x: 0,
     y: 0,
+  });
+
+  useEffect(() => {
+    const setAltKey = (ev: KeyboardEvent) => {
+      if (ev.altKey) {
+        store.state.keyboard.altKey.value = true;
+      }
+      if (ev.key === "Escape") {
+        store.dispatch<CellSelectResetCmd>({
+          type: "CELL_SELECT_RESET",
+          payload: true,
+        });
+      }
+    };
+    const unSetAltKey = (_ev: KeyboardEvent) => {
+      store.state.keyboard.altKey.value = false;
+    };
+    globalThis.addEventListener("keydown", setAltKey);
+    globalThis.addEventListener("keyup", unSetAltKey);
+    return () => {
+      globalThis.removeEventListener("keydown", setAltKey);
+      globalThis.removeEventListener("keyup", unSetAltKey);
+    };
   });
 
   useEffect(() => {

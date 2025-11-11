@@ -2,6 +2,7 @@ import { useCallback, useRef } from "preact/hooks";
 import { TableStore } from "@/store/types.ts";
 import { RowData } from "@/row/types.ts";
 import { CellEditingSetCommand } from "@/editing/store.ts";
+import { CellSelectCmd } from "@/cell/store.ts";
 
 type CellKeyBindingsProps = {
   store: TableStore;
@@ -86,13 +87,23 @@ export function useCellKb(
   //   so we have to return focus when we cancel edit
   const focusTarget = useRef<HTMLTableCellElement>(null);
   const onBlur = ((e: KeyboardEvent) => {
-    //focusTarget.current = e.target as HTMLTableCellElement;
+    focusTarget.current = e.target as HTMLTableCellElement;
     e.preventDefault();
   }) as any;
+
+  const onFocus = useCallback(() => {
+    if (store.state.keyboard.altKey.value) {
+      store.dispatch<CellSelectCmd>({
+        type: "CELL_SELECT",
+        payload: store.getCellKey({ row, column }),
+      });
+    }
+  }, []) as any;
 
   return {
     onKeyDown,
     onDblClick,
     onBlur,
+    onFocus,
   };
 }

@@ -83,7 +83,6 @@ export function methods(state: TableState) {
         DefaultFormater;
     },
     addFormater<T extends string>(formatter: TypeFormatComponent<T>) {
-      console.log(3, state[TYPE_FORMATTERS_ACCESSOR]);
       state[TYPE_FORMATTERS_ACCESSOR][formatter.datatype] = formatter;
     },
   };

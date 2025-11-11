@@ -4,20 +4,29 @@ import { RowData } from "@/row/types.ts";
 
 declare module "@/store/types.ts" {
   interface TableState {
-    focusedCell: Signal<{ tabIndex: number; rowIndex: number } | null>;
-    selectedCells: Signal<Record<string, Record<string, boolean>>>;
+    selectedCells: Signal<Record<string, boolean>>;
   }
   interface TableStore {
     getCellKey: (opts: { column: string; row: RowData }) => string;
   }
 }
 
+const CELL_SELECT = "CELL_SELECT";
+const CELL_SELECT_RESET = "CELL_SELECT_RESET";
+
+export type CellSelectCmd = Command<
+  typeof CELL_SELECT,
+  string
+>;
+export type CellSelectResetCmd = Command<
+  typeof CELL_SELECT_RESET,
+  true
+>;
+
 export function state() {
   const selectedCells = signal({});
-  const focusedCell = signal(null);
   return {
     selectedCells,
-    focusedCell,
   };
 }
 
@@ -25,8 +34,23 @@ export function persist(_: TableState) {
   return {};
 }
 
-export function mutate<T>(state: TableState, _: Command<T>) {
-  return state;
+export function mutate<T>(
+  state: TableState,
+  cmd: CellSelectCmd | CellSelectResetCmd,
+) {
+  switch (cmd.type) {
+    case "CELL_SELECT":
+      state.selectedCells.value = {
+        ...state.selectedCells.value,
+        [cmd.payload]: true,
+      };
+      break;
+    case "CELL_SELECT_RESET":
+      if (cmd.payload) {
+        state.selectedCells.value = {};
+      }
+      break;
+  }
 }
 
 export function methods(_: TableState) {

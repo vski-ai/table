@@ -21,8 +21,7 @@ async function pressKey(key: string, shift = false) {
 
 export async function navigation() {
   // Start at the third cell of the third row
-  const startCellSelector = `tr[data-index="2"] td[tabindex="3"]`;
-  console.log(startCellSelector);
+  const startCellSelector = `tr:nth-child(3) td:nth-child(3)`;
   await focusCell(startCellSelector);
 
   // Press right arrow 3 times
@@ -44,7 +43,6 @@ export async function navigation() {
 export async function multiselect() {
   // Start at the third cell of the third row
   const startCellSelector = `tr[data-index="2"] td[tabindex="3"]`;
-  console.log(startCellSelector);
   await focusCell(startCellSelector);
 
   // Press right arrow 3 times

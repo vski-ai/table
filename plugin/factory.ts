@@ -17,11 +17,13 @@ import { StylingPlugin } from "@/styling/plugin.ts";
 import { ContextMenuPlugin } from "@/contextmenu/plugin.ts";
 import { ColumnsPlugin } from "@/columns/plugin.ts";
 import { RowsPlugin } from "@/row/plugin.ts";
+import { KeyboardPlugin } from "@/keyboard/mod.ts";
 
 export const createPlugin = (plugin: ITablePlugin) => plugin;
 export type PluginContainer = ReturnType<typeof createPluginContainer>;
 
 export const buildInPlugins = [
+  KeyboardPlugin,
   StylingPlugin,
   ColumnsPlugin,
   DatatypePlugin,
