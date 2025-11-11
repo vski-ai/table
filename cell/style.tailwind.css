@@ -2,7 +2,7 @@
   .vt-cell {
     @apply p-0 bg-white dark:bg-gray-800 border-0 relative after:border-r-1
       after:border-b-1 after:border-gray-200 dark:after:border-gray-700
-      text-base-content;
+      text-base-content transition-none!;
 
     &.stick-left {
       @apply after:border-r-gray-400 dark:after:border-r-gray-600;
@@ -31,6 +31,7 @@
       pointer-events: none;
       display: block;
       background: transparent;
+      @apply transition-all delay-10 duration-0;
     }
     &::before {
       content: "";
