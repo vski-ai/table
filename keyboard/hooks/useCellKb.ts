@@ -83,7 +83,8 @@ export function useCellKb(
   }, [isEditing]) as any;
 
   const onClick = useCallback(() => {
-    if (Object.values(store.state.cellEditing.value).every(Boolean)) {
+    const values = Object.values(store.state.cellEditing.value)
+    if (values.length && values.every(Boolean)) {
       setEditing();
     }
   }, [store.state.cellEditing.value]);
