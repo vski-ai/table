@@ -15,9 +15,9 @@ export function useTableColumnStyle({ store }: TableStyleProps) {
   const totalWidth = useMemo(
     () => {
       const { column, width: resizingColumnWidth } =
-        store.state.resizingColumn.value || {};
+        store.state.columns.resizing_column.value || {};
 
-      return Object.entries(store.state.columnWidths.value)
+      return Object.entries(store.state.columns.widths.value)
         .filter(([col, _]) => {
           return col !== column;
         })
@@ -26,7 +26,10 @@ export function useTableColumnStyle({ store }: TableStyleProps) {
           resizingColumnWidth ?? 0,
         );
     },
-    [store.state.columnWidths.value, store.state.resizingColumn.value],
+    [
+      store.state.columns.widths.value,
+      store.state.columns.resizing_column.value,
+    ],
   );
 
   const style = useMemo(() => {
@@ -38,7 +41,7 @@ export function useTableColumnStyle({ store }: TableStyleProps) {
       }, {} as Record<string, string>),
     };
 
-    const currentState = store.state.columnWidths.value;
+    const currentState = store.state.columns.widths.value;
 
     Object.entries(currentState).reduce(
       (sum, [col, _]) => {
@@ -49,7 +52,7 @@ export function useTableColumnStyle({ store }: TableStyleProps) {
     );
 
     return widths;
-  }, [totalWidth, columns, store.state.columnWidths.value]);
+  }, [totalWidth, columns, store.state.columns.widths.value]);
 
   return {
     style,

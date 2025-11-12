@@ -24,7 +24,7 @@ deno run dev
 There are no complex abstractions. There are callbacks, mutations and factories.
 Plus some composition.
 
-- The modules provide store (state), init and other hooks. 
+- The modules provide store (state), init and other hooks.
 - Preact signals are mainly used for state managment.
 - The state is mutated using the dispatch method (provided by store).
 - There's no context, the things done explicitly!

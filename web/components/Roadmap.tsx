@@ -44,7 +44,7 @@ export function Roadmap(
             <div class="text-left">
               <span class="badge badge-sm mb-2 -ml-2">Jan, 2026</span>
             </div>
-            More plugins.
+            More adons.
           </TodoItem>
         </ul>
       </div>

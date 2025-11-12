@@ -10,16 +10,16 @@ export async function playAll(
   if (!scrollContainer.current) {
     return;
   }
-  
-  store.state.columnWidths.value = {
+
+  store.state.columns.widths.value = {
     $$enumerator$$: 50,
   };
   store.state.rowHeights.value = {};
-  store.state.stickyColumns.value = {};
+  store.state.columns.sticky.value = {};
   store.state.columnStyles.value = {};
   store.state.rowStyles.value = {};
-  store.state.columnDataType.value = {};
-  store.state.columnDataTypeOptions.value = {};
+  store.state.data_type.column.value = {};
+  store.state.data_type.options.value = {};
   delay(1000);
   //start();
   // Scroll to the end
@@ -47,14 +47,14 @@ export async function playAll(
   await scrollX(scrollContainer.current, 500, 2000);
   await scrollX(scrollContainer.current, maxScroll - 100, 2000);
   await delay(1000);
-  store.state.stickyColumns.value = {
-    ...store.state.stickyColumns.value,
+  store.state.columns.sticky.value = {
+    ...store.state.columns.sticky.value,
     Total: "right",
   };
 
   await delay(1000);
-  store.state.columnDataTypeOptions.value = {
-    ...store.state.columnDataTypeOptions.value,
+  store.state.data_type.options.value = {
+    ...store.state.data_type.options.value,
     Total: {
       "minimumFractionDigits": 3,
       "maximumFractionDigits": 3,
@@ -65,8 +65,8 @@ export async function playAll(
     },
   };
 
-  store.state.columnDataType.value = {
-    ...store.state.columnDataType.value,
+  store.state.data_type.column.value = {
+    ...store.state.data_type.column.value,
     Total: "currency",
   };
 
@@ -88,16 +88,16 @@ export async function playAll(
   await scrollX(scrollContainer.current, 0, 2000);
   await delay(1000);
 
-  store.state.columnDataTypeOptions.value = {
-    ...store.state.columnDataTypeOptions.value,
+  store.state.data_type.options.value = {
+    ...store.state.data_type.options.value,
     "Order Date": {
       "locale": "en-GB",
       "dateStyle": "medium",
       "timeStyle": "medium",
     },
   };
-  store.state.columnDataType.value = {
-    ...store.state.columnDataType.value,
+  store.state.data_type.column.value = {
+    ...store.state.data_type.column.value,
     "Order Date": "date",
   };
 
@@ -128,8 +128,8 @@ export async function playAll(
   };
 
   await delay(1000);
-  store.state.stickyColumns.value = {
-    ...store.state.stickyColumns.value,
+  store.state.columns.sticky.value = {
+    ...store.state.columns.sticky.value,
     "Product Name": "left",
   };
 
@@ -137,8 +137,8 @@ export async function playAll(
   await scrollX(scrollContainer.current, maxScroll / 2, 2000);
 
   await delay(1000);
-  store.state.columnDataTypeOptions.value = {
-    ...store.state.columnDataTypeOptions.value,
+  store.state.data_type.options.value = {
+    ...store.state.data_type.options.value,
     Price: {
       "minimumFractionDigits": 2,
       "maximumFractionDigits": 2,
@@ -156,8 +156,8 @@ export async function playAll(
       "currency": "USD",
     },
   };
-  store.state.columnDataType.value = {
-    ...store.state.columnDataType.value,
+  store.state.data_type.column.value = {
+    ...store.state.data_type.column.value,
     Price: "currency",
     Discount: "currency",
   };

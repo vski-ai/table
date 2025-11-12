@@ -5,10 +5,15 @@ import { DefaultFormater } from "./components/DefaultFormater.tsx";
 
 const TYPE_FORMATTERS_ACCESSOR = Symbol("formatters");
 
+type DatatypesState = {
+  data_type: {
+    column: Signal<Record<string, string>>;
+    options: Signal<Record<string, any>>;
+  };
+};
+
 declare module "@/module/types.ts" {
-  interface TableState {
-    columnDataType: Signal<Record<string, string>>;
-    columnDataTypeOptions: Signal<Record<string, any>>;
+  interface TableState extends DatatypesState {
     [TYPE_FORMATTERS_ACCESSOR]: Record<string, TypeFormatComponent<string>>;
   }
 
@@ -43,33 +48,37 @@ export function inject(_: TableState) {
   };
 }
 
-export function state(init: Record<string, any> | null) {
+export function state(init: any): DatatypesState {
   const columnDataType = signal(init?.columnDataType ?? {});
   const columnDataTypeOptions = signal(init?.columnDataTypeOptions ?? {});
   return {
-    columnDataType,
-    columnDataTypeOptions,
+    data_type: {
+      column: columnDataType,
+      options: columnDataTypeOptions,
+    },
   };
 }
 
 export function persist(state: TableState) {
   return {
-    columnDataType: state.columnDataType.value,
-    columnDataTypeOptions: state.columnDataTypeOptions.value,
+    data_type: {
+      column: state.data_type.column.value,
+      options: state.data_type.options.value,
+    },
   };
 }
 
 export function mutate(state: TableState, command: FormattingCommandType) {
   switch (command.type) {
     case "COLUMN_DATATYPE_SET":
-      state.columnDataType.value = {
-        ...state.columnDataType.value,
+      state.data_type.column.value = {
+        ...state.data_type.column.value,
         ...command.payload,
       };
       break;
     case "COLUMN_DATATYPE_OPTIONS_SET":
-      state.columnDataTypeOptions.value = {
-        ...state.columnDataTypeOptions.value,
+      state.data_type.options.value = {
+        ...state.data_type.options.value,
         ...command.payload,
       };
       break;

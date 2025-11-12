@@ -12,7 +12,7 @@ export function useColumnResizer({
 }: ColumnResizerProps) {
   const handleResizeCallback = useCallback(
     (column: string, newWidth: number) => {
-      store.state.resizingColumn.value = null;
+      store.state.columns.resizing_column.value = null;
       store.dispatch<ColumnWidthCommand>({
         type: "COLUMN_WIDTHS_SET",
         payload: {
@@ -25,22 +25,22 @@ export function useColumnResizer({
 
   const handleResizeUpdateCallback = useCallback(
     (column: string, newWidth: number) => {
-      store.state.resizingColumn.value = { column, width: newWidth };
+      store.state.columns.resizing_column.value = { column, width: newWidth };
     },
     [],
   );
 
   const getColumnWidth = useCallback((col: string) => {
     if (
-      store.state.resizingColumn.value &&
-      store.state.resizingColumn.value.column === col
+      store.state.columns.resizing_column.value &&
+      store.state.columns.resizing_column.value.column === col
     ) {
-      return store.state.resizingColumn.value.width;
+      return store.state.columns.resizing_column.value.width;
     }
-    return store.state.columnWidths.value[col] ?? 250;
+    return store.state.columns.widths.value[col] ?? 250;
   }, []);
   return {
-    resizingColumn: store.state.resizingColumn,
+    resizingColumn: store.state.columns.resizing_column,
     getColumnWidth,
     handleResizeCallback,
     handleResizeUpdateCallback,

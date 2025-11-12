@@ -88,7 +88,7 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
         return;
       }
       context.value = ctx;
-      const rootMenu = store.state.contextMenu.value;
+      const rootMenu = store.state.context_menu.menu.value;
       const virtualElement = {
         getBoundingClientRect: () => ({
           width: 0,

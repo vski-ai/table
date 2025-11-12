@@ -27,10 +27,10 @@ export const Row = (props: RowProps) => {
     rowKey,
   } = props;
 
-  const plugins = useAddons({ store });
+  const adons = useAddons({ store });
   const height = rowHeight;
 
-  const classes = plugins.rowclasses.string({
+  const classes = adons.rowclasses.string({
     row,
     store,
     rowKey,
@@ -45,13 +45,13 @@ export const Row = (props: RowProps) => {
         class={"vt-row " + classes}
         style={{
           height: height,
-          ...plugins.rowstyles.data({
+          ...adons.rowstyles.data({
             row,
             store,
           }),
         }}
       >
-        {plugins.lefttablecells.render({
+        {adons.lefttablecells.render({
           column: "",
           store,
           row,
@@ -62,7 +62,7 @@ export const Row = (props: RowProps) => {
           <Cell key={column} store={store} row={row} column={column} />
         ))}
 
-        {plugins.righttablecells.render({
+        {adons.righttablecells.render({
           column: "",
           store,
           row,

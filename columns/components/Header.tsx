@@ -13,7 +13,7 @@ export function Header({
   store,
   loading,
 }: HeaderProps) {
-  const plugins = useAddons({ store });
+  const adons = useAddons({ store });
   const columnsInOrder = useOrderedColumns({ store });
   const { style } = useTableColumnStyle({ store });
 
@@ -43,7 +43,7 @@ export function Header({
             )
             : (
               <tr>
-                {plugins.lefttableheaders.render({
+                {adons.lefttableheaders.render({
                   column: "",
                   store,
                 })}

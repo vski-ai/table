@@ -19,7 +19,7 @@ export function Settings({ store, column }: MenuContext) {
     "symbol",
   );
   const unitDisplay = useSignal<"short" | "long" | "narrow">("short");
-  const digits = useSignal(0);
+  const digits = useSignal(2);
   const error = useSignal<any>({});
 
   const radioClass = (value: string) =>

@@ -9,8 +9,8 @@ export function useStickyColOffset({ store }: StickyColOffset) {
   const columns = useOrderedColumns({ store });
 
   const offsets = useMemo(() => {
-    const stickyColumns = store.state.stickyColumns.value;
-    const widths = store.state.columnWidths.value;
+    const stickyColumns = store.state.columns.sticky.value;
+    const widths = store.state.columns.widths.value;
 
     const leftOffsets: Record<string, number> = {};
     let currentLeftOffset = 0;
@@ -33,9 +33,9 @@ export function useStickyColOffset({ store }: StickyColOffset) {
 
     return { left: leftOffsets, right: rightOffsets };
   }, [
-    store.state.columnWidths.value,
-    store.state.stickyColumns.value,
-    store.state.columnOrder.value,
+    store.state.columns.widths.value,
+    store.state.columns.sticky.value,
+    store.state.columns.ordered.value,
     columns,
   ]);
   return offsets;

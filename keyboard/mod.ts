@@ -1,6 +1,3 @@
-export * from "./hooks/useTableKb.ts";
-export * from "./hooks/useCellKb.ts";
-
 import * as KeyboardStore from "./store.ts";
 
 import { ITableModule, ModuleInitCallback } from "@/module/types.ts";

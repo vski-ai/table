@@ -22,7 +22,7 @@ export function Column(
     store,
   }: ColumnProps,
 ) {
-  const plugins = useAddons({ store });
+  const adons = useAddons({ store });
   const onColumnDrop = useColumnsOrderCallback({ store });
   const {
     getColumnWidth,
@@ -97,7 +97,7 @@ export function Column(
       <Draggable onDrop={onColumnDrop} id={column}>
         {children ? children : (
           <div class="vt-col-wrap">
-            {plugins.headerprefixes.render({
+            {adons.headerprefixes.render({
               column,
               store,
             })}

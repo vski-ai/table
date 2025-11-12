@@ -14,7 +14,7 @@ export function display({ column, row, store }: TypeFormatOpts) {
     column,
   });
 
-  const opts = store.state.columnDataTypeOptions.value?.[column];
+  const opts = store.state.data_type.options.value?.[column];
 
   let formattedValue = value;
   try {

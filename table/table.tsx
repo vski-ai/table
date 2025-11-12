@@ -11,7 +11,7 @@ import {
   useRenderRowCallback,
 } from "@/row/mod.ts";
 import { TableStore } from "@/module/types.ts";
-import { useTableKb } from "../keyboard/mod.ts";
+import { useTableKb } from "@/keyboard/hooks/useTableKb.ts";
 
 export type TableProps = {
   onDataLoad: DataLoadCallback;
@@ -52,12 +52,12 @@ export function Table(props: TableProps) {
 
   const kb = useTableKb({ store, tableRef });
 
-  const plugins = useAddons({ store });
+  const adons = useAddons({ store });
   const initializing = !data.value.length;
   return (
     <>
       <Header store={store} loading={initializing} />
-      {plugins.beforetable.render({
+      {adons.beforetable.render({
         ref: scrollContainerRef,
         store,
       })}
@@ -111,7 +111,7 @@ export function Table(props: TableProps) {
           )}
         </tbody>
       </table>
-      {plugins.aftertable.render({
+      {adons.aftertable.render({
         ref: scrollContainerRef,
         store,
       })}

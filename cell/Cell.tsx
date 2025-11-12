@@ -6,7 +6,7 @@ import { RowData } from "@/row/types.ts";
 import { useAddons } from "@/module/mod.ts";
 import { TypeFormat } from "@/datatype/mod.ts";
 import { useRowHeights } from "@/fetcher/hooks/useRowHeights.ts";
-import { useCellKb } from "@/keyboard/mod.ts";
+import { useCellKb } from "@/keyboard//hooks/useCellKb.ts";
 
 interface CellProps {
   store: TableStore;
@@ -34,7 +34,7 @@ export const Cell = ({
     left,
     right,
   } = useStickyColumn({ store, column });
-  const isSelected = store.state.selectedCells?.value?.[key];
+  const isSelected = store.state.cells.selected?.value?.[key];
   const keyBindings = useCellKb({ store, row, column });
 
   return (

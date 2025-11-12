@@ -8,7 +8,7 @@ type RowKeyProps = {
 export function useRowKey({
   store,
 }: RowKeyProps) {
-  const columns = store.state.columns?.value ?? [];
+  const columns = store.state.columns.all?.value ?? [];
   const rowIdentifier = "id";
   return useMemo(() => {
     if (rowIdentifier && columns.includes(rowIdentifier)) return rowIdentifier;

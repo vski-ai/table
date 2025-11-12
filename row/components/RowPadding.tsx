@@ -17,7 +17,7 @@ export const RowPadding = (
   }: RowPaddingProps,
 ) => {
   const columns = useOrderedColumns({ store });
-  const plugins = useAddons({ store });
+  const adons = useAddons({ store });
   const { getColumnWidth } = useColumnResizer({ store });
   return (
     <tr
@@ -25,7 +25,7 @@ export const RowPadding = (
       data-name={name}
       style={{ height: `${padding}px` }}
     >
-      {plugins.lefttablecells.getSorted().map((cb) => (
+      {adons.lefttablecells.getSorted().map((cb) => (
         <td
           class="vt-cell"
           style={{

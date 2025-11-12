@@ -5,12 +5,12 @@ interface OrderedColumnsProps {
 }
 
 export function useOrderedColumns({ store }: OrderedColumnsProps) {
-  const colOrder = store.state.columnOrder.value;
-  const columns = store.state.columns.value;
+  const colOrder = store.state.columns.ordered.value;
+  const columns = store.state.columns.all.value;
   const res = [
     ...(colOrder ?? []),
     ...columns.filter((c) => !colOrder.includes(c)),
   ]
-    .filter((c) => store.state.columnVisibility.value[c] !== false);
+    .filter((c) => store.state.columns.visibility.value[c] !== false);
   return res;
 }

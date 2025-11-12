@@ -13,8 +13,8 @@ export function useColumnsOrderCallback(
   const columns = useOrderedColumns({ store });
   return useCallback(
     (draggedColumn: string, targetColumn: string) => {
-      const currentColumnOrder = store.state.columnOrder.value.length
-        ? store.state.columnOrder.value
+      const currentColumnOrder = store.state.columns.ordered.value.length
+        ? store.state.columns.ordered.value
         : columns;
       const draggedIndex = currentColumnOrder.indexOf(draggedColumn);
       const targetIndex = currentColumnOrder.indexOf(targetColumn);

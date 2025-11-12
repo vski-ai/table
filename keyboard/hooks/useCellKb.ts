@@ -83,20 +83,23 @@ export function useCellKb(
   }, [isEditing]) as any;
 
   const onClick = useCallback(() => {
-    const values = Object.values(store.state.cellEditing.value)
+    const values = Object.values(store.state.cellEditing.value);
     if (values.length && values.every(Boolean)) {
       setEditing();
     }
   }, [store.state.cellEditing.value]);
 
-  // tricky part:
-  //   on edit we focus the root element
-  //   so we have to return focus when we cancel edit
   const focusTarget = useRef<HTMLTableCellElement>(null);
-  const onBlur = ((e: KeyboardEvent) => {
-    focusTarget.current = e.target as HTMLTableCellElement;
+  const onBlur = useCallback((e: KeyboardEvent) => {
+    focusTarget.current = e.target as HTMLTableCellElement; // tricky part: so we have to return focus when we cancel edit
     e.preventDefault();
-  }) as any;
+    if (store.state.keyboard.altKey.value) {
+      store.dispatch<CellSelectCmd>({
+        type: "CELL_SELECT",
+        payload: store.getCellKey({ row, column }),
+      });
+    }
+  }, [store.state.keyboard.altKey.value]) as any;
 
   const onFocus = useCallback(() => {
     if (store.state.keyboard.altKey.value) {

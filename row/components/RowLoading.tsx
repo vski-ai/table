@@ -8,9 +8,9 @@ export const RowLoading = (
     store: TableStore;
   },
 ) => {
-  const plugins = useAddons({ store });
-  const left = new Array(plugins.lefttablecells.size).fill(0);
-  const right = new Array(plugins.righttablecells.size).fill(0);
+  const adons = useAddons({ store });
+  const left = new Array(adons.lefttablecells.size).fill(0);
+  const right = new Array(adons.righttablecells.size).fill(0);
   return (
     <tr class="vt-row" style={{ height: rowHeight + "px" }}>
       {}

@@ -2,10 +2,14 @@ import { Signal, signal } from "@preact/signals";
 import { Command, TableState } from "@/module/mod.ts";
 import { RowData } from "@/row/types.ts";
 
+type CellsState = {
+  cells: {
+    selected: Signal<Record<string, boolean>>;
+  };
+};
+
 declare module "@/module/types.ts" {
-  interface TableState {
-    selectedCells: Signal<Record<string, boolean>>;
-  }
+  interface TableState extends CellsState {}
   interface TableStore {
     getCellKey: (opts: { column: string; row: RowData }) => string;
   }
@@ -23,10 +27,10 @@ export type CellSelectResetCmd = Command<
   true
 >;
 
-export function state() {
-  const selectedCells = signal({});
+export function state(): CellsState {
+  const selected = signal({});
   return {
-    selectedCells,
+    cells: { selected },
   };
 }
 
@@ -40,14 +44,14 @@ export function mutate<T>(
 ) {
   switch (cmd.type) {
     case "CELL_SELECT":
-      state.selectedCells.value = {
-        ...state.selectedCells.value,
+      state.cells.selected.value = {
+        ...state.cells.selected.value,
         [cmd.payload]: true,
       };
       break;
     case "CELL_SELECT_RESET":
       if (cmd.payload) {
-        state.selectedCells.value = {};
+        state.cells.selected.value = {};
       }
       break;
   }

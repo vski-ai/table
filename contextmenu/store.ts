@@ -2,11 +2,15 @@ import { computed, Signal, signal } from "@preact/signals";
 import { Command, TableState } from "@/module/mod.ts";
 import { ContextMenu, ContextMenuItem } from "./types.ts";
 
+type ContextMenuState = {
+  context_menu: {
+    menu: Signal<ContextMenu>;
+    items: Signal<Record<string, ContextMenuItem>>;
+  };
+};
+
 declare module "@/module/types.ts" {
-  interface TableState {
-    contextMenuItems: Signal<Record<string, ContextMenuItem>>;
-    contextMenu: Signal<ContextMenu>;
-  }
+  interface TableState extends ContextMenuState {}
 }
 
 const CONTEXT_MENU_ADD_ITEM = "CONTEXT_MENU_ADD_ITEM";
@@ -15,7 +19,7 @@ export type ContextMenuAddCommand = Command<
   ContextMenuItem
 >;
 
-export function state<T>(_: Record<string, T> | null) {
+export function state<T>(_: any): ContextMenuState {
   const contextMenuItems = signal<Record<string, ContextMenuItem>>({});
 
   const contextMenu = computed<ContextMenu>(() => {
@@ -54,8 +58,10 @@ export function state<T>(_: Record<string, T> | null) {
   });
 
   return {
-    contextMenuItems,
-    contextMenu,
+    context_menu: {
+      items: contextMenuItems,
+      menu: contextMenu,
+    },
   };
 }
 
@@ -66,8 +72,8 @@ export function persist(_: TableState) {
 export function mutate(state: TableState, command: ContextMenuAddCommand) {
   switch (command.type) {
     case "CONTEXT_MENU_ADD_ITEM": {
-      state.contextMenuItems.value = {
-        ...state.contextMenuItems.value,
+      state.context_menu.items.value = {
+        ...state.context_menu.items.value,
         [command.payload.menu]: command.payload,
       };
       break;
