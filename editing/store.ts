@@ -1,9 +1,9 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/store/mod.ts";
+import { Command, TableState } from "@/module/mod.ts";
 import { RowData } from "../row/types.ts";
 
 type GetCellValueOpts = { row: RowData; column: string };
-declare module "@/store/types.ts" {
+declare module "@/module/types.ts" {
   interface TableState {
     cellEditing: Signal<Record<string, boolean>>;
     rowEdits: Signal<Record<string, RowData>>;

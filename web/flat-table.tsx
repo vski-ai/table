@@ -1,11 +1,11 @@
-import { LocalStorageAdapter } from "@/store/mod.ts";
+import { LocalStorageAdapter } from "@/module/mod.ts";
 import { useEffect, useRef } from "preact/hooks";
 import { RowData } from "@/row/types.ts";
 import { createTable } from "../mod.ts";
-import { createFrontendSorter, SortingPlugin } from "@/sorting/mod.ts";
+import { createFrontendSorter, SortingModule } from "@/sorting/mod.ts";
 
 import { SelectorPlugin } from "@/selector/mod.ts";
-import { EnumeratorPlugin } from "../enumerator/mod.ts";
+import { EnumeratorModule } from "../enumerator/mod.ts";
 import { generateRows } from "./mock/flat-table.ts";
 
 let generated;
@@ -30,10 +30,10 @@ export const FlatTable = () => {
 
   const { Table } = createTable({
     id: "flat",
-    plugins: [
-      SortingPlugin,
+    modules: [
+      SortingModule,
       //SelectorPlugin,
-      EnumeratorPlugin,
+      EnumeratorModule,
     ],
     persistence: new LocalStorageAdapter(),
   });

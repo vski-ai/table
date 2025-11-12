@@ -1,22 +1,8 @@
 import { effect } from "@preact/signals";
-import { StorageAdapter } from "./persistence.ts";
+import { StorageAdapter } from "../components/LocalStorageAdapter.ts";
 import { Command, StoreModule, TableState, TableStore } from "./types.ts";
 
-import { ColumnsStore } from "@/columns/mod.ts";
-import { RowsStore } from "@/row/mod.ts";
-import { CellStore } from "@/cell/mod.ts";
-import { FetcherStore } from "@/fetcher/mod.ts";
-import { ContextMenuStore } from "@/contextmenu/mod.ts";
-import { EditingStore } from "@/editing/mod.ts";
-
-const builtInStore: StoreModule[] = [
-  FetcherStore,
-  ColumnsStore,
-  CellStore,
-  ContextMenuStore,
-  RowsStore,
-  EditingStore,
-];
+const builtInStore: StoreModule[] = [];
 
 const MAX_HISTORY_SIZE = 100;
 

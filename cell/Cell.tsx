@@ -1,11 +1,11 @@
 import { sanitizeColName } from "@/common/sanitizeColName.ts";
 import { cn } from "@/common/className.ts";
-import { useStickyColumn } from "@/columns/mod.ts";
-import { TableStore } from "@/store/types.ts";
+import { useStickyColumn } from "@/columns/hooks/useStickyColumn.ts";
+import { TableStore } from "@/module/types.ts";
 import { RowData } from "@/row/types.ts";
-import { usePlugins } from "@/plugin/usePlugins.ts";
+import { useAddons } from "@/module/mod.ts";
 import { TypeFormat } from "@/datatype/mod.ts";
-import { useRowHeights } from "@/fetcher/mod.ts";
+import { useRowHeights } from "@/fetcher/hooks/useRowHeights.ts";
 import { useCellKb } from "@/keyboard/mod.ts";
 
 interface CellProps {
@@ -19,7 +19,7 @@ export const Cell = ({
   column,
   row,
 }: CellProps) => {
-  const plugins = usePlugins({ store });
+  const addons = useAddons({ store });
   const key = store.getCellKey({ row, column });
 
   const getHeight = useRowHeights({
@@ -62,7 +62,7 @@ export const Cell = ({
         class="vt-cell-wrap"
         title={row[column]?.toString()}
       >
-        {plugins.cellprefixes.render({
+        {addons.cellprefixes.render({
           column: column,
           row,
           store,
@@ -70,7 +70,7 @@ export const Cell = ({
 
         <TypeFormat {...{ store, column, row }} />
 
-        {plugins.cellsuffixes?.render({
+        {addons.cellsuffixes?.render({
           column: column,
           row,
           store,

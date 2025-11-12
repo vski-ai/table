@@ -2,10 +2,10 @@ import ArrowDownIcon from "lucide-react/dist/esm/icons/arrow-down-0-1.js";
 import ArrowUpIcon from "lucide-react/dist/esm/icons/arrow-up-1-0.js";
 import ArrowDownUpIcon from "lucide-react/dist/esm/icons/arrow-down-up.js";
 
-import { TableStore } from "@/store/mod.ts";
+import { TableStore } from "@/module/mod.ts";
 import { cn } from "@/common/className.ts";
 
-import { ColumnRendererCallback } from "@/plugin/types.ts";
+import { ColumnRendererCallback } from "@/module/types.ts";
 import { useCallback } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 import { SortSetCommand } from "../store.ts";

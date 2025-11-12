@@ -1,6 +1,6 @@
-import { CommonRendererCallback } from "@/plugin/types.ts";
-import { TableStore } from "@/store/types.ts";
-import { useTableColumnStyle } from "@/columns/mod.ts";
+import { CommonRendererCallback } from "@/module/types.ts";
+import { TableStore } from "@/module/types.ts";
+import { useTableColumnStyle } from "@/columns/hooks/useTableColumnStyle.ts";
 import { useRenderRowCallback } from "./Row.tsx";
 import { RowPadding } from "./RowPadding.tsx";
 

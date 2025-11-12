@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "preact/hooks";
-import { TableStore } from "@/store/types.ts";
+import { TableStore } from "@/module/types.ts";
 import { RowData } from "@/row/types.ts";
 import { CellEditingSetCommand } from "@/editing/store.ts";
 import { CellSelectCmd } from "@/cell/store.ts";

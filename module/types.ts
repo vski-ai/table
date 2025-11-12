@@ -1,9 +1,10 @@
-import { TableStore } from "@/store/types.ts";
+export * from "./store/types.ts";
+import { TableStore } from "@/module/types.ts";
 import { RowData } from "@/row/types.ts";
 import { DataLoadOptions, DataLoadResult } from "@/fetcher/types.ts";
-import { SortedAddon } from "./addon.ts";
+import { SortedAddon } from "./components/SortedAddon.ts";
 import { MutableRef } from "preact/hooks";
-import { StoreModule } from "@/store/types.ts";
+import { StoreModule } from "@/module/types.ts";
 
 type WithRef = {
   ref?: MutableRef<HTMLElement>;
@@ -78,7 +79,7 @@ type RightTableHeaders = SortedAddon<ColumnRendererCallback>;
 type RowClasses = SortedAddon<ClassResolverCallback>;
 type RowStyles = SortedAddon<StyleResolverCallback>;
 
-export interface PluginsInitOptions {
+export interface ModuleInitOptions {
   store: TableStore;
   headerprefixes: HeaderPrefixes;
   lefttablecells: LeftTableCells;
@@ -94,15 +95,15 @@ export interface PluginsInitOptions {
   aftertable: AfterTable;
 }
 
-export type PluginInitCallback = (opts: PluginsInitOptions) => void;
+export type ModuleInitCallback = (opts: ModuleInitOptions) => void;
 
-export type ITablePlugin<T extends Record<string, any> = Record<string, any>> =
+export type ITableModule<T extends Record<string, any> = Record<string, any>> =
   {
     name: string;
     dependencies?: string[];
     tableProps?: T;
 
-    onInit?: PluginInitCallback;
+    onInit?: ModuleInitCallback;
 
     // A hook that is called before data is loaded
     beforeLoad?: BeforeLoadCallback;

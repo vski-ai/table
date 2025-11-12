@@ -1,5 +1,5 @@
-import { TableStore } from "@/store/types.ts";
-import { CommonRendererCallback } from "@/plugin/mod.ts";
+import { TableStore } from "@/module/types.ts";
+import { CommonRendererCallback } from "@/module/mod.ts";
 
 const ROOT_SEL = (id: string) => `table[x-id="vt_${id}"] `;
 const ROW_SEL = (root: string, rowId: string) =>

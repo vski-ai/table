@@ -1,4 +1,4 @@
-import { TableStore } from "@/store/types.ts";
+import { TableStore } from "@/module/types.ts";
 import { useMemo } from "preact/hooks";
 
 type RowKeyProps = {
@@ -8,7 +8,7 @@ type RowKeyProps = {
 export function useRowKey({
   store,
 }: RowKeyProps) {
-  const columns = store.state.columns.value;
+  const columns = store.state.columns?.value ?? [];
   const rowIdentifier = "id";
   return useMemo(() => {
     if (rowIdentifier && columns.includes(rowIdentifier)) return rowIdentifier;

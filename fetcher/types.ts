@@ -1,4 +1,4 @@
-import { TableStore } from "@/store/types.ts";
+import { TableStore } from "@/module/types.ts";
 import { RowData } from "@/row/types.ts";
 
 export interface DataLoadOptions {

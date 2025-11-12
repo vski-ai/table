@@ -1,7 +1,7 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/store/mod.ts";
+import { Command, TableState } from "@/module/mod.ts";
 
-declare module "@/store/types.ts" {
+declare module "@/module/types.ts" {
   interface TableState {
     selectedRows: Signal<(string | number)[]>;
   }

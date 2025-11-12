@@ -4,9 +4,9 @@ import { GroupLevelLine } from "./GroupLevelLine.tsx";
 import { GroupLinePointer } from "./GroupLevelLine.tsx";
 import { GroupMargin } from "./GroupMargin.tsx";
 import { RowData } from "@/row/types.ts";
-import { TableStore } from "@/store/types.ts";
-import { CellRendererCallback } from "@/plugin/mod.ts";
-import { useStickyColOffset } from "@/columns/mod.ts";
+import { TableStore } from "@/module/types.ts";
+import { CellRendererCallback } from "@/module/mod.ts";
+import { useStickyColOffset } from "@/columns/hooks/useStickyColumn.ts";
 import { GroupSorter } from "./GroupSorter.tsx";
 import { ExpandSetCommand } from "../store.ts";
 

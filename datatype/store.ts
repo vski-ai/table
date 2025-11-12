@@ -1,11 +1,11 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/store/mod.ts";
+import { Command, TableState } from "@/module/mod.ts";
 import { TypeFormatComponent } from "./types.ts";
 import { DefaultFormater } from "./components/DefaultFormater.tsx";
 
 const TYPE_FORMATTERS_ACCESSOR = Symbol("formatters");
 
-declare module "@/store/types.ts" {
+declare module "@/module/types.ts" {
   interface TableState {
     columnDataType: Signal<Record<string, string>>;
     columnDataTypeOptions: Signal<Record<string, any>>;

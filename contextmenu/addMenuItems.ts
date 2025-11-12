@@ -1,5 +1,5 @@
 import { ContextMenuAddCommand } from "./store.ts";
-import { TableStore } from "@/store/types.ts";
+import { TableStore } from "@/module/types.ts";
 import { ContextMenuItem } from "./types.ts";
 
 type AddMenuItemProps = {

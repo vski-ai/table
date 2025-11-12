@@ -1,5 +1,5 @@
 import { RowData } from "@/row/types.ts";
-import { TableStore } from "@/store/mod.ts";
+import { TableStore } from "@/module/mod.ts";
 import { SortState } from "./types.ts";
 
 const sortFn = (sorting: SortState) => (a: RowData, b: RowData) => {

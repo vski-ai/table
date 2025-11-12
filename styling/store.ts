@@ -1,10 +1,10 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/store/mod.ts";
+import { Command, TableState } from "@/module/mod.ts";
 import { CellStyle } from "./types.ts";
 
 type CSSStyleObject = Record<string, string | undefined>;
 
-declare module "@/store/types.ts" {
+declare module "@/module/types.ts" {
   interface TableState {
     tableStyles: Signal<CSSStyleObject>;
     columnStyles: Signal<Record<string, CSSStyleObject>>;
@@ -162,18 +162,6 @@ export function mutate(state: TableState, command: StylingCommandType) {
         const { [command.payload.columnId]: _, ...restRow } = row;
         state.cellStyles.value = { ...rest, [command.payload.rowKey]: restRow };
       }
-      break;
-    case "CELL_DATATYPE_SET":
-      state.cellDataTypes.value = {
-        ...state.cellDataTypes.value,
-        ...command.payload,
-      };
-      break;
-    case "CELL_EDITING_SET":
-      state.cellEditing.value = {
-        ...state.cellEditing.value,
-        ...command.payload,
-      };
       break;
   }
 }

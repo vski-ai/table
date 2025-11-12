@@ -1,8 +1,8 @@
 import PlayIcon from "lucide-react/dist/esm/icons/play.js";
 import { useRef } from "preact/hooks";
 import { SelectorPlugin } from "@/selector/mod.ts";
-import { EnumeratorPlugin } from "@/enumerator/mod.ts";
-import { createFrontendSorter, SortingPlugin } from "@/sorting/mod.ts";
+import { EnumeratorModule } from "@/enumerator/mod.ts";
+import { createFrontendSorter, SortingModule } from "@/sorting/mod.ts";
 import { createTable } from "@/table/mod.ts";
 
 import { generateRows } from "../mock/flat-table.ts";
@@ -14,10 +14,10 @@ const sorter = createFrontendSorter();
 
 const { store, Table } = createTable({
   id: "demo",
-  plugins: [
-    SortingPlugin,
+  modules: [
+    SortingModule,
     //SelectorPlugin,
-    EnumeratorPlugin,
+    EnumeratorModule,
   ],
 });
 

@@ -23,6 +23,11 @@
     "tailwindcss": "npm:tailwindcss@^4.1.16",
     "vite": "npm:vite@^7.1.12"
   },
+  "lint": {
+    "rules": {
+      "exclude": ["no-explicit-any"]
+    }
+  },
   "compilerOptions": {
     "lib": ["dom", "dom.asynciterable", "dom.iterable", "deno.ns"],
     "jsx": "precompile",

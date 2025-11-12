@@ -1,5 +1,5 @@
-import { Column } from "@/columns/mod.ts";
-import { ColumnRendererCallback } from "@/plugin/types.ts";
+import { Column } from "@/columns/components/Column.tsx";
+import { ColumnRendererCallback } from "@/module/types.ts";
 
 export const enumColumnRenderCallback: ColumnRendererCallback = (
   { store },

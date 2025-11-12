@@ -1,10 +1,10 @@
 import { useSignal } from "@preact/signals";
 import { useCallback, useEffect, useRef } from "preact/hooks";
-import { TableStore } from "@/store/mod.ts";
+import { TableStore } from "@/module/mod.ts";
 import { ColumnSetCommand } from "@/columns/store.ts";
 import { RowData } from "@/row/types.ts";
 import { DataLoadCallback } from "../types.ts";
-import { usePlugins } from "@/plugin/usePlugins.ts";
+import { useAddons } from "@/module/mod.ts";
 import { TableMetaCommnand } from "../store.ts";
 
 interface LoaderProps {
@@ -24,7 +24,7 @@ export const useLoader = ({
   const loadedRanges = useRef<{ start: number; end: number }[]>([]);
   const reloadKey = store.state.dataLoadKey;
   const lastReloadKey = useRef(reloadKey.value);
-  const plugins = usePlugins({ store });
+  const plugins = useAddons({ store });
 
   const load = useCallback(async (offset: number, limit: number) => {
     if (limit <= 0 || isLoading.value) return;

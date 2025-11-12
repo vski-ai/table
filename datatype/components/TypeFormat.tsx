@@ -1,5 +1,5 @@
 import { RowData } from "@/row/types.ts";
-import { TableStore } from "@/store/types.ts";
+import { TableStore } from "@/module/types.ts";
 
 export interface TypeFormatProps {
   column: string;

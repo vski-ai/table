@@ -1,14 +1,16 @@
 import { MutableRef, useRef } from "preact/hooks";
-import { DataLoadCallback, useDataFetcher } from "@/fetcher/mod.ts";
-import { usePlugins } from "@/plugin/mod.ts";
-import { Header, useTableColumnStyle } from "@/columns/mod.ts";
+import { DataLoadCallback } from "@/fetcher/types.ts";
+import { useDataFetcher } from "@/fetcher/hooks/useDataFetcher.ts";
+import { useAddons } from "@/module/mod.ts";
+import { Header } from "@/columns/components/Header.tsx";
+import { useTableColumnStyle } from "@/columns/hooks/useTableColumnStyle.ts";
 import {
   RowData,
   RowPadding,
   RowSkeleton,
   useRenderRowCallback,
 } from "@/row/mod.ts";
-import { TableStore } from "@/store/types.ts";
+import { TableStore } from "@/module/types.ts";
 import { useTableKb } from "../keyboard/mod.ts";
 
 export type TableProps = {
@@ -50,7 +52,7 @@ export function Table(props: TableProps) {
 
   const kb = useTableKb({ store, tableRef });
 
-  const plugins = usePlugins({ store });
+  const plugins = useAddons({ store });
   const initializing = !data.value.length;
   return (
     <>

@@ -1,5 +1,5 @@
-import { usePlugins } from "@/plugin/usePlugins.ts";
-import { TableStore } from "@/store/types.ts";
+import { useAddons } from "@/module/mod.ts";
+import { TableStore } from "@/module/types.ts";
 
 export const RowLoading = (
   { columns, rowHeight, store }: {
@@ -8,7 +8,7 @@ export const RowLoading = (
     store: TableStore;
   },
 ) => {
-  const plugins = usePlugins({ store });
+  const plugins = useAddons({ store });
   const left = new Array(plugins.lefttablecells.size).fill(0);
   const right = new Array(plugins.righttablecells.size).fill(0);
   return (

@@ -3,39 +3,50 @@ import {
   ClassResolverCallback,
   ColumnRendererCallback,
   CommonRendererCallback,
-  ITablePlugin,
+  ITableModule,
   StyleResolverCallback,
 } from "./types.ts";
-import { PLUGIN_CONTAINER_ACCESSOR } from "./private.ts";
+import { ADDONS_CONTAINER_ACCESSOR } from "./hooks/private.ts";
 
-import { TableStore } from "../store/mod.ts";
-import { SortedAddon } from "./addon.ts";
-import { DataLoadOptions, DataLoadResult } from "@/fetcher/types.ts";
+import { TableStore } from "./store/mod.ts";
+import { SortedAddon } from "./components/SortedAddon.ts";
 
-import { DatatypePlugin } from "@/datatype/plugin.ts";
-import { StylingPlugin } from "@/styling/plugin.ts";
-import { ContextMenuPlugin } from "@/contextmenu/plugin.ts";
-import { ColumnsPlugin } from "@/columns/plugin.ts";
-import { RowsPlugin } from "@/row/plugin.ts";
+import {
+  DataFetcherModule,
+  DataLoadOptions,
+  DataLoadResult,
+} from "@/fetcher/mod.ts";
+import { TableCellModule } from "@/cell/mod.ts";
+import { TableColumnsModule } from "@/columns/mod.ts";
+import { ContextMenuModule } from "@/contextmenu/mod.ts";
+import { DatatypeModule } from "@/datatype/mod.ts";
+import { EditingModule } from "@/editing/mod.ts";
+import { RowsModule } from "@/row/mod.ts";
+
+import { StylingModule } from "@/styling/mod.ts";
+
 import { KeyboardPlugin } from "@/keyboard/mod.ts";
 
-export const createPlugin = (plugin: ITablePlugin) => plugin;
+export const createPlugin = (plugin: ITableModule) => plugin;
 export type PluginContainer = ReturnType<typeof createPluginContainer>;
 
-export const buildInPlugins = [
+export const buildInModules = [
+  DataFetcherModule,
+  TableCellModule,
+  TableColumnsModule,
+  RowsModule,
+  ContextMenuModule,
+  DatatypeModule,
+  EditingModule,
   KeyboardPlugin,
-  StylingPlugin,
-  ColumnsPlugin,
-  DatatypePlugin,
-  ContextMenuPlugin,
-  RowsPlugin,
+  StylingModule,
 ];
 
 export const createPluginContainer = (
   store: TableStore,
-  plugins: ITablePlugin[],
+  plugins: ITableModule[],
 ) => {
-  plugins = [...buildInPlugins, ...plugins];
+  plugins = [...buildInModules, ...plugins];
   const sortedPlugins = [...plugins].sort((a, b) => {
     if (a.dependencies?.includes(b.name)) {
       return 1;
@@ -116,7 +127,7 @@ export const createPluginContainer = (
   };
 
   // @ts-ignore: some privats
-  store[PLUGIN_CONTAINER_ACCESSOR] = container;
+  store[ADDONS_CONTAINER_ACCESSOR] = container;
 
   return container;
 };

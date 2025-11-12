@@ -1,8 +1,8 @@
 import { useCallback } from "preact/hooks";
-import { CellRendererCallback } from "@/plugin/mod.ts";
-import { TableStore } from "@/store/types.ts";
+import { CellRendererCallback } from "@/module/mod.ts";
+import { TableStore } from "@/module/types.ts";
 import { RowData } from "@/row/types.ts";
-import { useRowKey } from "@/fetcher/mod.ts";
+import { useRowKey } from "@/columns/hooks/useRowKey.ts";
 import { KEY } from "../constants.ts";
 import { RowsSelectCommand } from "../store.ts";
 

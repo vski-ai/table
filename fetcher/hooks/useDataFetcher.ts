@@ -3,12 +3,12 @@ import { MutableRef, useMemo } from "preact/hooks";
 import { useRowHeights } from "./useRowHeights.ts";
 import { useVariableVirtualizer } from "./useVariableVirtualizer.ts";
 
-import { TableStore } from "@/store/types.ts";
+import { TableStore } from "@/module/types.ts";
 import { RowData } from "@/row/types.ts";
 import { DataLoadCallback } from "../types.ts";
 
 import { useLoader } from "./useLoader.ts";
-import { useRowKey } from "./useRowKey.ts";
+import { useRowKey } from "@/columns/hooks/useRowKey.ts";
 
 interface DataFetcherProps {
   store: TableStore;

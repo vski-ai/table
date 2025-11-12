@@ -1,9 +1,9 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/store/mod.ts";
+import { Command, TableState } from "@/module/mod.ts";
 import { TableMeta } from "./types.ts";
 import { RowData } from "@/row/types.ts";
 
-declare module "@/store/types.ts" {
+declare module "@/module/types.ts" {
   interface TableState {
     loading: Signal<boolean>;
     isInitialized: Signal<boolean>;

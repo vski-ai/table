@@ -1,6 +1,7 @@
-import { TableStore } from "@/store/types.ts";
-import { useColumnResizer, useOrderedColumns } from "@/columns/mod.ts";
-import { usePlugins } from "@/plugin/usePlugins.ts";
+import { TableStore } from "@/module/types.ts";
+import { useColumnResizer } from "@/columns/hooks/useColumnnResize.ts";
+import { useOrderedColumns } from "@/columns/hooks/useOrderedColumns.ts";
+import { useAddons } from "@/module/mod.ts";
 
 interface RowPaddingProps {
   padding: number;
@@ -16,7 +17,7 @@ export const RowPadding = (
   }: RowPaddingProps,
 ) => {
   const columns = useOrderedColumns({ store });
-  const plugins = usePlugins({ store });
+  const plugins = useAddons({ store });
   const { getColumnWidth } = useColumnResizer({ store });
   return (
     <tr

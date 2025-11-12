@@ -1,6 +1,6 @@
 import { useCallback } from "preact/hooks";
 
-import { TableStore } from "@/store/mod.ts";
+import { TableStore } from "@/module/mod.ts";
 import { ColumnWidthCommand } from "../store.ts";
 
 interface ColumnResizerProps {

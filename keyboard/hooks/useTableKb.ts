@@ -1,4 +1,4 @@
-import { TableStore } from "@/store/types.ts";
+import { TableStore } from "@/module/types.ts";
 import { MutableRef, useCallback, useEffect, useRef } from "preact/hooks";
 import { CellSelectResetCmd } from "@/cell/store.ts";
 

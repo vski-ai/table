@@ -1,5 +1,5 @@
 import { useMemo } from "preact/hooks";
-import { TableStore } from "@/store/types.ts";
+import { TableStore } from "@/module/types.ts";
 import { useOrderedColumns } from "./useOrderedColumns.ts";
 interface StickyColOffset {
   store: TableStore;

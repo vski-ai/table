@@ -1,8 +1,8 @@
 import { signal, useSignal } from "@preact/signals";
 import { MutableRef, useLayoutEffect, useRef } from "preact/hooks";
 import { computePosition, flip, shift } from "@floating-ui/dom";
-import { TableStore } from "@/store/types.ts";
-import { CommonRendererCallback } from "@/plugin/types.ts";
+import { TableStore } from "@/module/types.ts";
+import { CommonRendererCallback } from "@/module/types.ts";
 import { MenuContext, MenuItem } from "./types.ts";
 import BackIcon from "lucide-react/dist/esm/icons/chevron-left.js";
 

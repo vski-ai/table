@@ -4,21 +4,15 @@ import {
   StorageAdapter,
   StoreModule,
   TableStore,
-} from "@/store/mod.ts";
+} from "@/module/mod.ts";
 import {
-  buildInPlugins,
-  createPluginContainer,
-  ITablePlugin,
-} from "@/plugin/mod.ts";
+  createTableModule,
+  CreateTableModuleOpts,
+  ITableModule,
+} from "@/module/mod.ts";
 import { Table as TableView, TableProps as TableViewProps } from "./table.tsx";
 import { ComponentChildren } from "preact";
 import { MutableRef } from "preact/hooks";
-
-type CreateTableOpts = {
-  id: string;
-  plugins: ITablePlugin[];
-  persistence?: StorageAdapter;
-};
 
 type Result = {
   store: TableStore;
@@ -31,19 +25,9 @@ type TableProps = {
 };
 
 export function createTable(
-  { id, plugins, persistence }: CreateTableOpts,
+  props: CreateTableModuleOpts,
 ): Result {
-  const modules: StoreModule[] = [...buildInPlugins, ...plugins].map((p) =>
-    p.store
-  ).filter((p) => !!p);
-  const store = createTableStore(
-    persistence ?? new LocalStorageAdapter(),
-    id,
-    modules,
-  );
-
-  createPluginContainer(store, plugins);
-
+  const store = createTableModule(props);
   return {
     store,
     Table({ container, onDataLoad }: TableProps) {

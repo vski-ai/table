@@ -1,8 +1,8 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/store/mod.ts";
+import { Command, TableState } from "@/module/mod.ts";
 
 type ResizingRow = { rowId: string | number; height: number } | null;
-declare module "@/store/types.ts" {
+declare module "@/module/types.ts" {
   interface TableState {
     resizingRow: Signal<ResizingRow>;
   }

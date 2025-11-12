@@ -3,12 +3,12 @@ export * from "./hooks/useCellKb.ts";
 
 import * as KeyboardStore from "./store.ts";
 
-import { ITablePlugin, PluginInitCallback } from "@/plugin/types.ts";
+import { ITableModule, ModuleInitCallback } from "@/module/types.ts";
 
-const onInit: PluginInitCallback = () => {
+const onInit: ModuleInitCallback = () => {
 };
 
-export const KeyboardPlugin: ITablePlugin = {
+export const KeyboardPlugin: ITableModule = {
   name: "keyboard",
   onInit,
   store: KeyboardStore,

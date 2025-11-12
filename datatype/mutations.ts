@@ -1,4 +1,4 @@
-import { TableStore } from "@/store/types.ts";
+import { TableStore } from "@/module/types.ts";
 import {
   ColumnDataTypeOptionsSetCommand,
   ColumnDataTypeSetCommand,

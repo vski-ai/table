@@ -1,14 +1,14 @@
 import {
   AfterLoadCallback,
   BeforeLoadCallback,
-  ITablePlugin,
-  PluginInitCallback,
-} from "@/plugin/mod.ts";
+  ITableModule,
+  ModuleInitCallback,
+} from "@/module/mod.ts";
 import { ColumnVisibilityCommand } from "@/columns/store.ts";
 import { groupCellRenderCallback } from "./components/GroupCell.tsx";
 import { groupColumnRenderCallback } from "./components/GroupColumn.tsx";
 
-const onInit: PluginInitCallback = ({
+const onInit: ModuleInitCallback = ({
   store,
   lefttablecells,
   lefttableheaders,
@@ -55,7 +55,7 @@ const afterLoad: AfterLoadCallback = ({ res, store }) => {
   return res;
 };
 
-export const GroupingPlugin: ITablePlugin = {
+export const GroupingPlugin: ITableModule = {
   name: "grouping",
   onInit,
   beforeLoad,

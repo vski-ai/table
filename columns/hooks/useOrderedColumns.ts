@@ -1,4 +1,4 @@
-import { TableStore } from "@/store/mod.ts";
+import { TableStore } from "@/module/mod.ts";
 
 interface OrderedColumnsProps {
   store: TableStore;

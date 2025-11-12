@@ -1,5 +1,5 @@
 import { useMemo } from "preact/hooks";
-import { TableStore } from "@/store/types.ts";
+import { TableStore } from "@/module/types.ts";
 import { sanitizeColName } from "@/common/sanitizeColName.ts";
 import { useColumnResizer } from "./useColumnnResize.ts";
 import { useOrderedColumns } from "./useOrderedColumns.ts";

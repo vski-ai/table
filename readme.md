@@ -24,20 +24,13 @@ deno run dev
 There are no complex abstractions. There are callbacks, mutations and factories.
 Plus some composition.
 
-1. Module State (s) - factory expects callbacks provided by a module: state(p),
-   persist(s), mutation(s), etc. The factory registers module state, persistence
-   callback and mutation callback (dispatch).
-2. Store Factory - the main interface is TableState which is to be extended by
-   modules. Provides dispatch(cmd) callback. Most of the components accept
-   `store` as an input. There's no context, things are done explicitly!
-3. Plugin Factory - expects an init callbacks and plugin name. It is executed
-   after store initialization and before table render. Everything that has to be
-   initialized before render makes use of plugin interface (including store
-   modules).
-4. Table Factory - mates store, plugins and table view. then returns store
-   instance and Table component.
+- The modules provide store (state), init and other hooks. 
+- Preact signals are mainly used for state managment.
+- The state is mutated using the dispatch method (provided by store).
+- There's no context, the things done explicitly!
+- There are addons (render hooks) as an alternative to slots.
 
 ## WIP
 
 The project state is "pre-alpha". Meaning that everything is subject to change
-and not everything is shaped to according to my vision (yet).
+and not everything is shaped to according to my vision yet.

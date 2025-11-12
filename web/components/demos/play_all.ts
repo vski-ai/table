@@ -1,6 +1,6 @@
 import { MutableRef } from "preact/hooks";
 import { delay, end, scrollX, scrollY, start } from "./common.ts";
-import { TableStore } from "@/store/types.ts";
+import { TableStore } from "@/module/types.ts";
 import { navigation } from "./navigation.ts";
 
 export async function playAll(
