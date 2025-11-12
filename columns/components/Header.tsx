@@ -1,7 +1,7 @@
 import { TableStore } from "@/store/mod.ts";
-import { useTableColumnStyle } from "./useTableColumnStyle.ts";
-import { usePlugins } from "../plugin/usePlugins.ts";
-import { useOrderedColumns } from "./useOrderedColumns.ts";
+import { usePlugins } from "@/plugin/usePlugins.ts";
+import { useTableColumnStyle } from "../hooks/useTableColumnStyle.ts";
+import { useOrderedColumns } from "../hooks/useOrderedColumns.ts";
 import { Column } from "./Column.tsx";
 
 interface HeaderProps {

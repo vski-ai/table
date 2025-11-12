@@ -1,6 +1,6 @@
 import { useCallback } from "preact/hooks";
 import { TableStore } from "@/store/mod.ts";
-import { ColumnOrderCommand } from "./store.ts";
+import { ColumnOrderCommand } from "../store.ts";
 import { useOrderedColumns } from "./useOrderedColumns.ts";
 
 interface ColumnsOrderCallbackProps {

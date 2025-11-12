@@ -1,7 +1,7 @@
 import { CommonRendererCallback } from "@/plugin/types.ts";
 import { TableStore } from "@/store/types.ts";
-import { useRenderRowCallback } from "./Row.tsx";
 import { useTableColumnStyle } from "@/columns/mod.ts";
+import { useRenderRowCallback } from "./Row.tsx";
 import { RowPadding } from "./RowPadding.tsx";
 
 interface StickyRowsProps {

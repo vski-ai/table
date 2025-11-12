@@ -1,7 +1,7 @@
 import { ITablePlugin, PluginInitCallback } from "@/plugin/mod.ts";
-import { ColumnWidthCommand } from "../columns/store.ts";
-import { enumCellRenderCallback } from "./EnumeratorCell.tsx";
-import { enumColumnRenderCallback } from "./EnumeratorColumn.tsx";
+import { ColumnWidthCommand } from "@/columns/store.ts";
+import { enumCellRenderCallback } from "./components/EnumeratorCell.tsx";
+import { enumColumnRenderCallback } from "./components/EnumeratorColumn.tsx";
 import * as store from "./store.ts";
 
 const onInit: PluginInitCallback = ({

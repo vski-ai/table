@@ -1,7 +1,7 @@
-import { Column } from "../columns/Column.tsx";
+import { Column } from "@/columns/mod.ts";
 import { ColumnRendererCallback } from "@/plugin/types.ts";
-import { RowsSelectCommand } from "./store.ts";
-import { KEY } from "./constants.ts";
+import { RowsSelectCommand } from "../store.ts";
+import { KEY } from "../constants.ts";
 
 export const selectorColumnRenderCallback: ColumnRendererCallback = (
   { store },

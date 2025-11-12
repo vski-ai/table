@@ -4,9 +4,9 @@ import {
   ITablePlugin,
   PluginInitCallback,
 } from "@/plugin/mod.ts";
-import { ColumnVisibilityCommand } from "../columns/store.ts";
-import { groupCellRenderCallback } from "./GroupCell.tsx";
-import { groupColumnRenderCallback } from "./GroupColumn.tsx";
+import { ColumnVisibilityCommand } from "@/columns/store.ts";
+import { groupCellRenderCallback } from "./components/GroupCell.tsx";
+import { groupColumnRenderCallback } from "./components/GroupColumn.tsx";
 
 const onInit: PluginInitCallback = ({
   store,

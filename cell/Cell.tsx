@@ -5,8 +5,8 @@ import { TableStore } from "@/store/types.ts";
 import { RowData } from "@/row/types.ts";
 import { usePlugins } from "@/plugin/usePlugins.ts";
 import { TypeFormat } from "@/datatype/mod.ts";
-import { useRowHeights } from "@/fetcher/useRowHeights.ts";
-import { useCellKb } from "@/keyboard/useCellKb.ts";
+import { useRowHeights } from "@/fetcher/mod.ts";
+import { useCellKb } from "@/keyboard/mod.ts";
 
 interface CellProps {
   store: TableStore;

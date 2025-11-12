@@ -3,7 +3,7 @@ import {
   ITablePlugin,
   PluginInitCallback,
 } from "@/plugin/mod.ts";
-import { headerRenderCallback } from "./RowSorter.tsx";
+import { headerRenderCallback } from "./components/RowSorter.tsx";
 import { SortState } from "./types.ts";
 import * as store from "./store.ts";
 

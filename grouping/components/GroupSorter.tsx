@@ -1,12 +1,12 @@
+import { TableStore } from "@/store/mod.ts";
+import { SortState } from "@/sorting/types.ts";
+import { RowData } from "@/row/types.ts";
+import { CellRendererCallback } from "@/plugin/mod.ts";
+import { LeafSortCommand } from "../store.ts";
+
 import ArrowDownIcon from "lucide-react/dist/esm/icons/arrow-down-0-1.js";
 import ArrowUpIcon from "lucide-react/dist/esm/icons/arrow-up-1-0.js";
 import ArrowDownUpIcon from "lucide-react/dist/esm/icons/arrow-down-up.js";
-
-import { TableStore } from "@/store/mod.ts";
-import { SortState } from "@/sorting/types.ts";
-import { LeafSortCommand } from "./store.ts";
-import { RowData } from "@/row/types.ts";
-import { CellRendererCallback } from "../plugin/mod.ts";
 
 interface RowSorterProps {
   className?: string;

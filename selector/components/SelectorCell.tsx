@@ -1,10 +1,10 @@
 import { useCallback } from "preact/hooks";
-import { RowsSelectCommand } from "./store.ts";
 import { CellRendererCallback } from "@/plugin/mod.ts";
 import { TableStore } from "@/store/types.ts";
 import { RowData } from "@/row/types.ts";
 import { useRowKey } from "@/fetcher/mod.ts";
-import { KEY } from "./constants.ts";
+import { KEY } from "../constants.ts";
+import { RowsSelectCommand } from "../store.ts";
 
 export const SelectorCell = ({
   store,

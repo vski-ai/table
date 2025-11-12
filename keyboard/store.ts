@@ -1,6 +1,5 @@
 import { Signal, signal } from "@preact/signals";
 import { Command, TableState } from "@/store/mod.ts";
-import { RowData } from "@/row/types.ts";
 
 type KeyboardState = {
   altKey: Signal<boolean>;

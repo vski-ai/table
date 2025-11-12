@@ -7,7 +7,7 @@ import { addMenuItems } from "@/contextmenu/addMenuItems.ts";
 import {
   bottomStickRowsRenderCallback,
   topStickRowsRenderCallback,
-} from "./StickyRows.tsx";
+} from "./components/StickyRows.tsx";
 import { Stick, StickBottom, StickReset, StickTop, UnpinRow } from "./menu.tsx";
 import {
   StickyBottomRowsSetCommand,

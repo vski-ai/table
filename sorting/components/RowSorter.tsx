@@ -3,12 +3,13 @@ import ArrowUpIcon from "lucide-react/dist/esm/icons/arrow-up-1-0.js";
 import ArrowDownUpIcon from "lucide-react/dist/esm/icons/arrow-down-up.js";
 
 import { TableStore } from "@/store/mod.ts";
-import { SortState } from "./types.ts";
-import { ColumnRendererCallback } from "@/plugin/types.ts";
-import { SortSetCommand } from "./store.ts";
 import { cn } from "@/common/className.ts";
-import { useCallback, useEffect } from "preact/hooks";
+
+import { ColumnRendererCallback } from "@/plugin/types.ts";
+import { useCallback } from "preact/hooks";
 import { useSignal } from "@preact/signals";
+import { SortSetCommand } from "../store.ts";
+import { SortState } from "../types.ts";
 
 interface RowSorterProps {
   column: string;

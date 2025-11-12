@@ -1,5 +1,5 @@
-export * from "./useTableKb.ts";
-export * from "./useCellKb.ts";
+export * from "./hooks/useTableKb.ts";
+export * from "./hooks/useCellKb.ts";
 
 import * as KeyboardStore from "./store.ts";
 

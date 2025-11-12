@@ -3,9 +3,9 @@ import { TableStore } from "@/store/types.ts";
 import { useOrderedColumns } from "@/columns/mod.ts";
 import { usePlugins } from "@/plugin/usePlugins.ts";
 import { useRowHeights, useRowKey } from "@/fetcher/mod.ts";
-import { RowData } from "./types.ts";
-import { RowLoading } from "./RowLoading.tsx";
 import { Cell } from "@/cell/mod.ts";
+import { RowLoading } from "./RowLoading.tsx";
+import { RowData } from "../types.ts";
 
 interface RowProps {
   row: RowData;

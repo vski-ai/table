@@ -1,7 +1,7 @@
 import { ITablePlugin, PluginInitCallback } from "@/plugin/mod.ts";
-import { ColumnWidthCommand } from "../columns/store.ts";
-import { selectorCellRenderCallback } from "./SelectorCell.tsx";
-import { selectorColumnRenderCallback } from "./SelectorColumn.tsx";
+import { ColumnWidthCommand } from "@/columns/store.ts";
+import { selectorCellRenderCallback } from "./components/SelectorCell.tsx";
+import { selectorColumnRenderCallback } from "./components/SelectorColumn.tsx";
 import { KEY } from "./constants.ts";
 import * as store from "./store.ts";
 

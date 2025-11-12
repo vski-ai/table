@@ -5,7 +5,7 @@ import { useVariableVirtualizer } from "./useVariableVirtualizer.ts";
 
 import { TableStore } from "@/store/types.ts";
 import { RowData } from "@/row/types.ts";
-import { DataLoadCallback } from "./types.ts";
+import { DataLoadCallback } from "../types.ts";
 
 import { useLoader } from "./useLoader.ts";
 import { useRowKey } from "./useRowKey.ts";

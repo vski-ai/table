@@ -4,8 +4,8 @@ import { CellRendererCallback } from "@/plugin/mod.ts";
 import { TableStore } from "@/store/types.ts";
 import { RowData } from "@/row/types.ts";
 import { useRowHeights, useRowKey } from "@/fetcher/mod.ts";
-import { RowResizeHandle } from "./RowResizeHandle.tsx";
-import { RowHeightCommand } from "./store.ts";
+import { RowResizeHandle } from "../RowResizeHandle.tsx";
+import { RowHeightCommand } from "../store.ts";
 import { useSignal } from "@preact/signals";
 
 export const EnumeratorCell = ({

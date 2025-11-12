@@ -3,9 +3,9 @@ import { useCallback, useEffect, useRef } from "preact/hooks";
 import { TableStore } from "@/store/mod.ts";
 import { ColumnSetCommand } from "@/columns/store.ts";
 import { RowData } from "@/row/types.ts";
-import { DataLoadCallback } from "./types.ts";
-import { usePlugins } from "../plugin/usePlugins.ts";
-import { TableMetaCommnand } from "./store.ts";
+import { DataLoadCallback } from "../types.ts";
+import { usePlugins } from "@/plugin/usePlugins.ts";
+import { TableMetaCommnand } from "../store.ts";
 
 interface LoaderProps {
   onDataLoad: DataLoadCallback;
