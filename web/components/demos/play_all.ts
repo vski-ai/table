@@ -10,7 +10,7 @@ export async function playAll(
   if (!scrollContainer.current) {
     return;
   }
-  start();
+  
   store.state.columnWidths.value = {
     $$enumerator$$: 50,
   };
@@ -18,11 +18,10 @@ export async function playAll(
   store.state.stickyColumns.value = {};
   store.state.columnStyles.value = {};
   store.state.rowStyles.value = {};
-  store.state.cellDataTypes.value = {};
   store.state.columnDataType.value = {};
   store.state.columnDataTypeOptions.value = {};
   delay(1000);
-
+  //start();
   // Scroll to the end
   const maxScroll = scrollContainer.current.scrollWidth -
     scrollContainer.current.clientWidth;
