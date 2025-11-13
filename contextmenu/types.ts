@@ -1,4 +1,4 @@
-import { TableStore } from "../store/types.ts";
+import { TableStore } from "@/module/store/types.ts";
 import { ComponentChildren } from "preact";
 
 export interface ContextMenuItem {

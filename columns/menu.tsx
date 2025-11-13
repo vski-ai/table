@@ -1,9 +1,12 @@
 import { ContextMenuItem, MenuContext } from "@/contextmenu/types.ts";
 import RightIcon from "lucide-react/dist/esm/icons/panel-right.js";
 import LeftIcon from "lucide-react/dist/esm/icons/panel-left.js";
-import UnPin from "lucide-react/dist/esm/icons/pin-off.js";
-import Pin from "lucide-react/dist/esm/icons/pin.js";
-import { ColumnStickCommand } from "./store.ts";
+import UnpinIcon from "lucide-react/dist/esm/icons/pin-off.js";
+import PinIcon from "lucide-react/dist/esm/icons/pin.js";
+import HideIcon from "lucide-react/dist/esm/icons/eye-off.js";
+import CogIcon from "lucide-react/dist/esm/icons/cog.js";
+
+import { ColumnStickCommand, ColumnVisibilityCommand } from "./store.ts";
 
 const STICKY_COLUMN = "sticky_column";
 
@@ -25,7 +28,7 @@ export const Stick: ContextMenuItem = {
   label({ column }) {
     return (
       <>
-        <Pin />
+        <PinIcon />
         Pin
         <span class="badge badge-xs badge-accent absolute right-3">
           {column}
@@ -90,7 +93,7 @@ const unpinVisibility = ({ store, column }: MenuContext) =>
 const unpinLabel = ({ column }: MenuContext) => {
   return (
     <>
-      <UnPin />
+      <UnpinIcon />
       Unpin
       <span class="badge badge-xs badge-accent">
         {column}
@@ -120,7 +123,7 @@ export const StickReset: ContextMenuItem = {
 };
 
 export const UnpinColumn: ContextMenuItem = {
-  menu: "main",
+  menu: "unpin-column",
   order: Infinity,
   title: (ctx) => (
     <span>
@@ -134,3 +137,53 @@ export const UnpinColumn: ContextMenuItem = {
   label: unpinLabel,
   action: unpinAction,
 };
+
+export const HideColumn: ContextMenuItem = {
+  menu: "hide-column",
+  order: Infinity,
+  visibility: ({ store, column }: MenuContext) => true,
+  label() {
+    return (
+      <>
+        <HideIcon />
+        Hide
+      </>
+    );
+  },
+  action({ store, column }: MenuContext) {
+    if (!column) return;
+    store.dispatch<ColumnVisibilityCommand>({
+      type: "COLUMN_VISIBILITY_SET",
+      payload: {
+        [column]: false,
+      },
+    });
+  },
+};
+
+export const ManageColumns: ContextMenuItem = {
+  menu: "manage-columns",
+  order: Infinity,
+  visibility: ({ store, column }: MenuContext) => true,
+  label() {
+    return (
+      <>
+        <CogIcon />
+        Columns
+      </>
+    );
+  },
+  action({ store, column }: MenuContext) {
+    store.state.columns.manager_dialog.value = true;
+  },
+};
+
+export const MenuItems = [
+  Stick,
+  StickLeft,
+  StickReset,
+  StickRight,
+  UnpinColumn,
+  HideColumn,
+  ManageColumns,
+];

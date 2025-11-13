@@ -1,26 +1,17 @@
 import { ITableModule, ModuleInitCallback } from "@/module/types.ts";
 import { addMenuItems } from "@/contextmenu/addMenuItems.ts";
-import {
-  Stick,
-  StickLeft,
-  StickReset,
-  StickRight,
-  UnpinColumn,
-} from "./menu.tsx";
+import { renderColumnsManager } from "./components/ColumnsManager.tsx";
+import { MenuItems } from "./menu.tsx";
 import * as store from "./store.ts";
 
 const onInit: ModuleInitCallback = ({
   store,
+  beforetable,
 }) => {
+  beforetable.use(-1, renderColumnsManager);
   addMenuItems({
     store,
-    items: [
-      Stick,
-      StickLeft,
-      StickRight,
-      StickReset,
-      UnpinColumn,
-    ],
+    items: MenuItems,
   });
 };
 
