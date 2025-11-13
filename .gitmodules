@@ -1,0 +1,3 @@
+[submodule "enterprise"]
+	path = enterprise
+	url = ssh://git@git.vski.sh/x/table-modules.git
