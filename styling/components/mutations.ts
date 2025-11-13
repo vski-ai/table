@@ -78,11 +78,12 @@ export function getStyle(
   const { store } = ctx;
   switch (ctx.scope) {
     case "column":
-      return store.state.columnStyles.value[ctx.column ?? -1] ?? {};
+      return store.state.styles.columns.value[ctx.column ?? -1] ?? {};
     case "row":
-      return store.state.rowStyles.value[ctx.row ?? -1] ?? {};
+      return store.state.styles.rows.value[ctx.row ?? -1] ?? {};
     case "cell":
-      return store.state.cellStyles.value[ctx.row ?? -1]?.[ctx.column ?? -1] ??
+      return store.state.styles.cells.value[ctx.row ?? -1]
+        ?.[ctx.column ?? -1] ??
         {};
     default:
       return {};

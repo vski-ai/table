@@ -25,5 +25,6 @@ export function App() {
 }
 
 if (typeof document !== "undefined") {
+  localStorage.clear();
   hydrate(<App />, document.getElementById("app")!);
 }

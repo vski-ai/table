@@ -21,10 +21,10 @@ export const Stick: ContextMenuItem = {
   ),
   visibility: ({ placement, store, rowId }) =>
     placement === "body" && (
-      !(store.state.stickyTopRows.value.some((r: RowData) =>
+      !(store.state.rows.sticky_top.value.some((r: RowData) =>
         r.id.toString() === rowId
       ) ||
-        store.state.stickyBottomRows.value.some((r: RowData) =>
+        store.state.rows.sticky_bottom.value.some((r: RowData) =>
           r.id.toString() === rowId
         ))
     ),
@@ -54,7 +54,7 @@ export const StickTop: ContextMenuItem = {
   action({ store, rowId }) {
     const row = store.getRow(rowId!);
     if (!row) return;
-    const currentSticky = store.state.stickyTopRows.value;
+    const currentSticky = store.state.rows.sticky_top.value;
     store.dispatch<StickyTopRowsSetCommand>({
       type: "STICKY_TOP_ROWS_SET",
       payload: [...currentSticky, row] as RowData[],
@@ -78,7 +78,7 @@ export const StickBottom: ContextMenuItem = {
   action({ store, rowId }) {
     const row = store.getRow(rowId!);
     if (!row) return;
-    const currentSticky = store.state.stickyBottomRows.value;
+    const currentSticky = store.state.rows.sticky_bottom.value;
     store.dispatch<StickyBottomRowsSetCommand>({
       type: "STICKY_BOTTOM_ROWS_SET",
       payload: [...currentSticky, row] as RowData[],
@@ -89,8 +89,10 @@ export const StickBottom: ContextMenuItem = {
 const unpinVisibility = ({ store, rowId }: MenuContext) => {
   const row = store.getRow(rowId!);
   return !!row &&
-    (store.state.stickyTopRows.value.some((r: RowData) => r.id === row.id) ||
-      store.state.stickyBottomRows.value.some((r: RowData) => r.id === row.id));
+    (store.state.rows.sticky_top.value.some((r: RowData) => r.id === row.id) ||
+      store.state.rows.sticky_bottom.value.some((r: RowData) =>
+        r.id === row.id
+      ));
 };
 
 const unpinLabel = () => {

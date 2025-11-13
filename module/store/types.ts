@@ -27,3 +27,8 @@ export interface TableStore {
   dispatch: <T>(command: T) => void;
   scrollContainerRef: MutableRef<any>;
 }
+
+export type InferPersist<T extends Record<string, any>> = Record<
+  keyof T,
+  Partial<Record<keyof T[keyof T], any>>
+>;

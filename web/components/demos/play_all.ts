@@ -14,10 +14,10 @@ export async function playAll(
   store.state.columns.widths.value = {
     $$enumerator$$: 50,
   };
-  store.state.rowHeights.value = {};
+  store.state.rows.heights.value = {};
   store.state.columns.sticky.value = {};
-  store.state.columnStyles.value = {};
-  store.state.rowStyles.value = {};
+  store.state.styles.columns.value = {};
+  store.state.styles.rows.value = {};
   store.state.data_type.column.value = {};
   store.state.data_type.options.value = {};
   delay(1000);
@@ -71,15 +71,15 @@ export async function playAll(
   };
 
   await delay(1000);
-  store.state.columnStyles.value = {
-    ...store.state.columnStyles.value,
+  store.state.styles.columns.value = {
+    ...store.state.styles.columns.value,
     Total: {
       "font-style": "italic",
     },
   };
   await delay(1000);
-  store.state.columnStyles.value = {
-    ...store.state.columnStyles.value,
+  store.state.styles.columns.value = {
+    ...store.state.styles.columns.value,
     Total: {
       "font-weight": "bold",
     },
@@ -102,8 +102,8 @@ export async function playAll(
   };
 
   await delay(1000);
-  store.state.columnStyles.value = {
-    ...store.state.columnStyles.value,
+  store.state.styles.columns.value = {
+    ...store.state.styles.columns.value,
     "Order Date": {
       "font-style": "italic",
     },
@@ -111,8 +111,8 @@ export async function playAll(
 
   await delay(1000);
 
-  store.state.columnStyles.value = {
-    ...store.state.columnStyles.value,
+  store.state.styles.columns.value = {
+    ...store.state.styles.columns.value,
     "Order Date": {
       "font-style": "italic",
     },
@@ -120,8 +120,8 @@ export async function playAll(
 
   await delay(1000);
 
-  store.state.columnStyles.value = {
-    ...store.state.columnStyles.value,
+  store.state.styles.columns.value = {
+    ...store.state.styles.columns.value,
     "Product Name": {
       "font-weight": "bold",
     },
@@ -164,8 +164,8 @@ export async function playAll(
 
   await delay(1000);
 
-  store.state.rowStyles.value = {
-    ...store.state.rowStyles.value,
+  store.state.styles.rows.value = {
+    ...store.state.styles.rows.value,
     "summary-123": {
       "color": "#ff9200",
       "text-align": "left",

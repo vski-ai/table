@@ -14,7 +14,7 @@ export function useRowHeights({
   height = 64,
   rowKey = "id",
 }: RowHeightsProps) {
-  const rowHeights = store.state.rowHeights.value;
+  const rowHeights = store.state.rows.heights.value;
 
   return useCallback((row: RowData | null) => {
     if (!row) {

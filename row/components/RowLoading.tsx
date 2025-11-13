@@ -16,7 +16,7 @@ export const RowLoading = (
       {}
       {[...left, ...columns, ...right].map(() => (
         <td class="vt-cell placeholder" style={{ height: rowHeight }}>
-          <div class="vt-loading p-4 m-2"></div>
+          <div class="vt-loading p-2 m-1 rounded-none"></div>
         </td>
       ))}
     </tr>

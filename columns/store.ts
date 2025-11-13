@@ -1,5 +1,5 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/module/mod.ts";
+import { Command, InferPersist, TableState } from "@/module/mod.ts";
 
 type ColumnsState = {
   columns: {
@@ -9,6 +9,7 @@ type ColumnsState = {
     widths: Signal<Record<string, number>>;
     sticky: Signal<Record<string, StickyPosition>>;
     resizing_column: Signal<{ column: string; width: number } | null>;
+    header_height: Signal<number>;
   };
 };
 
@@ -49,19 +50,20 @@ export type ColumnCommandType =
   | ColumnWidthCommand
   | ColumnVisibilityCommand;
 
-export function state<T>(init: any): ColumnsState {
+export function state<T>(persist: InferPersist<ColumnsState>): ColumnsState {
   const all = signal<string[]>([]);
-  const ordered = signal<string[]>(init?.columns?.ordered || []);
+  const ordered = signal<string[]>(persist?.columns?.ordered || []);
   const visibility = signal<Record<string, boolean>>(
-    init?.columns?.visibility || {
+    persist?.columns?.visibility || {
       id: false,
     },
   );
-  const widths = signal(init?.columns?.widths || {});
+  const widths = signal(persist?.columns?.widths || {});
   const sticky = signal<Record<string, StickyPosition>>(
-    init?.columns.sticky || {},
+    persist?.columns.sticky || {},
   );
   const resizing_column = signal(null);
+  const header_height = signal<number>(50);
   return {
     columns: {
       all,
@@ -70,11 +72,12 @@ export function state<T>(init: any): ColumnsState {
       widths,
       sticky,
       resizing_column,
+      header_height,
     },
   };
 }
 
-export function persist(state: TableState) {
+export function persist(state: TableState): InferPersist<ColumnsState> {
   return {
     columns: {
       ordered: state.columns.ordered.value,

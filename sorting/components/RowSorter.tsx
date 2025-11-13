@@ -20,7 +20,7 @@ export const RowSorter = ({
   column,
   store,
 }: RowSorterProps) => {
-  const meta = store.state.tableMeta.value;
+  const meta = store.state.fetcher.table_meta.value;
   if (!meta?.sortableAll && !meta?.sortableColumns?.includes(column)) {
     return null;
   }
@@ -59,7 +59,7 @@ export const RowSorter = ({
     isLoading.value = true;
 
     const endIsLoading = () => {
-      if (!store.state.loading.value) {
+      if (!store.state.fetcher.loading.value) {
         isLoading.value = false;
         return;
       }

@@ -22,7 +22,7 @@ export const useLoader = ({
   const total = useSignal(0);
   const isLoading = useSignal(false);
   const loadedRanges = useRef<{ start: number; end: number }[]>([]);
-  const reloadKey = store.state.dataLoadKey;
+  const reloadKey = store.state.fetcher.reload_key;
   const lastReloadKey = useRef(reloadKey.value);
   const plugins = useAddons({ store });
 
@@ -30,7 +30,7 @@ export const useLoader = ({
     if (limit <= 0 || isLoading.value) return;
 
     isLoading.value = true;
-    store.state.loading.value = true;
+    store.state.fetcher.loading.value = true;
     try {
       const options = await plugins.beforeLoad({ offset, limit, store });
       const res = await onDataLoad(options);
@@ -59,7 +59,7 @@ export const useLoader = ({
         }
       }
       data.value = finalData;
-      store.state.currentData = finalData.filter((r) => !!r);
+      store.state.fetcher.current_data = finalData.filter((r) => !!r);
       // Merge ranges
       const newRange = { start: offset, end: offset + limit };
       const mergedRanges: { start: number; end: number }[] = [];
@@ -81,7 +81,7 @@ export const useLoader = ({
       console.error("Failed to load data", error);
     } finally {
       isLoading.value = false;
-      store.state.loading.value = false;
+      store.state.fetcher.loading.value = false;
     }
   }, [
     onDataLoad,
@@ -141,7 +141,7 @@ export const useLoader = ({
   }, [visibleRows, load, reloadKey.value]);
 
   if (data.value.length) {
-    store.state.isInitialized.value = true;
+    store.state.fetcher.is_initialized.value = true;
   }
   return { data, total, isLoading };
 };

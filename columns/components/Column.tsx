@@ -81,7 +81,8 @@ export function Column(
     <th
       data-column-name={column}
       style={{
-        width: `${width}px`,
+        height: store.state.columns?.header_height?.value ?? 42,
+        width,
         left,
         right,
         zIndex: isSticky ? 100 : 10,

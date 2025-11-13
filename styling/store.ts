@@ -1,18 +1,20 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/module/mod.ts";
+import { Command, InferPersist, TableState } from "@/module/mod.ts";
 import { CellStyle } from "./types.ts";
 
 type CSSStyleObject = Record<string, string | undefined>;
 
+type StylesStore = {
+  styles: {
+    table: Signal<CSSStyleObject>;
+    columns: Signal<Record<string, CSSStyleObject>>;
+    rows: Signal<Record<string, CSSStyleObject>>;
+    cells: Signal<Record<string, Record<string, CSSStyleObject>>>;
+  };
+};
+
 declare module "@/module/types.ts" {
-  interface TableState {
-    tableStyles: Signal<CSSStyleObject>;
-    columnStyles: Signal<Record<string, CSSStyleObject>>;
-    rowStyles: Signal<Record<string, CSSStyleObject>>;
-    cellStyles: Signal<
-      Record<string, Record<string, CSSStyleObject>>
-    >;
-  }
+  interface TableState extends StylesStore {}
 }
 
 const TABLE_STYLE_SET = "TABLE_STYLE_SET";
@@ -78,61 +80,65 @@ export type StylingCommandType =
   | ColumnStyleResetCommand
   | CellStyleResetCommand;
 
-export function state(init: Record<string, any> | null) {
-  const tableStyles = signal(init?.tableStyles ?? {});
-  const columnStyles = signal(init?.columnStyles ?? {});
-  const rowStyles = signal(init?.rowStyles ?? {});
-  const cellStyles = signal(init?.cellStyles ?? {});
+export function state(persist: InferPersist<StylesStore>): StylesStore {
+  const table = signal(persist?.styles.table ?? {});
+  const columns = signal(persist?.styles.columns ?? {});
+  const rows = signal(persist?.styles.rows ?? {});
+  const cells = signal(persist?.styles.cells ?? {});
   return {
-    tableStyles,
-    columnStyles,
-    rowStyles,
-    cellStyles,
+    styles: {
+      table,
+      columns,
+      rows,
+      cells,
+    },
   };
 }
 
-export function persist(state: TableState) {
+export function persist(state: TableState): InferPersist<StylesStore> {
   return {
-    tableStyles: state.tableStyles.value,
-    columnStyles: state.columnStyles.value,
-    rowStyles: state.rowStyles.value,
-    cellStyles: state.cellStyles.value,
+    styles: {
+      table: state.styles.table.value,
+      columns: state.styles.columns.value,
+      rows: state.styles.rows.value,
+      cells: state.styles.cells.value,
+    },
   };
 }
 
 export function mutate(state: TableState, command: StylingCommandType) {
   switch (command.type) {
     case "TABLE_STYLE_SET":
-      state.tableStyles.value = {
-        ...state.tableStyles.value,
+      state.styles.table.value = {
+        ...state.styles.table.value,
         ...command.payload,
       };
       break;
     case "ROW_STYLE_SET":
-      state.rowStyles.value = {
-        ...state.rowStyles.value,
+      state.styles.rows.value = {
+        ...state.styles.rows.value,
         [command.payload.key]: {
-          ...state.rowStyles.value[command.payload.key],
+          ...state.styles.rows.value[command.payload.key],
           ...command.payload.style,
         },
       };
       break;
     case "COLUMN_STYLE_SET":
-      state.columnStyles.value = {
-        ...state.columnStyles.value,
+      state.styles.columns.value = {
+        ...state.styles.columns.value,
         [command.payload.key]: {
-          ...state.columnStyles.value[command.payload.key],
+          ...state.styles.columns.value[command.payload.key],
           ...command.payload.style,
         },
       };
       break;
     case "CELL_STYLE_SET":
-      state.cellStyles.value = {
-        ...state.cellStyles.value,
+      state.styles.cells.value = {
+        ...state.styles.cells.value,
         [command.payload.rowKey]: {
-          ...state.cellStyles.value[command.payload.rowKey],
+          ...state.styles.cells.value[command.payload.rowKey],
           [command.payload.columnId]: {
-            ...state.cellStyles.value[command.payload.rowKey]?.[
+            ...state.styles.cells.value[command.payload.rowKey]?.[
               command.payload.columnId
             ],
             ...command.payload.style,
@@ -141,26 +147,30 @@ export function mutate(state: TableState, command: StylingCommandType) {
       };
       break;
     case "TABLE_STYLE_RESET":
-      state.tableStyles.value = {};
+      state.styles.table.value = {};
       break;
     case "ROW_STYLE_RESET":
       {
-        const { [command.payload.key]: _, ...rest } = state.rowStyles.value;
-        state.rowStyles.value = rest;
+        const { [command.payload.key]: _, ...rest } = state.styles.rows.value;
+        state.styles.rows.value = rest;
       }
       break;
     case "COLUMN_STYLE_RESET":
       {
-        const { [command.payload.key]: _, ...rest } = state.columnStyles.value;
-        state.columnStyles.value = rest;
+        const { [command.payload.key]: _, ...rest } =
+          state.styles.columns.value;
+        state.styles.columns.value = rest;
       }
       break;
     case "CELL_STYLE_RESET":
       {
-        const { [command.payload.rowKey]: row, ...rest } = state.cellStyles
+        const { [command.payload.rowKey]: row, ...rest } = state.styles.cells
           .value;
         const { [command.payload.columnId]: _, ...restRow } = row;
-        state.cellStyles.value = { ...rest, [command.payload.rowKey]: restRow };
+        state.styles.cells.value = {
+          ...rest,
+          [command.payload.rowKey]: restRow,
+        };
       }
       break;
   }

@@ -1,6 +1,6 @@
 @layer components {
   .vt-col {
-    @apply sticky top-0 z-10 border-0 bg-gray-100 dark:bg-gray-800
+    @apply p-0 sticky top-0 z-10 border-0 bg-gray-100 dark:bg-gray-800
       text-base-content after:border-r-1 after:border-gray-300
       dark:after:border-gray-700;
 
@@ -34,13 +34,16 @@
       @apply absolute -right-2 top-0 h-full w-4 cursor-col-resize select-none
         bg-transparent;
     }
+    input {
+      outline: none;
+    }
   }
   .vt-header {
     @apply border-b border-b-gray-400 dark:border-b-gray-900 shadow
       dark:shadow-lg;
 
     .vt-header-skeleton {
-      @apply skeleton h-8;
+      @apply skeleton h-8 rounded-none;
     }
   }
 }

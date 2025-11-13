@@ -18,7 +18,7 @@ export function StyleFormat({ store }: StyleFormatProps) {
   const styles: string[] = [];
   const root = ROOT_SEL(store.state.tableId!);
 
-  const cols = store.state.columnStyles.value;
+  const cols = store.state.styles.columns.value;
   for (const column in cols) {
     const col = cols[column];
     let style = "";
@@ -29,7 +29,7 @@ export function StyleFormat({ store }: StyleFormatProps) {
     styles.push(style);
   }
 
-  const rows = store.state.rowStyles.value;
+  const rows = store.state.styles.rows.value;
   for (const rowId in rows) {
     const row = rows[rowId];
     let style = "";
@@ -40,7 +40,7 @@ export function StyleFormat({ store }: StyleFormatProps) {
     styles.push(style);
   }
 
-  const cells = store.state.cellStyles.value;
+  const cells = store.state.styles.cells.value;
   for (const rowId in cells) {
     const row = cells[rowId];
     for (const column in row) {

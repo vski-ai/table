@@ -1,6 +1,6 @@
 @layer components {
   .vt-sorter {
-    @apply btn btn-xs btn-ghost w-8 h-8 rounded-lg transition-none;
+    @apply btn btn-xs btn-ghost ml-1 w-8 h-8 rounded-none transition-none;
 
     &.enabled {
       @apply bg-sky-200/50 dark:bg-gray-900;

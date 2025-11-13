@@ -23,7 +23,7 @@ export const GroupSorter = ({
   row,
   onChange,
 }: RowSorterProps) => {
-  const meta = store.state.tableMeta.value;
+  const meta = store.state.fetcher.table_meta.value;
   if (
     !meta.sortableGroupLevelAll &&
     !meta?.sortableGroupLevelColumns?.[row.$group_level ?? 0]

@@ -1,17 +1,20 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/module/mod.ts";
+import { Command, InferPersist, TableState } from "@/module/mod.ts";
 import { TableMeta } from "./types.ts";
 import { RowData } from "@/row/types.ts";
 
-declare module "@/module/types.ts" {
-  interface TableState {
+type FetcherState = {
+  fetcher: {
     loading: Signal<boolean>;
-    isInitialized: Signal<boolean>;
-    dataLoadKey: Signal<number>;
-    tableMeta: Signal<TableMeta>;
-    rowHeights: Signal<Record<string, number>>;
-    currentData: RowData[];
-  }
+    is_initialized: Signal<boolean>;
+    table_meta: Signal<TableMeta>;
+    reload_key: Signal<number>;
+    current_data: RowData[];
+  };
+};
+
+declare module "@/module/types.ts" {
+  interface TableState extends FetcherState {}
   interface TableStore {
     shouldReload: () => void;
     getRow: (id: string | number) => RowData;
@@ -22,28 +25,35 @@ const TABLE_META_SET = "TABLE_META_SET";
 
 export type TableMetaCommnand = Command<typeof TABLE_META_SET, TableMeta>;
 
-export function state(init: Record<string, any> | null) {
+export function state(init: InferPersist<FetcherState>): FetcherState {
+  const loading = signal(true);
+  const is_initialized = signal(false);
+  const table_meta = signal(init?.fetcher?.table_meta ?? {});
+  const reload_key = signal(0);
+
   return {
-    tableMeta: signal(init?.tableMeta ?? {}),
-    dataLoadKey: signal(0),
-    loading: signal(true),
-    isInitialized: signal(false),
-    rowHeights: signal(init?.rowHeights ?? {}),
-    currentData: [],
+    fetcher: {
+      loading,
+      is_initialized,
+      table_meta,
+      reload_key,
+      current_data: [],
+    },
   };
 }
 
-export function persist(state: TableState) {
+export function persist(state: TableState): InferPersist<FetcherState> {
   return {
-    tableMeta: state.tableMeta.value,
-    rowHeights: state.rowHeights.value,
+    fetcher: {
+      table_meta: state.fetcher.table_meta.value,
+    },
   };
 }
 
 export function mutate(state: TableState, command: TableMetaCommnand) {
   switch (command.type) {
     case "TABLE_META_SET": {
-      state.tableMeta.value = command.payload;
+      state.fetcher.table_meta.value = command.payload;
       break;
     }
   }
@@ -52,10 +62,10 @@ export function mutate(state: TableState, command: TableMetaCommnand) {
 export function methods(state: TableState) {
   return {
     shouldReload() {
-      state.dataLoadKey.value = new Date().getTime();
+      state.fetcher.reload_key.value = new Date().getTime();
     },
     getRow(id: string | number) {
-      return state.currentData.find((row) =>
+      return state.fetcher.current_data.find((row) =>
         row?.id?.toString() === id?.toString()
       );
     },

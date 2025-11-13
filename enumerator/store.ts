@@ -34,8 +34,8 @@ export function mutate(state: TableState, command: RowCommand) {
       state.resizingRow.value = command.payload;
       break;
     case "ROW_HEIGHTS_SET":
-      state.rowHeights.value = {
-        ...state.rowHeights.value,
+      state.rows.heights.value = {
+        ...state.rows.heights.value,
         ...command.payload,
       };
       break;

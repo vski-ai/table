@@ -9,9 +9,9 @@ interface StickyRowsProps {
 }
 
 export const StickyTopRows = ({ store }: StickyRowsProps) => {
-  const rows = store.state.stickyTopRows.value;
+  const rows = store.state.rows.sticky_top.value;
 
-  if (!rows.length || !store.state.currentData.length) {
+  if (!rows.length || !store.state.fetcher.current_data.length) {
     return null;
   }
 
@@ -46,9 +46,9 @@ export const topStickRowsRenderCallback: CommonRendererCallback = (
 };
 
 export const StickyBottomRows = ({ store }: StickyRowsProps) => {
-  const rows = store.state.stickyBottomRows.value;
+  const rows = store.state.rows.sticky_bottom.value;
 
-  if (!rows.length || !store.state.isInitialized.value) {
+  if (!rows.length || !store.state.fetcher.is_initialized.value) {
     return null;
   }
 
