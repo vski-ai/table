@@ -25,18 +25,6 @@ const TABLE_STYLE_RESET = "TABLE_STYLE_RESET";
 const ROW_STYLE_RESET = "ROW_STYLE_RESET";
 const COLUMN_STYLE_RESET = "COLUMN_STYLE_RESET";
 const CELL_STYLE_RESET = "CELL_STYLE_RESET";
-const CELL_DATATYPES_SET = "CELL_DATATYPE_SET";
-const CELL_EDITING_SET = "CELL_EDITING_SET";
-
-export type CellDatatypeSetCommand = Command<
-  typeof CELL_DATATYPES_SET,
-  Record<string, string>
->;
-
-export type CellEditingSetCommand = Command<
-  typeof CELL_EDITING_SET,
-  Record<string, boolean>
->;
 
 export type TableStyleSetCommand = Command<
   typeof TABLE_STYLE_SET,
@@ -69,8 +57,6 @@ export type CellStyleResetCommand = Command<
 >;
 
 export type StylingCommandType =
-  | CellEditingSetCommand
-  | CellDatatypeSetCommand
   | TableStyleSetCommand
   | RowStyleSetCommand
   | ColumnStyleSetCommand

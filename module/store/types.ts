@@ -3,7 +3,7 @@ import { MutableRef } from "preact/hooks";
 
 export type StoreModule = {
   state: (
-    init: Record<string, unknown> | null,
+    init: any,
   ) => { [key: string]: Signal<unknown> | unknown };
   persist: (state: TableState) => { [key: string]: unknown };
   mutate: (state: TableState, command: Command) => void;

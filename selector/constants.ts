@@ -1,1 +1,1 @@
-export const KEY = "$$selector$$";
+export const KEY = "__selector__";

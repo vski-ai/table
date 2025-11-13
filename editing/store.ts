@@ -1,15 +1,18 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/module/mod.ts";
-import { RowData } from "../row/types.ts";
+import { Command, InferPersist, TableState } from "@/module/mod.ts";
+import { RowData } from "@/row/types.ts";
 
 type GetCellValueOpts = { row: RowData; column: string };
+
+type EditingStore = {
+  editing: {
+    cell: Signal<Record<string, boolean>>;
+    rows: Signal<Record<string, RowData>>;
+  };
+};
+
 declare module "@/module/types.ts" {
-  interface TableState {
-    cellEditing: Signal<Record<string, boolean>>;
-    rowEdits: Signal<Record<string, RowData>>;
-    // we'll treat external edits differently, this should be in a separate module
-    rowAgentEdits: Signal<Record<string, RowData>>;
-  }
+  interface TableState extends EditingStore {}
   interface TableStore {
     getCurrentRowValue: ({ row }: { row: RowData }) => RowData;
     getCurrentCellValue: (opts: GetCellValueOpts) => string;
@@ -32,33 +35,30 @@ export type RowEditCommand = Command<
 
 export type EditingCommandType = CellEditingSetCommand | RowEditCommand;
 
-export function state(init: Record<string, any> | null) {
-  const cellDataTypes = signal(init?.cellDataTypes ?? {});
-  const rowEdits = signal(init?.rowEdits ?? {});
-  const rowAgentEdits = signal({});
-  const cellEditing = signal({});
+export function state(persist: InferPersist<EditingStore>): EditingStore {
+  const cell = signal({});
+  const rows = signal(persist?.editing?.rows ?? {});
+
   return {
-    cellDataTypes,
-    cellEditing,
-    rowAgentEdits,
-    rowEdits,
+    editing: {
+      cell,
+      rows,
+    },
   };
 }
 
-export function persist(state: TableState) {
-  return {
-    // rowEdits: state.rowEdits.value
-  };
+export function persist(_: TableState) {
+  return {};
 }
 
 export function mutate(state: TableState, command: EditingCommandType) {
   switch (command.type) {
     case "CELL_EDITING_SET":
-      state.cellEditing.value = command.payload;
+      state.editing.cell.value = command.payload;
       break;
     case "ROW_EDIT_UPDATE":
-      state.rowEdits.value = {
-        ...state.rowEdits.value,
+      state.editing.rows.value = {
+        ...state.editing.rows.value,
         [command.payload.id]: command.payload,
       };
       break;
@@ -68,17 +68,17 @@ export function mutate(state: TableState, command: EditingCommandType) {
 export function methods(state: TableState) {
   return {
     getCurrentCellValue({ row, column }: GetCellValueOpts) {
-      return state.rowEdits.value[row.id]?.[column] ?? row[column];
+      return state.editing.rows.value[row.id]?.[column] ?? row[column];
     },
     getCurrentRowValue({ row }: { row: RowData }) {
-      return state.rowEdits.value[row.id] ?? row;
+      return state.editing.rows.value[row.id] ?? row;
     },
     isCellModified({ row, column }: GetCellValueOpts) {
-      const edited = state.rowEdits.value[row.id]?.[column];
+      const edited = state.editing.rows.value[row.id]?.[column];
       if (!edited) {
         return false;
       }
-      return state.rowEdits.value[row.id]?.[column] !== row[column];
+      return state.editing.rows.value[row.id]?.[column] !== row[column];
     },
   };
 }

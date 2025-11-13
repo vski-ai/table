@@ -22,7 +22,7 @@ export function useAutoFocus(
     }
     ref.current?.focus();
     const onScroll = () => {
-      store.state.cellEditing.value = {};
+      store.state.editing.cell.value = {};
     };
     store.scrollContainerRef.current?.addEventListener("scroll", onScroll);
     return () => {

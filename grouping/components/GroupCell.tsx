@@ -33,9 +33,9 @@ export const GroupCell = ({
 
   const key = "$group_by";
   const stickyColumns = useStickyColOffset({ store });
-  const levels = store.state.expandedLevels;
-  const groupby = store.state.fetcher.table_meta.value?.groupBy || [];
-  const nextColInOrder = groupby.at(groupby.indexOf(row.$group_by!) + 1); // because of grouping it's a header of the next level
+  const levels = store.state.grouping.expanded;
+  const group_by = store.state.fetcher.table_meta.value?.group_by || [];
+  const nextColInOrder = group_by.at(group_by.indexOf(row.$group_by!) + 1); // because of grouping it's a header of the next level
   const isStickyLeft = typeof stickyColumns.left[key] === "number";
 
   return (

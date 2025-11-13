@@ -17,7 +17,7 @@ export const SelectorCell = ({
   const rowKey = useRowKey({ store });
   const onSelectionChange = useCallback((e: Event) => {
     const checked = (e.target as HTMLInputElement).checked;
-    const currentSelectedRows = store.state.selectedRows.value;
+    const currentSelectedRows = store.state.selector.rows.value;
     if (checked) {
       store.dispatch<RowsSelectCommand>({
         type: "SELECTED_ROWS_SET",
@@ -31,7 +31,7 @@ export const SelectorCell = ({
     }
   }, [store, row]);
 
-  const isSelected = store.state.selectedRows.value.includes(row[rowKey]);
+  const isSelected = store.state.selector.rows.value.includes(row[rowKey]);
 
   return (
     <td

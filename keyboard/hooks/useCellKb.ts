@@ -14,7 +14,7 @@ export function useCellKb(
   { store, row, column }: CellKeyBindingsProps,
 ) {
   const key = store.getCellKey({ row, column });
-  const isEditing = !!store.state.cellEditing.value[key];
+  const isEditing = !!store.state.editing.cell.value[key];
 
   const setEditing = useCallback(() => {
     store.dispatch<CellEditingSetCommand>({
@@ -83,11 +83,11 @@ export function useCellKb(
   }, [isEditing]) as any;
 
   const onClick = useCallback(() => {
-    const values = Object.values(store.state.cellEditing.value);
+    const values = Object.values(store.state.editing.cell.value);
     if (values.length && values.every(Boolean)) {
       setEditing();
     }
-  }, [store.state.cellEditing.value]);
+  }, [store.state.editing.cell.value]);
 
   const focusTarget = useRef<HTMLTableCellElement>(null);
   const onBlur = useCallback((e: KeyboardEvent) => {

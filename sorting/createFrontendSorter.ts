@@ -22,7 +22,7 @@ const sortFn = (sorting: SortState) => (a: RowData, b: RowData) => {
  */
 const sortGroup = (data: RowData[], store: TableStore): RowData[] => {
   const sorting = store.state.sorting.value;
-  const groupSorting = store.state.groupSorting?.value ?? {};
+  const groupSorting = store.state.grouping?.sorting?.value ?? {};
 
   const roots = data.filter((row) => !row.$parent_id);
   const children: Record<string, RowData[]> = {};
@@ -69,7 +69,7 @@ export function createFrontendSorter() {
     store: TableStore;
   }): RowData[] {
     const sorting = store.state.sorting.value;
-    const groupSorting = store.state.groupSorting?.value ?? {};
+    const groupSorting = store.state.grouping?.sorting?.value ?? {};
     if (
       lastData === data &&
       lastSorting === sorting &&

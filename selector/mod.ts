@@ -15,7 +15,7 @@ const onInit: ModuleInitCallback = ({
   lefttablecells.use(1, selectorCellRenderCallback);
   rowclasses.use(1, ({ row, store, rowKey }) => {
     return [
-      store.state.selectedRows.value.includes(row?.[rowKey ?? ""]!)
+      store.state.selector.rows.value.includes(row?.[rowKey ?? ""]!)
         ? "selected"
         : "",
     ];

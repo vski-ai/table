@@ -1,11 +1,11 @@
 declare module "@/fetcher/types.ts" {
   interface TableMeta {
-    groupBy: string[];
-    sortableGroupLevelAll?: boolean;
-    sortableGroupLevelColumns?: string[][];
+    group_by?: string[];
+    group_sorting_all?: boolean;
+    group_sorting_level_columns?: string[][];
   }
   interface DataLoadOptions {
-    groupBy?: string[] | null;
+    group_by?: string[] | null;
   }
 }
 

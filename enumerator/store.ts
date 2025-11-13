@@ -2,10 +2,15 @@ import { Signal, signal } from "@preact/signals";
 import { Command, TableState } from "@/module/mod.ts";
 
 type ResizingRow = { rowId: string | number; height: number } | null;
+
+type EnumeratorStore = {
+  enumerator: {
+    resizing_row: Signal<ResizingRow>;
+  };
+};
+
 declare module "@/module/types.ts" {
-  interface TableState {
-    resizingRow: Signal<ResizingRow>;
-  }
+  interface TableState extends EnumeratorStore {}
 }
 
 const ROW_RESIZING_SET = "ROW_RESIZING_SET";
@@ -18,20 +23,23 @@ export type RowHeightCommand = Command<
 >;
 type RowCommand = RowResizeCommand | RowHeightCommand;
 
-export function state<T>(init: Record<string, T> | null) {
+export function state<T>(): EnumeratorStore {
+  const resizing_row = signal<ResizingRow>(null);
   return {
-    resizingRow: signal({}),
+    enumerator: {
+      resizing_row,
+    },
   };
 }
 
-export function persist(state: TableState) {
+export function persist(_: TableState) {
   return {};
 }
 
 export function mutate(state: TableState, command: RowCommand) {
   switch (command.type) {
     case "ROW_RESIZING_SET":
-      state.resizingRow.value = command.payload;
+      state.enumerator.resizing_row.value = command.payload;
       break;
     case "ROW_HEIGHTS_SET":
       state.rows.heights.value = {

@@ -1,11 +1,8 @@
 import { useSignal } from "@preact/signals";
 import { useCallback, useEffect, useRef } from "preact/hooks";
-import { TableStore } from "@/module/mod.ts";
-import { ColumnSetCommand } from "@/columns/store.ts";
+import { TableStore, useAddons } from "@/module/mod.ts";
 import { RowData } from "@/row/types.ts";
 import { DataLoadCallback } from "../types.ts";
-import { useAddons } from "@/module/mod.ts";
-import { TableMetaCommnand } from "../store.ts";
 
 interface LoaderProps {
   onDataLoad: DataLoadCallback;
@@ -24,7 +21,7 @@ export const useLoader = ({
   const loadedRanges = useRef<{ start: number; end: number }[]>([]);
   const reloadKey = store.state.fetcher.reload_key;
   const lastReloadKey = useRef(reloadKey.value);
-  const plugins = useAddons({ store });
+  const addons = useAddons({ store });
 
   const load = useCallback(async (offset: number, limit: number) => {
     if (limit <= 0 || isLoading.value) return;
@@ -32,19 +29,23 @@ export const useLoader = ({
     isLoading.value = true;
     store.state.fetcher.loading.value = true;
     try {
-      const options = await plugins.beforeLoad({ offset, limit, store });
+      const options = await addons.beforeLoad({ offset, limit, store });
       const res = await onDataLoad(options);
-      const { rows, total: newTotal, meta } = await plugins.afterLoad(res);
+      const { rows, total: newTotal, meta } = await addons.afterLoad(res);
 
-      store.dispatch<ColumnSetCommand>({
-        type: "COLUMNS_SET",
-        payload: Object.keys(rows.find((r) => r !== null) ?? {}),
-      });
+      store.state.fetcher.table_meta.value = meta;
 
-      store.dispatch<TableMetaCommnand>({
-        type: "TABLE_META_SET",
-        payload: meta,
-      });
+      const currentColumns = JSON.stringify(
+        store.state.columns.all.value?.sort() || [],
+      );
+      const receivedColumns = JSON.stringify(
+        Object.keys(rows.find((r) => r !== null) ?? {}),
+      );
+      if (currentColumns !== receivedColumns) {
+        store.state.columns.all.value = Object.keys(
+          rows.find((r) => r !== null) ?? {},
+        );
+      }
 
       if (total.value !== newTotal) {
         total.value = newTotal;
@@ -86,7 +87,7 @@ export const useLoader = ({
   }, [
     onDataLoad,
     store,
-    plugins,
+    addons,
     data,
     total,
     isLoading,

@@ -1,13 +1,17 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/module/mod.ts";
+import { Command, InferPersist, TableState } from "@/module/mod.ts";
 import { SortState } from "@/sorting/types.ts";
 
+type GroupingStore = {
+  grouping: {
+    expanded: Signal<string[]>;
+    group_by: Signal<string[] | null>;
+    sorting: Signal<Record<string, SortState>>;
+  };
+};
+
 declare module "@/module/types.ts" {
-  interface TableState {
-    expandedLevels: Signal<string[]>;
-    groupBy: Signal<string[] | null>;
-    groupSorting: Signal<Record<string, SortState>>;
-  }
+  interface TableState extends GroupingStore {}
 }
 
 const EXPANDED_LEVELS_SET = "EXPANDED_LEVELS_SET";
@@ -20,32 +24,36 @@ export type LeafSortCommand = Command<
 >;
 export type GroupingCommand = ExpandSetCommand | LeafSortCommand;
 
-export function state<T>(init: Record<string, T> | null) {
+export function state<T>(init: InferPersist<GroupingStore>): GroupingStore {
   return {
-    groupBy: signal([]),
-    expandedLevels: signal(init?.expandedLevels ?? []),
-    groupSorting: signal(init?.groupSorting ?? {}),
+    grouping: {
+      expanded: signal(init?.grouping?.expanded ?? []),
+      group_by: signal([]),
+      sorting: signal(init?.grouping?.sorting ?? {}),
+    },
   };
 }
 
-export function persist(state: TableState) {
+export function persist(state: TableState): InferPersist<GroupingStore> {
   return {
-    expandedLevels: state.expandedLevels.value,
-    groupSorting: state.groupSorting.value,
+    grouping: {
+      expanded: state.grouping.expanded.value,
+      sorting: state.grouping.sorting.value,
+    },
   };
 }
 
 export function mutate(state: TableState, command: GroupingCommand) {
   switch (command.type) {
     case "EXPANDED_LEVELS_SET":
-      state.expandedLevels.value =
-        state.expandedLevels.value.includes(command.payload as never)
-          ? state.expandedLevels.value.filter((id) => id !== command.payload)
-          : [...state.expandedLevels.value, command.payload];
+      state.grouping.expanded.value =
+        state.grouping.expanded.value.includes(command.payload as never)
+          ? state.grouping.expanded.value.filter((id) => id !== command.payload)
+          : [...state.grouping.expanded.value, command.payload];
       break;
     case "LEAF_SORT_SET": {
-      state.groupSorting.value = {
-        ...state.groupSorting.value,
+      state.grouping.sorting.value = {
+        ...state.grouping.sorting.value,
         ...command.payload,
       };
       break;

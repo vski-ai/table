@@ -1,10 +1,14 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/module/mod.ts";
+import { Command, InferPersist, TableState } from "@/module/mod.ts";
+
+type SelectorStore = {
+  selector: {
+    rows: Signal<(string | number)[]>;
+  };
+};
 
 declare module "@/module/types.ts" {
-  interface TableState {
-    selectedRows: Signal<(string | number)[]>;
-  }
+  interface TableState extends SelectorStore {}
 }
 
 const SELECTED_ROWS_SET = "SELECTED_ROWS_SET";
@@ -13,22 +17,27 @@ export type RowsSelectCommand = Command<
   (string | number)[]
 >;
 
-export function state(init: Record<string, any> | null) {
+export function state(init: InferPersist<SelectorStore>): SelectorStore {
+  const rows = signal(init?.selector?.rows ?? []);
   return {
-    selectedRows: signal(init?.selectedRows ?? []),
+    selector: {
+      rows,
+    },
   };
 }
 
-export function persist(state: TableState) {
+export function persist(state: TableState): InferPersist<SelectorStore> {
   return {
-    selectedRows: state.selectedRows.value,
+    selector: {
+      rows: state.selector.rows.value,
+    },
   };
 }
 
 export function mutate(state: TableState, command: RowsSelectCommand) {
   switch (command.type) {
     case "SELECTED_ROWS_SET": {
-      state.selectedRows.value = command.payload;
+      state.selector.rows.value = command.payload;
       break;
     }
   }

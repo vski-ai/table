@@ -25,14 +25,14 @@ export const GroupSorter = ({
 }: RowSorterProps) => {
   const meta = store.state.fetcher.table_meta.value;
   if (
-    !meta.sortableGroupLevelAll &&
-    !meta?.sortableGroupLevelColumns?.[row.$group_level ?? 0]
+    !meta.group_sorting_all &&
+    !meta?.group_sorting_level_columns?.[row.$group_level ?? 0]
       .includes(column)
   ) {
     return null;
   }
 
-  const state = store.state.groupSorting.value[row.id] ??
+  const state = store.state.grouping.sorting.value[row.id] ??
     { column: "", sort: "" };
 
   const sort = (state: SortState) => {

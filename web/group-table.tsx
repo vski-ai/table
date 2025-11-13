@@ -62,9 +62,9 @@ export const GroupTable = () => {
       rows: (d as RowData[]).slice(offset, offset + limit),
       total: d.length,
       meta: {
-        groupBy: ["Year", "Month", "Company"],
+        group_by: ["Year", "Month", "Company"],
         sortableColumns: ["Year", "Hourly Rate", "Year", "Month"],
-        sortableGroupLevelColumns: [
+        group_sorting_level_columns: [
           ["Month"],
           ["Company", "First Name", "Last Name"],
           [],
