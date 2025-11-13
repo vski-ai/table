@@ -34,7 +34,7 @@ export function Home() {
         <p class="my-1 text-center w-full">
           Tables are <i>complex</i>. Building a <i>feature-rich</i> and{" "}
           <i>ai-enabled</i> table is a dauniting task. <br />
-          <strong class="inline-block mt-2">we are here to fix it</strong>
+          <i class="inline-block mt-2">we are here to fix it</i>
         </p>
         <div ref={demoRef}>
           <Demo />

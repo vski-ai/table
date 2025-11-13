@@ -5,7 +5,7 @@ export function VskiTableLogo() {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 210 30"
-      class="font-mono h-16 w-78"
+      class="font-mono w-96"
     >
       <style>
         {`

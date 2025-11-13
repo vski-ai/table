@@ -7,11 +7,14 @@ export function Hero({ cta }) {
       <div class="hero-content text-center">
         <div class="max-w-lg">
           <div class="flex justify-center mb-6 relative">
-            <div class="relative">
+            <div class="relative text-center">
               <VskiTableLogo />
-              <span class="badge badge-xs badge-warning absolute -top-1 -right-14">
-                pre-alpha
-              </span>
+              <div class="badge badge-sm badge-success mt-6 pl-0">
+                <span class="badge badge-sm badge-error -ml-1">
+                  pre-apha
+                </span>{" "}
+                developed live
+              </div>
             </div>
           </div>
           <p class="my-6 py-6 text-2xl">
