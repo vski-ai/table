@@ -15,7 +15,7 @@ export default function ({ children }: { children: any }) {
     <>
       <nav class="main-navbar flex">
         <AsideSwitch />
-        <div class="w-32 flex absolute left-18 -top-200 dense:-top-200 aside-open:-top-2 transition-all">
+        <div class="w-32 flex absolute left-18 -top-200 dense:-top-200 aside-open:top-3.5 transition-all">
           <VskiTableLogo />
         </div>
       </nav>
