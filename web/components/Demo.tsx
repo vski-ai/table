@@ -1,6 +1,5 @@
 import PlayIcon from "lucide-react/dist/esm/icons/play.js";
 import { useRef } from "preact/hooks";
-import { SelectorPlugin } from "@/selector/mod.ts";
 import { EnumeratorModule } from "@/enumerator/mod.ts";
 import { createFrontendSorter, SortingModule } from "@/sorting/mod.ts";
 import { createTable } from "@/table/mod.ts";

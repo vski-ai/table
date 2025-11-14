@@ -6,7 +6,6 @@
 @import "./datatype/style.tailwind.css";
 @import "./enumerator/style.tailwind.css";
 @import "./sorting/style.tailwind.css";
-@import "./selector/style.tailwind.css";
 
 @layer components {
   .vt {

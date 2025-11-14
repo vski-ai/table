@@ -1,2 +1,6 @@
 *.json linguist-generated
 *.css linguist-generated
+*.svg linguist-generated
+*.mjs linguist-generated
+*.html linguist-generated
+*.lock linguist-generated
