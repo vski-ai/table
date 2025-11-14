@@ -1,7 +1,7 @@
 import { LocalStorageAdapter } from "@/module/mod.ts";
 import { useEffect, useRef } from "preact/hooks";
 import { RowData } from "@/row/types.ts";
-import { createTable } from "../mod.ts";
+import { createTable, type DataLoadCallback } from "../mod.ts";
 import { createFrontendSorter, SortingModule } from "@/sorting/mod.ts";
 
 import { EnumeratorModule } from "../enumerator/mod.ts";
@@ -37,9 +37,9 @@ export const FlatTable = () => {
     persistence: new LocalStorageAdapter(),
   });
 
-  const onDataLoad = async (
+  const onDataLoad: DataLoadCallback = async (
     { offset, limit, store }: any,
-  ): Promise<{ rows: RowData[]; total: number }> => {
+  ) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const sorted = sorter({
       data: (data as RowData[]),
@@ -52,7 +52,7 @@ export const FlatTable = () => {
         sortableAll: true,
         pinnedRows,
       },
-    } as any;
+    }
   };
 
   return (

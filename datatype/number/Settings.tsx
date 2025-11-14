@@ -3,7 +3,7 @@ import { cn } from "@/common/className.ts";
 import { LocaleSelector } from "../components/LocaleSelector.tsx";
 import { CurrencySelector } from "./CurrencySelector.tsx";
 import { UnitSelector } from "./UnitSelector.tsx";
-import { MenuContext } from "@/contextmenu/types.ts";
+import { MenuContext } from "@/ctxmenu/types.ts";
 import { resetFormatting, setFormatting } from "../mutations.ts";
 
 import HashIcon from "lucide-react/dist/esm/icons/hash.js";

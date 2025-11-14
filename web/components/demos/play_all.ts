@@ -27,15 +27,15 @@ export async function playAll(
     scrollContainer.current.clientWidth;
   await scrollX(scrollContainer.current, maxScroll, 2000);
   await delay(1000);
-
-  store.dispatch({
-    type: "COLUMN_WIDTHS_SET",
-    payload: {
-      Total: 500,
-    },
-  });
-
-  await delay(600);
+  
+  // store.dispatch({
+  //   type: "COLUMN_WIDTHS_SET",
+  //   payload: {
+  //     Total: 500,
+  //   },
+  // });
+  
+  // await delay(600);
 
   store.dispatch({
     type: "COLUMN_WIDTHS_SET",
@@ -43,14 +43,15 @@ export async function playAll(
       Total: 150,
     },
   });
-
-  await scrollX(scrollContainer.current, 500, 2000);
-  await scrollX(scrollContainer.current, maxScroll - 100, 2000);
+  
+  await scrollX(scrollContainer.current, 500, 1000);
+  await scrollX(scrollContainer.current, maxScroll - 100, 1000);
   await delay(1000);
   store.state.columns.sticky.value = {
     ...store.state.columns.sticky.value,
     Total: "right",
   };
+  start();
 
   await delay(1000);
   store.state.data_type.options.value = {
@@ -170,7 +171,7 @@ export async function playAll(
       "color": "#ff9200",
       "text-align": "left",
       "text-decoration": "none",
-      "font-style": "italic",
+      //"font-style": "italic",
       "font-weight": "bold",
       "font-size": "0.7em",
     },
@@ -178,7 +179,7 @@ export async function playAll(
   store.dispatch({
     type: "ROW_HEIGHTS_SET",
     payload: {
-      "summary-123": 30,
+      "summary-123": 42,
     },
   });
   await delay(1000);

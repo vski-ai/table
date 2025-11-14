@@ -2,7 +2,7 @@ export * from "./types.ts";
 export * from "./components/TypeFormat.tsx";
 
 import { ITableModule, ModuleInitCallback } from "@/module/types.ts";
-import { addMenuItems } from "@/contextmenu/mod.ts";
+import { addMenuItems } from "@/ctxmenu/mod.ts";
 import { MenuItems } from "./menu.tsx";
 import { NumberMenuItems } from "./number/menu.tsx";
 import { DateMenuItems } from "./date/menu.tsx";

@@ -1,4 +1,4 @@
-import { ContextMenuItem } from "@/contextmenu/types.ts";
+import { ContextMenuItem } from "@/ctxmenu/types.ts";
 import { COLUMN_DATATYPE_MENU, Title } from "../menu.tsx";
 import { Settings } from "./Settings.tsx";
 import CalendarIcon from "lucide-react/dist/esm/icons/calendar-clock.js";

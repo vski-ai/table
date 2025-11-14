@@ -9,7 +9,7 @@ import {
   ITableModule,
   ModuleInitCallback,
 } from "@/module/types.ts";
-import { addMenuItems } from "@/contextmenu/addMenuItems.ts";
+import { addMenuItems } from "@/ctxmenu/addMenuItems.ts";
 import {
   bottomStickRowsRenderCallback,
   topStickRowsRenderCallback,

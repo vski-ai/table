@@ -1,4 +1,4 @@
-import { ContextMenuItem } from "@/contextmenu/types.ts";
+import { ContextMenuItem } from "@/ctxmenu/types.ts";
 import CopyIcon from "lucide-react/dist/esm/icons/copy.js";
 
 export const Copy: ContextMenuItem = {

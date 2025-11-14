@@ -2,6 +2,7 @@ import { Signal, signal } from "@preact/signals";
 import { Command, TableState } from "@/module/mod.ts";
 import { TypeFormatComponent } from "./types.ts";
 import { DefaultFormater } from "./components/DefaultFormater.tsx";
+import { InferPersist } from "../module/types.ts";
 
 const TYPE_FORMATTERS_ACCESSOR = Symbol("formatters");
 
@@ -48,13 +49,13 @@ export function inject(_: TableState) {
   };
 }
 
-export function state(init: any): DatatypesState {
-  const columnDataType = signal(init?.columnDataType ?? {});
-  const columnDataTypeOptions = signal(init?.columnDataTypeOptions ?? {});
+export function state(persist: InferPersist<DatatypesState>): DatatypesState {
+  const column = signal(persist?.data_type.column ?? {});
+  const options = signal(persist?.data_type.options ?? {});
   return {
     data_type: {
-      column: columnDataType,
-      options: columnDataTypeOptions,
+      column,
+      options,
     },
   };
 }

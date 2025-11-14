@@ -18,7 +18,7 @@ import {
 } from "@/fetcher/mod.ts";
 import { TableCellModule } from "@/cell/mod.ts";
 import { TableColumnsModule } from "@/columns/mod.ts";
-import { ContextMenuModule } from "@/contextmenu/mod.ts";
+import { ContextMenuModule } from "@/ctxmenu/mod.ts";
 import { DatatypeModule } from "@/datatype/mod.ts";
 import { EditingModule } from "@/editing/mod.ts";
 import { RowsModule } from "@/row/mod.ts";

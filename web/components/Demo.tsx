@@ -7,6 +7,7 @@ import { createTable } from "@/table/mod.ts";
 import { generateRows } from "../mock/flat-table.ts";
 import { useSignal } from "@preact/signals";
 import { playAll } from "./demos/play_all.ts";
+import { DataLoadCallback } from "../../mod.ts";
 
 const { data, pinnedRows } = generateRows(1000);
 const sorter = createFrontendSorter();
@@ -35,9 +36,9 @@ export const Demo = () => {
     playing.value = false;
   };
 
-  const onDataLoad = async (
+  const onDataLoad: DataLoadCallback = async (
     { offset, limit, store }: any,
-  ): Promise<{ rows: any; total: number }> => {
+  ) => {
     await new Promise((resolve) => setTimeout(resolve, 0));
     const sorted = sorter({
       data: (data as any),

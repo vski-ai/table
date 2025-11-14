@@ -1,4 +1,4 @@
-import { ContextMenuItem } from "@/contextmenu/types.ts";
+import { ContextMenuItem } from "@/ctxmenu/types.ts";
 import NumberIcon from "lucide-react/dist/esm/icons/decimals-arrow-right.js";
 import { ComponentChildren } from "preact";
 

@@ -1,4 +1,4 @@
-import { ContextMenuItem, MenuContext } from "@/contextmenu/types.ts";
+import { ContextMenuItem, MenuContext } from "@/ctxmenu/types.ts";
 import RightIcon from "lucide-react/dist/esm/icons/panel-right.js";
 import LeftIcon from "lucide-react/dist/esm/icons/panel-left.js";
 import UnpinIcon from "lucide-react/dist/esm/icons/pin-off.js";
@@ -141,7 +141,7 @@ export const UnpinColumn: ContextMenuItem = {
 export const HideColumn: ContextMenuItem = {
   menu: "hide-column",
   order: Infinity,
-  visibility: ({ store, column }: MenuContext) => true,
+  visibility: ({ placement }: MenuContext) => placement === 'outside',
   label() {
     return (
       <>
@@ -164,7 +164,7 @@ export const HideColumn: ContextMenuItem = {
 export const ManageColumns: ContextMenuItem = {
   menu: "manage-columns",
   order: Infinity,
-  visibility: ({ store, column }: MenuContext) => true,
+  visibility: ({ placement }: MenuContext) => placement === 'outside',
   label() {
     return (
       <>
@@ -173,7 +173,7 @@ export const ManageColumns: ContextMenuItem = {
       </>
     );
   },
-  action({ store, column }: MenuContext) {
+  action({ store }: MenuContext) {
     store.state.columns.manager_dialog.value = true;
   },
 };

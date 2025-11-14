@@ -1,4 +1,4 @@
-import { ContextMenuItem, MenuContext } from "@/contextmenu/types.ts";
+import { ContextMenuItem, MenuContext } from "@/ctxmenu/types.ts";
 import Pin from "lucide-react/dist/esm/icons/pin.js";
 import UnPin from "lucide-react/dist/esm/icons/pin-off.js";
 import TopIcon from "lucide-react/dist/esm/icons/arrow-up-to-line.js";

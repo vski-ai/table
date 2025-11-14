@@ -1,4 +1,4 @@
-import { ContextMenuItem } from "@/contextmenu/types.ts";
+import { ContextMenuItem } from "@/ctxmenu/types.ts";
 import PaletteIcon from "lucide-react/dist/esm/icons/palette.js";
 
 import { StyleSettings } from "./components/StyleSettings.tsx";

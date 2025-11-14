@@ -1,7 +1,7 @@
 import { useSignal } from "@preact/signals";
 import { cn } from "@/common/className.ts";
 import { LocaleSelector } from "../components/LocaleSelector.tsx";
-import { MenuContext } from "@/contextmenu/types.ts";
+import { MenuContext } from "@/ctxmenu/types.ts";
 import { resetFormatting, setFormatting } from "../mutations.ts";
 
 type Style = "full" | "long" | "medium" | "short";
