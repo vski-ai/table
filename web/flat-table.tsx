@@ -4,7 +4,6 @@ import { RowData } from "@/row/types.ts";
 import { createTable } from "../mod.ts";
 import { createFrontendSorter, SortingModule } from "@/sorting/mod.ts";
 
-import { SelectorPlugin } from "@/selector/mod.ts";
 import { EnumeratorModule } from "../enumerator/mod.ts";
 import { generateRows } from "./mock/flat-table.ts";
 
