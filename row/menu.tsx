@@ -107,11 +107,11 @@ const unpinLabel = () => {
 const unpinAction = ({ store, rowId }: MenuContext) => {
   const row = store.getRow(rowId!);
   if (!row) return;
-  const { stickyTopRows, stickyBottomRows } = store.state;
-  stickyTopRows.value = stickyTopRows.value.filter((r: RowData) =>
+  const { sticky_bottom, sticky_top } = store.state.rows;
+  sticky_top.value = sticky_top.value.filter((r: RowData) =>
     r.id !== row.id
   );
-  stickyBottomRows.value = stickyBottomRows.value.filter(
+  sticky_bottom.value = sticky_bottom.value.filter(
     (r: RowData) => r.id !== row.id,
   );
 };
