@@ -16,7 +16,8 @@ declare module "@/module/types.ts" {
 export const CONTEXT_MENU_ADD_ITEM = "CONTEXT_MENU_ADD_ITEM";
 export type ContextMenuAddCommand = Command<
   typeof CONTEXT_MENU_ADD_ITEM,
-  ContextMenuItem
+  ContextMenuItem,
+  "Add context menu item"
 >;
 
 export function state<T>(_: any): ContextMenuState {

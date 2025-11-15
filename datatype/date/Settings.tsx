@@ -3,6 +3,7 @@ import { cn } from "@/common/className.ts";
 import { LocaleSelector } from "../components/LocaleSelector.tsx";
 import { MenuContext } from "@/ctxmenu/types.ts";
 import { resetFormatting, setFormatting } from "../mutations.ts";
+import { DateDataTypeOptions } from "./types.ts";
 
 type Style = "full" | "long" | "medium" | "short";
 type Numeric2Digit = "numeric" | "2-digit";
@@ -34,7 +35,7 @@ export function Settings({ store, column }: MenuContext) {
   const timeZoneName = useSignal<TimeZoneName | undefined>(undefined);
 
   const onApply = () => {
-    let opts: Intl.DateTimeFormatOptions & { locale: string };
+    let opts: DateDataTypeOptions;
 
     if (configMode.value === "style") {
       opts = {

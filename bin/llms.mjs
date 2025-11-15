@@ -21,11 +21,14 @@ function collectDefinitions(obj) {
   }
 
   if (obj.$ref) {
-    const defName = obj.$ref.replace("#/definitions/", "");
+    const defName = decodeURIComponent(obj.$ref.replace("#/definitions/", ""));
+    obj.$ref = decodeURIComponent(obj.$ref);
     if (schema.definitions[defName] && !definitions[defName]) {
       const definition = schema.definitions[defName];
       // Add definition before recursing to handle circular dependencies
       definitions[defName] = definition;
+      Object.assign(obj, definition);
+      delete obj.$ref;
       collectDefinitions(definition);
     }
   }
@@ -46,13 +49,13 @@ for (
   collectDefinitions(payload);
   const spec = {
     type: type.const,
-    payload: payload,
     doc: comment.const,
+    payload: payload,
   };
   commands.push(spec);
 }
 
 Deno.writeTextFileSync(
   "./llms.json",
-  JSON.stringify({ definitions, commands }, null, 1),
+  JSON.stringify({ commands }, null, 1),
 );

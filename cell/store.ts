@@ -21,15 +21,20 @@ export const CELL_SELECT_RESET = "CELL_SELECT_RESET";
 
 export type CellSelectCmd = Command<
   typeof CELL_SELECT,
-  string
+  string,
+  "Select a cell { [cell_key]: boolean }"
 >;
+
 export type CellDeselectCmd = Command<
   typeof CELL_DESELECT,
-  string
+  string,
+  "Deselect one cell [cell_key]"
 >;
+
 export type CellSelectResetCmd = Command<
   typeof CELL_SELECT_RESET,
-  true
+  true,
+  "Reset selection (deselect all selected cells)"
 >;
 
 export function state(): CellsState {
@@ -43,7 +48,7 @@ export function persist(_: TableState) {
   return {};
 }
 
-export function mutate<T>(
+export function mutate(
   state: TableState,
   cmd: CellSelectCmd | CellSelectResetCmd | CellDeselectCmd,
 ) {

@@ -3,6 +3,9 @@ import { Command, TableState } from "@/module/mod.ts";
 import { TypeFormatComponent } from "./types.ts";
 import { DefaultFormater } from "./components/DefaultFormater.tsx";
 import { InferPersist } from "../module/types.ts";
+import { NumberDataTypeOptions, NumberDataTypes } from "./number/types.ts";
+import { DateDataType, DateDataTypeOptions } from "./date/types.ts";
+import { DataType } from "./types.ts";
 
 const TYPE_FORMATTERS_ACCESSOR = Symbol("formatters");
 
@@ -26,6 +29,7 @@ declare module "@/module/types.ts" {
 
 export const COLUMN_DATATYPE_SET = "COLUMN_DATATYPE_SET";
 export const COLUMN_DATATYPE_OPTIONS_SET = "COLUMN_DATATYPE_OPTIONS_SET";
+export const COLUMN_FORMAT_SET = "COLUMN_FORMAT_SET";
 
 export type ColumnDataTypeSetCommand = Command<
   typeof COLUMN_DATATYPE_SET,
@@ -37,9 +41,17 @@ export type ColumnDataTypeOptionsSetCommand = Command<
   Record<string, any>
 >;
 
+export type ColumnFormatSetCommand = Command<
+  typeof COLUMN_FORMAT_SET,
+  | DataType<NumberDataTypes, NumberDataTypeOptions>
+  | DataType<DateDataType, DateDataTypeOptions>,
+  "Set column formatting based on a datetype"
+>;
+
 export type FormattingCommandType =
   | ColumnDataTypeSetCommand
-  | ColumnDataTypeOptionsSetCommand;
+  | ColumnDataTypeOptionsSetCommand
+  | ColumnFormatSetCommand;
 
 export function inject(_: TableState) {
   return {
@@ -81,6 +93,24 @@ export function mutate(state: TableState, command: FormattingCommandType) {
       state.data_type.options.value = {
         ...state.data_type.options.value,
         ...command.payload,
+      };
+      break;
+    case COLUMN_FORMAT_SET:
+      state.data_type.options.value = {
+        ...state.data_type.options.value,
+        [command.payload.column]: {},
+      };
+      state.data_type.column.value = {
+        ...state.data_type.column.value,
+        [command.payload.column]: "default",
+      };
+      state.data_type.options.value = {
+        ...state.data_type.options.value,
+        [command.payload.column]: command.payload.options,
+      };
+      state.data_type.column.value = {
+        ...state.data_type.column.value,
+        [command.payload.column]: command.payload.type,
       };
       break;
   }

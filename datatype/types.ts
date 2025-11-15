@@ -1,19 +1,11 @@
 import { RowData } from "../row/types.ts";
-import { TableStore } from "../store/types.ts";
+import { TableStore } from "@/module/store/types.ts";
 import { ComponentChildren } from "preact";
 
-export enum FormattingType {
-  Style = "style",
-  Date = "date",
-}
-
-export enum ConditionOperator {
-  Equals = "==",
-  NotEquals = "!=",
-  LessThan = "<",
-  GreaterThan = ">",
-  LessThanOrEqual = "<=",
-  GreaterThanOrEqual = ">=",
+export interface DataType<T extends string = "default", O = any> {
+  column: string;
+  type: T;
+  options: O;
 }
 
 export interface TypeFormatOpts {

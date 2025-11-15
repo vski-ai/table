@@ -10,8 +10,10 @@ import HashIcon from "lucide-react/dist/esm/icons/hash.js";
 import DollarIcon from "lucide-react/dist/esm/icons/dollar-sign.js";
 import UnitIcon from "lucide-react/dist/esm/icons/drafting-compass.js";
 
+import { NumberDataTypeOptions, NumberDataTypes } from "./types.ts";
+
 export function Settings({ store, column }: MenuContext) {
-  const current = useSignal<"number" | "unit" | "currency">("number");
+  const current = useSignal<NumberDataTypes>("number");
   const locale = useSignal(navigator.language);
   const currency = useSignal("");
   const unit = useSignal("");
@@ -30,7 +32,7 @@ export function Settings({ store, column }: MenuContext) {
 
   const onApply = () => {
     error.value = {};
-    const opts: Intl.NumberFormatOptions & { locale: string } = {
+    const opts: NumberDataTypeOptions = {
       minimumFractionDigits: digits.value,
       maximumFractionDigits: digits.value,
       locale: locale.value,

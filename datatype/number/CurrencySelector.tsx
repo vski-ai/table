@@ -44,7 +44,7 @@ export const CurrencySelector = (
 ) => {
   return (
     <select
-      onChange={(e) => data.value = e.target.value}
+      onChange={(e) => data.value = e.currentTarget.value}
       defaultValue={data.value}
       class={"select select-sm " + className}
     >

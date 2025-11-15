@@ -5,3 +5,5 @@ export type {
   ColumnStickCommandPayload,
   ColumnVisibilityCommand,
 } from "./columns/store.ts";
+
+export type { ColumnFormatSetCommand } from "./datatype/store.ts";

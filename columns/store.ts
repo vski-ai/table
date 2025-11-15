@@ -31,12 +31,12 @@ export const COLUMN_WIDTHS_SET = "COLUMN_WIDTHS_SET";
 export const COLUMN_STICK_SET = "COLUMN_STICK_SET";
 
 export type ColumnSetCommand = Command<
-  typeof COLUMNS_SET, 
+  typeof COLUMNS_SET,
   string[],
   "Set all available columns."
 >;
 export type ColumnOrderCommand = Command<
-  typeof COLUMN_ORDER_SET, 
+  typeof COLUMN_ORDER_SET,
   string[],
   "Set column order: ['column_name_1', 'column_name_2']"
 >;
