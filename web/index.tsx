@@ -8,6 +8,8 @@ import { FlatTable } from "./flattable.tsx";
 import { EditableTable } from "./editable.tsx";
 import Layout from "./layout.tsx";
 
+localStorage.clear();
+
 export function App() {
   return (
     <LocationProvider>
@@ -27,6 +29,5 @@ export function App() {
 }
 
 if (typeof document !== "undefined") {
-  localStorage.clear();
   hydrate(<App />, document.getElementById("app")!);
 }

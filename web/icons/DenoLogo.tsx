@@ -1,6 +1,5 @@
-import { h } from "preact";
 import BoxIcon from "lucide-react/dist/esm/icons/box.js";
 
 export function DenoLogo() {
-  return <BoxIcon class="w-10 h-10" />;
+  return <BoxIcon className="w-7 h-7" />;
 }

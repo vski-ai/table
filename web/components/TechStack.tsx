@@ -15,7 +15,7 @@ const tech = [
 
 export function TechStack() {
   return (
-    <div class="flex flex-wrap justify-center items-center gap-4 mt-8">
+    <div class="flex flex-wrap justify-center items-center gap-4 mt-8 mb-8">
       {tech.map((t) => (
         <div
           class="flex items-center gap-2 p-2 rounded-lg bg-base-200"
