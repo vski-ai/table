@@ -6,7 +6,12 @@ import PinIcon from "lucide-react/dist/esm/icons/pin.js";
 import HideIcon from "lucide-react/dist/esm/icons/eye-off.js";
 import CogIcon from "lucide-react/dist/esm/icons/columns-3-cog.js";
 
-import { ColumnStickCommand, ColumnVisibilityCommand } from "./store.ts";
+import { 
+  ColumnStickCommand, 
+  ColumnVisibilityCommand, 
+  COLUMN_STICK_SET, 
+  COLUMN_VISIBILITY_SET 
+} from "./store.ts";
 
 const STICKY_COLUMN = "sticky_column";
 
@@ -54,7 +59,7 @@ export const StickLeft: ContextMenuItem = {
   action({ store, column }) {
     if (!column) return;
     store.dispatch<ColumnStickCommand>({
-      type: "COLUMN_STICK_SET",
+      type: COLUMN_STICK_SET,
       payload: {
         column,
         position: "left",
@@ -78,7 +83,7 @@ export const StickRight: ContextMenuItem = {
   action({ store, column }) {
     if (!column) return;
     store.dispatch<ColumnStickCommand>({
-      type: "COLUMN_STICK_SET",
+      type: COLUMN_STICK_SET,
       payload: {
         column,
         position: "right",
@@ -105,7 +110,7 @@ const unpinLabel = ({ column }: MenuContext) => {
 const unpinAction = ({ store, column }: MenuContext) => {
   if (!column) return;
   store.dispatch<ColumnStickCommand>({
-    type: "COLUMN_STICK_SET",
+    type: COLUMN_STICK_SET,
     payload: {
       column,
       position: false,
@@ -153,7 +158,7 @@ export const HideColumn: ContextMenuItem = {
   action({ store, column }: MenuContext) {
     if (!column) return;
     store.dispatch<ColumnVisibilityCommand>({
-      type: "COLUMN_VISIBILITY_SET",
+      type: COLUMN_VISIBILITY_SET,
       payload: {
         [column]: false,
       },

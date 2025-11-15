@@ -24,11 +24,11 @@ export interface ColumnStickCommandPayload {
   position: StickyPosition;
 }
 
-const COLUMNS_SET = "COLUMNS_SET";
-const COLUMN_ORDER_SET = "COLUMN_ORDER_SET";
-const COLUMN_VISIBILITY_SET = "COLUMN_VISIBILITY_SET";
-const COLUMN_WIDTHS_SET = "COLUMN_WIDTHS_SET";
-const COLUMN_STICK_SET = "COLUMN_STICK_SET";
+export const COLUMNS_SET = "COLUMNS_SET";
+export const COLUMN_ORDER_SET = "COLUMN_ORDER_SET";
+export const COLUMN_VISIBILITY_SET = "COLUMN_VISIBILITY_SET";
+export const COLUMN_WIDTHS_SET = "COLUMN_WIDTHS_SET";
+export const COLUMN_STICK_SET = "COLUMN_STICK_SET";
 
 export type ColumnSetCommand = Command<typeof COLUMNS_SET, string[]>;
 export type ColumnOrderCommand = Command<typeof COLUMN_ORDER_SET, string[]>;

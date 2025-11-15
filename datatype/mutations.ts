@@ -2,6 +2,8 @@ import { TableStore } from "@/module/types.ts";
 import {
   ColumnDataTypeOptionsSetCommand,
   ColumnDataTypeSetCommand,
+  COLUMN_DATATYPE_OPTIONS_SET,
+  COLUMN_DATATYPE_SET
 } from "./store.ts";
 
 export function resetFormatting(
@@ -9,13 +11,13 @@ export function resetFormatting(
 ) {
   if (!column) return;
   store.dispatch<ColumnDataTypeSetCommand>({
-    type: "COLUMN_DATATYPE_SET",
+    type: COLUMN_DATATYPE_SET,
     payload: {
       [column]: "default",
     },
   });
   store.dispatch<ColumnDataTypeOptionsSetCommand>({
-    type: "COLUMN_DATATYPE_OPTIONS_SET",
+    type: COLUMN_DATATYPE_OPTIONS_SET,
     payload: {
       [column]: {},
     },
@@ -35,13 +37,13 @@ export function setFormatting<T>({
 }) {
   if (!column) return;
   store.dispatch<ColumnDataTypeOptionsSetCommand>({
-    type: "COLUMN_DATATYPE_OPTIONS_SET",
+    type: COLUMN_DATATYPE_OPTIONS_SET,
     payload: {
       [column]: opts,
     },
   });
   store.dispatch<ColumnDataTypeSetCommand>({
-    type: "COLUMN_DATATYPE_SET",
+    type: COLUMN_DATATYPE_SET,
     payload: {
       [column]: datatype,
     },

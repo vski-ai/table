@@ -3,6 +3,7 @@
   "nodeModulesDir": "auto",
   "tasks": {
     "dev": "vite",
+    "install-ci": "echo \"$SSH_DEPLOY_KEY\" | base64 --decode > ~/.ssh/id_rsa_deploy1 && chmod 600 ~/.ssh/id_rsa_deploy1 && GIT_SSH_COMMAND=\"ssh -i ~/.ssh/id_rsa_deploy1\" git submodule update --remote --recursive",
     "build": "vite build"
   },
   "imports": {

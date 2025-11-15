@@ -51,7 +51,7 @@ This is a recommended way of mutating state inside the table.
 import type { ConsumeCmdType } from "some-module";
 
 store.dispatch<ConsumeType>({
-  type: "CONSUME_TYPE_UNIQ_COMMAND_ID",
+  type: CONSUME_TYPE_UNIQ_COMMAND_ID,
   payload: "Payload According to Consume Type",
   history: false, // record history
 });
@@ -95,7 +95,7 @@ Here is an example of a store:
 
 ```ts
 import { Signal, signal } from "@preact/signals";
-import { Command, InferPerstist, TableState } from "@/module/mod.ts";
+import { Command, InferPersist, TableState } from "@/module/mod.ts";
 
 type MyState = {
   mymod: {
@@ -115,7 +115,7 @@ export type MyModPropSetCmd = Command<
 >;
 
 // A state to be added to the table store
-export function state(pesist: InferPerstist<MyState>): MyState {
+export function state(pesist: InferPersist<MyState>): MyState {
   return {
     mymod: {
       prop: signal(pesist.mymod.prop ?? false),
@@ -126,7 +126,7 @@ export function state(pesist: InferPerstist<MyState>): MyState {
 // The persist callback, must return state attributes
 // as a JSON serializable object.
 // Here we explicitly specify what is needes to pesist
-export function persist(state: TableState): InferPerstist<MyState> {
+export function persist(state: TableState): InferPersist<MyState> {
   return {
     mymod: {
       prop: state.mymod.prop.value,

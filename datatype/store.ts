@@ -24,8 +24,8 @@ declare module "@/module/types.ts" {
   }
 }
 
-const COLUMN_DATATYPE_SET = "COLUMN_DATATYPE_SET";
-const COLUMN_DATATYPE_OPTIONS_SET = "COLUMN_DATATYPE_OPTIONS_SET";
+export const COLUMN_DATATYPE_SET = "COLUMN_DATATYPE_SET";
+export const COLUMN_DATATYPE_OPTIONS_SET = "COLUMN_DATATYPE_OPTIONS_SET";
 
 export type ColumnDataTypeSetCommand = Command<
   typeof COLUMN_DATATYPE_SET,
