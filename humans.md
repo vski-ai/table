@@ -3,7 +3,7 @@
 ---
 
 You can find documentation at [docs.md](./docs.md). The documetation is
-understood by LMMs (even the stupidest ones) and usually produces correct,
+understood by LLMs (even the stupidest ones) and usually produces correct,
 strong-typed code without fail.
 
 ## Note on Architecture
