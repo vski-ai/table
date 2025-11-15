@@ -19,7 +19,8 @@ export const ROW_HEIGHTS_SET = "ROW_HEIGHTS_SET";
 export type RowResizeCommand = Command<typeof ROW_RESIZING_SET, ResizingRow>;
 export type RowHeightCommand = Command<
   typeof ROW_HEIGHTS_SET,
-  Record<string, number>
+  Record<string, number>,
+  "Set row height"
 >;
 type RowCommand = RowResizeCommand | RowHeightCommand;
 
