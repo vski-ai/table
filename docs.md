@@ -89,9 +89,9 @@ There are callbacks such as: `beforeLoad` and `afterLoad`. See
 
 ## Store
 
-Store prodes factories and calbacks that extend the table store.
+Store prodes factories and calbacks that extend the table state.
 
-Here is an example of build-in keyboard store:
+Here is an example of a store:
 
 ```ts
 import { Signal, signal } from "@preact/signals";
