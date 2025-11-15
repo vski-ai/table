@@ -108,9 +108,7 @@ const unpinAction = ({ store, rowId }: MenuContext) => {
   const row = store.getRow(rowId!);
   if (!row) return;
   const { sticky_bottom, sticky_top } = store.state.rows;
-  sticky_top.value = sticky_top.value.filter((r: RowData) =>
-    r.id !== row.id
-  );
+  sticky_top.value = sticky_top.value.filter((r: RowData) => r.id !== row.id);
   sticky_bottom.value = sticky_bottom.value.filter(
     (r: RowData) => r.id !== row.id,
   );

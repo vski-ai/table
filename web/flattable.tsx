@@ -38,7 +38,7 @@ export const FlatTable = () => {
   });
 
   const onDataLoad: DataLoadCallback = async (
-    { offset, limit, store }: any,
+    { offset, limit, store },
   ) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const sorted = sorter({
@@ -59,7 +59,7 @@ export const FlatTable = () => {
     <div ref={scrollRef}>
       <Table
         onDataLoad={onDataLoad}
-        container={scrollRef as any}
+        container={scrollRef}
       />
     </div>
   );

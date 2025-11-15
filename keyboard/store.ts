@@ -26,5 +26,4 @@ export function persist(_: TableState) {
 }
 
 export function mutate<T>(state: TableState, _: Command<T>) {
-  return state;
 }
