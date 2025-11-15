@@ -1,6 +1,6 @@
 VSKI License v1.0
 
-Copyright (c) 2025 Anton A Nesterov
+Copyright (c) 2025 Anton A Nesterov <an+sla@vski.sh>
 
 This VSKI License (the "License") governs your use of the software provided hereunder (the "Software"). By using, copying, modifying, or distributing the Software, you accept and agree to be bound by the terms of this License.
 
@@ -21,6 +21,8 @@ This VSKI License (the "License") governs your use of the software provided here
 
 "Excluded Work" shall mean a separate and independent software work, such as a third-party plugin or extension, which interoperates with the Software through its designated Application Programming Interfaces (APIs) but is not otherwise a Derivative Work.
 
+"Integration" shall mean any use of Software or Derivative Work trough Application Programming Interfaces (APIs) or by any other means of interoperation.
+
 2. Free License Grant
 
 Subject to the terms and conditions of this License, a perpetual, worldwide, non-exclusive, royalty-free, irrevocable license is hereby granted to any Entity that meets neither of the conditions set forth in Section 3, to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software.
@@ -33,21 +35,22 @@ a. Its Annual Gross Revenue is one million US dollars ($1,000,000 USD) or more; 
 
 b. Its Total Capital Raised is one million US dollars ($1,000,000 USD) or more.
 
-To inquire about a commercial license, please contact an+sales@vski.sh.
+The commercial licenses may only be issued by this VSKI License copyright holders. 
+Terms, costs, and additional agreements for commercial licenses may be negotiated individually.
 
 4. Copyleft and Distribution Conditions
 
 Any distribution of the Software, or any Derivative Work, is subject to the following conditions:
 
-a. It must be licensed under the terms of this VSKI Community License.
+a. It must be licensed under the terms of this VSKI License.
 
 b. The above copyright notice and the full text of this License must be included in all copies or substantial portions of the Software or Derivative Work.
 
 c. For the avoidance of doubt, creating and distributing an Excluded Work that interoperates with the Software does not, by itself, subject the Excluded Work to the terms of this License.
 
-5. Software-as-a-Service (SaaS) Distribution
+d. For the avoidance of doubt, the Integration of the Software is NOT considered to be Excluded Work and any Integration is subject to the conditions defined in Section 3.
 
-Providing the functionality of the Software or a Derivative Work as part of a commercial Software-as-a-Service (SaaS) product constitutes distribution and is subject to the conditions defined in Section 3.
+e. Providing the functionality of the Software or a Derivative Work as part of a commercial Software-as-a-Service (SaaS) product constitutes distribution and is subject to the conditions defined in Section 3.
 
 
 6. Disclaimer of Warranty
