@@ -7,6 +7,7 @@
   },
   "imports": {
     "@/": "./",
+    "@enterprise/": "./enterprise/",
     "@deno/dnt": "jsr:@deno/dnt@^0.42.3",
     "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.5",
     "@faker-js/faker": "npm:@faker-js/faker@^10.1.0",
