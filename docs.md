@@ -1,6 +1,6 @@
 ![vski table](./web/public/vskitable.svg)
 
-<center> Vski Table is a flexible datagrid component. </center>
+---------------
 
 ## Getting Started
 
