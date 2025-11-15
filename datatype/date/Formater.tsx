@@ -68,7 +68,7 @@ export function edit(opts: TypeFormatOpts) {
       type="datetime-local"
       onChange={onChange as any}
       onBlur={onChange as any}
-      class="vt-edit vt-default-edit m-0 -mt-2"
+      class="vt-edit vt-default-edit m-0 p-[calc(3%)]"
       name={cellKey}
       style={{
         height: "inherit",
