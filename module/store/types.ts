@@ -12,11 +12,11 @@ export type StoreModule = {
   inject?: (state: TableState) => Record<string, any>;
 };
 
-export interface Command<T = any, P = any, Doc = ""> {
+export interface Command<T = any, P = any, Doc = any> {
   type: T;
   payload: P;
-  history?: boolean
-  doc?: Doc
+  history?: boolean;
+  comment?: Doc;
 }
 
 export interface TableState {

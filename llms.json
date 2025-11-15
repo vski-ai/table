@@ -1,0 +1,80 @@
+{
+ "definitions": {
+  "ColumnStickCommandPayload": {
+   "type": "object",
+   "properties": {
+    "column": {
+     "type": "string"
+    },
+    "position": {
+     "$ref": "#/definitions/StickyPosition"
+    }
+   },
+   "required": [
+    "column",
+    "position"
+   ],
+   "additionalProperties": false
+  },
+  "StickyPosition": {
+   "type": [
+    "string",
+    "boolean"
+   ],
+   "enum": [
+    "left",
+    "right",
+    false
+   ]
+  }
+ },
+ "commands": [
+  {
+   "type": "COLUMNS_SET",
+   "payload": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "doc": "Set all available columns."
+  },
+  {
+   "type": "COLUMN_ORDER_SET",
+   "payload": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "doc": "Set column order: ['column_name_1', 'column_name_2']"
+  },
+  {
+   "type": "COLUMN_STICK_SET",
+   "payload": {
+    "$ref": "#/definitions/ColumnStickCommandPayload"
+   },
+   "doc": "Pin (stick) column on left or right side."
+  },
+  {
+   "type": "COLUMN_WIDTHS_SET",
+   "payload": {
+    "type": "object",
+    "additionalProperties": {
+     "type": "number"
+    }
+   },
+   "doc": "Set column(s) width: { [column_name]: number }"
+  },
+  {
+   "type": "COLUMN_VISIBILITY_SET",
+   "payload": {
+    "type": "object",
+    "additionalProperties": {
+     "type": "boolean"
+    }
+   },
+   "doc": "Set column(s) visibility: { [column_name]: boolean }"
+  }
+ ]
+}

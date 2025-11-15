@@ -30,19 +30,30 @@ export const COLUMN_VISIBILITY_SET = "COLUMN_VISIBILITY_SET";
 export const COLUMN_WIDTHS_SET = "COLUMN_WIDTHS_SET";
 export const COLUMN_STICK_SET = "COLUMN_STICK_SET";
 
-export type ColumnSetCommand = Command<typeof COLUMNS_SET, string[]>;
-export type ColumnOrderCommand = Command<typeof COLUMN_ORDER_SET, string[]>;
+export type ColumnSetCommand = Command<
+  typeof COLUMNS_SET, 
+  string[],
+  "Set all available columns."
+>;
+export type ColumnOrderCommand = Command<
+  typeof COLUMN_ORDER_SET, 
+  string[],
+  "Set column order: ['column_name_1', 'column_name_2']"
+>;
 export type ColumnStickCommand = Command<
   typeof COLUMN_STICK_SET,
-  ColumnStickCommandPayload
+  ColumnStickCommandPayload,
+  "Pin (stick) column on left or right side."
 >;
 export type ColumnWidthCommand = Command<
   typeof COLUMN_WIDTHS_SET,
-  Record<string, number>
+  Record<string, number>,
+  "Set column(s) width: { [column_name]: number }"
 >;
 export type ColumnVisibilityCommand = Command<
   typeof COLUMN_VISIBILITY_SET,
-  Record<string, boolean>
+  Record<string, boolean>,
+  "Set column(s) visibility: { [column_name]: boolean }"
 >;
 export type ColumnCommandType =
   | ColumnSetCommand
