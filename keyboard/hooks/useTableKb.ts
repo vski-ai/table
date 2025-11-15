@@ -1,6 +1,7 @@
 import { TableStore } from "@/module/types.ts";
 import { MutableRef, useCallback, useEffect, useRef } from "preact/hooks";
 import { CellSelectResetCmd } from "@/cell/store.ts";
+import { en_CA } from "@faker-js/faker";
 
 const BUFFER_SIZE = 5;
 
@@ -20,6 +21,9 @@ export function useTableKb({ store, tableRef }: RowKbProps) {
       if (ev.altKey) {
         store.state.keyboard.altKey.value = true;
       }
+      if (ev.metaKey || ev.ctrlKey) {
+        store.state.keyboard.metaKey.value = true;
+      }
       if (ev.key === "Escape") {
         store.dispatch<CellSelectResetCmd>({
           type: "CELL_SELECT_RESET",
@@ -30,6 +34,9 @@ export function useTableKb({ store, tableRef }: RowKbProps) {
     const globalKeyUp = (ev: KeyboardEvent) => {
       if (!ev.altKey) {
         store.state.keyboard.altKey.value = false;
+      }
+      if (!ev.metaKey && !ev.ctrlKey) {
+        store.state.keyboard.metaKey.value = false;
       }
     };
 

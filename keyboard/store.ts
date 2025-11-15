@@ -3,6 +3,7 @@ import { Command, TableState } from "@/module/mod.ts";
 
 type KeyboardState = {
   altKey: Signal<boolean>;
+  metaKey: Signal<boolean>;
 };
 
 declare module "@/module/types.ts" {
@@ -15,6 +16,7 @@ export function state() {
   return {
     keyboard: {
       altKey: signal(false),
+      metaKey: signal(false),
     },
   };
 }

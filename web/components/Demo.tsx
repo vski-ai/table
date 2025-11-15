@@ -97,7 +97,7 @@ export const Demo = () => {
           <div class="flex gap-1 items-center">
             <kbd class="kbd">◀︎</kbd>
             <kbd class="kbd">▶︎</kbd>
-            <kbd class="kbd">Tab</kbd>
+            <kbd class="kbd">Tb</kbd>
             Navigate
           </div>
           <div class="flex gap-1 items-center">
@@ -105,16 +105,20 @@ export const Demo = () => {
             Edit
           </div>
           <div class="flex gap-1 items-center">
-            <kbd class="kbd">Tab</kbd>
+            <kbd class="kbd">Tb</kbd>
             Jump Out Edit
           </div>
           <div class="flex gap-1 items-center">
-            <kbd class="kbd">Alt</kbd>
-            Select Cells
+            <kbd class="kbd">⌥</kbd>
+            Select Cell
+          </div>
+          <div class="flex gap-1 items-center">
+            <kbd class="kbd">⌘</kbd>
+            Deselect Cell
           </div>
           <div class="flex gap-1 items-center">
             <kbd class="kbd">Esc</kbd>
-            Deselect
+            Deselect All
           </div>
         </div>
       </div>

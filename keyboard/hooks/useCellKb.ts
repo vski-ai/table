@@ -2,7 +2,7 @@ import { useCallback, useRef } from "preact/hooks";
 import { TableStore } from "@/module/types.ts";
 import { RowData } from "@/row/types.ts";
 import { CellEditingSetCommand } from "@/editing/store.ts";
-import { CellSelectCmd } from "@/cell/store.ts";
+import { CellDeselectCmd, CellSelectCmd } from "@/cell/store.ts";
 
 type CellKeyBindingsProps = {
   store: TableStore;
@@ -87,7 +87,19 @@ export function useCellKb(
     if (values.length && values.every(Boolean)) {
       setEditing();
     }
-  }, [store.state.editing.cell.value]);
+    if (store.state.keyboard.metaKey.value) {
+      store.dispatch<CellDeselectCmd>({
+        type: "CELL_DESELECT",
+        payload: key,
+      });
+    }
+    if (store.state.keyboard.altKey.value) {
+      store.dispatch<CellSelectCmd>({
+        type: "CELL_SELECT",
+        payload: key,
+      });
+    }
+  }, [store.state.editing.cell.value, store.state.keyboard.metaKey.value]);
 
   const focusTarget = useRef<HTMLTableCellElement>(null);
   const onBlur = useCallback((e: KeyboardEvent) => {
@@ -96,19 +108,37 @@ export function useCellKb(
     if (store.state.keyboard.altKey.value) {
       store.dispatch<CellSelectCmd>({
         type: "CELL_SELECT",
-        payload: store.getCellKey({ row, column }),
+        payload: key,
       });
     }
-  }, [store.state.keyboard.altKey.value]) as any;
+    if (store.state.keyboard.metaKey.value) {
+      store.dispatch<CellDeselectCmd>({
+        type: "CELL_DESELECT",
+        payload: key,
+      });
+    }
+  }, [
+    store.state.keyboard.altKey.value,
+    store.state.keyboard.metaKey.value,
+  ]) as any;
 
   const onFocus = useCallback(() => {
     if (store.state.keyboard.altKey.value) {
       store.dispatch<CellSelectCmd>({
         type: "CELL_SELECT",
-        payload: store.getCellKey({ row, column }),
+        payload: key,
       });
     }
-  }, [store.state.keyboard.altKey.value]) as any;
+    if (store.state.keyboard.metaKey.value) {
+      store.dispatch<CellDeselectCmd>({
+        type: "CELL_DESELECT",
+        payload: key,
+      });
+    }
+  }, [
+    store.state.keyboard.altKey.value,
+    store.state.keyboard.metaKey.value,
+  ]) as any;
 
   return {
     onKeyDown,

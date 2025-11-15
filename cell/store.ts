@@ -16,10 +16,15 @@ declare module "@/module/types.ts" {
 }
 
 const CELL_SELECT = "CELL_SELECT";
+const CELL_DESELECT = "CELL_DESELECT";
 const CELL_SELECT_RESET = "CELL_SELECT_RESET";
 
 export type CellSelectCmd = Command<
   typeof CELL_SELECT,
+  string
+>;
+export type CellDeselectCmd = Command<
+  typeof CELL_DESELECT,
   string
 >;
 export type CellSelectResetCmd = Command<
@@ -40,13 +45,19 @@ export function persist(_: TableState) {
 
 export function mutate<T>(
   state: TableState,
-  cmd: CellSelectCmd | CellSelectResetCmd,
+  cmd: CellSelectCmd | CellSelectResetCmd | CellDeselectCmd,
 ) {
   switch (cmd.type) {
     case "CELL_SELECT":
       state.cells.selected.value = {
         ...state.cells.selected.value,
         [cmd.payload]: true,
+      };
+      break;
+    case "CELL_DESELECT":
+      state.cells.selected.value = {
+        ...state.cells.selected.value,
+        [cmd.payload]: false,
       };
       break;
     case "CELL_SELECT_RESET":
