@@ -3,7 +3,7 @@
   "nodeModulesDir": "auto",
   "tasks": {
     "dev": "vite",
-    "install-ci": "echo \"$SSH_DEPLOY_KEY\" | base64 --decode > ./id_rsa_deploy1 && chmod 600 ./id_rsa_deploy1 && GIT_SSH_COMMAND=\"ssh -i ./id_rsa_deploy1\" git clone ssh://git@git.vski.sh/x/table-modules.git enterprise",
+    "install-ci": "echo \"$SSH_DEPLOY_KEY\" | base64 --decode > ~/id_rsa_deploy1 && cat ~/id_rsa_deploy1  && chmod 600 ~/id_rsa_deploy1 && GIT_SSH_COMMAND=\"ssh -i ~/id_rsa_deploy1\" git clone ssh://git@git.vski.sh/x/table-modules.git enterprise",
     "build": "vite build"
   },
   "imports": {
