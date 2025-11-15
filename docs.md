@@ -58,7 +58,7 @@ store.dispatch<ConsumeType>({
 ```
 
 Another way to mutate state is to access `store.state` directly. Most of the
-properties there are signals and can be mutated directly. It is not recommended,
+properties are signals and can be mutated directly. It is not recommended,
 especially when implementing agentic flows.
 
 ```ts
@@ -267,3 +267,21 @@ export const DateMenuItems = [
 
 See [typedefs](./ctxmenu/types.ts) for context menu. We work with
 `ContextMenuItem`.
+
+Here is an example of adding menu items on module init:
+
+```ts
+import { addMenuItems } from "@/ctxmenu/addMenuItems.ts";
+import { MenuItems } from "./menu.tsx";
+
+const onInit: ModuleInitCallback = ({
+  store,
+}) => {
+  addMenuItems({
+    store,
+    items: MenuItems,
+  });
+};
+```
+
+END OF DOCS
