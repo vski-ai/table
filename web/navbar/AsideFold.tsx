@@ -7,7 +7,7 @@ export function AsideFold() {
   return (
     <a
       role="button"
-      className="btn btn-ghost"
+      class="btn btn-ghost"
       onClick={() => {
         ui.value.dense = ui.value.dense == "1" ? "0" : "1";
         ui.value = { ...ui.value };

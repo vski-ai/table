@@ -4,7 +4,7 @@ import { CellRendererCallback } from "@/module/mod.ts";
 import { TableStore } from "@/module/types.ts";
 import { RowData } from "@/row/types.ts";
 import { useRowKey } from "@/columns/hooks/useRowKey.ts";
-import { useRowHeights } from "@/fetcher/hooks/useRowHeights.ts";
+import { useRowHeights } from "@/row/hooks/useRowHeights.ts";
 import { RowResizeHandle } from "./RowResizeHandle.tsx";
 import { RowHeightCommand } from "../store.ts";
 import { useSignal } from "@preact/signals";

@@ -3,13 +3,7 @@ import TypeIcon from "lucide-react/dist/esm/icons/type.js";
 import type { StyleProps } from "./mutations.ts";
 import * as mutations from "./mutations.ts";
 import { TargetedEvent } from "preact";
-
-const getDefaultColor = () =>
-  typeof document !== "undefined" && "getDefaultComputedStyle" in globalThis
-    // @ts-ignore:
-    ? globalThis.getDefaultComputedStyle(document.body.querySelector(".vt td"))
-      .getPropertyValue("color")
-    : "#555";
+import { getDefaultColor } from "./utils.ts";
 
 export const FontColor = (props: StyleProps) => {
   const currentStyle = mutations.getStyle(props);
@@ -24,13 +18,13 @@ export const FontColor = (props: StyleProps) => {
   };
 
   return (
-    <div className="vt-fmt-color-w">
+    <div class="vt-fmt-color-w">
       <TypeIcon className="vt-fmt-color-i left" />
       <input
         onInput={onChange}
         type="color"
-        value={currentValue ?? getDefaultColor()}
-        className="color-i"
+        value={currentValue ?? getDefaultColor("#555")}
+        class="color-i"
       />
     </div>
   );

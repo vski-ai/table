@@ -81,7 +81,7 @@ export function Column(
     <th
       data-column-name={column}
       style={{
-        height: store.state.columns?.header_height?.value ?? 42,
+        height: store.state.columns?.header_height?.value ?? 50,
         width,
         left,
         right,

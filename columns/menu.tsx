@@ -4,7 +4,7 @@ import LeftIcon from "lucide-react/dist/esm/icons/panel-left.js";
 import UnpinIcon from "lucide-react/dist/esm/icons/pin-off.js";
 import PinIcon from "lucide-react/dist/esm/icons/pin.js";
 import HideIcon from "lucide-react/dist/esm/icons/eye-off.js";
-import CogIcon from "lucide-react/dist/esm/icons/cog.js";
+import CogIcon from "lucide-react/dist/esm/icons/columns-3-cog.js";
 
 import { ColumnStickCommand, ColumnVisibilityCommand } from "./store.ts";
 
@@ -12,7 +12,7 @@ const STICKY_COLUMN = "sticky_column";
 
 export const Stick: ContextMenuItem = {
   menu: STICKY_COLUMN,
-  order: Infinity,
+  order: 10,
   visibility: ({ column, placement, store }) =>
     (!!column && placement === "outside") &&
     !store.state.columns.sticky.value[column],
@@ -124,7 +124,7 @@ export const StickReset: ContextMenuItem = {
 
 export const UnpinColumn: ContextMenuItem = {
   menu: "unpin-column",
-  order: Infinity,
+  order: 10,
   title: (ctx) => (
     <span>
       Unpin
@@ -140,8 +140,8 @@ export const UnpinColumn: ContextMenuItem = {
 
 export const HideColumn: ContextMenuItem = {
   menu: "hide-column",
-  order: Infinity,
-  visibility: ({ placement }: MenuContext) => placement === 'outside',
+  order: 10,
+  visibility: ({ placement }: MenuContext) => placement === "outside",
   label() {
     return (
       <>
@@ -163,8 +163,8 @@ export const HideColumn: ContextMenuItem = {
 
 export const ManageColumns: ContextMenuItem = {
   menu: "manage-columns",
-  order: Infinity,
-  visibility: ({ placement }: MenuContext) => placement === 'outside',
+  order: 99,
+  visibility: ({ placement }: MenuContext) => placement === "outside",
   label() {
     return (
       <>
@@ -174,7 +174,7 @@ export const ManageColumns: ContextMenuItem = {
     );
   },
   action({ store }: MenuContext) {
-    store.state.columns.manager_dialog.value = true;
+    store.state.columns.settings_dialog.value = true;
   },
 };
 

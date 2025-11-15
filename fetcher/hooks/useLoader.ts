@@ -83,6 +83,7 @@ export const useLoader = ({
     } finally {
       isLoading.value = false;
       store.state.fetcher.loading.value = false;
+      store.state.fetcher.is_initialized.value = true;
     }
   }, [
     onDataLoad,
@@ -141,8 +142,5 @@ export const useLoader = ({
     }
   }, [visibleRows, load, reloadKey.value]);
 
-  if (data.value.length) {
-    store.state.fetcher.is_initialized.value = true;
-  }
   return { data, total, isLoading };
 };

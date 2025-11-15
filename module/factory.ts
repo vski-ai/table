@@ -16,6 +16,7 @@ import {
   DataLoadOptions,
   DataLoadResult,
 } from "@/fetcher/mod.ts";
+import { TableModule } from "@/table/module.ts";
 import { TableCellModule } from "@/cell/mod.ts";
 import { TableColumnsModule } from "@/columns/mod.ts";
 import { ContextMenuModule } from "@/ctxmenu/mod.ts";
@@ -31,6 +32,7 @@ export const createPlugin = (plugin: ITableModule) => plugin;
 export type PluginContainer = ReturnType<typeof createPluginContainer>;
 
 export const buildInModules = [
+  TableModule,
   DataFetcherModule,
   TableCellModule,
   TableColumnsModule,

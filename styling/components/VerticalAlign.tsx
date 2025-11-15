@@ -56,7 +56,7 @@ export const VerticalAlign = (props: StyleProps) => {
             "enabled": isMiddle,
           })}
         >
-          <AlignCenter />
+          <AlignCenter className="rotate-90" />
         </a>
         <a
           onClick={toggleBottom}

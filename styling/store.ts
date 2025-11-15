@@ -42,7 +42,7 @@ export type CellStyleSetCommand = Command<
   typeof CELL_STYLE_SET,
   { rowKey: string; columnId: string; style: Partial<CellStyle> }
 >;
-export type TableStyleResetCommand = Command<typeof TABLE_STYLE_RESET, void>;
+export type TableStyleResetCommand = Command<typeof TABLE_STYLE_RESET, unknown>;
 export type RowStyleResetCommand = Command<
   typeof ROW_STYLE_RESET,
   { key: string }

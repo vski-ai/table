@@ -1,6 +1,6 @@
 import { ITableModule, ModuleInitCallback } from "@/module/types.ts";
 import { addMenuItems } from "@/ctxmenu/addMenuItems.ts";
-import { renderColumnSettings } from "./components/Settings.tsx";
+import { renderTableSettings } from "./components/Settings.tsx";
 import { MenuItems } from "./menu.tsx";
 import * as store from "./store.ts";
 
@@ -8,15 +8,15 @@ const onInit: ModuleInitCallback = ({
   store,
   beforetable,
 }) => {
-  beforetable.use(-1, renderColumnSettings);
+  beforetable.use(-1, renderTableSettings);
   addMenuItems({
     store,
     items: MenuItems,
   });
 };
 
-export const TableColumnsModule: ITableModule = {
-  name: "columns",
+export const TableModule: ITableModule = {
+  name: "table",
   onInit,
   store,
 };

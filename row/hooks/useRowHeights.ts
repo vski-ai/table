@@ -23,9 +23,9 @@ export function useRowHeights({
 
     const rowId = row[rowKey];
     if (rowHeights[rowId]) {
-      return rowHeights[rowId] || height;
+      return rowHeights[rowId] || store.state.table.row_height.value || height;
     }
 
     return height;
-  }, [height, rowHeights]);
+  }, [height, rowHeights, store.state.table.row_height.value]);
 }

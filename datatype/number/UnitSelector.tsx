@@ -12,7 +12,7 @@ export const UnitSelector = ({ className = "", data }: UnitSelectorProps) => {
     <select
       onChange={(e) => data.value = e.target.value}
       defaultValue={data.value}
-      className={"select select-sm " + className}
+      class={"select select-sm " + className}
     >
       <option value={data.value} disabled>Select Unit</option>
       {UNITS.map((unit) => <option value={unit}>{unit}</option>)}

@@ -158,10 +158,10 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
         top: contextMenuState.value.position.y,
         opacity: contextMenuOpacity.value,
       }}
-      className="vt-menu"
+      class="vt-menu"
     >
       {isSubmenu && (
-        <div className="vt-menu-title">
+        <div class="vt-menu-title">
           <a href="#" onClick={pop}>
             <BackIcon />
           </a>

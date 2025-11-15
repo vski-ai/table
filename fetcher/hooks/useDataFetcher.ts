@@ -1,6 +1,6 @@
 import { useSignal } from "@preact/signals";
 import { MutableRef, useMemo } from "preact/hooks";
-import { useRowHeights } from "./useRowHeights.ts";
+import { useRowHeights } from "@/row/hooks/useRowHeights.ts";
 import { useVariableVirtualizer } from "./useVariableVirtualizer.ts";
 
 import { TableStore } from "@/module/types.ts";
@@ -12,7 +12,6 @@ import { useRowKey } from "@/columns/hooks/useRowKey.ts";
 
 interface DataFetcherProps {
   store: TableStore;
-  scrollContainerRef: MutableRef<HTMLElement>;
   rowHeight: number;
   buffer?: number;
   onDataLoad: DataLoadCallback;
@@ -20,7 +19,6 @@ interface DataFetcherProps {
 
 export function useDataFetcher({
   store,
-  scrollContainerRef,
   rowHeight,
   onDataLoad,
 }: DataFetcherProps) {
@@ -43,7 +41,7 @@ export function useDataFetcher({
     startIndex,
     endIndex,
   } = useVariableVirtualizer({
-    scrollContainerRef,
+    scrollContainerRef: store.scrollContainerRef,
     itemCount: latestCount.value,
     rowHeights,
   });
@@ -70,7 +68,6 @@ export function useDataFetcher({
   //    - Some data loaded, but there are null rows in visible range
   latestData.value = data.value;
   latestCount.value = total.value;
-
   return {
     visibleRows,
     data,

@@ -9,35 +9,41 @@ const features = [
     title: "Data-driven at Core",
     description:
       "Advanced data fetching & patching strategy - backend ready from inception.",
-    icon: <DatabaseIcon class="w-12 h-12 mx-auto mb-4 text-primary" />,
+    icon: <DatabaseIcon className="w-12 h-12 mx-auto mb-4 text-primary" />,
   },
   {
     title: "AI Agents Ready",
     description: "Feedback loops, constext enabled, approval workflows.",
-    icon: <SplitIcon class="w-12 h-12 mx-auto mb-4 text-primary" />,
+    icon: <SplitIcon className="w-12 h-12 mx-auto mb-4 text-primary" />,
   },
   {
     title: "Plugin System",
     description:
       "Flexible plugin system, allowing for custom features and integrations.",
-    icon: <PlugZapIcon class="w-12 h-12 mx-auto mb-4 text-primary" />,
+    icon: <PlugZapIcon className="w-12 h-12 mx-auto mb-4 text-primary" />,
   },
   {
     title: "Micro-frontend Ready",
     description:
       "Built to be easily integrated into any micro-frontend architecture.",
-    icon: <GalleryVerticalIcon class="w-12 h-12 mx-auto mb-4 text-primary" />,
+    icon: (
+      <GalleryVerticalIcon className="w-12 h-12 mx-auto mb-4 text-primary" />
+    ),
   },
   {
     title: "Best UX",
     description: "Edit, modify UI in-place. No code needed.",
-    icon: <GalleryVerticalIcon class="w-12 h-12 mx-auto mb-4 text-primary" />,
+    icon: (
+      <GalleryVerticalIcon className="w-12 h-12 mx-auto mb-4 text-primary" />
+    ),
   },
   {
     title: "Source Available",
     description:
       "Enterprize level quality for free. If you're not making money you don't have to pay.",
-    icon: <GalleryVerticalIcon class="w-12 h-12 mx-auto mb-4 text-primary" />,
+    icon: (
+      <GalleryVerticalIcon className="w-12 h-12 mx-auto mb-4 text-primary" />
+    ),
   },
 ];
 

@@ -4,7 +4,8 @@ import { LoremIpsum } from "./LoremIpsum.tsx";
 import { NotFound } from "./404.tsx";
 import { Home } from "./Home.tsx";
 // import { GroupTable } from "./group-table.tsx";
-import { FlatTable } from "./flat-table.tsx";
+import { FlatTable } from "./flattable.tsx";
+import { EditableTable } from "./editable.tsx";
 import Layout from "./layout.tsx";
 
 export function App() {
@@ -14,6 +15,7 @@ export function App() {
         <Router>
           <Route path="/" component={Home} />
           <Route path="/flat" component={FlatTable} />
+          <Route path="/editable" component={EditableTable} />
           {/* <Route path="/groupable" component={GroupTable} /> */}
           <Route path="/lorem-ipsum" component={LoremIpsum} />
           <Route path="/hire" component={HireMe} />

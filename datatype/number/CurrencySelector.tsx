@@ -46,7 +46,7 @@ export const CurrencySelector = (
     <select
       onChange={(e) => data.value = e.target.value}
       defaultValue={data.value}
-      className={"select select-sm " + className}
+      class={"select select-sm " + className}
     >
       <option value={data.value} disabled>Select Currency</option>
       {CURRENCIES.map((currency) => (

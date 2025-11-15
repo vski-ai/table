@@ -3,21 +3,22 @@ import { CommonRendererCallback, TableStore } from "@/module/types.ts";
 import EyeIcon from "lucide-react/dist/esm/icons/eye.js";
 import EyeClosedIcon from "lucide-react/dist/esm/icons/eye-closed.js";
 import CogIcon from "lucide-react/dist/esm/icons/columns-3-cog.js";
+import XIcon from "lucide-react/dist/esm/icons/x.js";
 import { useOrderedColumns } from "../hooks/useOrderedColumns.ts";
 import { useColumnsOrderCallback } from "../hooks/useColumnsOrderCallback.ts";
 import { Draggable } from "@/common/Draggable.tsx";
 
-type ColumnsManagerProps = {
+type ColumnsSettingsProps = {
   store: TableStore;
 };
 
-export function ColumnsManager({ store }: ColumnsManagerProps) {
+export function Settings({ store }: ColumnsSettingsProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   useEffect(() => {
-    if (store.state.columns.manager_dialog.value) {
+    if (store.state.columns.settings_dialog.value) {
       dialogRef.current?.showModal();
     }
-  }, [store.state.columns.manager_dialog.value]);
+  }, [store.state.columns.settings_dialog.value]);
 
   const columns = useOrderedColumns({ store, visibility: false });
   const onColumnDrop = useColumnsOrderCallback({ store });
@@ -31,19 +32,21 @@ export function ColumnsManager({ store }: ColumnsManagerProps) {
   };
 
   return (
-    <dialog ref={dialogRef} className="modal modal-end">
-      <div className="modal-box rounded-none">
+    <dialog ref={dialogRef} class="modal modal-end">
+      <div class="modal-box rounded-none">
         <form
           class="absolute right-1 top-1"
           method="dialog"
           onSubmit={() => {
-            store.state.columns.manager_dialog.value = false;
+            store.state.columns.settings_dialog.value = false;
           }}
         >
-          <button type="submit" className="btn btn-ghost">x</button>
+          <button type="submit" class="btn btn-ghost btn-circle">
+            <XIcon />
+          </button>
         </form>
-        <h3 className="font-bold text-lg flex gap-3 items-center w-full">
-          <CogIcon /> Manage columns
+        <h3 class="font-bold text-lg flex gap-3 items-center w-full">
+          <CogIcon /> Columns
         </h3>
 
         <div class="modal-body mt-6">
@@ -52,7 +55,7 @@ export function ColumnsManager({ store }: ColumnsManagerProps) {
               <div class="card p-2 mt-1 flex flex-row justify-between bg-base-300 cursor-move">
                 <input
                   type="text"
-                  class="input border-none outline-none shadow-none"
+                  class="input border-none outline-none shadow-none bg-transparent"
                   value={column}
                 />
                 <button
@@ -73,7 +76,7 @@ export function ColumnsManager({ store }: ColumnsManagerProps) {
         class="modal-backdrop"
         method="dialog"
         onSubmit={() => {
-          store.state.columns.manager_dialog.value = false;
+          store.state.columns.settings_dialog.value = false;
         }}
       >
         <button type="submit"></button>
@@ -82,6 +85,6 @@ export function ColumnsManager({ store }: ColumnsManagerProps) {
   );
 }
 
-export const renderColumnsManager: CommonRendererCallback = ({ store }) => {
-  return <ColumnsManager store={store} />;
+export const renderColumnSettings: CommonRendererCallback = ({ store }) => {
+  return <Settings store={store} />;
 };

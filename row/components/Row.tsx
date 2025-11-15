@@ -3,7 +3,7 @@ import { TableStore } from "@/module/types.ts";
 import { useOrderedColumns } from "@/columns/hooks/useOrderedColumns.ts";
 import { useAddons } from "@/module/mod.ts";
 
-import { useRowHeights } from "@/fetcher/mod.ts";
+import { useRowHeights } from "@/row/hooks/useRowHeights.ts";
 import { Cell } from "@/cell/mod.ts";
 import { RowLoading } from "./RowLoading.tsx";
 import { RowData } from "../types.ts";
@@ -86,7 +86,7 @@ export function useRenderRowCallback(
   const getRowHeight = useRowHeights({
     store,
     rowKey,
-    height: rowHeight,
+    height: store.state.table.row_height.value ?? rowHeight,
   });
   return useCallback((row: RowData, index: number) => {
     const rowHeight = getRowHeight(row);
@@ -101,7 +101,7 @@ export function useRenderRowCallback(
       <Row
         row={row}
         rowIndex={index}
-        rowHeight={rowHeight}
+        rowHeight={store.state.table.row_height.value || rowHeight}
         columns={columns}
         store={store}
         rowKey={rowKey}
@@ -111,5 +111,6 @@ export function useRenderRowCallback(
     rowKey,
     getRowHeight,
     columns,
+    store.state.table.row_height.value,
   ]);
 }

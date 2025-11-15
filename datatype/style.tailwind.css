@@ -8,7 +8,7 @@
   }
 
   .vt-default-edit {
-    @apply textarea textarea-ghost w-full bg-accent/20 m-0 p-4 z-10
+    @apply textarea textarea-ghost w-full bg-accent/20 m-0 p-[calc(3%)] z-10
       rounded-none;
   }
   .vt-fmt-is-dirty {

@@ -18,6 +18,14 @@ export function StyleFormat({ store }: StyleFormatProps) {
   const styles: string[] = [];
   const root = ROOT_SEL(store.state.tableId!);
 
+  const table = store.state.styles.table.value;
+  let style = "";
+  for (const [prop, value] of Object.entries(table)) {
+    style += prop + ": " + value + ";";
+  }
+  style = root + `.vt-fmt {${style}}`;
+  styles.push(style);
+
   const cols = store.state.styles.columns.value;
   for (const column in cols) {
     const col = cols[column];

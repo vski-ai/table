@@ -1,2 +1,2 @@
 export * from "@/table/factory.tsx";
-export {type DataLoadCallback } from "@/fetcher/mod.ts"
+export { type DataLoadCallback } from "@/fetcher/mod.ts";

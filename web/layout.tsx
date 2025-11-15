@@ -19,10 +19,10 @@ export default function ({ children }: { children: any }) {
           <VskiTableLogo />
         </div>
       </nav>
-      <main className="flex min-w-full w-fit bg-base-300">
-        <aside className="main-aside opacity-40 hover:opacity-100 transition-opacity duration-400">
+      <main class="flex min-w-full w-fit bg-base-300">
+        <aside class="main-aside opacity-40 hover:opacity-100 transition-opacity duration-400">
           <div class="h-12"></div>
-          <ul className="main-aside-menu">
+          <ul class="main-aside-menu">
             <li>
               <a href="/" class="aria-[current=page]:active mt-10">
                 <HomeIcon />
@@ -85,7 +85,7 @@ export default function ({ children }: { children: any }) {
               </a>
             </li>
           </ul>
-          <div className="main-aside-bottom">
+          <div class="main-aside-bottom">
             {
               /* <a
               href="/app/profile"
@@ -99,7 +99,7 @@ export default function ({ children }: { children: any }) {
             <ThemeSwitch theme={ui.value.theme!} />
           </div>
         </aside>
-        <section className="main-outlet">
+        <section class="main-outlet">
           {children}
         </section>
       </main>

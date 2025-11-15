@@ -5,7 +5,7 @@ import { TableStore } from "@/module/types.ts";
 import { RowData } from "@/row/types.ts";
 import { useAddons } from "@/module/mod.ts";
 import { TypeFormat } from "@/datatype/mod.ts";
-import { useRowHeights } from "@/fetcher/hooks/useRowHeights.ts";
+import { useRowHeights } from "@/row/hooks/useRowHeights.ts";
 import { useCellKb } from "@/keyboard//hooks/useCellKb.ts";
 
 interface CellProps {
@@ -24,7 +24,7 @@ export const Cell = ({
 
   const getHeight = useRowHeights({
     store,
-    height: 64,
+    height: store.state.table.row_height.value || 42,
   });
 
   const {

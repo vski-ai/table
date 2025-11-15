@@ -5,6 +5,8 @@ import {
   ColumnStyleSetCommand,
   RowStyleResetCommand,
   RowStyleSetCommand,
+  TableStyleResetCommand,
+  TableStyleSetCommand,
 } from "../store.ts";
 
 import { CellStyle } from "../types.ts";
@@ -32,9 +34,23 @@ type SetCellStyle = {
   style: Partial<CellStyle>;
 } & WithStore;
 
-export function setStyle(ctx: SetColumnStyle | SetRowStyle | SetCellStyle) {
+type SetTableStyle = {
+  scope: "table";
+  style: any;
+} & WithStore;
+
+export function setStyle(
+  ctx: SetColumnStyle | SetRowStyle | SetCellStyle | SetTableStyle,
+) {
   const { store, style } = ctx;
   switch (ctx.scope) {
+    case "table": {
+      store.dispatch<TableStyleSetCommand>({
+        type: "TABLE_STYLE_SET",
+        payload: style,
+      });
+      break;
+    }
     case "column": {
       store.dispatch<ColumnStyleSetCommand>({
         type: "COLUMN_STYLE_SET",
@@ -66,7 +82,8 @@ export type ScopedStyleProps =
     column: string;
   }
   | { scope: "row"; row: string }
-  | { scope: "column"; column: string };
+  | { scope: "column"; column: string }
+  | { scope: "table" };
 
 export type StyleProps = {
   store: TableStore;
@@ -77,6 +94,8 @@ export function getStyle(
 ): Partial<CellStyle> {
   const { store } = ctx;
   switch (ctx.scope) {
+    case "table":
+      return store.state.styles.table.value ?? {};
     case "column":
       return store.state.styles.columns.value[ctx.column ?? -1] ?? {};
     case "row":
@@ -93,6 +112,13 @@ export function getStyle(
 export function resetStyle(ctx: ScopedStyleProps & WithStore) {
   const { store } = ctx;
   switch (ctx.scope) {
+    case "table": {
+      store.dispatch<TableStyleResetCommand>({
+        type: "TABLE_STYLE_RESET",
+        payload: {},
+      });
+      break;
+    }
     case "column": {
       store.dispatch<ColumnStyleResetCommand>({
         type: "COLUMN_STYLE_RESET",

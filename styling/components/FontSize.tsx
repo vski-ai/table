@@ -15,14 +15,14 @@ export const FontSize = (props: StyleProps) => {
 
   return (
     <div>
-      <div className="w-full max-w-xs">
+      <div class="w-full">
         <input
           onInput={onChange}
           type="range"
           min="10"
           max="100"
           value={parseFloat(currentStyle["font-size"] ?? "1") * 100 / 2}
-          className="range range-xs"
+          class="range range-xs w-full"
           step="10"
         />
       </div>

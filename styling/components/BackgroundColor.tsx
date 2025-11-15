@@ -3,13 +3,7 @@ import TypeIcon from "lucide-react/dist/esm/icons/squares-subtract.js";
 import type { StyleProps } from "./mutations.ts";
 import * as mutations from "./mutations.ts";
 import { TargetedEvent } from "preact";
-
-const getDefaultColor = () =>
-  typeof document !== "undefined" && "getDefaultComputedStyle" in globalThis
-    // @ts-ignore:
-    ? globalThis.getDefaultComputedStyle(document.body.querySelector(".vt td"))
-      .getPropertyValue("background-color")
-    : "#fff";
+import { getDefaultColor } from "./utils.ts";
 
 export const BackgroundColor = (props: StyleProps) => {
   const currentStyle = mutations.getStyle(props);
@@ -24,13 +18,13 @@ export const BackgroundColor = (props: StyleProps) => {
   };
 
   return (
-    <div className="vt-fmt-color-w">
+    <div class="vt-fmt-color-w">
       <TypeIcon className="vt-fmt-color-i right" />
       <input
         onInput={onChange}
         type="color"
         value={currentValue ?? getDefaultColor()}
-        className="color-i"
+        class="color-i"
       />
     </div>
   );

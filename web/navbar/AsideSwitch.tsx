@@ -6,7 +6,7 @@ export function AsideSwitch() {
   return (
     <a
       role="button"
-      className="btn btn-circle ml-0 -mt-0.5 border border-primary text-primary"
+      class="btn btn-circle ml-0 -mt-0.5 border border-primary text-primary"
       onClick={() => {
         ui.value.aside = ui.value.aside == "1" ? "0" : "1";
         ui.value = { ...ui.value };

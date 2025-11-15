@@ -8,7 +8,7 @@ const DARK = "dark";
 
 export const ThemeSwitch = ({ theme }: { theme: string }) => {
   return (
-    <label className="swap swap-rotate">
+    <label class="swap swap-rotate">
       <input
         onClick={() => {
           ui.value.theme = ui?.value.theme !== DARK ? DARK : LIGHT;
@@ -16,7 +16,7 @@ export const ThemeSwitch = ({ theme }: { theme: string }) => {
         }}
         type="checkbox"
         defaultChecked={theme === LIGHT}
-        className="theme-controller"
+        class="theme-controller"
       />
       <SunIcon
         className="swap-off fill-current"

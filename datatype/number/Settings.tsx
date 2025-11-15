@@ -74,7 +74,7 @@ export function Settings({ store, column }: MenuContext) {
   return (
     <div class="flex flex-col gap-1">
       <LocaleSelector data={locale} />
-      <div className="grid grid-cols-3 grid-rows-1 gap-1">
+      <div class="grid grid-cols-3 grid-rows-1 gap-1">
         <button
           type="button"
           onClick={() => {
@@ -165,14 +165,14 @@ export function Settings({ store, column }: MenuContext) {
       <button
         type="button"
         onClick={onApply}
-        className="btn btn-sm w-full mt-5"
+        class="btn btn-sm w-full mt-5"
       >
         Apply
       </button>
       <button
         onClick={() => resetFormatting({ store, column })}
         type="button"
-        className="btn btn-xs btn-ghost w-full mt-1"
+        class="btn btn-xs btn-ghost w-full mt-1"
       >
         Reset
       </button>

@@ -1,15 +1,5 @@
-import {
-  createTableStore,
-  LocalStorageAdapter,
-  StorageAdapter,
-  StoreModule,
-  TableStore,
-} from "@/module/mod.ts";
-import {
-  createTableModule,
-  CreateTableModuleOpts,
-  ITableModule,
-} from "@/module/mod.ts";
+import { TableStore } from "@/module/mod.ts";
+import { createTableModule, CreateTableModuleOpts } from "@/module/mod.ts";
 import { Table as TableView, TableProps as TableViewProps } from "./table.tsx";
 import { ComponentChildren } from "preact";
 import { MutableRef } from "preact/hooks";

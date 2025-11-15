@@ -74,7 +74,7 @@ export const LocaleSelector = ({ data }: LocaleSelectorProps) => {
     <select
       onChange={(e) => data.value = e.target.value}
       defaultValue={data.value}
-      className="select select-sm"
+      class="select select-sm"
     >
       <option value={data.value} disabled>
         {displayName.of(navigator.language)} ({navigator.language})

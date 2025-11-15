@@ -1,3 +1,4 @@
+import { cn } from "@/common/className.ts";
 import { BackgroundColor } from "./BackgroundColor.tsx";
 import { FontColor } from "./FontColor.tsx";
 import { FontSize } from "./FontSize.tsx";
@@ -9,14 +10,14 @@ import * as mutations from "./mutations.ts";
 
 import RemoveFormatting from "lucide-react/dist/esm/icons/remove-formatting.js";
 
-export function StyleSettings(props: StyleProps) {
+export function StyleSettings(props: StyleProps & { className?: string }) {
   return (
-    <div class="vt-fmt-style-settings-w">
+    <div class={cn(["vt-fmt-style-settings-w", props.className])}>
       <FontStyle {...props} />
       <TextAlign {...props} />
       <VerticalAlign {...props} />
 
-      <div class="vt-fmt-color-wrap">
+      <div class="vt-fmt-color-wrap mt-3">
         <FontColor {...props} />
         <BackgroundColor {...props} />
       </div>
@@ -26,7 +27,7 @@ export function StyleSettings(props: StyleProps) {
         onClick={() => {
           mutations.resetStyle(props);
         }}
-        class="vt-fmt-menu-btn vt-fmt-reset"
+        class="vt-fmt-menu-btn vt-fmt-reset h-8"
       >
         Reset{" "}
         <RemoveFormatting style={{ width: 13, height: 13, marginLeft: 6 }} />

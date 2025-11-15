@@ -27,14 +27,14 @@ export async function playAll(
     scrollContainer.current.clientWidth;
   await scrollX(scrollContainer.current, maxScroll, 2000);
   await delay(1000);
-  
+
   // store.dispatch({
   //   type: "COLUMN_WIDTHS_SET",
   //   payload: {
   //     Total: 500,
   //   },
   // });
-  
+
   // await delay(600);
 
   store.dispatch({
@@ -43,7 +43,7 @@ export async function playAll(
       Total: 150,
     },
   });
-  
+
   await scrollX(scrollContainer.current, 500, 1000);
   await scrollX(scrollContainer.current, maxScroll - 100, 1000);
   await delay(1000);
@@ -168,7 +168,7 @@ export async function playAll(
   store.state.styles.rows.value = {
     ...store.state.styles.rows.value,
     "summary-123": {
-      "color": "#ff9200",
+      //"color": "#ff9200",
       "text-align": "left",
       "text-decoration": "none",
       //"font-style": "italic",

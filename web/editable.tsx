@@ -9,10 +9,10 @@ import { generateRows } from "./mock/flat-table.ts";
 
 let generated;
 try {
-  JSON.parse(localStorage.getItem("flat_table") ?? "null");
+  JSON.parse(localStorage.getItem("editable_table") ?? "null");
   if (!generated) {
-    generated = generateRows(5000);
-    localStorage.setItem("flat_table", JSON.stringify(generated));
+    generated = generateRows(0);
+    localStorage.setItem("editable_table", JSON.stringify(generated));
   }
 } catch (e) {
   generated = generateRows(10000);
@@ -21,7 +21,7 @@ try {
 const { data, pinnedRows } = generated;
 const sorter = createFrontendSorter();
 
-export const FlatTable = () => {
+export const EditableTable = () => {
   const scrollRef = useRef<any>(null);
   useEffect(() => {
     scrollRef.current = document.querySelector(".main-outlet");
@@ -52,7 +52,7 @@ export const FlatTable = () => {
         sortableAll: true,
         pinnedRows,
       },
-    }
+    };
   };
 
   return (

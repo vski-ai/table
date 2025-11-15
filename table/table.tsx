@@ -26,17 +26,16 @@ export function Table(props: TableProps) {
     store,
     scrollContainerRef,
     onDataLoad,
-    rowHeight = 64,
   } = props;
 
+  const rowHeight = store.state.table.row_height.value;
+
   const {
-    data,
     visibleRows,
     paddingBottom,
     paddingTop,
   } = useDataFetcher({
     store,
-    scrollContainerRef,
     rowHeight,
     onDataLoad,
   });
@@ -53,7 +52,7 @@ export function Table(props: TableProps) {
   const kb = useTableKb({ store, tableRef });
 
   const adons = useAddons({ store });
-  const initializing = !data.value.length;
+  const initializing = !store.state.fetcher.is_initialized.value;
   return (
     <>
       <Header store={store} loading={initializing} />

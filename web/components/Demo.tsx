@@ -72,7 +72,7 @@ export const Demo = () => {
             <select
               disabled={playing.value}
               defaultValue="Pick a color"
-              className="select select-sm rounded-3xl"
+              class="select select-sm rounded-3xl"
             >
               <option value="all">Play all</option>
               <option value="ai_agents" disabled>AI Agents</option>
@@ -88,32 +88,32 @@ export const Demo = () => {
           </div>
         </div>
         <div
-          className="border-1 mt-2 border-accent/10 h-180 w-full overflow-auto rounded-lg"
+          class="border-1 mt-2 border-accent/10 h-180 w-full overflow-auto rounded-lg"
           ref={scrollRef}
         >
           <Table onDataLoad={onDataLoad} container={scrollRef as any} />
         </div>
         <div class="flex gap-6 p-3 text-sm items-center">
           <div class="flex gap-1 items-center">
-            <kbd className="kbd">◀︎</kbd>
-            <kbd className="kbd">▶︎</kbd>
-            <kbd className="kbd">Tab</kbd>
+            <kbd class="kbd">◀︎</kbd>
+            <kbd class="kbd">▶︎</kbd>
+            <kbd class="kbd">Tab</kbd>
             Navigate
           </div>
           <div class="flex gap-1 items-center">
-            <kbd className="kbd">Enter</kbd>
+            <kbd class="kbd">Enter</kbd>
             Edit
           </div>
           <div class="flex gap-1 items-center">
-            <kbd className="kbd">Tab</kbd>
+            <kbd class="kbd">Tab</kbd>
             Jump Out Edit
           </div>
           <div class="flex gap-1 items-center">
-            <kbd className="kbd">Alt</kbd>
+            <kbd class="kbd">Alt</kbd>
             Select Cells
           </div>
           <div class="flex gap-1 items-center">
-            <kbd className="kbd">Esc</kbd>
+            <kbd class="kbd">Esc</kbd>
             Deselect
           </div>
         </div>
