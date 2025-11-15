@@ -19,14 +19,14 @@ export const StickyTopRows = ({ store }: StickyRowsProps) => {
 
   const renderRow = useRenderRowCallback({
     store,
-    rowHeight: 64,
+    rowHeight: store.state.table.row_height.value,
   });
 
   return (
     <div
       class="vt-sticky-rows-top"
       style={{
-        top: 60, // header heihgt
+        top: store.state.columns.header_height.value, // header heihgt
       }}
     >
       <table style={style} class="vt" x-id={`vt_${store.state.tableId}`}>
