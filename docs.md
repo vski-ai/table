@@ -1,6 +1,6 @@
 ![vski table](./web/public/vskitable.svg)
 
----------------
+---
 
 ## Getting Started
 
@@ -98,7 +98,7 @@ import { Signal, signal } from "@preact/signals";
 import { Command, InferPerstist, TableState } from "@/module/mod.ts";
 
 type MyState = {
-  mystate: {
+  mymod: {
     prop: Signal<boolean>;
   };
 };
@@ -107,11 +107,18 @@ declare module "@/module/types.ts" {
   interface TableState extends MyState {}
 }
 
+const MYMOD_PROP_SET = 'MYMOD_PROP_SET'
+
+export type MyModPropSetCmd = Command<
+  typeof MYMOD_PROP_SET,
+  boolean
+>;
+
 // A state to be added to the table store
 export function state(pesist: InferPerstist<MyState>): MyState {
   return {
-    mystate: {
-      prop: signal(pesist.mystate.prop ?? false),
+    mymod: {
+      prop: signal(pesist.mymod.prop ?? false),
     },
   };
 }
@@ -121,8 +128,8 @@ export function state(pesist: InferPerstist<MyState>): MyState {
 // Here we explicitly specify what is needes to pesist
 export function persist(state: TableState): InferPerstist<MyState> {
   return {
-    mystate: {
-      prop: state.mystate.prop.value,
+    mymod: {
+      prop: state.mymod.prop.value,
     },
   };
 }
@@ -130,7 +137,12 @@ export function persist(state: TableState): InferPerstist<MyState> {
 // State mutation for `store.dispatch`.
 // A command spec is { type: string, payload:<P>, persist: boolean }
 // Pesist flag is for dispatch handler, it isn't used here.
-export function mutate<T>(state: TableState, _: Command<T>) {
+export function mutate(state: TableState, cmd: CMyModPropSetCmd) {
+  swtich(cmd.type) {
+    case "MYMOD_PROP_SET":
+      state.mymod.prop = cmd.payload
+      break;
+  }
 }
 ```
 
@@ -157,3 +169,101 @@ The first argunent in the `use` method represents render order - this is useful
 if you have components coming one after another and display order is important.
 Each render slot, like `beforetable` has their own callback type defined in
 [module typedefs](./module/types.ts).
+
+## Context Menu
+
+Context Menu is a built-in module. It provides methods and intefaces to add menu
+items (or any compnents) to be rendered in the contex menu.
+
+The default item parent is 'main', the other menu items can specify their names
+(menu prop) and parents. The render callbacks receive menu context with store
+and placement. Placemnet 'outside' means outside table body (ie in clicked on a
+header). The `visibility` callback returns a boolean and used to determine
+whether to show an item. A menu action is called if there are no children.
+
+Here is an example of a menu item that will appear in the main menu, when
+clicked on table header and when there is a column to work with:
+
+```ts
+import { ContextMenuItem } from "@/ctxmenu/types.ts";
+import NumberIcon from "lucide-react/dist/esm/icons/decimals-arrow-right.js";
+import { ComponentChildren } from "preact";
+
+export const COLUMN_DATATYPE_MENU = "column_datatype";
+
+export const Title = ({ children }: { children: ComponentChildren }) => {
+  return (
+    <div class="vt-fmt-menu-title">
+      {children}
+      <NumberIcon />
+    </div>
+  );
+};
+
+const Item = ({ children }: { children: ComponentChildren }) => {
+  return (
+    <>
+      <NumberIcon />
+      {children}
+    </>
+  );
+};
+
+export const ColumnMenu: ContextMenuItem = {
+  menu: COLUMN_DATATYPE_MENU,
+  order: 0,
+  visibility: ({ placement, column }) => !!column && placement === "outside",
+  title: () => <Title>Data types</Title>,
+  label: () => <Item>Data types</Item>,
+  action() {},
+};
+
+export const MenuItems = [
+  ColumnMenu,
+];
+```
+
+Here is an example of a column menu child item:
+
+```ts
+import { ContextMenuItem } from "@/ctxmenu/types.ts";
+import { COLUMN_DATATYPE_MENU, Title } from "../menu.tsx";
+import { Settings } from "./Settings.tsx";
+import CalendarIcon from "lucide-react/dist/esm/icons/calendar-clock.js";
+
+export const DATE_DATATYPE_MENU = "column_datatype_date";
+
+export const DateDatatypeMenu: ContextMenuItem = {
+  menu: DATE_DATATYPE_MENU,
+  parent: COLUMN_DATATYPE_MENU,
+  visibility: () => true,
+  title: ({ column }) => (
+    <Title>
+      Date format{" "}
+      <span class="badge badge-xs badge-accent absolute right-1">{column}</span>
+    </Title>
+  ),
+  label: () => (
+    <>
+      <CalendarIcon />
+      <span>Datetime Format</span>
+    </>
+  ),
+  action() {},
+};
+
+export const DateSettingsMenu: ContextMenuItem = {
+  menu: "date_settings_menu",
+  parent: DATE_DATATYPE_MENU,
+  visibility: () => true,
+  label: (ctx) => <Settings {...ctx} />,
+};
+
+export const DateMenuItems = [
+  DateDatatypeMenu,
+  DateSettingsMenu,
+];
+```
+
+See [typedefs](./ctxmenu/types.ts) for context menu. We work with
+`ContextMenuItem`.

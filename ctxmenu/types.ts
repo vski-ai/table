@@ -15,7 +15,6 @@ export type MenuContext = {
   column?: string;
   rowId?: string;
   index?: string;
-  tabIndex?: number;
   placement: "body" | "outside";
   store: TableStore;
 };
