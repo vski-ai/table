@@ -1,10 +1,18 @@
 import { TableStore } from "@/module/types.ts";
 import {
+  CELL_STYLE_RESET,
+  CELL_STYLE_SET,
   CellStyleSetCommand,
+  COLUMN_STYLE_RESET,
+  COLUMN_STYLE_SET,
   ColumnStyleResetCommand,
   ColumnStyleSetCommand,
+  ROW_STYLE_RESET,
+  ROW_STYLE_SET,
   RowStyleResetCommand,
   RowStyleSetCommand,
+  TABLE_STYLE_RESET,
+  TABLE_STYLE_SET,
   TableStyleResetCommand,
   TableStyleSetCommand,
 } from "../store.ts";
@@ -46,28 +54,28 @@ export function setStyle(
   switch (ctx.scope) {
     case "table": {
       store.dispatch<TableStyleSetCommand>({
-        type: "TABLE_STYLE_SET",
+        type: TABLE_STYLE_SET,
         payload: style,
       });
       break;
     }
     case "column": {
       store.dispatch<ColumnStyleSetCommand>({
-        type: "COLUMN_STYLE_SET",
+        type: COLUMN_STYLE_SET,
         payload: { key: ctx.column, style },
       });
       break;
     }
     case "row": {
       store.dispatch<RowStyleSetCommand>({
-        type: "ROW_STYLE_SET",
+        type: ROW_STYLE_SET,
         payload: { key: ctx.row, style },
       });
       break;
     }
     case "cell": {
       store.dispatch<CellStyleSetCommand>({
-        type: "CELL_STYLE_SET",
+        type: CELL_STYLE_SET,
         payload: { rowKey: ctx.row, columnId: ctx.column, style },
       });
       break;
@@ -114,28 +122,28 @@ export function resetStyle(ctx: ScopedStyleProps & WithStore) {
   switch (ctx.scope) {
     case "table": {
       store.dispatch<TableStyleResetCommand>({
-        type: "TABLE_STYLE_RESET",
+        type: TABLE_STYLE_RESET,
         payload: {},
       });
       break;
     }
     case "column": {
       store.dispatch<ColumnStyleResetCommand>({
-        type: "COLUMN_STYLE_RESET",
+        type: COLUMN_STYLE_RESET,
         payload: { key: ctx.column },
       });
       break;
     }
     case "row": {
       store.dispatch<RowStyleResetCommand>({
-        type: "ROW_STYLE_RESET",
+        type: ROW_STYLE_RESET,
         payload: { key: ctx.row },
       });
       break;
     }
     case "cell": {
       store.dispatch({
-        type: "CELL_STYLE_RESET",
+        type: CELL_STYLE_RESET,
         payload: { rowKey: ctx.row, columnId: ctx.column },
       });
       break;

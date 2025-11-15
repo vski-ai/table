@@ -6,8 +6,8 @@ export const enumColumnRenderCallback: ColumnRendererCallback = (
 ) => {
   return (
     <Column
-      key="$$enumerator$$"
-      column="$$enumerator$$"
+      key="__enumerator__"
+      column="__enumerator__"
       store={store}
     >
       <div class="text-center">#</div>

@@ -52,7 +52,7 @@ export function persist(state: TableState): InferPersist<FetcherState> {
 
 export function mutate(state: TableState, command: TableMetaCommnand) {
   switch (command.type) {
-    case "TABLE_META_SET": {
+    case TABLE_META_SET: {
       state.fetcher.table_meta.value = command.payload;
       break;
     }

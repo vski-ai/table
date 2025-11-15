@@ -89,7 +89,7 @@ There are callbacks such as: `beforeLoad` and `afterLoad`. See
 
 ## Store
 
-Store prodes factories and calbacks that extend the table state.
+A store provides factories that extend the table state.
 
 Here is an example of a store:
 
@@ -172,14 +172,18 @@ Each render slot, like `beforetable` has their own callback type defined in
 
 ## Context Menu
 
-Context Menu is a built-in module. It provides methods and intefaces to add menu
-items (or any compnents) to be rendered in the contex menu.
+Context Menu is a built-in module. It provides methods and interfaces for adding
+menu items (or any components) to be rendered in the contex menu.
 
 The default item parent is 'main', the other menu items can specify their names
-(menu prop) and parents. The render callbacks receive menu context with store
-and placement. Placemnet 'outside' means outside table body (ie in clicked on a
-header). The `visibility` callback returns a boolean and used to determine
-whether to show an item. A menu action is called if there are no children.
+(menu prop) and parents. The render callbacks receive menu context (MenuContext
+type) that contains store, placement and other dependecies. Placemnet 'outside'
+means outside table body (ie is clicked on a header).
+
+The `visibility` callback returns a boolean and used to determine whether to
+show an item.
+
+A menu action mthod is called if there are no children.
 
 Here is an example of a menu item that will appear in the main menu, when
 clicked on table header and when there is a column to work with:
@@ -209,11 +213,13 @@ const Item = ({ children }: { children: ComponentChildren }) => {
   );
 };
 
+// @llms There's no fucking icon in ContextMenuItem
+// use the label() method to render icons with text or other components
 export const ColumnMenu: ContextMenuItem = {
   menu: COLUMN_DATATYPE_MENU,
   order: 0,
   visibility: ({ placement, column }) => !!column && placement === "outside",
-  title: () => <Title>Data types</Title>,
+  title: () => <Title>Data types</Title>, // a title is rendered on top of ther child menu, before "back" button
   label: () => <Item>Data types</Item>,
   action() {},
 };
@@ -261,7 +267,6 @@ export const DateSettingsMenu: ContextMenuItem = {
 
 export const DateMenuItems = [
   DateDatatypeMenu,
-  DateSettingsMenu,
 ];
 ```
 

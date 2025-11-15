@@ -4,6 +4,8 @@ import UnPin from "lucide-react/dist/esm/icons/pin-off.js";
 import TopIcon from "lucide-react/dist/esm/icons/arrow-up-to-line.js";
 import BottomIcon from "lucide-react/dist/esm/icons/arrow-down-to-line.js";
 import {
+  STICKY_BOTTOM_ROWS_SET,
+  STICKY_TOP_ROWS_SET,
   StickyBottomRowsSetCommand,
   StickyTopRowsSetCommand,
 } from "./store.ts";
@@ -56,7 +58,7 @@ export const StickTop: ContextMenuItem = {
     if (!row) return;
     const currentSticky = store.state.rows.sticky_top.value;
     store.dispatch<StickyTopRowsSetCommand>({
-      type: "STICKY_TOP_ROWS_SET",
+      type: STICKY_TOP_ROWS_SET,
       payload: [...currentSticky, row] as RowData[],
     });
   },
@@ -80,7 +82,7 @@ export const StickBottom: ContextMenuItem = {
     if (!row) return;
     const currentSticky = store.state.rows.sticky_bottom.value;
     store.dispatch<StickyBottomRowsSetCommand>({
-      type: "STICKY_BOTTOM_ROWS_SET",
+      type: STICKY_BOTTOM_ROWS_SET,
       payload: [...currentSticky, row] as RowData[],
     });
   },

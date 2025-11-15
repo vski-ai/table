@@ -8,7 +8,7 @@ import { cn } from "@/common/className.ts";
 import { ColumnRendererCallback } from "@/module/types.ts";
 import { useCallback } from "preact/hooks";
 import { useSignal } from "@preact/signals";
-import { SortSetCommand } from "../store.ts";
+import { SORT_SET, SortSetCommand } from "../store.ts";
 import { SortState } from "../types.ts";
 
 interface RowSorterProps {
@@ -30,7 +30,7 @@ export const RowSorter = ({
 
   const sort = (state: SortState) => {
     store.dispatch<SortSetCommand>({
-      type: "SORT_SET",
+      type: SORT_SET,
       payload: state,
     });
     store.shouldReload();

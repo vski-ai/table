@@ -1,8 +1,13 @@
 import { useCallback, useRef } from "preact/hooks";
 import { TableStore } from "@/module/types.ts";
 import { RowData } from "@/row/types.ts";
-import { CellEditingSetCommand } from "@/editing/store.ts";
-import { CellDeselectCmd, CellSelectCmd } from "@/cell/store.ts";
+import { CELL_EDITING_SET, CellEditingSetCommand } from "@/editing/store.ts";
+import {
+  CELL_DESELECT,
+  CELL_SELECT,
+  CellDeselectCmd,
+  CellSelectCmd,
+} from "@/cell/store.ts";
 
 type CellKeyBindingsProps = {
   store: TableStore;
@@ -18,7 +23,7 @@ export function useCellKb(
 
   const setEditing = useCallback(() => {
     store.dispatch<CellEditingSetCommand>({
-      type: "CELL_EDITING_SET",
+      type: CELL_EDITING_SET,
       payload: {
         [key]: true,
       },
@@ -27,7 +32,7 @@ export function useCellKb(
 
   const unSetEditing = useCallback(() => {
     store.dispatch<CellEditingSetCommand>({
-      type: "CELL_EDITING_SET",
+      type: CELL_EDITING_SET,
       payload: {
         [key]: false,
       },
@@ -89,13 +94,13 @@ export function useCellKb(
     }
     if (store.state.keyboard.metaKey.value) {
       store.dispatch<CellDeselectCmd>({
-        type: "CELL_DESELECT",
+        type: CELL_DESELECT,
         payload: key,
       });
     }
     if (store.state.keyboard.altKey.value) {
       store.dispatch<CellSelectCmd>({
-        type: "CELL_SELECT",
+        type: CELL_SELECT,
         payload: key,
       });
     }
@@ -107,13 +112,13 @@ export function useCellKb(
     e.preventDefault();
     if (store.state.keyboard.altKey.value) {
       store.dispatch<CellSelectCmd>({
-        type: "CELL_SELECT",
+        type: CELL_SELECT,
         payload: key,
       });
     }
     if (store.state.keyboard.metaKey.value) {
       store.dispatch<CellDeselectCmd>({
-        type: "CELL_DESELECT",
+        type: CELL_DESELECT,
         payload: key,
       });
     }
@@ -125,13 +130,13 @@ export function useCellKb(
   const onFocus = useCallback(() => {
     if (store.state.keyboard.altKey.value) {
       store.dispatch<CellSelectCmd>({
-        type: "CELL_SELECT",
+        type: CELL_SELECT,
         payload: key,
       });
     }
     if (store.state.keyboard.metaKey.value) {
       store.dispatch<CellDeselectCmd>({
-        type: "CELL_DESELECT",
+        type: CELL_DESELECT,
         payload: key,
       });
     }

@@ -12,7 +12,7 @@ export async function playAll(
   }
 
   store.state.columns.widths.value = {
-    $$enumerator$$: 50,
+    __enumerator__: 50,
   };
   store.state.rows.heights.value = {};
   store.state.columns.sticky.value = {};

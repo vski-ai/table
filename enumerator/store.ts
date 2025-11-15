@@ -13,8 +13,8 @@ declare module "@/module/types.ts" {
   interface TableState extends EnumeratorStore {}
 }
 
-const ROW_RESIZING_SET = "ROW_RESIZING_SET";
-const ROW_HEIGHTS_SET = "ROW_HEIGHTS_SET";
+export const ROW_RESIZING_SET = "ROW_RESIZING_SET";
+export const ROW_HEIGHTS_SET = "ROW_HEIGHTS_SET";
 
 export type RowResizeCommand = Command<typeof ROW_RESIZING_SET, ResizingRow>;
 export type RowHeightCommand = Command<
@@ -38,10 +38,10 @@ export function persist(_: TableState) {
 
 export function mutate(state: TableState, command: RowCommand) {
   switch (command.type) {
-    case "ROW_RESIZING_SET":
+    case ROW_RESIZING_SET:
       state.enumerator.resizing_row.value = command.payload;
       break;
-    case "ROW_HEIGHTS_SET":
+    case ROW_HEIGHTS_SET:
       state.rows.heights.value = {
         ...state.rows.heights.value,
         ...command.payload,

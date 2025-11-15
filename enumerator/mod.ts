@@ -14,7 +14,7 @@ const onInit: ModuleInitCallback = ({
   store.dispatch<ColumnWidthCommand>({
     type: "COLUMN_WIDTHS_SET",
     payload: {
-      $$enumerator$$: 58,
+      __enumerator__: 58,
     },
   });
 };

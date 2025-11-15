@@ -6,7 +6,7 @@ import { RowData } from "@/row/types.ts";
 import { useRowKey } from "@/columns/hooks/useRowKey.ts";
 import { useRowHeights } from "@/row/hooks/useRowHeights.ts";
 import { RowResizeHandle } from "./RowResizeHandle.tsx";
-import { RowHeightCommand } from "../store.ts";
+import { ROW_HEIGHTS_SET, RowHeightCommand } from "../store.ts";
 import { useSignal } from "@preact/signals";
 
 export const EnumeratorCell = ({
@@ -27,7 +27,7 @@ export const EnumeratorCell = ({
   const update = useSignal(0);
   const onResize = useCallback((rowId: string | number, newHeight: number) => {
     store.dispatch<RowHeightCommand>({
-      type: "ROW_HEIGHTS_SET",
+      type: ROW_HEIGHTS_SET,
       payload: { [rowId]: newHeight },
     });
   }, []);
@@ -35,7 +35,7 @@ export const EnumeratorCell = ({
     <td
       class="vt-cell vt-enum"
       style={{
-        width: `var(--col-width-$$enumerator$$)`,
+        width: `var(--col-width-__enumerator__)`,
         position: "relative",
       }}
       tabIndex={-1}
@@ -60,4 +60,4 @@ export const enumCellRenderCallback: CellRendererCallback = ({
   return <EnumeratorCell {...{ store, row, index: rowIndex! }} />;
 };
 
-enumCellRenderCallback.columnName = "$$enumerator$$";
+enumCellRenderCallback.columnName = "__enumerator__";

@@ -71,13 +71,13 @@ export function persist(state: TableState) {
 
 export function mutate(state: TableState, command: FormattingCommandType) {
   switch (command.type) {
-    case "COLUMN_DATATYPE_SET":
+    case COLUMN_DATATYPE_SET:
       state.data_type.column.value = {
         ...state.data_type.column.value,
         ...command.payload,
       };
       break;
-    case "COLUMN_DATATYPE_OPTIONS_SET":
+    case COLUMN_DATATYPE_OPTIONS_SET:
       state.data_type.options.value = {
         ...state.data_type.options.value,
         ...command.payload,

@@ -13,7 +13,7 @@ declare module "@/module/types.ts" {
   interface TableState extends ContextMenuState {}
 }
 
-const CONTEXT_MENU_ADD_ITEM = "CONTEXT_MENU_ADD_ITEM";
+export const CONTEXT_MENU_ADD_ITEM = "CONTEXT_MENU_ADD_ITEM";
 export type ContextMenuAddCommand = Command<
   typeof CONTEXT_MENU_ADD_ITEM,
   ContextMenuItem
@@ -71,7 +71,7 @@ export function persist(_: TableState) {
 
 export function mutate(state: TableState, command: ContextMenuAddCommand) {
   switch (command.type) {
-    case "CONTEXT_MENU_ADD_ITEM": {
+    case CONTEXT_MENU_ADD_ITEM: {
       state.context_menu.items.value = {
         ...state.context_menu.items.value,
         [command.payload.menu]: command.payload,

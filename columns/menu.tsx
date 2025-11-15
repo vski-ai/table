@@ -6,11 +6,11 @@ import PinIcon from "lucide-react/dist/esm/icons/pin.js";
 import HideIcon from "lucide-react/dist/esm/icons/eye-off.js";
 import CogIcon from "lucide-react/dist/esm/icons/columns-3-cog.js";
 
-import { 
-  ColumnStickCommand, 
-  ColumnVisibilityCommand, 
-  COLUMN_STICK_SET, 
-  COLUMN_VISIBILITY_SET 
+import {
+  COLUMN_STICK_SET,
+  COLUMN_VISIBILITY_SET,
+  ColumnStickCommand,
+  ColumnVisibilityCommand,
 } from "./store.ts";
 
 const STICKY_COLUMN = "sticky_column";

@@ -1,7 +1,6 @@
 import { TableStore } from "@/module/types.ts";
 import { MutableRef, useCallback, useEffect, useRef } from "preact/hooks";
-import { CellSelectResetCmd } from "@/cell/store.ts";
-import { en_CA } from "@faker-js/faker";
+import { CELL_SELECT_RESET, CellSelectResetCmd } from "@/cell/store.ts";
 
 const BUFFER_SIZE = 5;
 
@@ -26,7 +25,7 @@ export function useTableKb({ store, tableRef }: RowKbProps) {
       }
       if (ev.key === "Escape") {
         store.dispatch<CellSelectResetCmd>({
-          type: "CELL_SELECT_RESET",
+          type: CELL_SELECT_RESET,
           payload: true,
         });
       }

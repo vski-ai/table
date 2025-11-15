@@ -33,7 +33,7 @@ export const FlatTable = () => {
     modules: [
       SortingModule,
       EnumeratorModule,
-      ChatModule
+      ChatModule,
     ],
     persistence: new LocalStorageAdapter(),
   });

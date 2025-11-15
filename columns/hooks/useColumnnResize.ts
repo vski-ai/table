@@ -1,7 +1,7 @@
 import { useCallback } from "preact/hooks";
 
 import { TableStore } from "@/module/mod.ts";
-import { ColumnWidthCommand } from "../store.ts";
+import { COLUMN_WIDTHS_SET, ColumnWidthCommand } from "../store.ts";
 
 interface ColumnResizerProps {
   store: TableStore;
@@ -14,7 +14,7 @@ export function useColumnResizer({
     (column: string, newWidth: number) => {
       store.state.columns.resizing_column.value = null;
       store.dispatch<ColumnWidthCommand>({
-        type: "COLUMN_WIDTHS_SET",
+        type: COLUMN_WIDTHS_SET,
         payload: {
           [column]: newWidth,
         },

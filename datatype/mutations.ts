@@ -1,9 +1,9 @@
 import { TableStore } from "@/module/types.ts";
 import {
+  COLUMN_DATATYPE_OPTIONS_SET,
+  COLUMN_DATATYPE_SET,
   ColumnDataTypeOptionsSetCommand,
   ColumnDataTypeSetCommand,
-  COLUMN_DATATYPE_OPTIONS_SET,
-  COLUMN_DATATYPE_SET
 } from "./store.ts";
 
 export function resetFormatting(

@@ -93,26 +93,26 @@ export function persist(state: TableState): InferPersist<ColumnsState> {
 
 export function mutate(state: TableState, command: ColumnCommandType) {
   switch (command.type) {
-    case "COLUMNS_SET": {
+    case COLUMNS_SET: {
       state.columns.all.value = command.payload;
       break;
     }
-    case "COLUMN_ORDER_SET":
+    case COLUMN_ORDER_SET:
       state.columns.ordered.value = command.payload;
       break;
-    case "COLUMN_VISIBILITY_SET":
+    case COLUMN_VISIBILITY_SET:
       state.columns.visibility.value = {
         ...state.columns.visibility.value,
         ...command.payload,
       };
       break;
-    case "COLUMN_WIDTHS_SET":
+    case COLUMN_WIDTHS_SET:
       state.columns.widths.value = {
         ...state.columns.widths.value,
         ...command.payload,
       };
       break;
-    case "COLUMN_STICK_SET": {
+    case COLUMN_STICK_SET: {
       const { column, position } = command
         .payload as ColumnStickCommandPayload;
       state.columns.sticky.value = {

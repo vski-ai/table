@@ -15,9 +15,9 @@ declare module "@/module/types.ts" {
   }
 }
 
-const CELL_SELECT = "CELL_SELECT";
-const CELL_DESELECT = "CELL_DESELECT";
-const CELL_SELECT_RESET = "CELL_SELECT_RESET";
+export const CELL_SELECT = "CELL_SELECT";
+export const CELL_DESELECT = "CELL_DESELECT";
+export const CELL_SELECT_RESET = "CELL_SELECT_RESET";
 
 export type CellSelectCmd = Command<
   typeof CELL_SELECT,
@@ -48,19 +48,19 @@ export function mutate<T>(
   cmd: CellSelectCmd | CellSelectResetCmd | CellDeselectCmd,
 ) {
   switch (cmd.type) {
-    case "CELL_SELECT":
+    case CELL_SELECT:
       state.cells.selected.value = {
         ...state.cells.selected.value,
         [cmd.payload]: true,
       };
       break;
-    case "CELL_DESELECT":
+    case CELL_DESELECT:
       state.cells.selected.value = {
         ...state.cells.selected.value,
         [cmd.payload]: false,
       };
       break;
-    case "CELL_SELECT_RESET":
+    case CELL_SELECT_RESET:
       if (cmd.payload) {
         state.cells.selected.value = {};
       }

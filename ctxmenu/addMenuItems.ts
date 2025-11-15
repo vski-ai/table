@@ -1,4 +1,4 @@
-import { ContextMenuAddCommand } from "./store.ts";
+import { CONTEXT_MENU_ADD_ITEM, ContextMenuAddCommand } from "./store.ts";
 import { TableStore } from "@/module/types.ts";
 import { ContextMenuItem } from "./types.ts";
 
@@ -20,7 +20,7 @@ export function addMenuItems({
       continue;
     }
     store.dispatch<ContextMenuAddCommand>({
-      type: "CONTEXT_MENU_ADD_ITEM",
+      type: CONTEXT_MENU_ADD_ITEM,
       payload: item,
     });
   }

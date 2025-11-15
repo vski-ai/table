@@ -14,8 +14,8 @@ declare module "@/module/types.ts" {
   interface TableState extends RowsState {}
 }
 
-const STICKY_TOP_ROWS_SET = "STICKY_TOP_ROWS_SET";
-const STICKY_BOTTOM_ROWS_SET = "STICKY_BOTTOM_ROWS_SET";
+export const STICKY_TOP_ROWS_SET = "STICKY_TOP_ROWS_SET";
+export const STICKY_BOTTOM_ROWS_SET = "STICKY_BOTTOM_ROWS_SET";
 
 export type StickyTopRowsSetCommand = Command<
   typeof STICKY_TOP_ROWS_SET,
@@ -53,10 +53,10 @@ export function persist(state: RowsState): InferPersist<RowsState> {
 
 export function mutate(state: TableState, command: StickyRowsCommand) {
   switch (command.type) {
-    case "STICKY_TOP_ROWS_SET":
+    case STICKY_TOP_ROWS_SET:
       state.rows.sticky_top.value = command.payload;
       break;
-    case "STICKY_BOTTOM_ROWS_SET":
+    case STICKY_BOTTOM_ROWS_SET:
       state.rows.sticky_bottom.value = command.payload;
       break;
   }

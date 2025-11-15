@@ -8,7 +8,7 @@ declare module "@/module/types.ts" {
   }
 }
 
-const SORT_SET = "SORT_SET";
+export const SORT_SET = "SORT_SET";
 export type SortSetCommand = Command<typeof SORT_SET, SortState>;
 
 export function state(init: Record<string, any> | null) {
@@ -25,7 +25,7 @@ export function persist(state: TableState) {
 
 export function mutate(state: TableState, command: SortSetCommand) {
   switch (command.type) {
-    case "SORT_SET": {
+    case SORT_SET: {
       state.sorting.value = command.payload;
       break;
     }

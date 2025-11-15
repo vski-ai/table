@@ -20,8 +20,8 @@ declare module "@/module/types.ts" {
   }
 }
 
-const CELL_EDITING_SET = "CELL_EDITING_SET";
-const ROW_EDIT_UPDATE = "ROW_EDIT_UPDATE";
+export const CELL_EDITING_SET = "CELL_EDITING_SET";
+export const ROW_EDIT_UPDATE = "ROW_EDIT_UPDATE";
 
 export type CellEditingSetCommand = Command<
   typeof CELL_EDITING_SET,
@@ -53,10 +53,10 @@ export function persist(_: TableState) {
 
 export function mutate(state: TableState, command: EditingCommandType) {
   switch (command.type) {
-    case "CELL_EDITING_SET":
+    case CELL_EDITING_SET:
       state.editing.cell.value = command.payload;
       break;
-    case "ROW_EDIT_UPDATE":
+    case ROW_EDIT_UPDATE:
       state.editing.rows.value = {
         ...state.editing.rows.value,
         [command.payload.id]: command.payload,
