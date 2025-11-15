@@ -1,7 +1,5 @@
 ![vski table](./web/public/vskitable.svg)
 
-# Documentation
-
 Vski Table is a flexible datagrid component.
 
 ## Getting Started
@@ -86,7 +84,8 @@ export const MyModule: ITableModule = {
 };
 ```
 
-There are callbacks such as: `beforeLoad` and `afterLoad`. See typedef for info.
+There are callbacks such as: `beforeLoad` and `afterLoad`. See
+[typedef](./module/types.ts) for info.
 
 ## Store
 
@@ -135,5 +134,26 @@ export function mutate<T>(state: TableState, _: Command<T>) {
 }
 ```
 
-See more complete examples at any module, for example
+See more complete examples at any module, for example in
 [columns](./columns/store.ts)
+
+### Addons
+
+Addons provide render callbacks for pre-defined render slots (beforetable,
+aftertable, etc). The slots are passed to a module init callback.
+
+```ts
+import { myModalRenderCallback } from "./MyModal.tsx";
+
+const onInit: ModuleInitCallback = ({
+  store,
+  beforetable,
+}) => {
+  beforetable.use(-1, myModalRenderCallback);
+};
+```
+
+The first argunent in the `use` method represents render order - this is useful
+if you have components coming one after another and display order is important.
+Each render slot, like `beforetable` has their own callback type defined in
+[module typedefs](./module/types.ts).
