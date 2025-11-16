@@ -116,12 +116,6 @@ export function useCellKb(
         payload: key,
       });
     }
-    if (store.state.keyboard.metaKey.value) {
-      store.dispatch<CellDeselectCmd>({
-        type: CELL_DESELECT,
-        payload: key,
-      });
-    }
   }, [
     store.state.keyboard.altKey.value,
     store.state.keyboard.metaKey.value,
