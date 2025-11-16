@@ -25,7 +25,8 @@ const Item = ({ children }: { children: ComponentChildren }) => {
 export const ColumnMenu: ContextMenuItem = {
   menu: COLUMN_DATATYPE_MENU,
   order: 0,
-  visibility: ({ placement, column }) => !!column && placement === "outside",
+  highlight: ({ column }) => `td[data-column-name="${column}"]`,
+  visibility: ({ placement, column }) => !!column && placement === "header",
   title: () => <Title>Data types</Title>,
   label: () => <Item>Data types</Item>,
   action() {},

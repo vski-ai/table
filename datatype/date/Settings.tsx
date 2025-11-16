@@ -82,6 +82,7 @@ export function Settings({ store, column }: MenuContext) {
       <div class="grid grid-cols-2 grid-rows-1 gap-1">
         <button
           type="button"
+          tabIndex={0}
           onClick={() => {
             configMode.value = "style";
           }}
@@ -107,6 +108,7 @@ export function Settings({ store, column }: MenuContext) {
               <span class="label-text">Date Style</span>
             </label>
             <select
+              tabIndex={0}
               class="select select-sm select-bordered"
               value={dateStyle.value}
               onChange={(e) => {
@@ -124,6 +126,7 @@ export function Settings({ store, column }: MenuContext) {
               <span class="label-text">Time Style</span>
             </label>
             <select
+              tabIndex={0}
               class="select select-sm select-bordered"
               value={timeStyle.value}
               onChange={(e) => {

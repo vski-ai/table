@@ -40,7 +40,9 @@ export const TextAlign = (props: StyleProps) => {
   return (
     <>
       <div class="vt-fmt-text-align-wrap">
-        <a
+        <button
+          type="button"
+          tabIndex={0}
           onClick={toggleLeft}
           class={cn({
             "vt-fmt-menu-btn": true,
@@ -48,8 +50,10 @@ export const TextAlign = (props: StyleProps) => {
           })}
         >
           <AlignStart />
-        </a>
-        <a
+        </button>
+        <button
+          type="button"
+          tabIndex={0}
           onClick={toggleCenter}
           class={cn({
             "vt-fmt-menu-btn": true,
@@ -57,8 +61,10 @@ export const TextAlign = (props: StyleProps) => {
           })}
         >
           <AlignCenter />
-        </a>
-        <a
+        </button>
+        <button
+          type="button"
+          tabIndex={0}
           onClick={toggleRight}
           class={cn({
             "vt-fmt-menu-btn": true,
@@ -66,7 +72,7 @@ export const TextAlign = (props: StyleProps) => {
           })}
         >
           <AlignEnd />
-        </a>
+        </button>
       </div>
     </>
   );

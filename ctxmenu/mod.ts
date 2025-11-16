@@ -1,8 +1,8 @@
-export * from "./addMenuItems.ts";
+export * from "./utils/addMenuItems.ts";
 
 import { ITableModule, ModuleInitCallback } from "@/module/mod.ts";
 import { contextMenuRenderCallback } from "./ContextMenu.tsx";
-import { addMenuItems } from "./addMenuItems.ts";
+import { addMenuItems } from "./utils/addMenuItems.ts";
 import { Copy } from "./default.tsx";
 import * as store from "./store.ts";
 

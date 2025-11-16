@@ -41,7 +41,9 @@ export const FontStyle = (props: StyleProps) => {
   return (
     <>
       <div class="vt-font-style-menu-wrap">
-        <a
+        <button
+          type="button"
+          tabIndex={0}
           onClick={toggleBold}
           class={cn({
             "vt-fmt-menu-btn": true,
@@ -49,8 +51,10 @@ export const FontStyle = (props: StyleProps) => {
           })}
         >
           <Bold />
-        </a>
-        <a
+        </button>
+        <button
+          type="button"
+          tabIndex={0}
           onClick={toggleItalic}
           class={cn({
             "vt-fmt-menu-btn": true,
@@ -58,8 +62,10 @@ export const FontStyle = (props: StyleProps) => {
           })}
         >
           <Italic />
-        </a>
-        <a
+        </button>
+        <button
+          type="button"
+          tabIndex={0}
           onClick={toggleDecoration("underline")}
           class={cn({
             "vt-fmt-menu-btn": true,
@@ -67,8 +73,10 @@ export const FontStyle = (props: StyleProps) => {
           })}
         >
           <Underline />
-        </a>
-        <a
+        </button>
+        <button
+          type="button"
+          tabIndex={0}
           onClick={toggleDecoration("line-through")}
           class={cn({
             "vt-fmt-menu-btn": true,
@@ -76,7 +84,7 @@ export const FontStyle = (props: StyleProps) => {
           })}
         >
           <Strikethrough />
-        </a>
+        </button>
       </div>
     </>
   );

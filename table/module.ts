@@ -1,5 +1,5 @@
 import { ITableModule, ModuleInitCallback } from "@/module/types.ts";
-import { addMenuItems } from "@/ctxmenu/addMenuItems.ts";
+import { addMenuItems } from "@/ctxmenu/utils/addMenuItems.ts";
 import { renderTableSettings } from "./components/Settings.tsx";
 import { MenuItems } from "./menu.tsx";
 import * as store from "./store.ts";

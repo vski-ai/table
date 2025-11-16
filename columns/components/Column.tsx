@@ -79,6 +79,7 @@ export function Column(
 
   return (
     <th
+      tabindex={0}
       data-column-name={column}
       style={{
         height: store.state.columns?.header_height?.value ?? 50,

@@ -78,6 +78,7 @@ export function Settings({ store, column }: MenuContext) {
       <LocaleSelector data={locale} />
       <div class="grid grid-cols-3 grid-rows-1 gap-1">
         <button
+          tabIndex={0}
           type="button"
           onClick={() => {
             current.value = "number";
@@ -87,6 +88,7 @@ export function Settings({ store, column }: MenuContext) {
           <HashIcon className="w-3 h-3" />
         </button>
         <button
+          tabIndex={0}
           type="button"
           onClick={() => {
             current.value = "currency";
@@ -96,6 +98,7 @@ export function Settings({ store, column }: MenuContext) {
           <DollarIcon className="w-3 h-3" />
         </button>
         <button
+          tabIndex={0}
           type="button"
           onClick={() => {
             current.value = "unit";
@@ -114,6 +117,7 @@ export function Settings({ store, column }: MenuContext) {
               data={currency}
             />
             <select
+              tabIndex={0}
               class="select select-sm select-bordered"
               value={currenyDisplay.value}
               onChange={(e) => {
@@ -136,6 +140,7 @@ export function Settings({ store, column }: MenuContext) {
             data={unit}
           />
           <select
+            tabIndex={0}
             class="select select-sm select-bordered"
             value={unitDisplay.value}
             onChange={(e) => {
@@ -154,6 +159,7 @@ export function Settings({ store, column }: MenuContext) {
           <span class="label-text">Fraction Digits</span>
         </label>
         <input
+          tabIndex={0}
           type="number"
           class="input input-sm input-bordered"
           value={digits.value}
@@ -165,6 +171,7 @@ export function Settings({ store, column }: MenuContext) {
         />
       </div>
       <button
+        tabIndex={0}
         type="button"
         onClick={onApply}
         class="btn btn-sm w-full mt-5"
@@ -172,6 +179,7 @@ export function Settings({ store, column }: MenuContext) {
         Apply
       </button>
       <button
+        tabIndex={0}
         onClick={() => resetFormatting({ store, column })}
         type="button"
         class="btn btn-xs btn-ghost w-full mt-1"

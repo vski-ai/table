@@ -25,7 +25,8 @@ const Item = ({ children }: { children: ComponentChildren }) => {
 export const RowMenu: ContextMenuItem = {
   menu: "row_style",
   order: 1,
-  visibility: ({ placement, rowId }) => !!rowId && placement !== "outside",
+  highlight: (ctx) => `[data-row-id="${ctx.rowId}"] td`,
+  visibility: ({ placement, rowId }) => !!rowId && placement !== "header",
   title: () => <Title>Row style</Title>,
   label: () => <Item>Row style</Item>,
   action() {},
@@ -45,9 +46,18 @@ export const RowMenuContent: ContextMenuItem = {
 export const ColumnMenu: ContextMenuItem = {
   menu: "col_style",
   order: 1,
-  visibility: ({ placement, column }) => !!column && placement === "outside",
-  title: () => <Title>Column style</Title>,
-  label: () => <Item>Column style</Item>,
+  visibility: ({ placement, column }) => !!column && placement === "header",
+  highlight: ({ column }) => `td[data-column-name="${column}"]`,
+  title: () => (
+    <Title>
+      Style
+    </Title>
+  ),
+  label: () => (
+    <Item>
+      Style
+    </Item>
+  ),
   action() {},
 };
 

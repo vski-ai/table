@@ -2,10 +2,19 @@ import { computed, Signal, signal } from "@preact/signals";
 import { Command, TableState } from "@/module/mod.ts";
 import { ContextMenu, ContextMenuItem } from "./types.ts";
 
+export const PLACEMENT_TARGET_ACESSOR = Symbol("placement");
+
+export type PlacementTargetResolver = {
+  name: string;
+  match: (element: HTMLElement) => boolean;
+  target: (element: HTMLElement) => HTMLElement | null;
+};
+
 type ContextMenuState = {
   context_menu: {
     menu: Signal<ContextMenu>;
     items: Signal<Record<string, ContextMenuItem>>;
+    [PLACEMENT_TARGET_ACESSOR]: PlacementTargetResolver[];
   };
 };
 
@@ -20,7 +29,19 @@ export type ContextMenuAddCommand = Command<
   "Add context menu item"
 >;
 
-export function state<T>(_: any): ContextMenuState {
+const PlacementBody: PlacementTargetResolver = {
+  name: "body",
+  match: (el) => !!el.closest(".vt-cell"),
+  target: (el) => el.closest(".vt-cell"),
+};
+
+const PlacementHeader: PlacementTargetResolver = {
+  name: "header",
+  match: (el) => !!el.closest(".vt-header"),
+  target: (el) => el.closest(".vt-header"),
+};
+
+export function state(): ContextMenuState {
   const contextMenuItems = signal<Record<string, ContextMenuItem>>({});
 
   const contextMenu = computed<ContextMenu>(() => {
@@ -50,6 +71,7 @@ export function state<T>(_: any): ContextMenuState {
             visibility: item.visibility,
             label: item.label,
             action: item.action,
+            highlight: item.highlight,
             submenu: submenu,
           };
         }),
@@ -62,6 +84,10 @@ export function state<T>(_: any): ContextMenuState {
     context_menu: {
       items: contextMenuItems,
       menu: contextMenu,
+      [PLACEMENT_TARGET_ACESSOR]: [
+        PlacementBody,
+        PlacementHeader,
+      ],
     },
   };
 }

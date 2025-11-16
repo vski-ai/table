@@ -4,6 +4,10 @@
       text-base-content after:border-r-1 after:border-gray-300
       dark:after:border-gray-700;
 
+    &:focus {
+      @apply outline-none after:border after:border-sky-500/30;
+    }
+
     &.stick-left {
       @apply after:border-gray-600 dark:after:border-gray-600;
     }

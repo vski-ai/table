@@ -23,7 +23,9 @@ export function StyleSettings(props: StyleProps & { className?: string }) {
       </div>
       <FontSize {...props} />
 
-      <a
+      <button
+        type="button"
+        tabIndex={0}
         onClick={() => {
           mutations.resetStyle(props);
         }}
@@ -31,7 +33,7 @@ export function StyleSettings(props: StyleProps & { className?: string }) {
       >
         Reset{" "}
         <RemoveFormatting style={{ width: 13, height: 13, marginLeft: 6 }} />
-      </a>
+      </button>
     </div>
   );
 }

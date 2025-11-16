@@ -17,6 +17,7 @@ export const FontSize = (props: StyleProps) => {
     <div>
       <div class="w-full">
         <input
+          tabIndex={0}
           onInput={onChange}
           type="range"
           min="10"

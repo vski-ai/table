@@ -18,26 +18,21 @@ const STICKY_COLUMN = "sticky_column";
 export const Stick: ContextMenuItem = {
   menu: STICKY_COLUMN,
   order: 10,
+  highlight: ({ column }) => `td[data-column-name="${column}"]`,
   visibility: ({ column, placement, store }) =>
-    (!!column && placement === "outside") &&
+    (!!column && placement === "header") &&
     !store.state.columns.sticky.value[column],
-  title: ({ column }) => (
+  title: () => (
     <div class="flex justify-between w-full">
       Pin Column
-      <span class="badge badge-xs badge-accent">
-        {column}
-      </span>
     </div>
   ),
 
-  label({ column }) {
+  label() {
     return (
       <>
         <PinIcon />
         Pin
-        <span class="badge badge-xs badge-accent absolute right-3">
-          {column}
-        </span>
       </>
     );
   },
@@ -95,14 +90,11 @@ export const StickRight: ContextMenuItem = {
 const unpinVisibility = ({ store, column }: MenuContext) =>
   !!column && !!store.state.columns.sticky.value[column];
 
-const unpinLabel = ({ column }: MenuContext) => {
+const unpinLabel = () => {
   return (
     <>
       <UnpinIcon />
       Unpin
-      <span class="badge badge-xs badge-accent">
-        {column}
-      </span>
     </>
   );
 };
@@ -130,12 +122,10 @@ export const StickReset: ContextMenuItem = {
 export const UnpinColumn: ContextMenuItem = {
   menu: "unpin-column",
   order: 10,
-  title: (ctx) => (
+  highlight: ({ column }) => `td[data-column-name="${column}"]`,
+  title: () => (
     <span>
       Unpin
-      <span class="badge badge-xs badge-accent absolute ml-3">
-        {ctx?.column}
-      </span>
     </span>
   ),
   visibility: unpinVisibility,
@@ -146,7 +136,8 @@ export const UnpinColumn: ContextMenuItem = {
 export const HideColumn: ContextMenuItem = {
   menu: "hide-column",
   order: 10,
-  visibility: ({ placement }: MenuContext) => placement === "outside",
+  highlight: ({ column }) => `td[data-column-name="${column}"]`,
+  visibility: ({ placement }: MenuContext) => placement === "header",
   label() {
     return (
       <>
@@ -169,7 +160,7 @@ export const HideColumn: ContextMenuItem = {
 export const ManageColumns: ContextMenuItem = {
   menu: "manage-columns",
   order: 99,
-  visibility: ({ placement }: MenuContext) => placement === "outside",
+  visibility: ({ placement }: MenuContext) => placement === "header",
   label() {
     return (
       <>

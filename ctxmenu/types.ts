@@ -6,22 +6,24 @@ export interface ContextMenuItem {
   menu: string | "main";
   order?: number;
   title?: (ctx: MenuContext) => ComponentChildren;
+  highlight?: (ctx: MenuContext) => string;
   label: (ctx: MenuContext) => ComponentChildren;
   visibility: (ctx: MenuContext) => boolean;
   action?: (ctx: MenuContext) => void;
 }
 
-export type MenuContext = {
+export interface MenuContext {
   column?: string;
   rowId?: string;
   index?: string;
-  placement: "body" | "outside";
+  placement?: string;
   store: TableStore;
-};
+}
 
 export interface MenuItem {
   label: (ctx: MenuContext) => ComponentChildren;
   visibility: (ctx: MenuContext) => boolean;
+  highlight?: (ctx: MenuContext) => string;
   action?: (ctx: MenuContext) => void;
   submenu?: ContextMenu;
 }

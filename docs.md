@@ -53,7 +53,7 @@ import type { ConsumeCmdType } from "some-module";
 store.dispatch<ConsumeType>({
   type: CONSUME_TYPE_UNIQ_COMMAND_ID,
   payload: "Payload According to Consume Type",
-  history: false, // record history
+  history: false, // whether to record history for (Ctrl+Z, Ctrl^Y)
 });
 ```
 
@@ -86,6 +86,11 @@ export const MyModule: ITableModule = {
 
 There are callbacks such as: `beforeLoad` and `afterLoad`. See
 [typedef](./module/types.ts) for info.
+
+We use those callbacks to apply transformations to request input `beforeLoad`
+and to the request result `afterLoad`. This is hanndy for adapting
+request/response to a format consumable by this table or for extending query
+`beforeLoad` if our modules add additional filters or options.
 
 ## Store
 
@@ -125,7 +130,7 @@ export function state(pesist: InferPersist<MyState>): MyState {
 
 // The persist callback, must return state attributes
 // as a JSON serializable object.
-// Here we explicitly specify what is needes to pesist
+// Here we explicitly specify what is needed to pesist
 export function persist(state: TableState): InferPersist<MyState> {
   return {
     mymod: {
@@ -135,8 +140,8 @@ export function persist(state: TableState): InferPersist<MyState> {
 }
 
 // State mutation for `store.dispatch`.
-// A command spec is { type: string, payload:<P>, persist: boolean }
-// Pesist flag is for dispatch handler, it isn't used here.
+// A command spec is { type: string, payload:<P>, history: boolean }
+// History flag is for dispatch handler, it isn't used here.
 export function mutate(state: TableState, cmd: CMyModPropSetCmd) {
   swtich(cmd.type) {
     case "MYMOD_PROP_SET":
@@ -165,7 +170,7 @@ const onInit: ModuleInitCallback = ({
 };
 ```
 
-The first argunent in the `use` method represents render order - this is useful
+The first argument in the `use` method represents render order - this is useful
 if you have components coming one after another and display order is important.
 Each render slot, like `beforetable` has their own callback type defined in
 [module typedefs](./module/types.ts).
@@ -177,13 +182,28 @@ menu items (or any components) to be rendered in the contex menu.
 
 The default item parent is 'main', the other menu items can specify their names
 (menu prop) and parents. The render callbacks receive menu context (MenuContext
-type) that contains store, placement and other dependecies. Placemnet 'outside'
-means outside table body (ie is clicked on a header).
+type) that contains store, placement and other dependencies.
+
+The default menu placement targets are `header` and `body`. `body` meaning an
+element clicked inside table body and the target was inside a cell.
+
+A module can add their own menu targets on initialization using
+`addMenuPlacement({ store: TableStore, items: PlacementTargetResolver[] })`.
+
+Here is an interface used for menu placements:
+
+```ts
+interface PlacementTargetResolver {
+  name: string; // new placement target name
+  match: (el: HTMLElement) => boolean; // accepts current event target, returns boolean (usually !!el.closest('selector'))
+  target: (el: HTMLElement) => HTMLElement | null; // if returns an element, the 'highlight' class is added to it
+}
+```
 
 The `visibility` callback returns a boolean and used to determine whether to
 show an item.
 
-A menu action mthod is called if there are no children.
+A menu action method is called if there are no children.
 
 Here is an example of a menu item that will appear in the main menu, when
 clicked on table header and when there is a column to work with:
@@ -218,7 +238,7 @@ const Item = ({ children }: { children: ComponentChildren }) => {
 export const ColumnMenu: ContextMenuItem = {
   menu: COLUMN_DATATYPE_MENU,
   order: 0,
-  visibility: ({ placement, column }) => !!column && placement === "outside",
+  visibility: ({ placement, column }) => !!column && placement === "header",
   title: () => <Title>Data types</Title>, // a title is rendered on top of ther child menu, before "back" button
   label: () => <Item>Data types</Item>,
   action() {},
@@ -276,7 +296,7 @@ See [typedefs](./ctxmenu/types.ts) for context menu. We work with
 Here is an example of adding menu items on module init:
 
 ```ts
-import { addMenuItems } from "@/ctxmenu/addMenuItems.ts";
+import { addMenuItems } from "@/ctxmenu/utils/addMenuItems.ts";
 import { MenuItems } from "./menu.tsx";
 
 const onInit: ModuleInitCallback = ({

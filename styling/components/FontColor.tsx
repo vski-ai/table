@@ -21,6 +21,7 @@ export const FontColor = (props: StyleProps) => {
     <div class="vt-fmt-color-w">
       <TypeIcon className="vt-fmt-color-i left" />
       <input
+        tabIndex={0}
         onInput={onChange}
         type="color"
         value={currentValue ?? getDefaultColor("#555")}

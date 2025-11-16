@@ -15,7 +15,8 @@ const STICKY_ROW = "sticky_rows";
 
 export const Stick: ContextMenuItem = {
   menu: STICKY_ROW,
-  order: Infinity,
+  order: 10,
+  highlight: (ctx) => `[data-row-id="${ctx.rowId}"] td`,
   title: () => (
     <div class="flex justify-between w-full font-bold">
       Pin Row
@@ -34,7 +35,7 @@ export const Stick: ContextMenuItem = {
     return (
       <>
         <Pin />
-        Pin Row
+        Pin row
       </>
     );
   },
@@ -49,7 +50,7 @@ export const StickTop: ContextMenuItem = {
     return (
       <>
         <TopIcon />
-        Pin Top
+        Pin top
       </>
     );
   },
@@ -73,7 +74,7 @@ export const StickBottom: ContextMenuItem = {
     return (
       <>
         <BottomIcon />
-        Pin Bottom
+        Pin bottom
       </>
     );
   },

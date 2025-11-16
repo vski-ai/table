@@ -16,4 +16,12 @@
     @apply relative flex items-center gap-2 p-2 pt-3 -mt-2 mb-1 border-b-2
       border-sky-50 dark:border-gray-600/50;
   }
+  .ctx-target, .ctx-hightlight {
+    @apply before:absolute before:w-full before:h-full before:bg-sky-500/10
+      before:top-0 before:left-0 before:z-100;
+    &::before {
+      content: "";
+      display: block;
+    }
+  }
 }
