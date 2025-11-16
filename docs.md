@@ -80,7 +80,7 @@ const onInit: ModuleInitCallback = ({ store, ...rest }) => {};
 export const MyModule: ITableModule = {
   name: "mymodule",
   onInit,
-  store: KeyboardStore,
+  store,
 };
 ```
 

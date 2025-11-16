@@ -4,7 +4,7 @@ import { CellStyle } from "./types.ts";
 
 type CSSStyleObject = Record<string, string | undefined>;
 
-type StylesStore = {
+type StylesState = {
   styles: {
     table: Signal<CSSStyleObject>;
     columns: Signal<Record<string, CSSStyleObject>>;
@@ -14,7 +14,7 @@ type StylesStore = {
 };
 
 declare module "@/module/types.ts" {
-  interface TableState extends StylesStore {}
+  interface TableState extends StylesState {}
 }
 
 export const TABLE_STYLE_SET = "TABLE_STYLE_SET";
@@ -50,9 +50,8 @@ export type CellStyleSetCommand = Command<
   "Set cell css style. Superseeds row styles. {  rowKey: string, columnId: string, style: { [string]: string } }"
 >;
 
-
 export type TableStyleResetCommand = Command<
-  typeof TABLE_STYLE_RESET, 
+  typeof TABLE_STYLE_RESET,
   unknown,
   "Reset table styles"
 >;
@@ -83,7 +82,7 @@ export type StylingCommandType =
   | ColumnStyleResetCommand
   | CellStyleResetCommand;
 
-export function state(persist: InferPersist<StylesStore>): StylesStore {
+export function state(persist: InferPersist<StylesState>): StylesState {
   const table = signal(persist?.styles.table ?? {});
   const columns = signal(persist?.styles.columns ?? {});
   const rows = signal(persist?.styles.rows ?? {});
@@ -98,7 +97,7 @@ export function state(persist: InferPersist<StylesStore>): StylesStore {
   };
 }
 
-export function persist(state: TableState): InferPersist<StylesStore> {
+export function persist(state: TableState): InferPersist<StylesState> {
   return {
     styles: {
       table: state.styles.table.value,

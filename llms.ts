@@ -1,5 +1,5 @@
 /**
- * This file contains type exports we would like to expose 
+ * This file contains type exports we would like to expose
  * to llms, for context and tool calls. The generated file (llms.json) contains
  * all schemas exported from this file.
  */
@@ -12,17 +12,15 @@ export type {
   ColumnVisibilityCommand,
 } from "./columns/store.ts";
 
-export type { 
-  ColumnFormatSetCommand 
-} from "./datatype/store.ts";
+export type { ColumnFormatSetCommand } from "./datatype/store.ts";
 
-export type { 
-  TableStyleSetCommand, 
-  ColumnStyleSetCommand, 
-  RowStyleSetCommand,
+export type {
+  CellStyleResetCommand,
   CellStyleSetCommand,
-  TableStyleResetCommand,
   ColumnStyleResetCommand,
+  ColumnStyleSetCommand,
   RowStyleResetCommand,
-  CellStyleResetCommand 
-} from "./styling/store.ts" 
+  RowStyleSetCommand,
+  TableStyleResetCommand,
+  TableStyleSetCommand,
+} from "./styling/store.ts";
