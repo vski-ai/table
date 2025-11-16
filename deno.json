@@ -4,7 +4,8 @@
   "tasks": {
     "dev": "vite",
     "install-ci": "echo \"$SSH_DEPLOY_KEY\" | base64 --decode > ~/id_rsa_deploy1 && chmod 600 ~/id_rsa_deploy1 && GIT_SSH_COMMAND=\"ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ~/id_rsa_deploy1\" git clone ssh://git@git.vski.sh/x/table-modules.git enterprise",
-    "build": "vite build"
+    "build": "vite build",
+    "llms": "deno -A bin/llms.mjs"
   },
   "imports": {
     "@/": "./",

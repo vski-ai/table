@@ -25,8 +25,8 @@ const Item = ({ children }: { children: ComponentChildren }) => {
 export const RowMenu: ContextMenuItem = {
   menu: "row_style",
   order: 1,
-  visibility: ({ placement, tabIndex, rowId }) =>
-    !!rowId && tabIndex === 0 && placement !== "outside",
+  visibility: ({ placement, rowId }) =>
+    !!rowId && placement !== "outside",
   title: () => <Title>Row style</Title>,
   label: () => <Item>Row style</Item>,
   action() {},

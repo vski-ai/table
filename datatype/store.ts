@@ -45,7 +45,7 @@ export type ColumnFormatSetCommand = Command<
   typeof COLUMN_FORMAT_SET,
   | DataType<NumberDataTypes, NumberDataTypeOptions>
   | DataType<DateDataType, DateDataTypeOptions>,
-  "Set column formatting based on a datetype"
+  "Set column formatting based on a datetype { column: [column_name], type: [datatype], options: [datetype_options] }"
 >;
 
 export type FormattingCommandType =

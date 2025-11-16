@@ -28,32 +28,49 @@ export const CELL_STYLE_RESET = "CELL_STYLE_RESET";
 
 export type TableStyleSetCommand = Command<
   typeof TABLE_STYLE_SET,
-  Partial<CellStyle>
+  Partial<CellStyle>,
+  "Set table style. A json serializable object containing CSS styles { [string]: string }"
 >;
-export type RowStyleSetCommand = Command<
-  typeof ROW_STYLE_SET,
-  { key: string; style: Partial<CellStyle> }
->;
+
 export type ColumnStyleSetCommand = Command<
   typeof COLUMN_STYLE_SET,
-  { key: string; style: Partial<CellStyle> }
+  { key: string; style: Partial<CellStyle> },
+  "Set column css style. Superseeds table styles. { [key: column_name]: string, style: { [string]: string } }"
 >;
+
+export type RowStyleSetCommand = Command<
+  typeof ROW_STYLE_SET,
+  { key: string; style: Partial<CellStyle> },
+  "Set row css style. Superseeds column styles. { [key: row_id]: string, style: { [string]: string } }"
+>;
+
 export type CellStyleSetCommand = Command<
   typeof CELL_STYLE_SET,
-  { rowKey: string; columnId: string; style: Partial<CellStyle> }
+  { rowKey: string; columnId: string; style: Partial<CellStyle> },
+  "Set cell css style. Superseeds row styles. {  rowKey: string, columnId: string, style: { [string]: string } }"
 >;
-export type TableStyleResetCommand = Command<typeof TABLE_STYLE_RESET, unknown>;
+
+
+export type TableStyleResetCommand = Command<
+  typeof TABLE_STYLE_RESET, 
+  unknown,
+  "Reset table styles"
+>;
 export type RowStyleResetCommand = Command<
   typeof ROW_STYLE_RESET,
-  { key: string }
+  { key: string },
+  "Reset row styles"
 >;
 export type ColumnStyleResetCommand = Command<
   typeof COLUMN_STYLE_RESET,
-  { key: string }
+  { key: string },
+  "Reset column styles"
 >;
+
 export type CellStyleResetCommand = Command<
   typeof CELL_STYLE_RESET,
-  { rowKey: string; columnId: string }
+  { rowKey: string; columnId: string },
+  "Reset cell styles"
 >;
 
 export type StylingCommandType =
