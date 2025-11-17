@@ -69,7 +69,7 @@ export const StickBottom: ContextMenuItem = {
   menu: "row-stick-bottom",
   parent: STICKY_ROW,
   order: 2,
-  visibility: (ctx) => true,
+  visibility: () => true,
   label() {
     return (
       <>

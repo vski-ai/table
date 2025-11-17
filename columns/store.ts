@@ -43,7 +43,7 @@ export type ColumnOrderCommand = Command<
 export type ColumnStickCommand = Command<
   typeof COLUMN_STICK_SET,
   ColumnStickCommandPayload,
-  "Pin (stick) column on left or right side."
+  "Pin (stick, fix) column on left or right side."
 >;
 export type ColumnWidthCommand = Command<
   typeof COLUMN_WIDTHS_SET,
