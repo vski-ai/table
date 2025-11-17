@@ -2,7 +2,7 @@
   "commands": [
     {
       "type": "TABLE_STYLE_SET",
-      "doc": "Set table style. A json serializable object containing CSS styles { [string]: string }",
+      "doc": "Set table style. A json serializable object containing CSS styles { [css-property-name: string]: string }",
       "payload": {
         "type": "object",
         "properties": {
@@ -35,7 +35,7 @@
     },
     {
       "type": "ROW_STYLE_SET",
-      "doc": "Set row css style. Superseeds column styles. { [key: row_id]: string, style: { [string]: string } }",
+      "doc": "Set row css style. Superseeds column styles. { [key: row_id]: string, style: { [css-property-name: string]: string } }",
       "payload": {
         "type": "object",
         "properties": {
@@ -81,7 +81,7 @@
     },
     {
       "type": "COLUMN_STYLE_SET",
-      "doc": "Set column css style. Superseeds table styles. { [key: column_name]: string, style: { [string]: string } }",
+      "doc": "Set column css style. Superseeds table styles. { [key: column_name]: string, style: { [css-property-name: string]: string } }",
       "payload": {
         "type": "object",
         "properties": {
@@ -127,7 +127,7 @@
     },
     {
       "type": "CELL_STYLE_SET",
-      "doc": "Set cell css style. Superseeds row styles. {  rowKey: string, columnId: string, style: { [string]: string } }",
+      "doc": "Set cell css style. Superseeds row styles. {  rowKey: string, columnId: string, style: { [css-property-name: string]: string } }",
       "payload": {
         "type": "object",
         "properties": {
@@ -317,7 +317,7 @@
     },
     {
       "type": "COLUMN_FORMAT_SET",
-      "doc": "Set column formatting based on a datetype { column: [column_name], type: [datatype], options: [datetype_options] }",
+      "doc": "Set column formatting based on a datetype { column: [column_name], type: [datatype], options: [datetype_options (Intl for numbers and date + locale)] }",
       "payload": {
         "anyOf": [
           {

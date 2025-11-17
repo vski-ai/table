@@ -16,6 +16,8 @@
     "npm:@deno/vite-plugin@^1.0.5": "1.0.5_vite@7.1.12__picomatch@4.0.3",
     "npm:@faker-js/faker@^10.1.0": "10.1.0",
     "npm:@floating-ui/dom@^1.7.4": "1.7.4",
+    "npm:@google/generative-ai@*": "0.15.0",
+    "npm:@google/generative-ai@0.15": "0.15.0",
     "npm:@preact/preset-vite@^2.10.2": "2.10.2_@babel+core@7.28.4_vite@7.1.12__picomatch@4.0.3_preact@10.27.2",
     "npm:@preact/signals@^2.3.2": "2.3.2_preact@10.27.2",
     "npm:@tailwindcss/typography@~0.5.19": "0.5.19_tailwindcss@4.1.16",
@@ -393,6 +395,9 @@
     },
     "@floating-ui/utils@0.2.10": {
       "integrity": "sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ=="
+    },
+    "@google/generative-ai@0.15.0": {
+      "integrity": "sha512-zs37judcTYFJf1U7tnuqnh7gdzF6dcWj9pNRxjA5JTONRoiQ0htrRdbefRFiewOIfXwhun5t9hbd2ray7812eQ=="
     },
     "@isaacs/balanced-match@4.0.1": {
       "integrity": "sha512-yzMTt9lEb8Gv7zRioUilSglI0c0smZ9k5D65677DLWLtWJaXIS3CqcGyUFByYKlnUj6TkjLVs54fBl6+TiGQDQ=="
@@ -1357,6 +1362,7 @@
       "npm:@deno/vite-plugin@^1.0.5",
       "npm:@faker-js/faker@^10.1.0",
       "npm:@floating-ui/dom@^1.7.4",
+      "npm:@google/generative-ai@0.15",
       "npm:@preact/preset-vite@^2.10.2",
       "npm:@preact/signals@^2.3.2",
       "npm:@tailwindcss/typography@~0.5.19",
