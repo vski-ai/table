@@ -1,12 +1,11 @@
 import { useEffect, useRef } from "preact/hooks";
 import { CommonRendererCallback, TableStore } from "@/module/types.ts";
-import EyeIcon from "lucide-react/dist/esm/icons/eye.js";
-import EyeClosedIcon from "lucide-react/dist/esm/icons/eye-closed.js";
 import CogIcon from "lucide-react/dist/esm/icons/cog.js";
 import XIcon from "lucide-react/dist/esm/icons/x.js";
 import { Select } from "@/common/Select.tsx";
 import { StyleSettings } from "@/styling/components/StyleSettings.tsx";
 import { PxSlider } from "./PxSlider.tsx";
+import { useAddons } from "@/module/mod.ts";
 
 type TableSettingsProps = {
   store: TableStore;
@@ -19,6 +18,7 @@ export const Settings = ({ store }: TableSettingsProps) => {
       dialogRef.current?.showModal();
     }
   }, [store.state.table.settings_dialog.value]);
+  const addons = useAddons({ store });
 
   return (
     <dialog ref={dialogRef} class="modal modal-end">
@@ -39,6 +39,7 @@ export const Settings = ({ store }: TableSettingsProps) => {
         </h3>
 
         <div class="modal-body mt-6 w-100">
+          {addons.beforesettings.render({ store })}
           <Select
             options={[{ label: "System Font", value: "" }]}
             onChange={() => {
@@ -67,6 +68,8 @@ export const Settings = ({ store }: TableSettingsProps) => {
               store.state.table.row_height.value = value;
             }}
           />
+
+          {addons.aftersettings.render({ store })}
         </div>
       </div>
       <form

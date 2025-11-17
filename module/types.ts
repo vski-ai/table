@@ -93,6 +93,8 @@ export interface ModuleInitOptions {
   beforetable: BeforeTable;
   insidetable: InsideTable;
   aftertable: AfterTable;
+  beforesettings: AfterTable;
+  aftersettings: AfterTable;
 }
 
 export type ModuleInitCallback = (opts: ModuleInitOptions) => void;
@@ -104,6 +106,7 @@ export type ITableModule<T extends Record<string, any> = Record<string, any>> =
     tableProps?: T;
 
     onInit?: ModuleInitCallback;
+    afterInit?: ModuleInitCallback;
 
     // A hook that is called before data is loaded
     beforeLoad?: BeforeLoadCallback;

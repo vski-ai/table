@@ -61,6 +61,8 @@ export const createPluginContainer = (
 
   const beforetable = new SortedAddon<CommonRendererCallback>();
   const insidetable = new SortedAddon<CommonRendererCallback>();
+  const beforesettings = new SortedAddon<CommonRendererCallback>();
+  const aftersettings = new SortedAddon<CommonRendererCallback>();
   const aftertable = new SortedAddon<CommonRendererCallback>();
   const headerprefixes = new SortedAddon<ColumnRendererCallback>();
   const lefttablecells = new SortedAddon<CellRendererCallback>();
@@ -72,7 +74,7 @@ export const createPluginContainer = (
   const rowclasses = new SortedAddon<ClassResolverCallback>();
   const rowstyles = new SortedAddon<StyleResolverCallback>();
 
-  setTimeout(() => {
+  setTimeout(async () => {
     for (const plugin of sortedPlugins) {
       plugin.onInit?.({
         store,
@@ -88,9 +90,31 @@ export const createPluginContainer = (
         beforetable,
         insidetable,
         aftertable,
+        beforesettings,
+        aftersettings,
       });
     }
-  });
+    await new Promise((r) => setTimeout(r, 1));
+    for (const plugin of sortedPlugins) {
+      plugin.afterInit?.({
+        store,
+        headerprefixes,
+        lefttablecells,
+        righttablecells,
+        lefttableheaders,
+        righttableheaders,
+        cellprefixes,
+        cellsuffixes,
+        rowclasses,
+        rowstyles,
+        beforetable,
+        insidetable,
+        aftertable,
+        beforesettings,
+        aftersettings,
+      });
+    }
+  }, 0);
 
   const beforeLoad = async (options: DataLoadOptions) => {
     let result = options;
@@ -126,6 +150,8 @@ export const createPluginContainer = (
     beforetable,
     insidetable,
     aftertable,
+    beforesettings,
+    aftersettings,
   };
 
   // @ts-ignore: some privats

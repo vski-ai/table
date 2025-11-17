@@ -5,6 +5,7 @@ import { RowData } from "@/row/types.ts";
 type CellsState = {
   cells: {
     selected: Signal<Record<string, boolean>>;
+    selected_rows: Signal<Record<string, boolean>>;
   };
 };
 
@@ -39,8 +40,9 @@ export type CellSelectResetCmd = Command<
 
 export function state(): CellsState {
   const selected = signal({});
+  const selected_rows = signal({});
   return {
-    cells: { selected },
+    cells: { selected, selected_rows },
   };
 }
 
@@ -58,16 +60,25 @@ export function mutate(
         ...state.cells.selected.value,
         [cmd.payload]: true,
       };
+      state.cells.selected_rows.value = {
+        ...state.cells.selected_rows.value,
+        [cmd.payload.split("/")[0]]: true, // this is temp
+      };
       break;
     case CELL_DESELECT:
       state.cells.selected.value = {
         ...state.cells.selected.value,
         [cmd.payload]: false,
       };
+      state.cells.selected_rows.value = {
+        ...state.cells.selected_rows.value,
+        [cmd.payload.split("/")[0]]: false, // this is temp
+      };
       break;
     case CELL_SELECT_RESET:
       if (cmd.payload) {
         state.cells.selected.value = {};
+        state.cells.selected_rows.value = {};
       }
       break;
   }

@@ -1,513 +1,513 @@
 {
- "commands": [
-  {
-   "type": "TABLE_STYLE_SET",
-   "doc": "Set table style. A json serializable object containing CSS styles { [string]: string }",
-   "payload": {
-    "type": "object",
-    "properties": {
-     "color": {
-      "type": "string"
-     },
-     "background-color": {
-      "type": "string"
-     },
-     "font-weight": {
-      "type": "string",
-      "enum": [
-       "normal",
-       "bold"
-      ]
-     },
-     "font-style": {
-      "type": "string",
-      "enum": [
-       "normal",
-       "italic"
-      ]
-     },
-     "text-decoration": {
-      "type": "string"
-     }
-    },
-    "additionalProperties": false
-   }
-  },
-  {
-   "type": "ROW_STYLE_SET",
-   "doc": "Set row css style. Superseeds column styles. { [key: row_id]: string, style: { [string]: string } }",
-   "payload": {
-    "type": "object",
-    "properties": {
-     "key": {
-      "type": "string"
-     },
-     "style": {
-      "type": "object",
-      "properties": {
-       "color": {
-        "type": "string"
-       },
-       "background-color": {
-        "type": "string"
-       },
-       "font-weight": {
-        "type": "string",
-        "enum": [
-         "normal",
-         "bold"
-        ]
-       },
-       "font-style": {
-        "type": "string",
-        "enum": [
-         "normal",
-         "italic"
-        ]
-       },
-       "text-decoration": {
-        "type": "string"
-       }
-      },
-      "additionalProperties": false
-     }
-    },
-    "required": [
-     "key",
-     "style"
-    ],
-    "additionalProperties": false
-   }
-  },
-  {
-   "type": "COLUMN_STYLE_SET",
-   "doc": "Set column css style. Superseeds table styles. { [key: column_name]: string, style: { [string]: string } }",
-   "payload": {
-    "type": "object",
-    "properties": {
-     "key": {
-      "type": "string"
-     },
-     "style": {
-      "type": "object",
-      "properties": {
-       "color": {
-        "type": "string"
-       },
-       "background-color": {
-        "type": "string"
-       },
-       "font-weight": {
-        "type": "string",
-        "enum": [
-         "normal",
-         "bold"
-        ]
-       },
-       "font-style": {
-        "type": "string",
-        "enum": [
-         "normal",
-         "italic"
-        ]
-       },
-       "text-decoration": {
-        "type": "string"
-       }
-      },
-      "additionalProperties": false
-     }
-    },
-    "required": [
-     "key",
-     "style"
-    ],
-    "additionalProperties": false
-   }
-  },
-  {
-   "type": "CELL_STYLE_SET",
-   "doc": "Set cell css style. Superseeds row styles. {  rowKey: string, columnId: string, style: { [string]: string } }",
-   "payload": {
-    "type": "object",
-    "properties": {
-     "rowKey": {
-      "type": "string"
-     },
-     "columnId": {
-      "type": "string"
-     },
-     "style": {
-      "type": "object",
-      "properties": {
-       "color": {
-        "type": "string"
-       },
-       "background-color": {
-        "type": "string"
-       },
-       "font-weight": {
-        "type": "string",
-        "enum": [
-         "normal",
-         "bold"
-        ]
-       },
-       "font-style": {
-        "type": "string",
-        "enum": [
-         "normal",
-         "italic"
-        ]
-       },
-       "text-decoration": {
-        "type": "string"
-       }
-      },
-      "additionalProperties": false
-     }
-    },
-    "required": [
-     "rowKey",
-     "columnId",
-     "style"
-    ],
-    "additionalProperties": false
-   }
-  },
-  {
-   "type": "TABLE_STYLE_RESET",
-   "doc": "Reset table styles",
-   "payload": {}
-  },
-  {
-   "type": "ROW_STYLE_RESET",
-   "doc": "Reset row styles",
-   "payload": {
-    "type": "object",
-    "properties": {
-     "key": {
-      "type": "string"
-     }
-    },
-    "required": [
-     "key"
-    ],
-    "additionalProperties": false
-   }
-  },
-  {
-   "type": "COLUMN_STYLE_RESET",
-   "doc": "Reset column styles",
-   "payload": {
-    "type": "object",
-    "properties": {
-     "key": {
-      "type": "string"
-     }
-    },
-    "required": [
-     "key"
-    ],
-    "additionalProperties": false
-   }
-  },
-  {
-   "type": "CELL_STYLE_RESET",
-   "doc": "Reset cell styles",
-   "payload": {
-    "type": "object",
-    "properties": {
-     "rowKey": {
-      "type": "string"
-     },
-     "columnId": {
-      "type": "string"
-     }
-    },
-    "required": [
-     "rowKey",
-     "columnId"
-    ],
-    "additionalProperties": false
-   }
-  },
-  {
-   "type": "COLUMNS_SET",
-   "doc": "Set all available columns.",
-   "payload": {
-    "type": "array",
-    "items": {
-     "type": "string"
-    }
-   }
-  },
-  {
-   "type": "COLUMN_ORDER_SET",
-   "doc": "Set column order: ['column_name_1', 'column_name_2']",
-   "payload": {
-    "type": "array",
-    "items": {
-     "type": "string"
-    }
-   }
-  },
-  {
-   "type": "COLUMN_STICK_SET",
-   "doc": "Pin (stick, fix) column on left or right side.",
-   "payload": {
-    "type": "object",
-    "properties": {
-     "column": {
-      "type": "string"
-     },
-     "position": {
-      "type": [
-       "string",
-       "boolean"
-      ],
-      "enum": [
-       "left",
-       "right",
-       false
-      ]
-     }
-    },
-    "required": [
-     "column",
-     "position"
-    ],
-    "additionalProperties": false
-   }
-  },
-  {
-   "type": "COLUMN_WIDTHS_SET",
-   "doc": "Set column(s) width: { [column_name]: number }",
-   "payload": {
-    "type": "object",
-    "additionalProperties": {
-     "type": "number"
-    }
-   }
-  },
-  {
-   "type": "COLUMN_VISIBILITY_SET",
-   "doc": "Set column(s) visibility: { [column_name]: boolean }",
-   "payload": {
-    "type": "object",
-    "additionalProperties": {
-     "type": "boolean"
-    }
-   }
-  },
-  {
-   "type": "COLUMN_DATATYPE_SET",
-   "payload": {
-    "type": "object",
-    "additionalProperties": {
-     "type": "string"
-    }
-   }
-  },
-  {
-   "type": "COLUMN_DATATYPE_OPTIONS_SET",
-   "payload": {
-    "type": "object"
-   }
-  },
-  {
-   "type": "COLUMN_FORMAT_SET",
-   "doc": "Set column formatting based on a datetype { column: [column_name], type: [datatype], options: [datetype_options] }",
-   "payload": {
-    "anyOf": [
-     {
-      "type": "object",
-      "properties": {
-       "column": {
-        "type": "string"
-       },
-       "type": {
-        "type": "string",
-        "enum": [
-         "number",
-         "unit",
-         "currency"
-        ]
-       },
-       "options": {
+  "commands": [
+    {
+      "type": "TABLE_STYLE_SET",
+      "doc": "Set table style. A json serializable object containing CSS styles { [string]: string }",
+      "payload": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
-         "locale": {
-          "type": "string"
-         },
-         "localeMatcher": {
-          "type": "string",
-          "enum": [
-           "lookup",
-           "best fit"
-          ]
-         },
-         "style": {},
-         "currency": {
-          "type": "string"
-         },
-         "currencyDisplay": {},
-         "useGrouping": {
-          "type": "boolean"
-         },
-         "minimumIntegerDigits": {
-          "type": "number"
-         },
-         "minimumFractionDigits": {
-          "type": "number"
-         },
-         "maximumFractionDigits": {
-          "type": "number"
-         },
-         "minimumSignificantDigits": {
-          "type": "number"
-         },
-         "maximumSignificantDigits": {
-          "type": "number"
-         }
+          "color": {
+            "type": "string"
+          },
+          "background-color": {
+            "type": "string"
+          },
+          "font-weight": {
+            "type": "string",
+            "enum": [
+              "normal",
+              "bold"
+            ]
+          },
+          "font-style": {
+            "type": "string",
+            "enum": [
+              "normal",
+              "italic"
+            ]
+          },
+          "text-decoration": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "type": "ROW_STYLE_SET",
+      "doc": "Set row css style. Superseeds column styles. { [key: row_id]: string, style: { [string]: string } }",
+      "payload": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "style": {
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "background-color": {
+                "type": "string"
+              },
+              "font-weight": {
+                "type": "string",
+                "enum": [
+                  "normal",
+                  "bold"
+                ]
+              },
+              "font-style": {
+                "type": "string",
+                "enum": [
+                  "normal",
+                  "italic"
+                ]
+              },
+              "text-decoration": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
         },
         "required": [
-         "locale"
-        ]
-       }
-      },
-      "required": [
-       "column",
-       "type",
-       "options"
-      ],
-      "additionalProperties": false
-     },
-     {
-      "type": "object",
-      "properties": {
-       "column": {
-        "type": "string"
-       },
-       "type": {
-        "type": "string",
-        "const": "date"
-       },
-       "options": {
+          "key",
+          "style"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "type": "COLUMN_STYLE_SET",
+      "doc": "Set column css style. Superseeds table styles. { [key: column_name]: string, style: { [string]: string } }",
+      "payload": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
-         "locale": {
-          "type": "string"
-         },
-         "localeMatcher": {
-          "type": "string",
-          "enum": [
-           "best fit",
-           "lookup"
-          ]
-         },
-         "weekday": {
-          "type": "string",
-          "enum": [
-           "long",
-           "short",
-           "narrow"
-          ]
-         },
-         "era": {
-          "type": "string",
-          "enum": [
-           "long",
-           "short",
-           "narrow"
-          ]
-         },
-         "year": {
-          "type": "string",
-          "enum": [
-           "numeric",
-           "2-digit"
-          ]
-         },
-         "month": {
-          "type": "string",
-          "enum": [
-           "numeric",
-           "2-digit",
-           "long",
-           "short",
-           "narrow"
-          ]
-         },
-         "day": {
-          "type": "string",
-          "enum": [
-           "numeric",
-           "2-digit"
-          ]
-         },
-         "hour": {
-          "type": "string",
-          "enum": [
-           "numeric",
-           "2-digit"
-          ]
-         },
-         "minute": {
-          "type": "string",
-          "enum": [
-           "numeric",
-           "2-digit"
-          ]
-         },
-         "second": {
-          "type": "string",
-          "enum": [
-           "numeric",
-           "2-digit"
-          ]
-         },
-         "timeZoneName": {
-          "type": "string",
-          "enum": [
-           "short",
-           "long",
-           "shortOffset",
-           "longOffset",
-           "shortGeneric",
-           "longGeneric"
-          ]
-         },
-         "formatMatcher": {
-          "type": "string",
-          "enum": [
-           "best fit",
-           "basic"
-          ]
-         },
-         "hour12": {
-          "type": "boolean"
-         },
-         "timeZone": {
-          "type": "string"
-         }
+          "key": {
+            "type": "string"
+          },
+          "style": {
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "background-color": {
+                "type": "string"
+              },
+              "font-weight": {
+                "type": "string",
+                "enum": [
+                  "normal",
+                  "bold"
+                ]
+              },
+              "font-style": {
+                "type": "string",
+                "enum": [
+                  "normal",
+                  "italic"
+                ]
+              },
+              "text-decoration": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
         },
         "required": [
-         "locale"
+          "key",
+          "style"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "type": "CELL_STYLE_SET",
+      "doc": "Set cell css style. Superseeds row styles. {  rowKey: string, columnId: string, style: { [string]: string } }",
+      "payload": {
+        "type": "object",
+        "properties": {
+          "rowKey": {
+            "type": "string"
+          },
+          "columnId": {
+            "type": "string"
+          },
+          "style": {
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "background-color": {
+                "type": "string"
+              },
+              "font-weight": {
+                "type": "string",
+                "enum": [
+                  "normal",
+                  "bold"
+                ]
+              },
+              "font-style": {
+                "type": "string",
+                "enum": [
+                  "normal",
+                  "italic"
+                ]
+              },
+              "text-decoration": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "rowKey",
+          "columnId",
+          "style"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "type": "TABLE_STYLE_RESET",
+      "doc": "Reset table styles",
+      "payload": {}
+    },
+    {
+      "type": "ROW_STYLE_RESET",
+      "doc": "Reset row styles",
+      "payload": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "type": "COLUMN_STYLE_RESET",
+      "doc": "Reset column styles",
+      "payload": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "type": "CELL_STYLE_RESET",
+      "doc": "Reset cell styles",
+      "payload": {
+        "type": "object",
+        "properties": {
+          "rowKey": {
+            "type": "string"
+          },
+          "columnId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "rowKey",
+          "columnId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "type": "COLUMNS_SET",
+      "doc": "Set all available columns.",
+      "payload": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "COLUMN_ORDER_SET",
+      "doc": "Set column order: ['column_name_1', 'column_name_2']",
+      "payload": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "COLUMN_STICK_SET",
+      "doc": "Pin (stick, fix) column on left or right side.",
+      "payload": {
+        "type": "object",
+        "properties": {
+          "column": {
+            "type": "string"
+          },
+          "position": {
+            "type": [
+              "string",
+              "boolean"
+            ],
+            "enum": [
+              "left",
+              "right",
+              false
+            ]
+          }
+        },
+        "required": [
+          "column",
+          "position"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "type": "COLUMN_WIDTHS_SET",
+      "doc": "Set column(s) width: { [column_name]: number }",
+      "payload": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "number"
+        }
+      }
+    },
+    {
+      "type": "COLUMN_VISIBILITY_SET",
+      "doc": "Set column(s) visibility: { [column_name]: boolean }",
+      "payload": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "boolean"
+        }
+      }
+    },
+    {
+      "type": "COLUMN_DATATYPE_SET",
+      "payload": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "COLUMN_DATATYPE_OPTIONS_SET",
+      "payload": {
+        "type": "object"
+      }
+    },
+    {
+      "type": "COLUMN_FORMAT_SET",
+      "doc": "Set column formatting based on a datetype { column: [column_name], type: [datatype], options: [datetype_options] }",
+      "payload": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "number",
+                  "unit",
+                  "currency"
+                ]
+              },
+              "options": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "locale": {
+                    "type": "string"
+                  },
+                  "localeMatcher": {
+                    "type": "string",
+                    "enum": [
+                      "lookup",
+                      "best fit"
+                    ]
+                  },
+                  "style": {},
+                  "currency": {
+                    "type": "string"
+                  },
+                  "currencyDisplay": {},
+                  "useGrouping": {
+                    "type": "boolean"
+                  },
+                  "minimumIntegerDigits": {
+                    "type": "number"
+                  },
+                  "minimumFractionDigits": {
+                    "type": "number"
+                  },
+                  "maximumFractionDigits": {
+                    "type": "number"
+                  },
+                  "minimumSignificantDigits": {
+                    "type": "number"
+                  },
+                  "maximumSignificantDigits": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "locale"
+                ]
+              }
+            },
+            "required": [
+              "column",
+              "type",
+              "options"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "const": "date"
+              },
+              "options": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "locale": {
+                    "type": "string"
+                  },
+                  "localeMatcher": {
+                    "type": "string",
+                    "enum": [
+                      "best fit",
+                      "lookup"
+                    ]
+                  },
+                  "weekday": {
+                    "type": "string",
+                    "enum": [
+                      "long",
+                      "short",
+                      "narrow"
+                    ]
+                  },
+                  "era": {
+                    "type": "string",
+                    "enum": [
+                      "long",
+                      "short",
+                      "narrow"
+                    ]
+                  },
+                  "year": {
+                    "type": "string",
+                    "enum": [
+                      "numeric",
+                      "2-digit"
+                    ]
+                  },
+                  "month": {
+                    "type": "string",
+                    "enum": [
+                      "numeric",
+                      "2-digit",
+                      "long",
+                      "short",
+                      "narrow"
+                    ]
+                  },
+                  "day": {
+                    "type": "string",
+                    "enum": [
+                      "numeric",
+                      "2-digit"
+                    ]
+                  },
+                  "hour": {
+                    "type": "string",
+                    "enum": [
+                      "numeric",
+                      "2-digit"
+                    ]
+                  },
+                  "minute": {
+                    "type": "string",
+                    "enum": [
+                      "numeric",
+                      "2-digit"
+                    ]
+                  },
+                  "second": {
+                    "type": "string",
+                    "enum": [
+                      "numeric",
+                      "2-digit"
+                    ]
+                  },
+                  "timeZoneName": {
+                    "type": "string",
+                    "enum": [
+                      "short",
+                      "long",
+                      "shortOffset",
+                      "longOffset",
+                      "shortGeneric",
+                      "longGeneric"
+                    ]
+                  },
+                  "formatMatcher": {
+                    "type": "string",
+                    "enum": [
+                      "best fit",
+                      "basic"
+                    ]
+                  },
+                  "hour12": {
+                    "type": "boolean"
+                  },
+                  "timeZone": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "locale"
+                ]
+              }
+            },
+            "required": [
+              "column",
+              "type",
+              "options"
+            ],
+            "additionalProperties": false
+          }
         ]
-       }
-      },
-      "required": [
-       "column",
-       "type",
-       "options"
-      ],
-      "additionalProperties": false
-     }
-    ]
-   }
-  }
- ]
+      }
+    }
+  ]
 }
