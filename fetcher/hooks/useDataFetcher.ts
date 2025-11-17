@@ -63,6 +63,8 @@ export function useDataFetcher({
     visibleRows,
   });
 
+  store.state.fetcher.visible_rows = visibleRows.map((r) => r.row);
+
   // 4. Go to 1st step:
   //    - Some data loaded, but the total might have changed
   //    - Some data loaded, but there are null rows in visible range

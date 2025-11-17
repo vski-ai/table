@@ -10,6 +10,7 @@ type FetcherState = {
     table_meta: Signal<TableMeta>;
     reload_key: Signal<number>;
     current_data: RowData[];
+    visible_rows: RowData[];
   };
 };
 
@@ -38,6 +39,7 @@ export function state(init: InferPersist<FetcherState>): FetcherState {
       table_meta,
       reload_key,
       current_data: [],
+      visible_rows: [],
     },
   };
 }

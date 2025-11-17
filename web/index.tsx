@@ -8,8 +8,6 @@ import { FlatTable } from "./flattable.tsx";
 import { EditableTable } from "./editable.tsx";
 import Layout from "./layout.tsx";
 
-localStorage.clear();
-
 export function App() {
   return (
     <LocationProvider>

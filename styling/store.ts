@@ -113,7 +113,7 @@ export function mutate(state: TableState, command: StylingCommandType) {
     case TABLE_STYLE_SET:
       state.styles.table.value = {
         ...state.styles.table.value,
-        ...command.payload,
+        ...sanitize(command.payload as any),
       };
       break;
     case ROW_STYLE_SET:
@@ -121,7 +121,7 @@ export function mutate(state: TableState, command: StylingCommandType) {
         ...state.styles.rows.value,
         [command.payload.key]: {
           ...state.styles.rows.value[command.payload.key],
-          ...command.payload.style,
+          ...sanitize(command.payload.style as any),
         },
       };
       break;
@@ -130,7 +130,7 @@ export function mutate(state: TableState, command: StylingCommandType) {
         ...state.styles.columns.value,
         [command.payload.key]: {
           ...state.styles.columns.value[command.payload.key],
-          ...command.payload.style,
+          ...sanitize(command.payload.style as any),
         },
       };
       break;
@@ -143,7 +143,7 @@ export function mutate(state: TableState, command: StylingCommandType) {
             ...state.styles.cells.value[command.payload.rowKey]?.[
               command.payload.columnId
             ],
-            ...command.payload.style,
+            ...sanitize(command.payload.style as any),
           },
         },
       };
@@ -176,4 +176,12 @@ export function mutate(state: TableState, command: StylingCommandType) {
       }
       break;
   }
+}
+
+function sanitize(obj: Record<string, string>) {
+  const result: Record<string, string> = {};
+  for (const key in obj) {
+    result[key.replaceAll("_", "-")] = obj[key];
+  }
+  return result;
 }

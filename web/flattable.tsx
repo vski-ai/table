@@ -6,7 +6,7 @@ import { createFrontendSorter, SortingModule } from "@/sorting/mod.ts";
 
 import { EnumeratorModule } from "../enumerator/mod.ts";
 import { generateRows } from "./mock/flat-table.ts";
-import { ChatModule } from "@enterprise/mod.ts";
+import { ChatModule, SearchModule } from "@enterprise/mod.ts";
 import { ContextModule } from "@enterprise/context/mod.ts";
 
 let generated;
@@ -36,6 +36,7 @@ export const FlatTable = () => {
       EnumeratorModule,
       ChatModule,
       ContextModule,
+      SearchModule,
     ],
     persistence: new LocalStorageAdapter(),
   });

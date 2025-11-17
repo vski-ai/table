@@ -26,7 +26,7 @@ export interface TableState {
 
 export interface TableStore {
   state: TableState;
-  dispatch: <T>(command: T) => void;
+  dispatch: <T, R = any>(command: T) => R[];
   scrollContainerRef: MutableRef<any>;
 }
 

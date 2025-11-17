@@ -60,7 +60,9 @@ export function createTableStore(
       history.shift();
     }
     history.push(command);
-    modules.map((module) => module.mutate(state, command));
+    return modules.map((module) => module.mutate(state, command)).filter(
+      Boolean,
+    );
   };
 
   const methods = modules

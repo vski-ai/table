@@ -29,7 +29,8 @@ declare module "@/module/types.ts" {
 
 export const COLUMN_DATATYPE_SET = "COLUMN_DATATYPE_SET";
 export const COLUMN_DATATYPE_OPTIONS_SET = "COLUMN_DATATYPE_OPTIONS_SET";
-export const COLUMN_FORMAT_SET = "COLUMN_FORMAT_SET";
+export const COLUMN_NUMBER_FORMAT_SET = "COLUMN_NUMBER_FORMAT_SET";
+export const COLUMN_DATE_FORMAT_SET = "COLUMN_DATE_FORMAT_SET";
 
 export type ColumnDataTypeSetCommand = Command<
   typeof COLUMN_DATATYPE_SET,
@@ -41,17 +42,52 @@ export type ColumnDataTypeOptionsSetCommand = Command<
   Record<string, any>
 >;
 
-export type ColumnFormatSetCommand = Command<
-  typeof COLUMN_FORMAT_SET,
-  | DataType<NumberDataTypes, NumberDataTypeOptions>
-  | DataType<DateDataType, DateDataTypeOptions>,
-  "Set column formatting based on a datetype { column: [column_name], type: [datatype], options: [datetype_options (Intl for numbers and date + locale)] }"
+export type ColumnNumnerFormatSetCommand = Command<
+  typeof COLUMN_NUMBER_FORMAT_SET,
+  DataType<NumberDataTypes, NumberDataTypeOptions>,
+  `Set column number formatting:
+     { column: [column_name], type: "number", options: [datetype_options] } or
+     { column: [column_name], type: "unit", options: [datetype_options] } or
+     { column: [column_name], type: "currency", options: [datetype_options] }
+    Datetype options support all Intl.NumberFormatOptions options (number, currency, units), 
+    but it is also IMPORTANT to pass user locale { locale: string }. The default locale is en-US.
+    Example: 
+      { 
+          "column": "total_price",
+          "type": "currency",
+          "options": {
+              "minimumFractionDigits":2,
+              "maximumFractionDigits":2,
+              "locale":"en-GB",
+              "style":"currency",
+              "currencyDisplay":"symbol",
+              "currency":"USD"
+            }
+      }
+   `
+>;
+export type ColumnDateFormatSetCommand = Command<
+  typeof COLUMN_DATE_FORMAT_SET,
+  DataType<DateDataType, DateDataTypeOptions>,
+  `Set column date/time formatting:
+     { column: [column_name], type: "date", options: [datetype_options] }
+
+    Datetype options support all Intl.DateTimeFormatOptions options, 
+    but it is also IMPORTANT to pass user locale { locale: string }. The default locale is en-US.
+    Example: 
+      { 
+          "column": "delivery date",
+          "type": "date",
+          "options": {"locale":"en-GB","dateStyle":"medium","timeStyle":"medium"}
+      }
+   `
 >;
 
 export type FormattingCommandType =
   | ColumnDataTypeSetCommand
   | ColumnDataTypeOptionsSetCommand
-  | ColumnFormatSetCommand;
+  | ColumnDateFormatSetCommand
+  | ColumnNumnerFormatSetCommand;
 
 export function inject(_: TableState) {
   return {
@@ -82,6 +118,24 @@ export function persist(state: TableState) {
 }
 
 export function mutate(state: TableState, command: FormattingCommandType) {
+  const setFormat = () => {
+    state.data_type.options.value = {
+      ...state.data_type.options.value,
+      [command.payload.column]: {},
+    };
+    state.data_type.column.value = {
+      ...state.data_type.column.value,
+      [command.payload.column]: "default",
+    };
+    state.data_type.options.value = {
+      ...state.data_type.options.value,
+      [command.payload.column]: command.payload.options,
+    };
+    state.data_type.column.value = {
+      ...state.data_type.column.value,
+      [command.payload.column]: command.payload.type,
+    };
+  };
   switch (command.type) {
     case COLUMN_DATATYPE_SET:
       state.data_type.column.value = {
@@ -95,23 +149,11 @@ export function mutate(state: TableState, command: FormattingCommandType) {
         ...command.payload,
       };
       break;
-    case COLUMN_FORMAT_SET:
-      state.data_type.options.value = {
-        ...state.data_type.options.value,
-        [command.payload.column]: {},
-      };
-      state.data_type.column.value = {
-        ...state.data_type.column.value,
-        [command.payload.column]: "default",
-      };
-      state.data_type.options.value = {
-        ...state.data_type.options.value,
-        [command.payload.column]: command.payload.options,
-      };
-      state.data_type.column.value = {
-        ...state.data_type.column.value,
-        [command.payload.column]: command.payload.type,
-      };
+    case COLUMN_NUMBER_FORMAT_SET:
+      setFormat();
+      break;
+    case COLUMN_DATE_FORMAT_SET:
+      setFormat();
       break;
   }
 }

@@ -1,7 +1,9 @@
 import tsj from "npm:ts-json-schema-generator";
 
+const [input = "llms.ts", output = "tools.json"] = Deno.args;
+
 const schema = tsj.createGenerator({
-  path: "llms.ts",
+  path: input,
   "skipTypeCheck": true,
   tsconfig: "./bin/ts.json",
 }).createSchema("*");
@@ -56,6 +58,6 @@ for (
 }
 
 Deno.writeTextFileSync(
-  "./llms.json",
+  output,
   JSON.stringify({ commands }, null, 1),
 );

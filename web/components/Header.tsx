@@ -2,6 +2,7 @@ import { ThemeSwitch } from "../navbar/ThemeSwitch.tsx";
 import GithubIcon from "lucide-react/dist/esm/icons/github.js";
 import TwitterIcon from "lucide-react/dist/esm/icons/twitter.js";
 import HireIcon from "lucide-react/dist/esm/icons/flame.js";
+import { ui } from "../state.ts";
 
 export function Header() {
   return (
@@ -28,7 +29,7 @@ export function Header() {
       </a>
 
       <span class="mx-4">
-        <ThemeSwitch theme="dark" />
+        <ThemeSwitch theme={ui.value.theme!} />
       </span>
     </div>
   );

@@ -109,6 +109,10 @@ export function useCellKb(
   const focusTarget = useRef<HTMLTableCellElement>(null);
   const onBlur = useCallback((e: KeyboardEvent) => {
     focusTarget.current = e.target as HTMLTableCellElement; // tricky part: so we have to return focus when we cancel edit
+    store.state.keyboard.focusedCell.value = {
+      column: focusTarget.current?.dataset.columnName!,
+      rowId: focusTarget.current?.closest("tr")?.dataset.rowId!,
+    };
     e.preventDefault();
     if (store.state.keyboard.altKey.value) {
       store.dispatch<CellSelectCmd>({

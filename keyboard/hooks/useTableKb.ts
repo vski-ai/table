@@ -60,7 +60,7 @@ export function useTableKb({ store, tableRef }: RowKbProps) {
   }, [tableRef.current]);
 
   const onFocus = useCallback((ev: FocusEvent) => {
-    const target = ev.target as HTMLTableCellElement;
+    const target = ev.currentTarget as HTMLTableCellElement;
     if (target.tagName !== "TD") {
       return;
     }
