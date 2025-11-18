@@ -35,7 +35,7 @@ export const Dialog = ({
   };
 
   return (
-    <dialog ref={dialogRef} class="modal modal-end">
+    <dialog onClose={handleClose} ref={dialogRef} class="modal modal-end">
       <div
         class={`modal-box dark:bg-gray-900 border-l-2 border-sky-600/10 rounded-none ${className}`}
       >

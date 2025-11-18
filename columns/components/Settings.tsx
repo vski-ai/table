@@ -16,8 +16,8 @@ export function Settings({ store }: ColumnsSettingsProps) {
   const onColumnDrop = useColumnsOrderCallback({ store });
 
   const toggleVisibility = (column: string) => () => {
-    store.state.columns.visibility.value[column] =
-      !store.state.columns.visibility.value[column];
+    store.state.columns.visibility.value[column] = !store.state.columns
+      .visibility.value[column];
     store.state.columns.visibility.value = {
       ...store.state.columns.visibility.value,
     };
@@ -46,11 +46,9 @@ export function Settings({ store }: ColumnsSettingsProps) {
                 onClick={toggleVisibility(column)}
                 class="btn btn-md btn-ghost"
               >
-                {store.state.columns.visibility.value[column] !== false ? (
-                  <EyeIcon />
-                ) : (
-                  <EyeClosedIcon />
-                )}
+                {store.state.columns.visibility.value[column] !== false
+                  ? <EyeIcon />
+                  : <EyeClosedIcon />}
               </button>
             </div>
           </Draggable>
