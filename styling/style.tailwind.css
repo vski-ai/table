@@ -28,7 +28,8 @@
   .vt-fmt-color-w {
     @apply w-full relative;
     .color-i {
-      @apply w-full h-6 border-1 border-sky-500/50 rounded-none outline-none;
+      @apply w-full h-6 border-1 border-sky-500/50 rounded-none outline-none
+        opacity-30 hover:opacity-100 transition-opacity focus:opacity-100;
     }
   }
   .vt-fmt-color-i {

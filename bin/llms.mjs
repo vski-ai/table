@@ -48,6 +48,7 @@ for (
   )
 ) {
   const { type, payload, comment } = schema.definitions[cmd]?.properties ?? {};
+  if (!comment?.const?.trim()) continue;
   collectDefinitions(payload);
   const spec = {
     type: type.const,
