@@ -22,4 +22,9 @@
       background: rgba(0, 150, 219, 0.2);
     }
   }
+  .vt-wrapper * {
+    .input, .select, .textarea {
+      @apply rounded-none! outline-none!;
+    }
+  }
 }

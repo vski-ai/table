@@ -72,6 +72,7 @@ export const createPluginContainer = (
   const lefttableheaders = new SortedAddon<ColumnRendererCallback>();
   const righttableheaders = new SortedAddon<ColumnRendererCallback>();
   const rowclasses = new SortedAddon<ClassResolverCallback>();
+  const columnclasses = new SortedAddon<ClassResolverCallback>();
   const rowstyles = new SortedAddon<StyleResolverCallback>();
 
   setTimeout(async () => {
@@ -86,6 +87,7 @@ export const createPluginContainer = (
         cellprefixes,
         cellsuffixes,
         rowclasses,
+        columnclasses,
         rowstyles,
         beforetable,
         insidetable,
@@ -106,6 +108,7 @@ export const createPluginContainer = (
         cellprefixes,
         cellsuffixes,
         rowclasses,
+        columnclasses,
         rowstyles,
         beforetable,
         insidetable,
@@ -146,6 +149,7 @@ export const createPluginContainer = (
     cellprefixes,
     cellsuffixes,
     rowclasses,
+    columnclasses,
     rowstyles,
     beforetable,
     insidetable,

@@ -2,7 +2,7 @@ import { TableStore } from "@/module/mod.ts";
 import { createTableModule, CreateTableModuleOpts } from "@/module/mod.ts";
 import { Table as TableView, TableProps as TableViewProps } from "./table.tsx";
 import { ComponentChildren } from "preact";
-import { MutableRef } from "preact/hooks";
+import { MutableRef, useEffect } from "preact/hooks";
 
 type Result = {
   store: TableStore;
@@ -22,6 +22,10 @@ export function createTable(
     store,
     Table({ container, onDataLoad }: TableProps) {
       store.scrollContainerRef = container;
+      useEffect(() => {
+        container.current?.classList.add("vt-wrapper");
+      }, [container.current]);
+
       return (
         <TableView
           store={store}

@@ -160,6 +160,7 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
         close();
         contextMenuOpacity.value = 0.1;
       }
+      deHightlight();
     };
 
     const box = target?.current || document.body;
@@ -268,6 +269,7 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
                       onBlur={() => deHightlight(item)}
                       onMouseLeave={() => deHightlight(item)}
                       onClick={(e) => {
+                        deHightlight();
                         e.preventDefault();
                         e.stopPropagation();
                         if (item.submenu?.items?.length) {

@@ -12,3 +12,5 @@
     font-family: Montserrat, sans-serif;
   }
 }
+
+@import "../enterprise/selector/style.tailwind.css";

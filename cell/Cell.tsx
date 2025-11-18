@@ -37,6 +37,11 @@ export const Cell = ({
   const isSelected = store.state.cells.selected?.value?.[key];
   const keyBindings = useCellKb({ store, row, column });
 
+  const classes = addons.columnclasses.string({
+    column,
+    store,
+  });
+
   return (
     <td
       key={column}
@@ -55,7 +60,7 @@ export const Cell = ({
         "stick-left": isStickyLeft,
         "stick-right": isStickyRight,
         "multifocus": isSelected,
-      })}
+      }) + ` ` + classes}
       {...keyBindings}
     >
       <div

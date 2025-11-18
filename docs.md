@@ -215,6 +215,7 @@ import { ComponentChildren } from "preact";
 
 export const COLUMN_DATATYPE_MENU = "column_datatype";
 
+// The title is shown in a submenu
 export const Title = ({ children }: { children: ComponentChildren }) => {
   return (
     <div class="vt-fmt-menu-title">
@@ -233,8 +234,8 @@ const Item = ({ children }: { children: ComponentChildren }) => {
   );
 };
 
-// @llms There's no fucking icon in ContextMenuItem
-// use the label() method to render icons with text or other components
+// @assistant There's no fucking icon in ContextMenuItem
+// use the label() method to render icons with text or other jsx components
 export const ColumnMenu: ContextMenuItem = {
   menu: COLUMN_DATATYPE_MENU,
   order: 0,
