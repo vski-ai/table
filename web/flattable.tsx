@@ -9,6 +9,7 @@ import { generateRows } from "./mock/flat-table.ts";
 import { ChatModule, SearchModule } from "@enterprise/mod.ts";
 import { ContextModule } from "@enterprise/context/mod.ts";
 import { SelectorModule } from "@enterprise/selector/mod.ts";
+import { MatcherModule } from "@enterprise/matcher/mod.ts";
 
 let generated;
 try {
@@ -39,6 +40,7 @@ export const FlatTable = () => {
       ContextModule,
       SearchModule,
       SelectorModule,
+      MatcherModule,
     ],
     persistence: new LocalStorageAdapter(),
   });
