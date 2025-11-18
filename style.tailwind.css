@@ -6,6 +6,7 @@
 @import "./datatype/style.tailwind.css";
 @import "./enumerator/style.tailwind.css";
 @import "./sorting/style.tailwind.css";
+@import "./table/style.tailwind.css";
 
 @layer components {
   .vt {
@@ -20,11 +21,6 @@
     .vt-loading {
       animation: pulse 1.5s infinite;
       background: rgba(0, 150, 219, 0.2);
-    }
-  }
-  .vt-wrapper * {
-    .input, .select, .textarea {
-      @apply rounded-none! outline-none!;
     }
   }
 }

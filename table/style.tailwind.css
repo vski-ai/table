@@ -1,0 +1,28 @@
+@layer components {
+  .vt-settings {
+    @apply rounded-none! dark:bg-gray-900! border-l border-l-sky-500/30;
+
+    .vt-settings-close {
+      @apply absolute right-1 top-1;
+      button {
+        @apply btn btn-ghost btn-circle;
+      }
+    }
+    .vt-settings-header {
+      @apply font-bold text-lg flex gap-3 items-center w-full;
+    }
+    .vt-settings-body {
+      @apply mt-0 w-100;
+    }
+    .vt-settings-label {
+      @apply block text-sm text-sky-900 dark:text-sky-200/50 border-t
+        border-sky-800 dark:border-sky-500/20 px-0 pt-3 mb-3 mt-12;
+    }
+  }
+
+  .vt-wrapper * {
+    .input, .select, .textarea {
+      @apply dark:bg-gray-900! outline-none!;
+    }
+  }
+}

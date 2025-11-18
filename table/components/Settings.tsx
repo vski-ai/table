@@ -22,24 +22,29 @@ export const Settings = ({ store }: TableSettingsProps) => {
 
   return (
     <dialog ref={dialogRef} class="modal modal-end">
-      <div class="modal-box rounded-none">
+      <div class="modal-box vt-settings">
         <form
-          class="absolute right-1 top-1"
+          class="vt-settings-close"
           method="dialog"
           onSubmit={() => {
             store.state.table.settings_dialog.value = false;
           }}
         >
-          <button type="submit" class="btn btn-ghost btn-circle">
+          <button type="submit">
             <XIcon />
           </button>
         </form>
-        <h3 class="font-bold text-lg flex gap-3 items-center w-full">
+        <h3 class="vt-settings-header">
           <CogIcon /> Table Settings
         </h3>
 
-        <div class="modal-body mt-6 w-100">
+        <div class="modal-body vt-settings-body">
           {addons.beforesettings.render({ store })}
+
+          <label class="vt-settings-label">
+            Table Styles
+          </label>
+
           <Select
             options={[{ label: "System Font", value: "" }]}
             onChange={() => {
