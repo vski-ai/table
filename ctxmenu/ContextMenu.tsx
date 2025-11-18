@@ -268,6 +268,28 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
                       onFocus={() => highlight(item)}
                       onBlur={() => deHightlight(item)}
                       onMouseLeave={() => deHightlight(item)}
+                      onKeyDown={(ev) => {
+                        if (ev.key === "ArrowUp" || ev.key === "ArrowDown") {
+                          ev.preventDefault();
+                          ev.stopPropagation();
+                          const next = (ev.currentTarget.parentNode
+                            ?.nextSibling as HTMLLIElement)?.querySelector(
+                              "button.ctx-menu-item",
+                            ) as HTMLButtonElement;
+                          const prev = (ev.currentTarget.parentNode
+                            ?.previousSibling as HTMLLIElement)
+                            ?.querySelector(
+                              "button.ctx-menu-item",
+                            ) as HTMLButtonElement;
+                          if (ev.key === "ArrowUp") {
+                            prev?.focus();
+                            return;
+                          }
+                          if (ev.key === "ArrowDown") {
+                            next?.focus();
+                          }
+                        }
+                      }}
                       onClick={(e) => {
                         deHightlight();
                         e.preventDefault();

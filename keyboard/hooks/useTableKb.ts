@@ -60,15 +60,13 @@ export function useTableKb({ store, tableRef }: RowKbProps) {
   }, [tableRef.current]);
 
   const onFocus = useCallback((ev: FocusEvent) => {
-    const target = ev.currentTarget as HTMLTableCellElement;
+    const target = ev.target as HTMLTableCellElement;
     if (target.tagName !== "TD") {
       return;
     }
     ev.stopPropagation();
-    const x = lastFocused.current.x !== 0
-      ? lastFocused.current.x
-      : target.cellIndex;
-    const y = lastFocused.current.y !== 0 ? lastFocused.current.y : (
+    const x = target.cellIndex + 1;
+    const y = (
       target.parentElement as HTMLTableRowElement
     ).rowIndex;
     lastFocused.current = { x, y };
@@ -77,13 +75,13 @@ export function useTableKb({ store, tableRef }: RowKbProps) {
   const onKeyDown = useCallback((ev: KeyboardEvent) => {
     const target = ev.target as HTMLTableCellElement;
     if (target.tagName !== "TD") {
-      const { x, y } = lastFocused.current;
+      const { x } = lastFocused.current;
       ev.preventDefault();
       ev.stopPropagation();
       getCellAtXY(
         tableRef.current!,
         x !== 0 ? x : 1,
-        y !== 0 ? y + BUFFER_SIZE : BUFFER_SIZE + 3,
+        BUFFER_SIZE + 3,
       )?.focus();
       return;
     }
@@ -110,7 +108,7 @@ export function useTableKb({ store, tableRef }: RowKbProps) {
   }, []) as any;
 
   return {
-    onFocus,
+    onFocus: onFocus,
     onKeyDown,
   };
 }

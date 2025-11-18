@@ -26,7 +26,7 @@ import { RowsModule } from "@/row/mod.ts";
 
 import { StylingModule } from "@/styling/mod.ts";
 
-import { KeyboardPlugin } from "@/keyboard/mod.ts";
+import { KeyboardModule } from "@/keyboard/mod.ts";
 
 export const createPlugin = (plugin: ITableModule) => plugin;
 export type PluginContainer = ReturnType<typeof createPluginContainer>;
@@ -40,7 +40,7 @@ export const buildInModules = [
   ContextMenuModule,
   DatatypeModule,
   EditingModule,
-  KeyboardPlugin,
+  KeyboardModule,
   StylingModule,
 ];
 
