@@ -14,11 +14,7 @@ interface CellProps {
   row: RowData;
 }
 
-export const Cell = ({
-  store,
-  column,
-  row,
-}: CellProps) => {
+export const Cell = ({ store, column, row }: CellProps) => {
   const addons = useAddons({ store });
   const key = store.getCellKey({ row, column });
 
@@ -27,13 +23,8 @@ export const Cell = ({
     height: store.state.table.row_height.value || 42,
   });
 
-  const {
-    isSticky,
-    isStickyLeft,
-    isStickyRight,
-    left,
-    right,
-  } = useStickyColumn({ store, column });
+  const { isSticky, isStickyLeft, isStickyRight, left, right } =
+    useStickyColumn({ store, column });
   const isSelected = store.state.cells.selected?.value?.[key];
   const keyBindings = useCellKb({ store, row, column });
 
@@ -59,14 +50,13 @@ export const Cell = ({
         "vt-cell": true,
         "stick-left": isStickyLeft,
         "stick-right": isStickyRight,
-        "multifocus": isSelected,
-      }) + ` ` + classes}
+        multifocus: isSelected,
+      }) +
+        ` ` +
+        classes}
       {...keyBindings}
     >
-      <div
-        class="vt-cell-wrap"
-        title={row[column]?.toString()}
-      >
+      <div class="vt-cell-wrap" title={row[column]?.toString()}>
         {addons.cellprefixes.render({
           column: column,
           row,

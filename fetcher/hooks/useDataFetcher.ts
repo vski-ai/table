@@ -1,10 +1,8 @@
-import { useSignal } from "@preact/signals";
-import { MutableRef, useMemo } from "preact/hooks";
+import { useMemo } from "preact/hooks";
 import { useRowHeights } from "@/row/hooks/useRowHeights.ts";
 import { useVariableVirtualizer } from "./useVariableVirtualizer.ts";
 
 import { TableStore } from "@/module/types.ts";
-import { RowData } from "@/row/types.ts";
 import { DataLoadCallback } from "../types.ts";
 
 import { useLoader } from "./useLoader.ts";
@@ -22,8 +20,8 @@ export function useDataFetcher({
   rowHeight,
   onDataLoad,
 }: DataFetcherProps) {
-  const latestData = useSignal<(RowData | null)[]>([]);
-  const latestCount = useSignal(0);
+  const latestData = store.state.fetcher.latest_data;
+  const latestCount = store.state.fetcher.latest_count;
   const rowKey = useRowKey({ store });
   const getRowHeight = useRowHeights({
     store,
@@ -34,17 +32,12 @@ export function useDataFetcher({
   const rowHeights = latestData.value.map(getRowHeight);
 
   // 1. Get items range
-  const {
-    virtualItems,
-    paddingTop,
-    paddingBottom,
-    startIndex,
-    endIndex,
-  } = useVariableVirtualizer({
-    scrollContainerRef: store.scrollContainerRef,
-    itemCount: latestCount.value,
-    rowHeights,
-  });
+  const { virtualItems, paddingTop, paddingBottom, startIndex, endIndex } =
+    useVariableVirtualizer({
+      scrollContainerRef: store.scrollContainerRef,
+      itemCount: latestCount.value,
+      rowHeights,
+    });
 
   // 2. Get visible items: null meaning needs to load on
   //  the next iteration (displays as loading)
@@ -55,7 +48,7 @@ export function useDataFetcher({
     }));
   }, [latestData.value, virtualItems, startIndex, endIndex]);
 
-  // 3. Load and merge (todo: maybe separate concerns)
+  // 3. Load and merge (TODO: maybe separate concerns)
   //      - loads the data, fills nulled rows
   const { data, total, isLoading } = useLoader({
     onDataLoad,

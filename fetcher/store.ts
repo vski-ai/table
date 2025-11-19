@@ -9,6 +9,9 @@ type FetcherState = {
     is_initialized: Signal<boolean>;
     table_meta: Signal<TableMeta>;
     reload_key: Signal<number>;
+    render_key: Signal<number>;
+    latest_data: Signal<(RowData | null)[]>;
+    latest_count: Signal<number>;
     current_data: RowData[];
     visible_rows: RowData[];
   };
@@ -31,13 +34,18 @@ export function state(init: InferPersist<FetcherState>): FetcherState {
   const is_initialized = signal(false);
   const table_meta = signal(init?.fetcher?.table_meta ?? {});
   const reload_key = signal(0);
-
+  const render_key = signal(0);
+  const latest_data = signal([]);
+  const latest_count = signal(0);
   return {
     fetcher: {
       loading,
       is_initialized,
       table_meta,
       reload_key,
+      render_key,
+      latest_data,
+      latest_count,
       current_data: [],
       visible_rows: [],
     },
@@ -67,8 +75,8 @@ export function methods(state: TableState) {
       state.fetcher.reload_key.value = new Date().getTime();
     },
     getRow(id: string | number) {
-      return state.fetcher.current_data.find((row) =>
-        row?.id?.toString() === id?.toString()
+      return state.fetcher.current_data.find(
+        (row) => row?.id?.toString() === id?.toString(),
       );
     },
   };

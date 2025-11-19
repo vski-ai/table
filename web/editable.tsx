@@ -7,28 +7,14 @@ import { createFrontendSorter, SortingModule } from "@/sorting/mod.ts";
 import { EnumeratorModule } from "../enumerator/mod.ts";
 import { generateRows } from "./mock/flat-table.ts";
 
-let generated;
-try {
-  JSON.parse(localStorage.getItem("editable_table") ?? "null");
-  if (!generated) {
-    generated = generateRows(0);
-    localStorage.setItem("editable_table", JSON.stringify(generated));
-  }
-} catch (e) {
-  generated = generateRows(10000);
-}
-
-const { data, pinnedRows } = generated;
+const { data, pinnedRows } = generateRows(0);
 const sorter = createFrontendSorter();
 
 export const EditableTable = () => {
   const scrollRef = useRef<any>(null);
-  useEffect(() => {
-    scrollRef.current = document.querySelector(".main-outlet");
-  }, []);
 
   const { Table } = createTable({
-    id: "flat",
+    id: "editable",
     modules: [
       SortingModule,
       //SelectorPlugin,
@@ -38,7 +24,7 @@ export const EditableTable = () => {
   });
 
   const onDataLoad: DataLoadCallback = async (
-    { offset, limit, store }: any,
+    { offset, limit, store },
   ) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const sorted = sorter({
@@ -50,7 +36,7 @@ export const EditableTable = () => {
       total: sorted.length,
       meta: {
         sortableAll: true,
-        pinnedRows,
+        //pinnedRows,
       },
     };
   };

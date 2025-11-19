@@ -9,25 +9,25 @@ import {
 
 // This hook is responsible for calculating the visible range of items
 // in a list with variable heights.
-export function useVariableVirtualizer(
-  {
-    scrollContainerRef,
-    itemCount,
-    rowHeights,
-    buffer = 5,
-    spacing = 0,
-    throttle = 10,
-    debounce = 10,
-  }: {
-    scrollContainerRef: MutableRef<HTMLElement>;
-    itemCount: number;
-    rowHeights: number[];
-    buffer?: number;
-    spacing?: number;
-    throttle?: number;
-    debounce?: number;
-  },
-) {
+export function useVariableVirtualizer({
+  scrollContainerRef,
+  itemCount,
+  rowHeights,
+  buffer = 5,
+  spacing = 0,
+  throttle = 10,
+  debounce = 10,
+  key = [],
+}: {
+  scrollContainerRef: MutableRef<HTMLElement>;
+  itemCount: number;
+  rowHeights: number[];
+  buffer?: number;
+  spacing?: number;
+  throttle?: number;
+  debounce?: number;
+  key?: any;
+}) {
   const [range, setRange] = useState({ startIndex: 0, endIndex: 0 });
   const debounceTimeoutRef = useRef<number>();
   const ignoreScrollEventsRef = useRef(false);
@@ -36,21 +36,24 @@ export function useVariableVirtualizer(
   // yes, we need trottle in combination with debounce
   // consider "shaking" effects on animations, transitions, dataload etc.
   // everything that may implictly emit scroll
-  const setRangeAndThrottle = useCallback((newRange: typeof range) => {
-    if (
-      newRange.startIndex !== range.startIndex ||
-      newRange.endIndex !== range.endIndex
-    ) {
-      setRange(newRange);
-      ignoreScrollEventsRef.current = true;
-      if (ignoreTimeoutRef.current) {
-        clearTimeout(ignoreTimeoutRef.current);
+  const setRangeAndThrottle = useCallback(
+    (newRange: typeof range) => {
+      if (
+        newRange.startIndex !== range.startIndex ||
+        newRange.endIndex !== range.endIndex
+      ) {
+        setRange(newRange);
+        ignoreScrollEventsRef.current = true;
+        if (ignoreTimeoutRef.current) {
+          clearTimeout(ignoreTimeoutRef.current);
+        }
+        ignoreTimeoutRef.current = setTimeout(() => {
+          ignoreScrollEventsRef.current = false;
+        }, throttle);
       }
-      ignoreTimeoutRef.current = setTimeout(() => {
-        ignoreScrollEventsRef.current = false;
-      }, throttle);
-    }
-  }, [range]);
+    },
+    [range],
+  );
 
   const calculateRange = useCallback(() => {
     const scrollElement = scrollContainerRef?.current;
@@ -133,16 +136,14 @@ export function useVariableVirtualizer(
   }, [scrollContainerRef?.current, calculateRange]);
 
   const paddingTop = Math.floor(
-    rowHeights.slice(0, range.startIndex).reduce(
-      (sum, height) => sum + height + spacing,
-      0,
-    ),
+    rowHeights
+      .slice(0, range.startIndex)
+      .reduce((sum, height) => sum + height + spacing, 0),
   );
   const paddingBottom = Math.floor(
-    rowHeights.slice(range.endIndex + 1).reduce(
-      (sum, height) => sum + height + spacing,
-      0,
-    ),
+    rowHeights
+      .slice(range.endIndex + 1)
+      .reduce((sum, height) => sum + height + spacing, 0),
   );
 
   const virtualItemsRef = useRef<any[]>([]);
@@ -163,7 +164,7 @@ export function useVariableVirtualizer(
     }
 
     return items;
-  }, [range.startIndex, range.endIndex]);
+  }, [range.startIndex, range.endIndex, key]);
 
   return { ...range, paddingTop, paddingBottom, virtualItems };
 }

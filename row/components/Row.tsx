@@ -18,14 +18,7 @@ interface RowProps {
 }
 
 export const Row = (props: RowProps) => {
-  const {
-    row,
-    rowIndex,
-    rowHeight,
-    store,
-    columns,
-    rowKey,
-  } = props;
+  const { row, rowIndex, rowHeight, store, columns, rowKey } = props;
 
   const adons = useAddons({ store });
   const height = rowHeight;
@@ -78,9 +71,10 @@ interface RenderRowCallbackProps {
   rowHeight: number;
 }
 
-export function useRenderRowCallback(
-  { store, rowHeight }: RenderRowCallbackProps,
-) {
+export function useRenderRowCallback({
+  store,
+  rowHeight,
+}: RenderRowCallbackProps) {
   const columns = useOrderedColumns({ store });
   const rowKey = "id";
   const getRowHeight = useRowHeights({
@@ -88,29 +82,27 @@ export function useRenderRowCallback(
     rowKey,
     height: store.state.table.row_height.value ?? rowHeight,
   });
-  return useCallback((row: RowData, index: number) => {
-    const rowHeight = getRowHeight(row);
+  return useCallback(
+    (row: RowData, index: number) => {
+      const rowHeight = getRowHeight(row);
 
-    if (row.$loading) {
+      if (row.$loading) {
+        return (
+          <RowLoading store={store} columns={columns} rowHeight={rowHeight} />
+        );
+      }
+
       return (
-        <RowLoading store={store} columns={columns} rowHeight={rowHeight} />
+        <Row
+          row={row}
+          rowIndex={index}
+          rowHeight={store.state.table.row_height.value || rowHeight}
+          columns={columns}
+          store={store}
+          rowKey={rowKey}
+        />
       );
-    }
-
-    return (
-      <Row
-        row={row}
-        rowIndex={index}
-        rowHeight={store.state.table.row_height.value || rowHeight}
-        columns={columns}
-        store={store}
-        rowKey={rowKey}
-      />
-    );
-  }, [
-    rowKey,
-    getRowHeight,
-    columns,
-    store.state.table.row_height.value,
-  ]);
+    },
+    [rowKey, getRowHeight, columns, store.state.table.row_height.value],
+  );
 }

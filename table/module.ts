@@ -4,10 +4,7 @@ import { renderTableSettings } from "./components/Settings.tsx";
 import { MenuItems } from "./menu.tsx";
 import * as store from "./store.ts";
 
-const onInit: ModuleInitCallback = ({
-  store,
-  beforetable,
-}) => {
+const onInit: ModuleInitCallback = ({ store, beforetable }) => {
   beforetable.use(-1, renderTableSettings);
   addMenuItems({
     store,

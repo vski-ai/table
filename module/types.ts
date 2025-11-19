@@ -62,6 +62,11 @@ export type AfterLoadCallback = (
   opts: AfterLoadOptions,
 ) => Promise<DataLoadResult | void> | DataLoadResult | void;
 
+export type BeforeRenderCallback = (opts: {
+  res: (RowData | null)[];
+  store: TableStore;
+}) => (RowData | null)[];
+
 export type BeforeLoadCallback = (
   opts: BeforeLoadOptions,
 ) => Promise<DataLoadOptions> | DataLoadOptions;
@@ -114,6 +119,8 @@ export type ITableModule<T extends Record<string, any> = Record<string, any>> =
 
     // A hook that is called after data is loaded
     afterLoad?: AfterLoadCallback;
+
+    beforeRender?: BeforeRenderCallback;
 
     store?: StoreModule;
   };

@@ -10,19 +10,9 @@ import { ChatModule, SearchModule } from "@enterprise/mod.ts";
 import { ContextModule } from "@enterprise/context/mod.ts";
 import { SelectorModule } from "@enterprise/selector/mod.ts";
 import { MatcherModule } from "@enterprise/matcher/mod.ts";
+import { EditModeModule } from "../enterprise/editmode/mod.ts";
 
-let generated;
-try {
-  JSON.parse(localStorage.getItem("flat_table") ?? "null");
-  if (!generated) {
-    generated = generateRows(5000);
-    localStorage.setItem("flat_table", JSON.stringify(generated));
-  }
-} catch (e) {
-  generated = generateRows(10000);
-}
-
-const { data, pinnedRows } = generated;
+const { data, pinnedRows } = generateRows(5000);
 const sorter = createFrontendSorter();
 
 export const FlatTable = () => {
@@ -41,16 +31,15 @@ export const FlatTable = () => {
       SearchModule,
       SelectorModule,
       MatcherModule,
+      EditModeModule,
     ],
     persistence: new LocalStorageAdapter(),
   });
 
-  const onDataLoad: DataLoadCallback = async (
-    { offset, limit, store },
-  ) => {
+  const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const sorted = sorter({
-      data: (data as RowData[]),
+      data: data as RowData[],
       store,
     });
     return {
@@ -58,17 +47,14 @@ export const FlatTable = () => {
       total: sorted.length,
       meta: {
         sortableAll: true,
-        pinnedRows,
+        //pinnedRows,
       },
     };
   };
 
   return (
     <div class="relative" ref={scrollRef}>
-      <Table
-        onDataLoad={onDataLoad}
-        container={scrollRef}
-      />
+      <Table onDataLoad={onDataLoad} container={scrollRef} />
     </div>
   );
 };

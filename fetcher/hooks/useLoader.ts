@@ -10,11 +10,7 @@ interface LoaderProps {
   visibleRows: any[];
 }
 
-export const useLoader = ({
-  onDataLoad,
-  store,
-  visibleRows,
-}: LoaderProps) => {
+export const useLoader = ({ onDataLoad, store, visibleRows }: LoaderProps) => {
   const data = useSignal<(RowData | null)[]>([]);
   const total = useSignal(0);
   const isLoading = useSignal(false);
@@ -23,78 +19,81 @@ export const useLoader = ({
   const lastReloadKey = useRef(reloadKey.value);
   const addons = useAddons({ store });
 
-  const load = useCallback(async (offset: number, limit: number) => {
-    if (limit <= 0 || isLoading.value) return;
+  const load = useCallback(
+    async (offset: number, limit: number) => {
+      if (limit <= 0 || isLoading.value) return;
 
-    isLoading.value = true;
-    store.state.fetcher.loading.value = true;
-    try {
-      const options = await addons.beforeLoad({ offset, limit, store });
-      const res = await onDataLoad(options);
-      const { rows, total: newTotal, meta } = await addons.afterLoad(res);
+      isLoading.value = true;
+      store.state.fetcher.loading.value = true;
+      try {
+        const options = await addons.beforeLoad({ offset, limit, store });
+        const res = await onDataLoad(options);
+        const { rows, total: newTotal, meta } = await addons.afterLoad(res);
 
-      store.state.fetcher.table_meta.value = meta;
+        store.state.fetcher.table_meta.value = meta;
 
-      const currentColumns = JSON.stringify(
-        store.state.columns.all.value?.sort() || [],
-      );
-      const receivedColumns = JSON.stringify(
-        Object.keys(rows.find((r) => r !== null) ?? {}),
-      );
-      if (currentColumns !== receivedColumns) {
-        store.state.columns.all.value = Object.keys(
-          rows.find((r) => r !== null) ?? {},
+        const currentColumns = JSON.stringify(
+          store.state.columns.all.value?.sort() || [],
         );
-      }
-
-      if (total.value !== newTotal) {
-        total.value = newTotal;
-        data.value = new Array(newTotal).fill(null);
-        loadedRanges.current = [];
-      }
-
-      const finalData = [...data.value];
-      for (let i = 0; i < rows.length; i++) {
-        if (offset + i < finalData.length) {
-          finalData[offset + i] = rows[i];
+        const receivedColumns = JSON.stringify(
+          Object.keys(rows.find((r) => r !== null) ?? {}),
+        );
+        if (currentColumns !== receivedColumns) {
+          store.state.columns.all.value = Object.keys(
+            rows.find((r) => r !== null) ?? {},
+          );
         }
-      }
-      data.value = finalData;
-      store.state.fetcher.current_data = finalData.filter((r) => !!r);
-      // Merge ranges
-      const newRange = { start: offset, end: offset + limit };
-      const mergedRanges: { start: number; end: number }[] = [];
-      let merged = false;
-      for (const range of loadedRanges.current) {
-        if (newRange.start <= range.end && newRange.end >= range.start) {
-          newRange.start = Math.min(newRange.start, range.start);
-          newRange.end = Math.max(newRange.end, range.end);
-          merged = true;
-        } else {
-          mergedRanges.push(range);
+
+        if (total.value !== newTotal) {
+          total.value = newTotal;
+          data.value = new Array(newTotal).fill(null);
+          loadedRanges.current = [];
         }
+
+        const finalData = [...data.value];
+        for (let i = 0; i < rows.length; i++) {
+          if (offset + i < finalData.length) {
+            finalData[offset + i] = rows[i];
+          }
+        }
+        data.value = addons.beforeRender(finalData);
+        store.state.fetcher.current_data = finalData.filter((r) => !!r);
+        // Merge ranges
+        const newRange = { start: offset, end: offset + limit };
+        const mergedRanges: { start: number; end: number }[] = [];
+        let merged = false;
+        for (const range of loadedRanges.current) {
+          if (newRange.start <= range.end && newRange.end >= range.start) {
+            newRange.start = Math.min(newRange.start, range.start);
+            newRange.end = Math.max(newRange.end, range.end);
+            merged = true;
+          } else {
+            mergedRanges.push(range);
+          }
+        }
+        if (!merged) {
+          mergedRanges.push(newRange);
+        }
+        loadedRanges.current = mergedRanges;
+      } catch (error) {
+        console.error("Failed to load data", error);
+      } finally {
+        isLoading.value = false;
+        store.state.fetcher.loading.value = false;
+        store.state.fetcher.is_initialized.value = true;
       }
-      if (!merged) {
-        mergedRanges.push(newRange);
-      }
-      loadedRanges.current = mergedRanges;
-    } catch (error) {
-      console.error("Failed to load data", error);
-    } finally {
-      isLoading.value = false;
-      store.state.fetcher.loading.value = false;
-      store.state.fetcher.is_initialized.value = true;
-    }
-  }, [
-    onDataLoad,
-    store,
-    addons,
-    data,
-    total,
-    isLoading,
-    loadedRanges,
-    visibleRows,
-  ]);
+    },
+    [
+      onDataLoad,
+      store,
+      addons,
+      data,
+      total,
+      isLoading,
+      loadedRanges,
+      visibleRows,
+    ],
+  );
 
   useEffect(() => {
     if (!visibleRows) return;
@@ -130,8 +129,9 @@ export const useLoader = ({
 
     const newRanges = nullRanges.filter((range) => {
       return !loadedRanges.current.some((loadingRange) => {
-        return range.start >= loadingRange.start &&
-          range.end <= loadingRange.end;
+        return (
+          range.start >= loadingRange.start && range.end <= loadingRange.end
+        );
       });
     });
 
@@ -141,6 +141,10 @@ export const useLoader = ({
       }
     }
   }, [visibleRows, load, reloadKey.value]);
+
+  useEffect(() => {
+    data.value = addons.beforeRender(data.value);
+  }, [store.state.fetcher.render_key.value]);
 
   return { data, total, isLoading };
 };

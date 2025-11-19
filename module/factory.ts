@@ -22,7 +22,7 @@ import { TableColumnsModule } from "@/columns/mod.ts";
 import { ContextMenuModule } from "@/ctxmenu/mod.ts";
 import { DatatypeModule } from "@/datatype/mod.ts";
 import { EditingModule } from "@/editing/mod.ts";
-import { RowsModule } from "@/row/mod.ts";
+import { RowData, RowsModule } from "@/row/mod.ts";
 
 import { StylingModule } from "@/styling/mod.ts";
 
@@ -138,9 +138,18 @@ export const createPluginContainer = (
     return result;
   };
 
+  const beforeRender = (res: (RowData | null)[]) => {
+    let result = res;
+    for (const plugin of sortedPlugins) {
+      result = plugin.beforeRender?.({ res: result, store }) ?? result;
+    }
+    return result;
+  };
+
   const container = {
     beforeLoad,
     afterLoad,
+    beforeRender,
     headerprefixes,
     lefttablecells,
     righttablecells,

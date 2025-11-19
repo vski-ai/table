@@ -1,4 +1,4 @@
-import { MutableRef, useRef } from "preact/hooks";
+import { MutableRef, useMemo, useRef } from "preact/hooks";
 import { DataLoadCallback } from "@/fetcher/types.ts";
 import { useDataFetcher } from "@/fetcher/hooks/useDataFetcher.ts";
 import { useAddons } from "@/module/mod.ts";
@@ -16,25 +16,15 @@ import { useTableKb } from "@/keyboard/hooks/useTableKb.ts";
 export type TableProps = {
   onDataLoad: DataLoadCallback;
   store: TableStore;
-  rowHeight?: number;
   scrollContainerRef: MutableRef<HTMLElement>;
-  rowIdentifier?: string;
 };
 
 export function Table(props: TableProps) {
-  const {
-    store,
-    scrollContainerRef,
-    onDataLoad,
-  } = props;
+  const { store, scrollContainerRef, onDataLoad } = props;
 
   const rowHeight = store.state.table.row_height.value;
 
-  const {
-    visibleRows,
-    paddingBottom,
-    paddingTop,
-  } = useDataFetcher({
+  const { visibleRows, paddingBottom, paddingTop } = useDataFetcher({
     store,
     rowHeight,
     onDataLoad,
@@ -51,12 +41,20 @@ export function Table(props: TableProps) {
 
   const kb = useTableKb({ store, tableRef });
 
-  const adons = useAddons({ store });
+  const addons = useAddons({ store });
+
+  const renderRows = [
+    { row: "top", index: -10 },
+    ...visibleRows,
+    { row: "bottom", index: -10 },
+  ];
+
   const initializing = !store.state.fetcher.is_initialized.value;
+
   return (
     <>
       <Header store={store} loading={initializing} />
-      {adons.beforetable.render({
+      {addons.beforetable.render({
         ref: scrollContainerRef,
         store,
       })}
@@ -69,48 +67,44 @@ export function Table(props: TableProps) {
         tabIndex={-1}
         {...kb}
       >
-        <tbody>
+        <tbody style={{ paddingBottom }}>
           {initializing && <RowSkeleton />}
-          {[{ row: "top", index: -Infinity }, ...visibleRows, {
-            row: "bottom",
-            index: Infinity,
-          }].map(
-            (item, i) => {
-              if (item.row === "top") {
-                return (
-                  <RowPadding
-                    key={paddingTop + i}
-                    name="top"
-                    padding={paddingTop}
-                    {...{
-                      store,
-                    }}
-                  />
-                );
-              }
 
-              if (item.row === "bottom") {
-                return (
-                  <RowPadding
-                    key={paddingBottom + i}
-                    name="bottom"
-                    padding={paddingBottom}
-                    {...{
-                      store,
-                    }}
-                  />
-                );
-              }
-
-              return renderRow(
-                (item.row as RowData) ?? { $loading: true },
-                item.index,
+          {renderRows.map((item, i) => {
+            if (item.row === "top") {
+              return (
+                <RowPadding
+                  key={i}
+                  name="top"
+                  padding={paddingTop}
+                  {...{
+                    store,
+                  }}
+                />
               );
-            },
-          )}
+            }
+
+            if (item.row === "bottom") {
+              return (
+                <RowPadding
+                  key={i + 1}
+                  name="bottom"
+                  padding={paddingBottom}
+                  {...{
+                    store,
+                  }}
+                />
+              );
+            }
+
+            return renderRow(
+              (item.row as RowData) ?? { $loading: true },
+              item.index,
+            );
+          })}
         </tbody>
       </table>
-      {adons.aftertable.render({
+      {addons.aftertable.render({
         ref: scrollContainerRef,
         store,
       })}
