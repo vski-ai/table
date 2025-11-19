@@ -22,18 +22,24 @@ declare module "@/module/types.ts" {
 
 export const CELL_EDITING_SET = "CELL_EDITING_SET";
 export const ROW_EDIT_UPDATE = "ROW_EDIT_UPDATE";
+export const ROW_EDIT_UNDO = "ROW_EDIT_UNDO";
 
 export type CellEditingSetCommand = Command<
   typeof CELL_EDITING_SET,
   Record<string, boolean>
 >;
 
-export type RowEditCommand = Command<
-  typeof ROW_EDIT_UPDATE,
-  RowData
+export type RowEditCommand = Command<typeof ROW_EDIT_UPDATE, RowData>;
+
+export type RowEditUndoCommand = Command<
+  typeof ROW_EDIT_UNDO,
+  { row_id: string }
 >;
 
-export type EditingCommandType = CellEditingSetCommand | RowEditCommand;
+export type EditingCommandType =
+  | CellEditingSetCommand
+  | RowEditCommand
+  | RowEditUndoCommand;
 
 export function state(persist: InferPersist<EditingStore>): EditingStore {
   const cell = signal({});
@@ -62,6 +68,12 @@ export function mutate(state: TableState, command: EditingCommandType) {
         [command.payload.id]: command.payload,
       };
       break;
+    case ROW_EDIT_UNDO: {
+      const { [command.payload.row_id]: _, ...rest } = state.editing.rows.value;
+      state.editing.rows.value = rest;
+      state.fetcher.render_key.value = new Date().getTime();
+      break;
+    }
   }
 }
 
