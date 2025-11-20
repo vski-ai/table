@@ -9,7 +9,7 @@ type RowKbProps = {
   tableRef: MutableRef<HTMLTableElement | null>;
 };
 
-export function useTableKb({ store, tableRef }: RowKbProps) {
+export function useTableInput({ store, tableRef }: RowKbProps) {
   const lastFocused = useRef<{ x: number; y: number }>({
     x: 0,
     y: 0,
@@ -38,12 +38,22 @@ export function useTableKb({ store, tableRef }: RowKbProps) {
         store.state.keyboard.metaKey.value = false;
       }
     };
+    const globalMouseDown = () => {
+      store.state.mouse.pressed.value = true;
+    };
+    const globalMouseUp = () => {
+      store.state.mouse.pressed.value = false;
+    };
 
     globalThis.addEventListener("keydown", globalKeyDown);
     globalThis.addEventListener("keyup", globalKeyUp);
+    globalThis.addEventListener("mousedown", globalMouseDown);
+    globalThis.addEventListener("mouseup", globalMouseUp);
     return () => {
       globalThis.removeEventListener("keydown", globalKeyDown);
       globalThis.removeEventListener("keyup", globalKeyUp);
+      globalThis.removeEventListener("mousedown", globalMouseDown);
+      globalThis.removeEventListener("mouseup", globalMouseUp);
     };
   });
 
@@ -66,9 +76,7 @@ export function useTableKb({ store, tableRef }: RowKbProps) {
     }
     ev.stopPropagation();
     const x = target.cellIndex + 1;
-    const y = (
-      target.parentElement as HTMLTableRowElement
-    ).rowIndex;
+    const y = (target.parentElement as HTMLTableRowElement).rowIndex;
     lastFocused.current = { x, y };
   }, []) as any;
 
@@ -78,11 +86,7 @@ export function useTableKb({ store, tableRef }: RowKbProps) {
       const { x } = lastFocused.current;
       ev.preventDefault();
       ev.stopPropagation();
-      getCellAtXY(
-        tableRef.current!,
-        x !== 0 ? x : 1,
-        BUFFER_SIZE + 3,
-      )?.focus();
+      getCellAtXY(tableRef.current!, x !== 0 ? x : 1, BUFFER_SIZE + 3)?.focus();
       return;
     }
 
@@ -142,9 +146,9 @@ function getRowBelow(target: HTMLTableCellElement) {
 }
 
 function getRowAtIndex(table: HTMLTableElement, index: number) {
-  return table.querySelector("tbody")?.querySelector(
-    `tr:nth-child(${index})`,
-  ) as HTMLTableRowElement;
+  return table
+    .querySelector("tbody")
+    ?.querySelector(`tr:nth-child(${index})`) as HTMLTableRowElement;
 }
 
 function getCellAtIndex(row: HTMLTableRowElement, index: number) {

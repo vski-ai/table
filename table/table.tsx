@@ -11,7 +11,7 @@ import {
   useRenderRowCallback,
 } from "@/row/mod.ts";
 import { TableStore } from "@/module/types.ts";
-import { useTableKb } from "@/keyboard/hooks/useTableKb.ts";
+import { useTableInput } from "@/input/hooks/useTableInput.ts";
 
 export type TableProps = {
   onDataLoad: DataLoadCallback;
@@ -39,7 +39,7 @@ export function Table(props: TableProps) {
 
   const tableRef = useRef<HTMLTableElement>(null);
 
-  const kb = useTableKb({ store, tableRef });
+  const kb = useTableInput({ store, tableRef });
 
   const addons = useAddons({ store });
 

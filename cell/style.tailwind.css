@@ -1,5 +1,6 @@
 @layer components {
   .vt-cell {
+    user-select: none;
     @apply p-0 bg-white dark:bg-gray-800 border-0 relative after:border-r-1
       after:border-b-1 after:border-gray-200 dark:after:border-gray-700
       text-base-content transition-none!;
@@ -12,7 +13,9 @@
       @apply after:border-l-1 after:border-r-0 after:border-l-gray-400
         dark:after:border-l-gray-600;
     }
-    &:focus, &:focus-visible, &:focus-within {
+    &:focus,
+    &:focus-visible,
+    &:focus-within {
       @apply after:border-2 after:border-sky-500/30 outline-0;
     }
     &.multifocus {
