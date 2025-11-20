@@ -4,6 +4,7 @@ export * from "./components/SortedAddon.ts";
 export * from "./hooks/useAddons.ts";
 export * from "./store/mod.ts";
 export * from "./components/LocalStorageAdapter.ts";
+export * from "./utils/NoopStorageAdapter.ts";
 
 import { ITableModule, StoreModule } from "./types.ts";
 import {
@@ -19,12 +20,14 @@ export type CreateTableModuleOpts = {
   persistence?: StorageAdapter;
 };
 
-export function createTableModule(
-  { id, modules, persistence }: CreateTableModuleOpts,
-) {
-  const storeModules: StoreModule[] = [...buildInModules, ...modules].map((p) =>
-    p.store
-  ).filter((p) => !!p);
+export function createTableModule({
+  id,
+  modules,
+  persistence,
+}: CreateTableModuleOpts) {
+  const storeModules: StoreModule[] = [...buildInModules, ...modules]
+    .map((p) => p.store)
+    .filter((p) => !!p);
 
   const store = createTableStore(
     persistence ?? new LocalStorageAdapter(),
