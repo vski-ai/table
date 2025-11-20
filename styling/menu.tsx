@@ -85,6 +85,7 @@ export const ColumnMenuContent: ContextMenuItem = {
 
 export const ColumnMenuCellContent: ContextMenuItem = {
   ...ColumnMenuContent,
+  menu: "col_style_menu_cell",
   parent: "col_style_cell",
 };
 
