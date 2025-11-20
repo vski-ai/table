@@ -1,5 +1,6 @@
-import { effect, Signal } from "@preact/signals";
+import { effect } from "@preact/signals";
 import { StorageAdapter } from "../components/LocalStorageAdapter.ts";
+import { NoopStorageAdapter } from "../components/NoopStorageAdapter.ts";
 import {
   Command,
   HistoryEntry,
@@ -7,64 +8,42 @@ import {
   TableState,
   TableStore,
 } from "./types.ts";
-
-const builtInStore: StoreModule[] = [];
+import { restoreFromSnaphot, serializeState } from "./utils.ts";
 
 const MAX_HISTORY_SIZE = 100;
 
-function serializeState(state: any): Record<string, unknown> {
-  const snapshot: Record<string, unknown> = {};
-  for (const key of Object.keys(state)) {
-    const value = state[key as keyof typeof state];
-    if (value instanceof Signal) {
-      snapshot[key] = value.peek();
-    } else if (typeof value === "object") {
-      snapshot[key] = serializeState(value);
-    } else if (typeof value !== "function") {
-      snapshot[key] = value;
-    }
-  }
-  return snapshot;
-}
+// Store factory
+// Provides dispatch and history
+export function createTableStore({
+  storage = new NoopStorageAdapter(),
+  tableId,
+  modules = [],
+}: {
+  storage?: StorageAdapter;
+  tableId: string;
+  modules: StoreModule[];
+}): TableStore {
+  const TABLE_PERSIST_KEY = tableId;
+  const TABLE_HISTORY_PERSIST_KEY = tableId + "_history";
+  const TABLE_UNDOHISTORY_PERSIST_KEY = tableId + "_undohistory";
+  // we get persistent data initially.
+  // storage must be sync - if want server/async do a background side
+  // effect for your storage impl.
+  const INITIAL_STATE = storage.getItem<Record<string, any>>(TABLE_PERSIST_KEY);
 
-function restoreFromSnaphot(snap: any, state: TableState | any) {
-  if (!snap) return;
-  for (const key in state) {
-    const ref = state[key];
-    const value = snap[key];
-    if (typeof value === "undefined") continue;
-    if (ref instanceof Signal) {
-      try {
-        ref.value = value;
-      } catch {
-        /* some signals are not writable */
-      }
-    } else if (typeof ref === "object" && typeof value === "object") {
-      restoreFromSnaphot(value, ref);
-    }
-  }
-}
-
-export function createTableStore(
-  storage?: StorageAdapter,
-  tableId?: string,
-  modules: StoreModule[] = [],
-): TableStore {
-  modules = [...modules, ...builtInStore];
-
-  const initialState = storage && tableId
-    ? storage.getItem<Record<string, any>>(tableId)
-    : null;
-  // @ts-expect-error:
+  // @ts-expect-error: type signature incomplete here
+  // due to extentions
   const state: TableState = {
     tableId,
   };
+
+  // handle inject (usually for private/sybmols)
   modules
     .map((module) => module.inject?.(state))
     .filter(Boolean)
     .forEach((module) => {
       for (const sym of Object.getOwnPropertySymbols(module)) {
-        // @ts-ignore
+        // @ts-ignore: privates
         state[sym] = module[sym];
       }
       for (const key in module) {
@@ -72,13 +51,18 @@ export function createTableStore(
       }
     });
 
-  for (const module of modules.map((module) => module.state(initialState))) {
+  // mapping state from modules
+  for (const module of modules.map((module) => module.state(INITIAL_STATE))) {
     for (const key in module) {
       state[key] = module[key];
     }
   }
 
-  const history: HistoryEntry[] = [];
+  // dispatch mutations
+  const history = (storage.getItem<Record<string, any>>(
+    TABLE_HISTORY_PERSIST_KEY,
+  ) ?? []) as HistoryEntry[];
+
   const dispatch = <T, P>(command: Command<T, P>) => {
     if (command.history) {
       const stateSnapshot = serializeState(state);
@@ -90,13 +74,17 @@ export function createTableStore(
         command,
         timestamp: Date.now(),
       });
+      storage.setItem(TABLE_HISTORY_PERSIST_KEY, history);
     }
     return modules
       .map((module) => module.mutate(state, command))
       .filter(Boolean);
   };
 
-  const undoHistory: HistoryEntry[] = [];
+  // undo/redo methods
+  const undoHistory = (storage.getItem<Record<string, any>>(
+    TABLE_UNDOHISTORY_PERSIST_KEY,
+  ) ?? []) as HistoryEntry[];
 
   const undo = () => {
     const item = history.pop();
@@ -105,6 +93,7 @@ export function createTableStore(
         undoHistory.shift();
       }
       undoHistory.push(item);
+      storage.setItem(TABLE_UNDOHISTORY_PERSIST_KEY, undoHistory);
       restoreFromSnaphot(item.stateSnapshot, state);
     }
   };
@@ -120,10 +109,12 @@ export function createTableStore(
     }
   };
 
+  // methods to be injected into store
   const methods = modules
     .map((module) => module.methods?.(state) ?? {})
     .reduce((acc, obj) => ({ ...acc, ...obj }), {});
 
+  // handle persisting on store updates
   let persistDebounceId: number = 0;
   effect(() => {
     if (storage && tableId) {
@@ -141,10 +132,10 @@ export function createTableStore(
   });
 
   return {
+    ...methods,
     state,
     dispatch,
     undo,
     redo,
-    ...methods,
   } as TableStore;
 }

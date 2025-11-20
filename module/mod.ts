@@ -4,7 +4,7 @@ export * from "./components/SortedAddon.ts";
 export * from "./hooks/useAddons.ts";
 export * from "./store/mod.ts";
 export * from "./components/LocalStorageAdapter.ts";
-export * from "./utils/NoopStorageAdapter.ts";
+export * from "./components/NoopStorageAdapter.ts";
 
 import { ITableModule, StoreModule } from "./types.ts";
 import {
@@ -29,11 +29,11 @@ export function createTableModule({
     .map((p) => p.store)
     .filter((p) => !!p);
 
-  const store = createTableStore(
-    persistence ?? new LocalStorageAdapter(),
-    id,
-    storeModules,
-  );
+  const store = createTableStore({
+    storage: persistence ?? new LocalStorageAdapter(),
+    tableId: id,
+    modules: storeModules,
+  });
 
   createPluginContainer(store, modules);
   return store;
