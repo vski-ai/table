@@ -25,25 +25,21 @@ export const GroupTable = () => {
   const tableStore = createTableStore(
     new LocalStorageAdapter(),
     "basic-table",
-    [
-      EnumeratorStore,
-      SortingStore,
-      GroupingStore,
-    ],
+    [EnumeratorStore, SortingStore, GroupingStore],
   );
 
-  createPluginContainer(
-    tableStore,
-    [
-      EnumeratorModule,
-      GroupingPlugin,
-      SortingPlugin,
-    ],
-  );
+  createPluginContainer(tableStore, [
+    EnumeratorModule,
+    GroupingPlugin,
+    SortingPlugin,
+  ]);
 
-  const onDataLoad: DataLoadCallback = async (
-    { store, offset, limit, sort },
-  ) => {
+  const onDataLoad: DataLoadCallback = async ({
+    store,
+    offset,
+    limit,
+    sort,
+  }) => {
     await new Promise((r) => setTimeout(r, 500));
 
     const sorted = sorter({
@@ -51,11 +47,11 @@ export const GroupTable = () => {
       store,
     });
 
-    const d = sorted.filter((r) =>
-      r.$parent_id?.every(
-        (id: string | number) =>
-          store.state?.expandedLevels?.value?.includes(id as never),
-      ) || !r.$group_level
+    const d = sorted.filter(
+      (r) =>
+        r.$parent_id?.every((id: string | number) =>
+          store.state?.expandedLevels?.value?.includes(id as never)
+        ) || !r.$group_level,
     );
 
     return {
@@ -63,7 +59,7 @@ export const GroupTable = () => {
       total: d.length,
       meta: {
         group_by: ["Year", "Month", "Company"],
-        sortableColumns: ["Year", "Hourly Rate", "Year", "Month"],
+        sortable_columns: ["Year", "Hourly Rate", "Year", "Month"],
         group_sorting_level_columns: [
           ["Month"],
           ["Company", "First Name", "Last Name"],

@@ -23,19 +23,17 @@ export const EditableTable = () => {
     persistence: new LocalStorageAdapter(),
   });
 
-  const onDataLoad: DataLoadCallback = async (
-    { offset, limit, store },
-  ) => {
+  const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const sorted = sorter({
-      data: (data as RowData[]),
+      data: data as RowData[],
       store,
     });
     return {
       rows: sorted.slice(offset, offset + limit),
       total: sorted.length,
       meta: {
-        sortableAll: true,
+        sortable_all: true,
         //pinnedRows,
       },
     };
@@ -43,10 +41,7 @@ export const EditableTable = () => {
 
   return (
     <div ref={scrollRef}>
-      <Table
-        onDataLoad={onDataLoad}
-        container={scrollRef as any}
-      />
+      <Table onDataLoad={onDataLoad} container={scrollRef as any} />
     </div>
   );
 };

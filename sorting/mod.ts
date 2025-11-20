@@ -13,8 +13,8 @@ import * as store from "./store.ts";
 
 declare module "@/fetcher/types.ts" {
   interface TableMeta {
-    sortableAll?: boolean;
-    sortableColumns?: string[];
+    sortable_all?: boolean;
+    sortable_columns?: string[];
   }
 
   interface DataLoadOptions {

@@ -18,7 +18,7 @@ interface RowSorterProps {
 
 export const RowSorter = ({ column, store }: RowSorterProps) => {
   const meta = store.state.fetcher.table_meta.value;
-  if (!meta?.sortableAll && !meta?.sortableColumns?.includes(column)) {
+  if (!meta?.sortable_all && !meta?.sortable_columns?.includes(column)) {
     return null;
   }
 

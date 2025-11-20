@@ -10,8 +10,8 @@ declare module "@/fetcher/types.ts" {
 
   interface TableMeta {
     group_by?: string[];
-    sortableAll?: boolean;
-    sortableColumns?: string[];
+    sortable_all?: boolean;
+    sortable_columns?: string[];
     group_sorting_all?: boolean;
     group_sorting_level_columns?: string[][];
   }

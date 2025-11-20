@@ -4,8 +4,8 @@ import { Column } from "@/columns/components/Column.tsx";
 import { createTableModule, NoopStorageAdapter } from "@/module/mod.ts";
 import { SortingModule } from "./mod.ts";
 
-describe("Column component", () => {
-  it("should render a column with the correct name", async () => {
+describe("Sorter module", () => {
+  it("should render a sorter in the column", async () => {
     const store = createTableModule({
       id: "test",
       modules: [SortingModule],
@@ -15,7 +15,7 @@ describe("Column component", () => {
 
     store.state.fetcher.table_meta.value = {
       ...store.state.fetcher.table_meta.value,
-      sortableColumns: ["col1"],
+      sortable_columns: ["col1"],
     };
 
     const column = "col1";

@@ -46,7 +46,7 @@ export const FlatTable = () => {
       rows: sorted.slice(offset, offset + limit),
       total: sorted.length,
       meta: {
-        sortableAll: true,
+        sortable_all: true,
         //pinnedRows,
       },
     };

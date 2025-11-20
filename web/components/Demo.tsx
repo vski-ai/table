@@ -36,19 +36,21 @@ export const Demo = () => {
     playing.value = false;
   };
 
-  const onDataLoad: DataLoadCallback = async (
-    { offset, limit, store }: any,
-  ) => {
+  const onDataLoad: DataLoadCallback = async ({
+    offset,
+    limit,
+    store,
+  }: any) => {
     await new Promise((resolve) => setTimeout(resolve, 0));
     const sorted = sorter({
-      data: (data as any),
+      data: data as any,
       store,
     });
     return {
       rows: sorted.slice(offset, offset + limit),
       total: sorted.length,
       meta: {
-        sortableAll: true,
+        sortable_all: true,
         pinnedRows,
       },
     } as any;
@@ -63,9 +65,7 @@ export const Demo = () => {
     >
       <div class="mockup-window overflow-hidden shadow-md bg-sky-900/50 dark:bg-sky-800/50  border border-sky-500/50 w-full max-w-340">
         <div class="hidden xl:block bg-tansparent absolute left-0 right-0 w-full text-center top-3.5 h-12 p-0 w-200">
-          <h4 class="font-semibold">
-            Core Features
-          </h4>
+          <h4 class="font-semibold">Core Features</h4>
         </div>
         <div class="bg-tansparent absolute -right-4 top-1 h-12 p-1 w-100">
           <div class="flex gap-3 items-center justify-betwwen">
@@ -75,7 +75,9 @@ export const Demo = () => {
               class="select select-sm rounded-3xl"
             >
               <option value="all">Play all</option>
-              <option value="ai_agents" disabled>AI Agents</option>
+              <option value="ai_agents" disabled>
+                AI Agents
+              </option>
             </select>
             <button
               onClick={play}
