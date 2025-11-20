@@ -7,13 +7,11 @@ type AddMenuItemProps = {
   items: ContextMenuItem | ContextMenuItem[];
 };
 
-export function addMenuItems({
-  store,
-  items,
-}: AddMenuItemProps) {
+export function addMenuItems({ store, items }: AddMenuItemProps) {
   if (!store.state.context_menu?.menu) {
     return;
   }
+
   const data = Array.isArray(items) ? items : [items];
   for (const item of data) {
     if (store.state.context_menu?.items?.value[item.menu]) {

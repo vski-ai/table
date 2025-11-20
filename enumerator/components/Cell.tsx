@@ -9,7 +9,7 @@ import { RowResizeHandle } from "./RowResizeHandle.tsx";
 import { ROW_HEIGHTS_SET, RowHeightCommand } from "../store.ts";
 import { useSignal } from "@preact/signals";
 
-export const EnumeratorCell = ({
+export const Cell = ({
   store,
   row,
   index,
@@ -45,7 +45,7 @@ export const EnumeratorCell = ({
         key={update.value}
         rowId={row[rowKey]}
         onResize={onResize}
-        onResizeEnd={() => update.value = new Date().getTime()}
+        onResizeEnd={() => (update.value = new Date().getTime())}
         rowHeight={height}
       />
     </td>
@@ -57,7 +57,7 @@ export const enumCellRenderCallback: CellRendererCallback = ({
   row,
   rowIndex,
 }) => {
-  return <EnumeratorCell {...{ store, row, index: rowIndex! }} />;
+  return <Cell {...{ store, row, index: rowIndex! }} />;
 };
 
 enumCellRenderCallback.columnName = "__enumerator__";

@@ -81,6 +81,17 @@ export function useTableInput({ store, tableRef }: RowKbProps) {
   }, []) as any;
 
   const onKeyDown = useCallback((ev: KeyboardEvent) => {
+    if (store.state.keyboard.metaKey) {
+      switch (ev.key) {
+        case "z":
+          if (ev.shiftKey) {
+            return store.redo();
+          } else {
+            return store.undo();
+          }
+      }
+    }
+
     const target = ev.target as HTMLTableCellElement;
     if (target.tagName !== "TD") {
       const { x } = lastFocused.current;

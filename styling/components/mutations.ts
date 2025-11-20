@@ -56,6 +56,7 @@ export function setStyle(
       store.dispatch<TableStyleSetCommand>({
         type: TABLE_STYLE_SET,
         payload: style,
+        history: true,
       });
       break;
     }
@@ -63,6 +64,7 @@ export function setStyle(
       store.dispatch<ColumnStyleSetCommand>({
         type: COLUMN_STYLE_SET,
         payload: { key: ctx.column, style },
+        history: true,
       });
       break;
     }
@@ -70,6 +72,7 @@ export function setStyle(
       store.dispatch<RowStyleSetCommand>({
         type: ROW_STYLE_SET,
         payload: { key: ctx.row, style },
+        history: true,
       });
       break;
     }
@@ -77,6 +80,7 @@ export function setStyle(
       store.dispatch<CellStyleSetCommand>({
         type: CELL_STYLE_SET,
         payload: { rowKey: ctx.row, columnId: ctx.column, style },
+        history: true,
       });
       break;
     }
@@ -109,9 +113,9 @@ export function getStyle(
     case "row":
       return store.state.styles.rows.value[ctx.row ?? -1] ?? {};
     case "cell":
-      return store.state.styles.cells.value[ctx.row ?? -1]
-        ?.[ctx.column ?? -1] ??
-        {};
+      return (
+        store.state.styles.cells.value[ctx.row ?? -1]?.[ctx.column ?? -1] ?? {}
+      );
     default:
       return {};
   }
