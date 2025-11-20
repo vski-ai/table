@@ -16,10 +16,7 @@ interface RowSorterProps {
   store: TableStore;
 }
 
-export const RowSorter = ({
-  column,
-  store,
-}: RowSorterProps) => {
+export const RowSorter = ({ column, store }: RowSorterProps) => {
   const meta = store.state.fetcher.table_meta.value;
   if (!meta?.sortableAll && !meta?.sortableColumns?.includes(column)) {
     return null;
@@ -70,17 +67,20 @@ export const RowSorter = ({
 
   return (
     <button
+      data-testid={column + "-sorter"}
       key={state?.column}
       type="button"
       class={cn({
         "vt-sorter": true,
-        "enabled": state?.column === column,
+        enabled: state?.column === column,
         "vt-loading": isLoading.value,
       })}
       onClick={handler}
     >
       {state?.column === column
-        ? state?.sort === "asc" ? <ArrowDownIcon /> : <ArrowUpIcon />
+        ? (
+          state?.sort === "asc" ? <ArrowDownIcon /> : <ArrowUpIcon />
+        )
         : <ArrowDownUpIcon />}
     </button>
   );

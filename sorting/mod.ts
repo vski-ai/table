@@ -26,10 +26,7 @@ const onInit: ModuleInitCallback = ({ headerprefixes }) => {
   headerprefixes.use(0, headerRenderCallback);
 };
 
-const beforeLoad: BeforeLoadCallback = ({
-  options,
-  store,
-}) => {
+const beforeLoad: BeforeLoadCallback = ({ options, store }) => {
   const sorting = store.state.sorting.value;
   if (!options) return options;
   options.sort = sorting;

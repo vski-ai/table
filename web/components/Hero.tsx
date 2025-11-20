@@ -10,17 +10,20 @@ export function Hero({ cta }) {
             <div class="relative text-center">
               <VskiTableLogo />
               <div class="badge badge-sm badge-success mt-6 pl-0">
-                <span class="badge badge-sm badge-error -ml-1">
-                  pre-apha
-                </span>{" "}
+                <span class="badge badge-sm badge-error -ml-1">pre-apha</span>
+                {" "}
                 developed live
               </div>
             </div>
           </div>
           <p class="my-6 py-6 text-2xl">
-            Powerful and Flexible Data-Table Engine.
+            Powerful and Flexible Datagrid Engine.
           </p>
-          <a class="btn btn-lg btn-outline" onClick={cta}>Roadmap</a>
+          {
+            /*<a class="btn btn-lg btn-outline" onClick={cta}>
+            Roadmap
+          </a>*/
+          }
           {/* <a href="/flat" class="btn btn-ghost">Get Started</a> */}
 
           <div class="my-10"></div>

@@ -15,22 +15,13 @@ export interface ColumnProps {
   children?: ComponentChildren;
 }
 
-export function Column(
-  {
-    column,
-    children,
-    store,
-  }: ColumnProps,
-) {
-  const adons = useAddons({ store });
+export function Column({ column, children, store }: ColumnProps) {
+  const addons = useAddons({ store });
   const onColumnDrop = useColumnsOrderCallback({ store });
-  const {
-    getColumnWidth,
-    handleResizeUpdateCallback,
-    handleResizeCallback,
-  } = useColumnResizer({
-    store,
-  });
+  const { getColumnWidth, handleResizeUpdateCallback, handleResizeCallback } =
+    useColumnResizer({
+      store,
+    });
 
   const width = getColumnWidth(column);
   const isResizing = useSignal(false);
@@ -52,7 +43,8 @@ export function Column(
   useEffect(() => {
     const handleMouseMove = (moveEvent: MouseEvent) => {
       const newWidth = startWidth.value + (moveEvent.clientX - startX.value);
-      if (newWidth > 50) { // Minimum column width
+      if (newWidth > 50) {
+        // Minimum column width
         handleResizeUpdateCallback(column, newWidth);
       }
     };
@@ -99,7 +91,7 @@ export function Column(
       <Draggable onDrop={onColumnDrop} id={column}>
         {children ? children : (
           <div class="vt-col-wrap">
-            {adons.headerprefixes.render({
+            {addons.headerprefixes.render({
               column,
               store,
             })}
@@ -138,15 +130,11 @@ export function Column(
                   }}
                 />
               )}
-            <div class="ml-2">
-            </div>
+            <div class="ml-2"></div>
           </div>
         )}
       </Draggable>
-      <div
-        class="vt-col-resize"
-        onMouseDown={handleMouseDown}
-      />
+      <div class="vt-col-resize" onMouseDown={handleMouseDown} />
     </th>
   );
 }
