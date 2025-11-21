@@ -21,15 +21,15 @@ function generateLevel1(length = 20) {
       $is_group_root: true,
       $group_level: 0,
       $group_by: "Year",
-      "Year": 2025 - length + i,
-      "Month": "-",
+      Year: 2025 - length + i,
+      Month: "-",
       "First Name": "",
       "Last Name": "",
       "Birth Date": "",
-      "Company": "",
+      Company: "",
       "Job title": "",
       "Hourly Rate": "",
-      "Country": "",
+      Country: "",
       "City ": "",
     };
   });
@@ -42,15 +42,15 @@ function generateLevel2(length = 12) {
       $is_group_root: true,
       $group_level: 1,
       $group_by: "Month",
-      "Year": "-",
-      "Month": month[i],
+      Year: "-",
+      Month: month[i],
       "First Name": "",
       "Last Name": "",
       "Birth Date": "",
-      "Company": "",
+      Company: "",
       "Job title": "",
       "Hourly Rate": "",
-      "Country": "",
+      Country: "",
       "City ": "",
     };
   });
@@ -63,24 +63,26 @@ function generateLevel3(length = 10) {
       $is_group_root: false,
       $group_level: 2,
       $group_by: "Company",
-      "Year": "-",
-      "Month": "-",
+      Year: "-",
+      Month: "-",
       "First Name": faker.person.firstName(),
       "Last Name": faker.person.lastName(),
-      "Birth Date": faker.date.between({
-        from: new Date(0),
-        to: new Date(new Date().setFullYear(2010)),
-      }).toISOString(),
-      "Company": faker.company.name(),
+      "Birth Date": faker.date
+        .between({
+          from: new Date(0),
+          to: new Date(new Date().setFullYear(2010)),
+        })
+        .toISOString(),
+      Company: faker.company.name(),
       "Job title": faker.person.jobTitle(),
       "Hourly Rate": faker.finance.amount(),
-      "Country": faker.location.countryCode(),
+      Country: faker.location.countryCode(),
       "City ": faker.location.city(),
     };
   });
 }
 
-export function generateRows() {
+export function generateGroupedRows() {
   const result = [];
   for (const l1 of generateLevel1()) {
     result.push(l1);
@@ -99,12 +101,3 @@ export function generateRows() {
   }
   return result;
 }
-
-export const generate = () => {
-  console.log("Generating 1M rows...");
-  Deno.writeTextFileSync(
-    "./group-1m-rows.json",
-    JSON.stringify(generateRows()),
-  );
-  console.log("Done");
-};

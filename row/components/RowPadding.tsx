@@ -9,14 +9,12 @@ interface RowPaddingProps {
   store: TableStore;
 }
 
-export const RowPadding = (
-  {
-    padding,
-    name,
-    store,
-  }: RowPaddingProps,
-) => {
-  const columns = useOrderedColumns({ store });
+export const RowPadding = ({ padding, name, store }: RowPaddingProps) => {
+  const all_columns = useOrderedColumns({ store });
+  const columns = [
+    ...store.state.columns.service_columns.value,
+    ...all_columns,
+  ];
   const adons = useAddons({ store });
   const { getColumnWidth } = useColumnResizer({ store });
   return (
@@ -25,35 +23,35 @@ export const RowPadding = (
       data-name={name}
       style={{ height: `${padding}px` }}
     >
-      {adons.lefttablecells.getSorted().map((
-        cb,
-      ) => (store.state.columns.visibility.value[cb.columnName!] === false
-        ? null
-        : (
+      {adons.lefttablecells.getSorted().map((cb) =>
+        store.state.columns.visibility.value[cb.columnName!] ===
+            false
+          ? null
+          : (
+            <td
+              class="vt-cell"
+              style={{
+                width: getColumnWidth(cb.columnName!),
+                height: 0,
+                padding: 0,
+              }}
+            >
+            </td>
+          )
+      )}
+      {columns.map((col) =>
+        store.state.columns.visibility.value[col] === false ? null : (
           <td
             class="vt-cell"
             style={{
-              width: getColumnWidth(cb.columnName!),
+              width: getColumnWidth(col),
               height: 0,
               padding: 0,
             }}
           >
           </td>
-        ))
+        )
       )}
-      {columns.map((
-        col,
-      ) => (store.state.columns.visibility.value[col] === false ? null : (
-        <td
-          class="vt-cell"
-          style={{
-            width: getColumnWidth(col),
-            height: 0,
-            padding: 0,
-          }}
-        >
-        </td>
-      )))}
     </tr>
   );
 };

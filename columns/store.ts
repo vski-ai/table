@@ -6,6 +6,7 @@ type ColumnsState = {
     all: Signal<string[]>;
     ordered: Signal<string[]>;
     visibility: Signal<Record<string, boolean>>;
+    service_columns: Signal<string[]>;
     widths: Signal<Record<string, number>>;
     sticky: Signal<Record<string, StickyPosition>>;
     resizing_column: Signal<{ column: string; width: number } | null>;
@@ -64,6 +65,7 @@ export type ColumnCommandType =
 
 export function state<T>(persist: InferPersist<ColumnsState>): ColumnsState {
   const all = signal<string[]>([]);
+  const service_columns = signal<string[]>([]);
   const ordered = signal<string[]>(persist?.columns?.ordered || []);
   const visibility = signal<Record<string, boolean>>(
     persist?.columns?.visibility || {
@@ -81,6 +83,7 @@ export function state<T>(persist: InferPersist<ColumnsState>): ColumnsState {
     columns: {
       all,
       ordered,
+      service_columns,
       visibility,
       widths,
       sticky,
@@ -124,8 +127,7 @@ export function mutate(state: TableState, command: ColumnCommandType) {
       };
       break;
     case COLUMN_STICK_SET: {
-      const { column, position } = command
-        .payload as ColumnStickCommandPayload;
+      const { column, position } = command.payload as ColumnStickCommandPayload;
       state.columns.sticky.value = {
         ...state.columns.sticky.value,
         [column]: position,

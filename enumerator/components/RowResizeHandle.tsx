@@ -7,32 +7,38 @@ interface RowResizeHandleProps {
   rowHeight: number;
 }
 
-export function RowResizeHandle(
-  { rowId, onResize, onResizeEnd, rowHeight }: RowResizeHandleProps,
-) {
-  const onMouseDown = useCallback((e: MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+export function RowResizeHandle({
+  rowId,
+  onResize,
+  onResizeEnd,
+  rowHeight,
+}: RowResizeHandleProps) {
+  const onMouseDown = useCallback(
+    (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-    const startY = e.clientY;
-    const startHeight = rowHeight;
+      const startY = e.clientY;
+      const startHeight = rowHeight;
+      const onMouseMove = (e: MouseEvent) => {
+        const newHeight = startHeight + (e.clientY - startY);
+        if (newHeight > 30) {
+          // Minimum height
+          onResize(rowId, newHeight);
+        }
+      };
 
-    const onMouseMove = (e: MouseEvent) => {
-      const newHeight = startHeight + (e.clientY - startY);
-      if (newHeight > 30) { // Minimum height
-        onResize(rowId, newHeight);
-      }
-    };
+      const onMouseUp = () => {
+        onResizeEnd?.();
+        globalThis.removeEventListener("mousemove", onMouseMove);
+        globalThis.removeEventListener("mouseup", onMouseUp);
+      };
 
-    const onMouseUp = () => {
-      onResizeEnd?.();
-      globalThis.removeEventListener("mousemove", onMouseMove);
-      globalThis.removeEventListener("mouseup", onMouseUp);
-    };
-
-    globalThis.addEventListener("mousemove", onMouseMove);
-    globalThis.addEventListener("mouseup", onMouseUp);
-  }, [rowId, onResize, onResizeEnd]);
+      globalThis.addEventListener("mousemove", onMouseMove);
+      globalThis.addEventListener("mouseup", onMouseUp);
+    },
+    [rowId, onResize, onResizeEnd],
+  );
 
   return (
     <div

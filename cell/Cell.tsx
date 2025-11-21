@@ -7,6 +7,7 @@ import { useAddons } from "@/module/mod.ts";
 import { TypeFormat } from "@/datatype/mod.ts";
 import { useRowHeights } from "@/row/hooks/useRowHeights.ts";
 import { useCellInput } from "@/input/hooks/useCellInput.ts";
+import { useMemo } from "preact/hooks";
 
 interface CellProps {
   store: TableStore;
@@ -17,11 +18,6 @@ interface CellProps {
 export const Cell = ({ store, column, row }: CellProps) => {
   const addons = useAddons({ store });
   const key = store.getCellKey({ row, column });
-
-  const getHeight = useRowHeights({
-    store,
-    height: store.state.table.row_height.value || 42,
-  });
 
   const { isSticky, isStickyLeft, isStickyRight, left, right } =
     useStickyColumn({ store, column });
@@ -40,7 +36,7 @@ export const Cell = ({ store, column, row }: CellProps) => {
       tabIndex={0}
       style={{
         width: `var(--col-width-${sanitizeColName(column)})`,
-        height: `${getHeight(row)}px`,
+        height: `inherit`,
         left,
         right,
         zIndex: isSticky ? 1 : 0,

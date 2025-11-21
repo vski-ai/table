@@ -65,12 +65,8 @@ export default function ({ children }: { children: any }) {
                 </span>
               </a>
             </li>
-            <li class="pointer-events-none opacity-50">
-              <a
-                aria-disabled="true"
-                href="#"
-                class="aria-[current=page]:active disabled"
-              >
+            <li>
+              <a href="/groupable" class="aria-[current=page]:active">
                 <ChartIcon />
                 Tree Engine
                 <span class="badge badge-xs bg-blue-500 border-none absolute dense:hidden">

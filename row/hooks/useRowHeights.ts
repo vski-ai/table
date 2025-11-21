@@ -16,16 +16,19 @@ export function useRowHeights({
 }: RowHeightsProps) {
   const rowHeights = store.state.rows.heights.value;
 
-  return useCallback((row: RowData | null) => {
-    if (!row) {
+  return useCallback(
+    (row: RowData | null) => {
+      if (!row) {
+        return height;
+      }
+      const rowId = row[rowKey];
+      if (rowHeights[rowId]) {
+        return (
+          rowHeights[rowId] || store.state.table.row_height.value || height
+        );
+      }
       return height;
-    }
-
-    const rowId = row[rowKey];
-    if (rowHeights[rowId]) {
-      return rowHeights[rowId] || store.state.table.row_height.value || height;
-    }
-
-    return height;
-  }, [height, rowHeights, store.state.table.row_height.value]);
+    },
+    [height, rowHeights, store.state.table.row_height.value],
+  );
 }

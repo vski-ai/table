@@ -96,7 +96,7 @@ export function useRenderRowCallback({
         <Row
           row={row}
           rowIndex={index}
-          rowHeight={store.state.table.row_height.value || rowHeight}
+          rowHeight={rowHeight || store.state.table.row_height.value}
           columns={columns}
           store={store}
           rowKey={rowKey}
