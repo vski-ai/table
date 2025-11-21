@@ -90,7 +90,7 @@ export const Demo = () => {
           </div>
         </div>
         <div
-          class="border-1 mt-2 border-accent/10 h-180 w-full overflow-auto rounded-lg"
+          class="border bg-gray-100 dark:bg-gray-800 mt-2 border-accent/10 h-180 w-full overflow-auto rounded-lg"
           ref={scrollRef}
         >
           <Table onDataLoad={onDataLoad} container={scrollRef as any} />
