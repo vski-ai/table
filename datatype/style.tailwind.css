@@ -4,6 +4,7 @@
     height: inherit;
     display: table-cell;
     vertical-align: middle;
+    user-select: none;
     @apply px-3;
   }
 

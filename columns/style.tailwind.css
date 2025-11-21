@@ -29,10 +29,10 @@
     }
 
     .vt-col-wrap {
-      @apply flex justify-start items-center gap-1;
+      @apply flex justify-start items-center;
     }
     .vt-col-content {
-      @apply truncate p-1 min-w-32 w-full;
+      @apply truncate px-3 min-w-32 w-full;
     }
     .vt-col-resize {
       @apply absolute -right-2 top-0 h-full w-4 cursor-col-resize select-none

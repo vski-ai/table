@@ -1,8 +1,7 @@
 @layer components {
   .vt-cell {
-    user-select: none;
-    @apply p-0 bg-white dark:bg-gray-800 border-0 relative after:border-r-1
-      after:border-b-1 after:border-gray-200 dark:after:border-gray-700
+    @apply p-0 bg-white dark:bg-gray-800 border-0 relative after:border-r
+      after:border-b after:border-gray-200 dark:after:border-gray-700
       text-base-content transition-none!;
 
     &.stick-left {
@@ -10,7 +9,7 @@
     }
 
     &.stick-right {
-      @apply after:border-l-1 after:border-r-0 after:border-l-gray-400
+      @apply after:border-l after:border-r-0 after:border-l-gray-400
         dark:after:border-l-gray-600;
     }
     &:focus,
