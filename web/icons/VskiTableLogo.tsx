@@ -1,9 +1,11 @@
-export function VskiTableLogo() {
+import { className } from "../../common/className.ts";
+
+export function VskiTableLogo({ className }: any) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 210 30"
-      class="font-mono w-96"
+      viewBox="0 0 210 40"
+      class={`font-mono ${className}`}
     >
       <style>
         {`
@@ -33,9 +35,13 @@ export function VskiTableLogo() {
           <stop offset="100%" stop-color="#038db3ff" />
         </linearGradient>
       </defs>
-      <text x="0" y="30" class="text">vski</text>
-      <circle cx="95" cy="20" r="5" class="dot" />
-      <text x="110" y="30" class="text">table</text>
+      <text x="0" y="25" class="text">
+        vski
+      </text>
+      <circle cx="95" cy="16" r="5" class="dot" />
+      <text x="110" y="25" class="text">
+        table
+      </text>
     </svg>
   );
 }

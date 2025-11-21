@@ -31,10 +31,17 @@ export function Home() {
             <NextIcon />
           </a>
         </p>
-        <p class="my-1 text-center w-full">
-          Tables are <i>complex</i>. Building a <i>feature-rich</i> and{" "}
-          <i>ai-enabled</i> table is a dauniting task. <br />
-          <i class="inline-block mt-2">we are here to fix it</i>
+        <p class="my-1 text-center font-mono w-full space-y-1.5">
+          <span class="text-sm">.datagrids are complex.</span> <br />
+          <span class="text-sm">
+            .with or without ai, building a <i>feature-rich</i>{" "}
+            datagrids is hard.
+          </span>{" "}
+          <br />
+          <span class="text-sm">
+            .only experienced engineers would understand the challenges.
+          </span>
+          <br />
         </p>
         <div ref={demoRef}>
           <Demo />

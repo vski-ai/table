@@ -1,14 +1,14 @@
 import { TechStack } from "./TechStack.tsx";
 import { VskiTableLogo } from "../icons/VskiTableLogo.tsx";
 
-export function Hero({ cta }) {
+export function Hero({ cta }: any) {
   return (
     <div class="hero min-h-[calc(100vh-500px)] bg-transparent">
       <div class="hero-content text-center">
         <div class="max-w-lg">
           <div class="flex justify-center mb-6 relative">
             <div class="relative text-center">
-              <VskiTableLogo />
+              <VskiTableLogo className="w-100 opacity-70 hover:opacity-100 transition:opacity duration-1000" />
               <div class="badge badge-sm badge-success mt-6 pl-0">
                 <span class="badge badge-sm badge-error -ml-1">pre-apha</span>
                 {" "}
