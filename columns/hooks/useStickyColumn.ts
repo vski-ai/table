@@ -6,8 +6,8 @@ interface StickyColOffset {
 }
 
 export function useStickyColOffset({ store }: StickyColOffset) {
-  const columns = useOrderedColumns({ store });
-
+  const ordered = useOrderedColumns({ store });
+  const columns = [...store.state.columns.service_columns.value, ...ordered];
   const offsets = useMemo(() => {
     const stickyColumns = store.state.columns.sticky.value;
     const widths = store.state.columns.widths.value;

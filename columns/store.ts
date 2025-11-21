@@ -77,7 +77,7 @@ export function state<T>(persist: InferPersist<ColumnsState>): ColumnsState {
     persist?.columns.sticky || {},
   );
   const resizing_column = signal(null);
-  const header_height = signal<number>(50);
+  const header_height = signal<number>(42);
   const settings_dialog = signal(false);
   return {
     columns: {
