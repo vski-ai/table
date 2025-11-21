@@ -37,7 +37,7 @@ export const FlatTable = () => {
   });
 
   const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {
-    //await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     const sorted = sorter({
       data: data as RowData[],
       store,

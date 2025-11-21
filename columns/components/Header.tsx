@@ -9,10 +9,7 @@ interface HeaderProps {
   loading: boolean;
 }
 
-export function Header({
-  store,
-  loading,
-}: HeaderProps) {
+export function Header({ store, loading }: HeaderProps) {
   const adons = useAddons({ store });
   const columnsInOrder = useOrderedColumns({ store });
   const { style } = useTableColumnStyle({ store });
@@ -35,8 +32,8 @@ export function Header({
           {loading
             ? (
               <tr>
-                {new Array(10).fill(0).map((_, i) => (
-                  <th class="vt-col" key={i} style={{ width: 350 }}>
+                {new Array(30).fill(0).map((_, i) => (
+                  <th class="vt-col col-loading" key={i} style={{ width: 150 }}>
                     <div class="vt-header-skeleton"></div>
                   </th>
                 ))}
@@ -49,11 +46,7 @@ export function Header({
                   store,
                 })}
                 {columnsInOrder.map((col) => (
-                  <Column
-                    key={col}
-                    column={col}
-                    store={store}
-                  />
+                  <Column key={col} column={col} store={store} />
                 ))}
               </tr>
             )}

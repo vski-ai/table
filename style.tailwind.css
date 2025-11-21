@@ -20,7 +20,7 @@
     }
     .vt-loading {
       animation: pulse 1.5s infinite;
-      background: rgba(0, 150, 219, 0.2);
+      @apply bg-gray-300 dark:bg-gray-700/50 rounded-none;
     }
   }
 }
