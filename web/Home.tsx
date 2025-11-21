@@ -34,8 +34,7 @@ export function Home() {
         <p class="my-1 text-center font-mono w-full space-y-1.5">
           <span class="text-sm">.datagrids are complex.</span> <br />
           <span class="text-sm">
-            .with or without ai, building a <i>feature-rich</i>{" "}
-            datagrids is hard.
+            .with or without ai, building <i>feature-rich</i> datagrids is hard.
           </span>{" "}
           <br />
           <span class="text-sm">
