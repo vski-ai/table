@@ -5,7 +5,7 @@ import { createTable, type DataLoadCallback } from "../mod.ts";
 import { createFrontendSorter, SortingModule } from "@/sorting/mod.ts";
 
 import { EnumeratorModule } from "../enumerator/mod.ts";
-import { generateGroupedRows } from "./mock/group-table.ts";
+
 import { ChatModule, SearchModule } from "@enterprise/mod.ts";
 import { ContextModule } from "@enterprise/context/mod.ts";
 import { SelectorModule } from "@enterprise/selector/mod.ts";
@@ -13,6 +13,10 @@ import { MatcherModule } from "@enterprise/matcher/mod.ts";
 import { EditModeModule } from "@enterprise/editmode/mod.ts";
 import { GroupingModule } from "@enterprise/grouping/mod.ts";
 
+import {
+  filterGroupedRows,
+  generateGroupedRows,
+} from "@enterprise/grouping/mock/group-table.mjs";
 const data = generateGroupedRows();
 const sorter = createFrontendSorter();
 
@@ -22,8 +26,8 @@ export const GroupedTable = () => {
     scrollRef.current = document.querySelector(".main-outlet");
   }, []);
 
-  const { Table } = createTable({
-    id: "flat",
+  const { Table, store } = createTable({
+    id: "tree",
     modules: [
       SortingModule,
       EnumeratorModule,
@@ -38,20 +42,32 @@ export const GroupedTable = () => {
     persistence: new LocalStorageAdapter(),
   });
 
+  store.state.data_type.column.value = {
+    "Stock Price": "currency",
+    Revenue: "currency",
+    Tax: "currency",
+  };
+  const currencyOpts = {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+    locale: "en-GB",
+    style: "currency",
+    currencyDisplay: "symbol",
+    currency: "USD",
+  };
+  store.state.data_type.options.value = {
+    "Stock Price": currencyOpts,
+    Revenue: currencyOpts,
+    Tax: currencyOpts,
+  };
+
   const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    //await new Promise((resolve) => setTimeout(resolve, 1000));
     const sorted = sorter({
       data: data as any,
       store,
     });
-    const rows = sorted.filter((c) =>
-      c.$parent_id
-        ? c.$parent_id.every((id) =>
-          store.state.grouping.expanded.value.includes(id as any)
-        )
-        : true
-    );
-    console.log(rows.slice(offset, offset + limit));
+    const rows = filterGroupedRows(sorted, store);
     return {
       rows: rows.slice(offset, offset + limit),
       total: rows.length,
