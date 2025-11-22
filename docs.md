@@ -166,11 +166,11 @@ const onInit: ModuleInitCallback = ({
   store,
   beforetable,
 }) => {
-  beforetable.use(-1, myModalRenderCallback);
+  beforetable.use(myModalRenderCallback);
 };
 ```
 
-The first argument in the `use` method represents render order - this is useful
+The second argument in the `use` method represents render order - this is useful
 if you have components coming one after another and display order is important.
 Each render slot, like `beforetable` has their own callback type defined in
 [module typedefs](./module/types.ts).

@@ -77,11 +77,11 @@ export default function ({ children }: { children: any }) {
                 </span>
               </a>
             </li>
-            <li class="pointer-events-none opacity-50">
+            <li>
               <a
                 aria-disabled="true"
-                href="#"
-                class="aria-[current=page]:active disabled"
+                href="/kanban"
+                class="aria-[current=page]:active"
               >
                 <KanbanIcon />
                 Kanban

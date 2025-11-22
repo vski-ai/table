@@ -5,7 +5,7 @@ import { MenuItems } from "./menu.tsx";
 import * as store from "./store.ts";
 
 const onInit: ModuleInitCallback = ({ store, beforetable }) => {
-  beforetable.use(-1, renderTableSettings);
+  beforetable.use(renderTableSettings);
   addMenuItems({
     store,
     items: MenuItems,

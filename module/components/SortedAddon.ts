@@ -3,7 +3,7 @@ export class SortedAddon<T extends (...args: any) => any = any> {
   get size() {
     return this.#map.size;
   }
-  use(index: number, ref: T) {
+  use(ref: T, index: number = 0) {
     if (!(this.#map.get(index) instanceof Set)) {
       this.#map.set(index, new Set());
     }
@@ -24,6 +24,8 @@ export class SortedAddon<T extends (...args: any) => any = any> {
   }
 
   string(...opts: Parameters<T>): string {
-    return this.render(...opts).flat(1).join(" ");
+    return this.render(...opts)
+      .flat(1)
+      .join(" ");
   }
 }

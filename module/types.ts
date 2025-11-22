@@ -99,6 +99,7 @@ export interface ModuleInitOptions {
   cellsuffixes: CellSuffixes;
   rowclasses: RowClasses;
   columnclasses: RowClasses;
+  headerclasses: RowClasses;
   rowstyles: RowStyles;
   beforetable: BeforeTable;
   insidetable: InsideTable;

@@ -23,7 +23,7 @@ declare module "@/fetcher/types.ts" {
 }
 
 const onInit: ModuleInitCallback = ({ headerprefixes }) => {
-  headerprefixes.use(0, headerRenderCallback);
+  headerprefixes.use(headerRenderCallback);
 };
 
 const beforeLoad: BeforeLoadCallback = ({ options, store }) => {

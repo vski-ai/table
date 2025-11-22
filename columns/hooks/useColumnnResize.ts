@@ -7,9 +7,7 @@ interface ColumnResizerProps {
   store: TableStore;
 }
 
-export function useColumnResizer({
-  store,
-}: ColumnResizerProps) {
+export function useColumnResizer({ store }: ColumnResizerProps) {
   const handleResizeCallback = useCallback(
     (column: string, newWidth: number) => {
       store.state.columns.resizing_column.value = null;
@@ -37,7 +35,10 @@ export function useColumnResizer({
     ) {
       return store.state.columns.resizing_column.value.width;
     }
-    return store.state.columns.widths.value[col] ?? 250;
+    return (
+      store.state.columns.widths.value[col] ??
+        store.state.table.column_width.value
+    );
   }, []);
   return {
     resizingColumn: store.state.columns.resizing_column,

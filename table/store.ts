@@ -5,6 +5,7 @@ type TableViewState = {
   table: {
     settings_dialog: Signal<boolean>;
     row_height: Signal<number>;
+    column_width: Signal<number>;
   };
 };
 
@@ -24,10 +25,12 @@ export function state<T>(
 ): TableViewState {
   const settings_dialog = signal(false);
   const row_height = signal(persist?.table.row_height ?? 42);
+  const column_width = signal(persist?.table.column_width ?? 250);
   return {
     table: {
       settings_dialog,
       row_height,
+      column_width,
     },
   };
 }
@@ -36,6 +39,7 @@ export function persist(state: TableViewState): InferPersist<TableViewState> {
   return {
     table: {
       row_height: state.table.row_height.value,
+      column_width: state.table.column_width.value,
     },
   };
 }

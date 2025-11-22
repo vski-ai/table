@@ -7,7 +7,7 @@ import { Copy } from "./default.tsx";
 import * as store from "./store.ts";
 
 const onInit: ModuleInitCallback = ({ beforetable, store }) => {
-  beforetable.use(0, contextMenuRenderCallback);
+  beforetable.use(contextMenuRenderCallback);
   addMenuItems({
     store,
     items: [

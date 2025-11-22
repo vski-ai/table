@@ -7,15 +7,15 @@ type KeyboardState = {
     metaKey: Signal<boolean>;
     focusedCell: Signal<{ column: string; rowId: string } | null>;
   };
-};
-
-type MouseState = {
   mouse: {
     pressed: Signal<boolean>;
   };
+  drag: {
+    active: Signal<boolean>;
+  };
 };
 
-type InputState = KeyboardState & MouseState;
+type InputState = KeyboardState;
 
 declare module "@/module/types.ts" {
   interface TableState extends InputState {}
@@ -30,6 +30,9 @@ export function state(): InputState {
     },
     mouse: {
       pressed: signal(false),
+    },
+    drag: {
+      active: signal(false),
     },
   };
 }

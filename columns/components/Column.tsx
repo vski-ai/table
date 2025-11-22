@@ -4,7 +4,7 @@ import { useEffect, useRef } from "preact/hooks";
 import { cn } from "@/common/className.ts";
 import { useAddons } from "@/module/mod.ts";
 import { TableStore } from "@/module/types.ts";
-import { Draggable } from "@/common/Draggable.tsx";
+import { Draggable } from "@/input/components/Draggable.tsx";
 import { useColumnsOrderCallback } from "../hooks/useColumnsOrderCallback.ts";
 import { useColumnResizer } from "../hooks/useColumnnResize.ts";
 import { useStickyColumn } from "../hooks/useStickyColumn.ts";
@@ -69,6 +69,11 @@ export function Column({ column, children, store }: ColumnProps) {
   const { left, right, isSticky, isStickyLeft, isStickyRight } =
     useStickyColumn({ store, column });
 
+  const classes = addons.headerclasses.string({
+    column,
+    store,
+  });
+
   return (
     <th
       tabindex={0}
@@ -86,9 +91,11 @@ export function Column({ column, children, store }: ColumnProps) {
         "vt-col": true,
         "stick-left": isStickyLeft,
         "stick-right": isStickyRight,
-      })}
+      }) +
+        " " +
+        classes}
     >
-      <Draggable onDrop={onColumnDrop} id={column}>
+      <Draggable store={store} onTransfer={onColumnDrop} id={column}>
         {children ? children : (
           <div class="vt-col-wrap">
             {addons.headerprefixes.render({

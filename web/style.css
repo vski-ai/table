@@ -16,3 +16,4 @@
 @import "../enterprise/selector/style.tailwind.css";
 @import "../enterprise/matcher/style.tailwind.css";
 @import "../enterprise/grouping/style.tailwind.css";
+@import "../enterprise/kanban/style.tailwind.css";

@@ -1,6 +1,7 @@
 import { TableStore } from "@/module/types.ts";
 import { MutableRef, useCallback, useEffect, useRef } from "preact/hooks";
-import { CELL_SELECT_RESET, CellSelectResetCmd } from "@/cell/store.ts";
+import { useGloalMouse } from "./useGlobalMouse.ts";
+import { useGloalKb } from "./useGlobalKb.ts";
 
 const BUFFER_SIZE = 5;
 
@@ -14,60 +15,8 @@ export function useTableInput({ store, tableRef }: RowKbProps) {
     x: 0,
     y: 0,
   });
-
-  useEffect(() => {
-    const globalKeyDown = (ev: KeyboardEvent) => {
-      if (ev.altKey) {
-        store.state.keyboard.altKey.value = true;
-      }
-      if (ev.metaKey || ev.ctrlKey) {
-        store.state.keyboard.metaKey.value = true;
-      }
-      if (ev.key === "Escape") {
-        store.dispatch<CellSelectResetCmd>({
-          type: CELL_SELECT_RESET,
-          payload: true,
-        });
-      }
-    };
-    const globalKeyUp = (ev: KeyboardEvent) => {
-      if (!ev.altKey) {
-        store.state.keyboard.altKey.value = false;
-      }
-      if (!ev.metaKey && !ev.ctrlKey) {
-        store.state.keyboard.metaKey.value = false;
-      }
-    };
-    const globalMouseDown = () => {
-      store.state.mouse.pressed.value = true;
-    };
-    const globalMouseUp = () => {
-      store.state.mouse.pressed.value = false;
-    };
-
-    globalThis.addEventListener("keydown", globalKeyDown);
-    globalThis.addEventListener("keyup", globalKeyUp);
-    globalThis.addEventListener("mousedown", globalMouseDown);
-    globalThis.addEventListener("mouseup", globalMouseUp);
-    return () => {
-      globalThis.removeEventListener("keydown", globalKeyDown);
-      globalThis.removeEventListener("keyup", globalKeyUp);
-      globalThis.removeEventListener("mousedown", globalMouseDown);
-      globalThis.removeEventListener("mouseup", globalMouseUp);
-    };
-  });
-
-  useEffect(() => {
-    const keyIntercept = () => {
-      if (document.activeElement === document.body) {
-        tableRef.current?.focus();
-      }
-    };
-    globalThis.addEventListener("keyup", keyIntercept);
-    return () => {
-      globalThis.removeEventListener("keyup", keyIntercept);
-    };
-  }, [tableRef.current]);
+  useGloalMouse({ store });
+  useGloalKb({ store, tableRef });
 
   const onFocus = useCallback((ev: FocusEvent) => {
     const target = ev.target as HTMLTableCellElement;

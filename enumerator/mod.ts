@@ -5,8 +5,8 @@ import { enumColumnRenderCallback } from "./components/Column.tsx";
 import * as store from "./store.ts";
 
 const onInit: ModuleInitCallback = ({ lefttablecells, lefttableheaders }) => {
-  lefttableheaders.use(0, enumColumnRenderCallback);
-  lefttablecells.use(0, enumCellRenderCallback);
+  lefttableheaders.use(enumColumnRenderCallback);
+  lefttablecells.use(enumCellRenderCallback);
 };
 
 const afterInit: ModuleInitCallback = ({ store }) => {

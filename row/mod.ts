@@ -26,8 +26,8 @@ const onInit: ModuleInitCallback = ({
   aftertable,
   beforetable,
 }) => {
-  beforetable.use(0, topStickRowsRenderCallback);
-  aftertable.use(0, bottomStickRowsRenderCallback);
+  beforetable.use(topStickRowsRenderCallback);
+  aftertable.use(bottomStickRowsRenderCallback);
   addMenuItems({
     store,
     items: [

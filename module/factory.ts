@@ -77,6 +77,7 @@ export const createPluginContainer = (
   const righttableheaders = new SortedAddon<ColumnRendererCallback>();
   const rowclasses = new SortedAddon<ClassResolverCallback>();
   const columnclasses = new SortedAddon<ClassResolverCallback>();
+  const headerclasses = new SortedAddon<ClassResolverCallback>();
   const rowstyles = new SortedAddon<StyleResolverCallback>();
   const beforepadding = new SortedAddon<CommonRendererCallback>();
   const afterpadding = new SortedAddon<CommonRendererCallback>();
@@ -106,6 +107,7 @@ export const createPluginContainer = (
         afterheaders,
         beforepadding,
         afterpadding,
+        headerclasses,
       });
     }
     await new Promise((r) => setTimeout(r, 1));
@@ -133,6 +135,7 @@ export const createPluginContainer = (
         afterheaders,
         beforepadding,
         afterpadding,
+        headerclasses,
       });
     }
   }, 0);
@@ -189,6 +192,7 @@ export const createPluginContainer = (
     afterheaders,
     beforepadding,
     afterpadding,
+    headerclasses,
   };
 
   // @ts-ignore: some privats

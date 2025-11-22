@@ -4,7 +4,7 @@ import EyeClosedIcon from "lucide-react/dist/esm/icons/eye-closed.js";
 import CogIcon from "lucide-react/dist/esm/icons/columns-3-cog.js";
 import { useOrderedColumns } from "../hooks/useOrderedColumns.ts";
 import { useColumnsOrderCallback } from "../hooks/useColumnsOrderCallback.ts";
-import { Draggable } from "@/common/Draggable.tsx";
+import { Draggable } from "@/input/components/Draggable.tsx";
 import { Dialog } from "@/common/Dialog.tsx";
 
 type ColumnsSettingsProps = {
@@ -34,7 +34,7 @@ export function Settings({ store }: ColumnsSettingsProps) {
     >
       <div class="modal-body mt-6">
         {columns.map((column) => (
-          <Draggable onDrop={onColumnDrop} id={column}>
+          <Draggable store={store} onDrop={onColumnDrop} id={column}>
             <div class="card p-2 mt-1 flex flex-row justify-between bg-sky-950 cursor-move">
               <input
                 type="text"
