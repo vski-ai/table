@@ -73,6 +73,7 @@ export const GroupedTable = () => {
       total: rows.length,
       meta: {
         sortable_all: true,
+        group_sorting_all: true,
         group_by: ["Year", "Month", "Company"],
       },
     };
