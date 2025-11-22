@@ -20,10 +20,10 @@ interface RowProps {
 export const Row = (props: RowProps) => {
   const { row, rowIndex, rowHeight, store, columns, rowKey } = props;
 
-  const adons = useAddons({ store });
+  const addons = useAddons({ store });
   const height = rowHeight;
 
-  const classes = adons.rowclasses.string({
+  const classes = addons.rowclasses.string({
     row,
     store,
     rowKey,
@@ -38,13 +38,13 @@ export const Row = (props: RowProps) => {
         class={"vt-row " + classes}
         style={{
           height: height,
-          ...adons.rowstyles.data({
+          ...addons.rowstyles.data({
             row,
             store,
           }),
         }}
       >
-        {adons.lefttablecells.render({
+        {addons.lefttablecells.render({
           column: "",
           store,
           row,
@@ -52,10 +52,24 @@ export const Row = (props: RowProps) => {
         })}
 
         {columns.map((column) => (
-          <Cell key={column} store={store} row={row} column={column} />
+          <>
+            {addons.beforecells.render({
+              column: "",
+              store,
+              row,
+              rowIndex,
+            })}
+            <Cell key={column} store={store} row={row} column={column} />
+            {addons.aftercells.render({
+              column: "",
+              store,
+              row,
+              rowIndex,
+            })}
+          </>
         ))}
 
-        {adons.righttablecells.render({
+        {addons.righttablecells.render({
           column: "",
           store,
           row,

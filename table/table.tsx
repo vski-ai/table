@@ -67,7 +67,7 @@ export function Table(props: TableProps) {
         tabIndex={-1}
         {...kb}
       >
-        <tbody style={{ paddingBottom }}>
+        <tbody>
           {initializing && <RowSkeleton />}
 
           {renderRows.map((item, i) => {

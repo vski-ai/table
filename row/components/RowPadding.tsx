@@ -15,7 +15,7 @@ export const RowPadding = ({ padding, name, store }: RowPaddingProps) => {
     ...store.state.columns.service_columns.value,
     ...all_columns,
   ];
-  const adons = useAddons({ store });
+  const addons = useAddons({ store });
   const { getColumnWidth } = useColumnResizer({ store });
   return (
     <tr
@@ -23,7 +23,7 @@ export const RowPadding = ({ padding, name, store }: RowPaddingProps) => {
       data-name={name}
       style={{ height: `${padding}px` }}
     >
-      {adons.lefttablecells.getSorted().map((cb) =>
+      {addons.lefttablecells.getSorted().map((cb) =>
         store.state.columns.visibility.value[cb.columnName!] ===
             false
           ? null
@@ -41,15 +41,19 @@ export const RowPadding = ({ padding, name, store }: RowPaddingProps) => {
       )}
       {columns.map((col) =>
         store.state.columns.visibility.value[col] === false ? null : (
-          <td
-            class="vt-cell"
-            style={{
-              width: getColumnWidth(col),
-              height: 0,
-              padding: 0,
-            }}
-          >
-          </td>
+          <>
+            {addons.beforepadding.render({ store })}
+            <td
+              class="vt-cell"
+              style={{
+                width: getColumnWidth(col),
+                height: 0,
+                padding: 0,
+              }}
+            >
+            </td>
+            {addons.afterpadding.render({ store })}
+          </>
         )
       )}
     </tr>

@@ -1,6 +1,5 @@
 import { LocalStorageAdapter } from "@/module/mod.ts";
 import { useEffect, useRef } from "preact/hooks";
-import { RowData } from "@/row/types.ts";
 import { createTable, type DataLoadCallback } from "../mod.ts";
 import { createFrontendSorter, SortingModule } from "@/sorting/mod.ts";
 

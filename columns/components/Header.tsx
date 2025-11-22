@@ -10,7 +10,7 @@ interface HeaderProps {
 }
 
 export function Header({ store, loading }: HeaderProps) {
-  const adons = useAddons({ store });
+  const addons = useAddons({ store });
   const columnsInOrder = useOrderedColumns({ store });
   const { style } = useTableColumnStyle({ store });
 
@@ -41,12 +41,22 @@ export function Header({ store, loading }: HeaderProps) {
             )
             : (
               <tr>
-                {adons.lefttableheaders.render({
+                {addons.lefttableheaders.render({
                   column: "",
                   store,
                 })}
                 {columnsInOrder.map((col) => (
-                  <Column key={col} column={col} store={store} />
+                  <>
+                    {addons.beforeheaders.render({
+                      column: "",
+                      store,
+                    })}
+                    <Column key={col} column={col} store={store} />
+                    {addons.afterheaders.render({
+                      column: "",
+                      store,
+                    })}
+                  </>
                 ))}
               </tr>
             )}

@@ -89,8 +89,12 @@ export interface ModuleInitOptions {
   headerprefixes: HeaderPrefixes;
   lefttablecells: LeftTableCells;
   righttablecells: RightTableCells;
+  beforecells: LeftTableCells;
+  aftercells: LeftTableCells;
   lefttableheaders: LeftTableHeaders;
   righttableheaders: RightTableHeaders;
+  beforeheaders: LeftTableHeaders;
+  afterheaders: RightTableHeaders;
   cellprefixes: CellPrefixes;
   cellsuffixes: CellSuffixes;
   rowclasses: RowClasses;
@@ -101,6 +105,8 @@ export interface ModuleInitOptions {
   aftertable: AfterTable;
   beforesettings: AfterTable;
   aftersettings: AfterTable;
+  beforepadding: BeforeTable;
+  afterpadding: BeforeTable;
 }
 
 export type ModuleInitCallback = (opts: ModuleInitOptions) => void;

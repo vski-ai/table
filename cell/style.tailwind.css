@@ -47,7 +47,7 @@
       background: transparent;
     }
     .vt-loading {
-      @apply skeleton;
+      /*@apply skeleton;*/
       height: inherit;
     }
   }

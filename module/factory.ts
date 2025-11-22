@@ -66,14 +66,20 @@ export const createPluginContainer = (
   const aftertable = new SortedAddon<CommonRendererCallback>();
   const headerprefixes = new SortedAddon<ColumnRendererCallback>();
   const lefttablecells = new SortedAddon<CellRendererCallback>();
+  const beforecells = new SortedAddon<CellRendererCallback>();
+  const aftercells = new SortedAddon<CellRendererCallback>();
   const cellprefixes = new SortedAddon<CellRendererCallback>();
   const cellsuffixes = new SortedAddon<CellRendererCallback>();
   const righttablecells = new SortedAddon<CellRendererCallback>();
   const lefttableheaders = new SortedAddon<ColumnRendererCallback>();
+  const beforeheaders = new SortedAddon<ColumnRendererCallback>();
+  const afterheaders = new SortedAddon<ColumnRendererCallback>();
   const righttableheaders = new SortedAddon<ColumnRendererCallback>();
   const rowclasses = new SortedAddon<ClassResolverCallback>();
   const columnclasses = new SortedAddon<ClassResolverCallback>();
   const rowstyles = new SortedAddon<StyleResolverCallback>();
+  const beforepadding = new SortedAddon<CommonRendererCallback>();
+  const afterpadding = new SortedAddon<CommonRendererCallback>();
 
   setTimeout(async () => {
     for (const plugin of sortedPlugins) {
@@ -94,6 +100,12 @@ export const createPluginContainer = (
         aftertable,
         beforesettings,
         aftersettings,
+        beforecells,
+        aftercells,
+        beforeheaders,
+        afterheaders,
+        beforepadding,
+        afterpadding,
       });
     }
     await new Promise((r) => setTimeout(r, 1));
@@ -115,6 +127,12 @@ export const createPluginContainer = (
         aftertable,
         beforesettings,
         aftersettings,
+        beforecells,
+        aftercells,
+        beforeheaders,
+        afterheaders,
+        beforepadding,
+        afterpadding,
       });
     }
   }, 0);
@@ -165,6 +183,12 @@ export const createPluginContainer = (
     aftertable,
     beforesettings,
     aftersettings,
+    beforecells,
+    aftercells,
+    beforeheaders,
+    afterheaders,
+    beforepadding,
+    afterpadding,
   };
 
   // @ts-ignore: some privats

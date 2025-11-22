@@ -7,6 +7,8 @@ import { CoreTable } from "./core.tsx";
 import { FlatTable } from "./flattable.tsx";
 import { EditableTable } from "./editable.tsx";
 import { GroupedTable } from "./grouping.tsx";
+import { KanbanTable } from "./kanban.tsx";
+
 import Layout from "./layout.tsx";
 
 export function App() {
@@ -19,6 +21,7 @@ export function App() {
           <Route path="/flat" component={FlatTable} />
           <Route path="/editable" component={EditableTable} />
           <Route path="/groupable" component={GroupedTable} />
+          <Route path="/kanban" component={KanbanTable} />
           <Route path="/lorem-ipsum" component={LoremIpsum} />
           <Route path="/hire" component={HireMe} />
           <Route default component={NotFound} />
