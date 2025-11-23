@@ -4,6 +4,10 @@
 
 ## Getting Started
 
+<!--
+@assistant this section contains fundametal knowleddge about the module system design.
+-->
+
 This project makes use of [@nesterow/xmod](https://github.com/nesterow/xmod)
 module system. The import is allised to `@xmod`
 
@@ -316,13 +320,14 @@ export const TableCellModule: XModule = {
 };
 ```
 
-<!--
-@assistant this section contained fundametal knowleddge about the module system design.
--->
-
 END OF FUNDAMENTALS
 
-## Styleguide
+## Table Component & Modules
+
+<!--
+@assistant this section contains basic information about the datagrid component and its modules. More compherensive docs and styleguide is in
+the enterprise scope.
+-->
 
 ### Use the table
 
@@ -387,118 +392,19 @@ especially when implementing agentic flows.
 store.state.columns.header_height.value = 42;
 ```
 
-## Module System
+## Hooks
 
-The module system is designed to be simple and scalable. A module is an object
-that provides callbcaks:
-
-```ts
-import * as store from "./store.ts";
-
-import { ModuleInitCallback, XModule } from "@xmod/types.ts";
-
-const onInit: ModuleInitCallback = ({ store, ...rest }) => {};
-
-export const MyModule: XModule = {
-  name: "mymodule",
-  onInit,
-  store,
-};
-```
-
-There are callbacks such as `beforeLoad` and `afterLoad`.
+This component provides hooks such as `beforeLoad` and `afterLoad`.
 
 We use those callbacks to apply transformations to request input `beforeLoad`
 and to the request result `afterLoad`. This is hanndy for adapting
 request/response to a format consumable by this table or for extending query
 `beforeLoad` if our modules add additional filters or options.
 
-## Store
+### Context Menu
 
-A store provides factories that extend the table state.
-
-Here is an example of a store:
-
-```ts
-import { Signal, signal } from "@preact/signals";
-import { Command, InferPersist, State } from "@xmod/mod.ts";
-
-type MyState = {
-  mymod: {
-    prop: Signal<boolean>;
-  };
-};
-
-declare module "@xmod/types.ts" {
-  interface State extends MyState {}
-}
-
-const MYMOD_PROP_SET = 'MYMOD_PROP_SET'
-
-export type MyModPropSetCmd = Command<
-  typeof MYMOD_PROP_SET,
-  boolean
->;
-
-// A state to be added to the table store
-export function state(pesist: InferPersist<MyState>): MyState {
-  return {
-    mymod: {
-      prop: signal(pesist.mymod.prop ?? false),
-    },
-  };
-}
-
-// The persist callback, must return state attributes
-// as a JSON serializable object.
-// Here we explicitly specify what is needed to pesist
-export function persist(state: State): InferPersist<MyState> {
-  return {
-    mymod: {
-      prop: state.mymod.prop.value,
-    },
-  };
-}
-
-// State mutation for `store.dispatch`.
-// A command spec is { type: string, payload:<P>, history: boolean }
-// History flag is for dispatch handler, it isn't used here.
-export function mutate(state: State, cmd: CMyModPropSetCmd) {
-  swtich(cmd.type) {
-    case "MYMOD_PROP_SET":
-      state.mymod.prop = cmd.payload
-      break;
-  }
-}
-```
-
-See more complete examples at any module, for example in
-[columns](./columns/store.ts)
-
-### Addons
-
-Addons provide render callbacks for pre-defined render slots (beforetable,
-aftertable, etc). The slots are passed to a before init callback.
-
-```ts
-import { myModalRenderCallback } from "./MyModal.tsx";
-
-const beforeInit: BeforeInitCallback = ({
-  beforetable,
-}) => {
-  beforetable.use(myModalRenderCallback);
-};
-```
-
-The second argument in the `use` method represents render order - this is useful
-if you have components coming one after another and display order is important.
-Each render slot, like `beforetable` has their own callback type defined in
-[module typedefs](./module/types.ts).
-
-## Context Menu
-
-Context Menu is a built-in module. It provides methods and interfaces for adding
-menu items (or any components) to be rendered in the contex menu.
+Context Menu is a built-in table module. It provides methods and interfaces for
+adding menu items (or any components) to be rendered in the contex menu.
 
 The default item parent is 'main', the other menu items can specify their names
 (menu prop) and parents. The render callbacks receive menu context (MenuContext
