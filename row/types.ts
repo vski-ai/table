@@ -22,7 +22,7 @@ declare module "@/fetcher/types.ts" {
 }
 
 declare module "@/module/types.ts" {
-  interface ModuleInitOptions {
+  interface Slots {
     cellprefixes: Addon<CellRendererCallback>;
     cellsuffixes: Addon<CellRendererCallback>;
     lefttablecells: Addon<CellRendererCallback>;

@@ -2,7 +2,7 @@ import type { Addon, ClassResolverCallback } from "@/module/types.ts";
 import type { TableStore } from "@/module/store/types.ts";
 
 declare module "@/module/types.ts" {
-  interface ModuleInitOptions {
+  interface Slots {
     headerprefixes: Addon<ColumnRendererCallback>;
     lefttableheaders: Addon<ColumnRendererCallback>;
     righttableheaders: Addon<ColumnRendererCallback>;
