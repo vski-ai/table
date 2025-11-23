@@ -20,7 +20,7 @@ export const EditableTable = () => {
       //SelectorPlugin,
       EnumeratorModule,
     ],
-    persistence: new LocalStorageAdapter(),
+    storage: new LocalStorageAdapter(),
   });
 
   const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {

@@ -14,11 +14,7 @@ const sorter = createFrontendSorter();
 
 const { store, Table } = createTable({
   id: "demo",
-  modules: [
-    SortingModule,
-    //SelectorPlugin,
-    EnumeratorModule,
-  ],
+  modules: [SortingModule, EnumeratorModule],
 });
 
 export const Demo = () => {

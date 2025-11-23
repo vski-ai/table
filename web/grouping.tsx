@@ -38,7 +38,7 @@ export const GroupedTable = () => {
       EditModeModule,
       GroupingModule,
     ],
-    persistence: new LocalStorageAdapter(),
+    storage: new LocalStorageAdapter(),
   });
 
   store.state.data_type.column.value = {

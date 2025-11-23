@@ -36,11 +36,11 @@ export const useLoader = ({ onDataLoad, store, visibleRows }: LoaderProps) => {
           store.state.columns.all.value?.sort() || [],
         );
         const receivedColumns = JSON.stringify(
-          Object.keys(rows.find((r) => r !== null) ?? {}),
+          Object.keys(rows.find((r: any) => r !== null) ?? {}),
         );
         if (currentColumns !== receivedColumns) {
           store.state.columns.all.value = Object.keys(
-            rows.find((r) => r !== null) ?? {},
+            rows.find((r: any) => r !== null) ?? {},
           );
         }
 

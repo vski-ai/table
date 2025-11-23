@@ -9,7 +9,7 @@ import { MatcherModule } from "@enterprise/matcher/mod.ts";
 import { EditModeModule } from "@enterprise/editmode/mod.ts";
 
 import { generateKanbanData } from "@enterprise/kanban/mock/kanban.mjs";
-import { transformKanbanData } from "@/enterprise/kanban/utils.ts";
+import { transformKanbanData } from "@enterprise/kanban/utils.ts";
 
 const data = transformKanbanData(generateKanbanData() as any);
 
@@ -22,8 +22,6 @@ export const KanbanTable = () => {
   const { Table } = createTable({
     id: "kanban",
     modules: [
-      //SortingModule,
-      //EnumeratorModule,
       ChatModule,
       ContextModule,
       SearchModule,
@@ -31,7 +29,7 @@ export const KanbanTable = () => {
       MatcherModule,
       EditModeModule,
     ],
-    persistence: new LocalStorageAdapter(),
+    storage: new LocalStorageAdapter(),
   });
 
   const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {

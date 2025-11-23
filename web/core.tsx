@@ -18,7 +18,7 @@ export const CoreTable = () => {
   const { Table } = createTable({
     id: "flat",
     modules: [SortingModule, EnumeratorModule],
-    persistence: new LocalStorageAdapter(),
+    storage: new LocalStorageAdapter(),
   });
 
   const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {
