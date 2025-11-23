@@ -157,13 +157,12 @@ See more complete examples at any module, for example in
 ### Addons
 
 Addons provide render callbacks for pre-defined render slots (beforetable,
-aftertable, etc). The slots are passed to a module init callback.
+aftertable, etc). The slots are passed to a before init callback.
 
 ```ts
 import { myModalRenderCallback } from "./MyModal.tsx";
 
-const onInit: ModuleInitCallback = ({
-  store,
+const beforeInit: BeforeInitCallback = ({
   beforetable,
 }) => {
   beforetable.use(myModalRenderCallback);
