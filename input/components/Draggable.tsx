@@ -1,13 +1,13 @@
 import { cloneElement, TargetedDragEvent } from "preact";
 import { useSignal } from "@preact/signals";
 import { ComponentChildren } from "preact";
-import { TableStore } from "@/module/store/mod.ts";
+import { Store } from "@xmod/mod.ts";
 
 interface DraggableProps {
   children: ComponentChildren;
   onTransfer?: (draggedId: string, targetId: string) => void;
   id: string;
-  store: TableStore;
+  store: Store;
 }
 
 export const Draggable = ({

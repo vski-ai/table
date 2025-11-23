@@ -1,9 +1,9 @@
 import { CONTEXT_MENU_ADD_ITEM, ContextMenuAddCommand } from "../store.ts";
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import { ContextMenuItem } from "../types.ts";
 
 type AddMenuItemProps = {
-  store: TableStore;
+  store: Store;
   items: ContextMenuItem | ContextMenuItem[];
 };
 

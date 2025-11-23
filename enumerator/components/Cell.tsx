@@ -1,7 +1,7 @@
 import { useCallback } from "preact/hooks";
 
-import { CellRendererCallback } from "@/module/mod.ts";
-import { TableStore } from "@/module/types.ts";
+import { CellRendererCallback } from "@xmod/mod.ts";
+import { Store } from "@xmod/types.ts";
 import { RowData } from "@/row/types.ts";
 import { useRowKey } from "@/columns/hooks/useRowKey.ts";
 import { useRowHeights } from "@/row/hooks/useRowHeights.ts";
@@ -14,7 +14,7 @@ export const Cell = ({
   row,
   index,
 }: {
-  store: TableStore;
+  store: Store;
   row: RowData;
   index: number;
 }) => {

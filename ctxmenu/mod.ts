@@ -1,10 +1,6 @@
 export * from "./utils/addMenuItems.ts";
 
-import {
-  BeforeInitCallback,
-  ITableModule,
-  ModuleInitCallback,
-} from "@/module/mod.ts";
+import { BeforeInitCallback, ModuleInitCallback, XModule } from "@xmod/mod.ts";
 import { contextMenuRenderCallback } from "./ContextMenu.tsx";
 import { addMenuItems } from "./utils/addMenuItems.ts";
 import { Copy } from "./default.tsx";
@@ -21,7 +17,7 @@ const onInit: ModuleInitCallback = ({ store }) => {
   });
 };
 
-export const ContextMenuModule: ITableModule = {
+export const ContextMenuModule: XModule = {
   name: "contextmenu",
   beforeInit,
   onInit,

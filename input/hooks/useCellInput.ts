@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "preact/hooks";
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import { RowData } from "@/row/types.ts";
 import { CELL_EDITING_SET, CellEditingSetCommand } from "@/editing/store.ts";
 import {
@@ -10,7 +10,7 @@ import {
 } from "@/cell/store.ts";
 
 type CellKeyBindingsProps = {
-  store: TableStore;
+  store: Store;
   row: RowData;
   column: string;
 };

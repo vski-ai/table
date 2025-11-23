@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/preact";
 import { Column } from "./Column.tsx";
-import { createTableModule, NoopStorageAdapter } from "@/module/mod.ts";
+import { createApp } from "@xmod/mod.ts";
+import { modules } from "@/table/factory.tsx";
 
 describe("Column component", () => {
   it("should render a column with the correct name", () => {
-    const store = createTableModule({
+    const store = createApp({
       id: "test",
-      modules: [],
-      persistence: new NoopStorageAdapter(),
+      modules,
     });
     const column = "col1";
 

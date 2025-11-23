@@ -1,7 +1,8 @@
-import { MutableRef, useMemo, useRef } from "preact/hooks";
+import { Store } from "@xmod/mod.ts";
+import { MutableRef, useRef } from "preact/hooks";
 import { DataLoadCallback } from "@/fetcher/types.ts";
 import { useDataFetcher } from "@/fetcher/hooks/useDataFetcher.ts";
-import { useAddons } from "@/module/mod.ts";
+import { getAddons } from "@xmod/mod.ts";
 import { Header } from "@/columns/components/Header.tsx";
 import { useTableColumnStyle } from "@/columns/hooks/useTableColumnStyle.ts";
 import {
@@ -10,12 +11,12 @@ import {
   RowSkeleton,
   useRenderRowCallback,
 } from "@/row/mod.ts";
-import { TableStore } from "@/module/types.ts";
+
 import { useTableInput } from "@/input/hooks/useTableInput.ts";
 
 export type TableProps = {
   onDataLoad: DataLoadCallback;
-  store: TableStore;
+  store: Store;
   scrollContainerRef: MutableRef<HTMLElement>;
 };
 
@@ -41,7 +42,7 @@ export function Table(props: TableProps) {
 
   const kb = useTableInput({ store, tableRef });
 
-  const addons = useAddons({ store });
+  const addons = getAddons({ store });
 
   const renderRows = [
     { row: "top", index: -10 },

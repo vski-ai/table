@@ -1,8 +1,4 @@
-import {
-  BeforeInitCallback,
-  ITableModule,
-  ModuleInitCallback,
-} from "@/module/mod.ts";
+import { BeforeInitCallback, ModuleInitCallback, XModule } from "@xmod/mod.ts";
 import { ColumnWidthCommand } from "@/columns/store.ts";
 import { enumCellRenderCallback } from "./components/Cell.tsx";
 import { enumColumnRenderCallback } from "./components/Column.tsx";
@@ -25,7 +21,7 @@ const afterInit: ModuleInitCallback = ({ store }) => {
   });
 };
 
-export const EnumeratorModule: ITableModule = {
+export const EnumeratorModule: XModule = {
   name: "enumerator",
   dependencies: ["$fetcher"],
   store,

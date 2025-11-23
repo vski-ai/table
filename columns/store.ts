@@ -1,5 +1,5 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, InferPersist, TableState } from "@/module/mod.ts";
+import { Command, InferPersist, State } from "@xmod/mod.ts";
 
 type ColumnsState = {
   columns: {
@@ -15,8 +15,8 @@ type ColumnsState = {
   };
 };
 
-declare module "@/module/types.ts" {
-  interface TableState extends ColumnsState {}
+declare module "@xmod/types.ts" {
+  interface State extends ColumnsState {}
 }
 
 export type StickyPosition = "left" | "right" | false;
@@ -94,7 +94,7 @@ export function state<T>(persist: InferPersist<ColumnsState>): ColumnsState {
   };
 }
 
-export function persist(state: TableState): InferPersist<ColumnsState> {
+export function persist(state: State): InferPersist<ColumnsState> {
   return {
     columns: {
       ordered: state.columns.ordered.value,
@@ -105,7 +105,7 @@ export function persist(state: TableState): InferPersist<ColumnsState> {
   };
 }
 
-export function mutate(state: TableState, command: ColumnCommandType) {
+export function mutate(state: State, command: ColumnCommandType) {
   switch (command.type) {
     case COLUMNS_SET: {
       state.columns.all.value = command.payload;

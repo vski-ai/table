@@ -1,5 +1,5 @@
-import { SortedAddon } from "@/module/components/SortedAddon.ts";
-import { CommonRendererCallback } from "@/module/types.ts";
+import { SortedAddon } from "@xmod/mod.ts";
+import { CommonRendererCallback } from "./types.ts";
 
 export const slots = () => ({
   beforesettings: new SortedAddon<CommonRendererCallback>(),

@@ -1,7 +1,7 @@
 export * from "./types.ts";
 export * from "./components/TypeFormat.tsx";
 
-import { ITableModule, ModuleInitCallback } from "@/module/types.ts";
+import { ModuleInitCallback, XModule } from "@xmod/types.ts";
 import { addMenuItems } from "@/ctxmenu/mod.ts";
 import { MenuItems } from "./menu.tsx";
 import { NumberMenuItems } from "./number/menu.tsx";
@@ -17,11 +17,7 @@ import * as store from "./store.ts";
 const onInit: ModuleInitCallback = ({ store }) => {
   addMenuItems({
     store,
-    items: [
-      ...MenuItems,
-      ...NumberMenuItems,
-      ...DateMenuItems,
-    ],
+    items: [...MenuItems, ...NumberMenuItems, ...DateMenuItems],
   });
   store.addFormater(NumberFormater);
   store.addFormater(CurrencyFormater);
@@ -29,7 +25,7 @@ const onInit: ModuleInitCallback = ({ store }) => {
   store.addFormater(DateFormater);
 };
 
-export const DatatypeModule: ITableModule = {
+export const DatatypeModule: XModule = {
   name: "datatypes",
   store,
   onInit,

@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/preact";
 import { Column } from "@/columns/components/Column.tsx";
-import { createTableModule, NoopStorageAdapter } from "@/module/mod.ts";
+import { createApp } from "@xmod/mod.ts";
+import { modules } from "@/table/factory.tsx";
 import { SortingModule } from "./mod.ts";
 
 describe("Sorter module", () => {
   it("should render a sorter in the column", async () => {
-    const store = createTableModule({
+    const store = createApp({
       id: "test",
-      modules: [SortingModule],
-      persistence: new NoopStorageAdapter(),
+      modules: [...modules, SortingModule],
     });
     await new Promise((r) => setTimeout(r, 1));
 

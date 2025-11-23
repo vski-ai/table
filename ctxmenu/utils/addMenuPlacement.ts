@@ -1,11 +1,11 @@
-import { type TableStore } from "@/module/types.ts";
+import { type Store } from "@xmod/types.ts";
 import {
   PLACEMENT_TARGET_ACESSOR,
   type PlacementTargetResolver,
 } from "../store.ts";
 
 type MenuPlamentProps = {
-  store: TableStore;
+  store: Store;
   items: PlacementTargetResolver[];
 };
 
@@ -15,7 +15,7 @@ export function addMenuPlacement({ store, items }: MenuPlamentProps) {
   const unique = new Set<string>();
   for (const target of targets) {
     if (unique.has(target.name)) {
-      console.error(`MENU PLACEMENT: ${target.name} is not unique. 
+      console.error(`MENU PLACEMENT: ${target.name} is not unique.
         Ensure unique name and target selector when creating new placement target`);
     }
     unique.add(target.name);

@@ -1,5 +1,5 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/module/mod.ts";
+import { Command, State } from "@xmod/mod.ts";
 import { RowData } from "@/row/types.ts";
 
 type CellsState = {
@@ -9,9 +9,9 @@ type CellsState = {
   };
 };
 
-declare module "@/module/types.ts" {
-  interface TableState extends CellsState {}
-  interface TableStore {
+declare module "@xmod/types.ts" {
+  interface State extends CellsState {}
+  interface Store {
     getCellKey: (opts: { column: string; row: RowData }) => string;
   }
 }
@@ -46,12 +46,12 @@ export function state(): CellsState {
   };
 }
 
-export function persist(_: TableState) {
+export function persist(_: State) {
   return {};
 }
 
 export function mutate(
-  state: TableState,
+  state: State,
   cmd: CellSelectCmd | CellSelectResetCmd | CellDeselectCmd,
 ) {
   switch (cmd.type) {
@@ -84,7 +84,7 @@ export function mutate(
   }
 }
 
-export function methods(_: TableState) {
+export function methods(_: State) {
   return {
     getCellKey({ column, row }: { column: string; row: RowData }) {
       return row.id + "/" + column;

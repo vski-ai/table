@@ -1,16 +1,14 @@
-import {
-  BeforeInitCallback,
-  ITableModule,
-  ModuleInitCallback,
-} from "@/module/types.ts";
+import { BeforeInitCallback, ModuleInitCallback, XModule } from "@xmod/mod.ts";
+
 import { addMenuItems } from "@/ctxmenu/utils/addMenuItems.ts";
-import { renderTableSettings } from "./components/Settings.tsx";
+import { renderSettings } from "./components/Settings.tsx";
 import { MenuItems } from "./menu.tsx";
 import { slots } from "./slots.ts";
+import { hooks } from "./hooks.ts";
 import * as store from "./store.ts";
 
 const beforeInit: BeforeInitCallback = ({ beforetable }) => {
-  beforetable.use(renderTableSettings);
+  beforetable.use(renderSettings);
 };
 
 const onInit: ModuleInitCallback = ({ store }) => {
@@ -20,10 +18,11 @@ const onInit: ModuleInitCallback = ({ store }) => {
   });
 };
 
-export const TableModule: ITableModule = {
+export const TableModule: XModule = {
   name: "table",
   beforeInit,
   onInit,
   store,
   slots,
+  hooks,
 };

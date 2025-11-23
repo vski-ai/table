@@ -1,8 +1,8 @@
 import { useEffect } from "preact/hooks";
-import { TableStore } from "@/module/store/mod.ts";
+import { Store } from "@xmod/mod.ts";
 
 type Props = {
-  store: TableStore;
+  store: Store;
 };
 
 export function useGloalMouse({ store }: Props) {

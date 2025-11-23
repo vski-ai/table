@@ -1,12 +1,12 @@
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import { useColumnResizer } from "@/columns/hooks/useColumnnResize.ts";
 import { useOrderedColumns } from "@/columns/hooks/useOrderedColumns.ts";
-import { useAddons } from "@/module/mod.ts";
+import { getAddons } from "@xmod/mod.ts";
 
 interface RowPaddingProps {
   padding: number;
   name: string;
-  store: TableStore;
+  store: Store;
 }
 
 export const RowPadding = ({ padding, name, store }: RowPaddingProps) => {
@@ -15,7 +15,7 @@ export const RowPadding = ({ padding, name, store }: RowPaddingProps) => {
     ...store.state.columns.service_columns.value,
     ...all_columns,
   ];
-  const addons = useAddons({ store });
+  const addons = getAddons({ store });
   const { getColumnWidth } = useColumnResizer({ store });
   return (
     <tr

@@ -1,22 +1,22 @@
 import { sanitizeColName } from "@/common/sanitizeColName.ts";
 import { cn } from "@/common/className.ts";
 import { useStickyColumn } from "@/columns/hooks/useStickyColumn.ts";
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import { RowData } from "@/row/types.ts";
-import { useAddons } from "@/module/mod.ts";
+import { getAddons } from "@xmod/mod.ts";
 import { TypeFormat } from "@/datatype/mod.ts";
 import { useRowHeights } from "@/row/hooks/useRowHeights.ts";
 import { useCellInput } from "@/input/hooks/useCellInput.ts";
 import { useMemo } from "preact/hooks";
 
 interface CellProps {
-  store: TableStore;
+  store: Store;
   column: string;
   row: RowData;
 }
 
 export const Cell = ({ store, column, row }: CellProps) => {
-  const addons = useAddons({ store });
+  const addons = getAddons({ store });
   const key = store.getCellKey({ row, column });
 
   const { isSticky, isStickyLeft, isStickyRight, left, right } =

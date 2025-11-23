@@ -1,5 +1,5 @@
-import { useAddons } from "@/module/mod.ts";
-import { TableStore } from "@/module/types.ts";
+import { getAddons } from "@xmod/mod.ts";
+import { Store } from "@xmod/types.ts";
 
 export const RowLoading = ({
   columns,
@@ -8,9 +8,9 @@ export const RowLoading = ({
 }: {
   columns: string[];
   rowHeight: number;
-  store: TableStore;
+  store: Store;
 }) => {
-  const adons = useAddons({ store });
+  const adons = getAddons({ store });
   const left = new Array(adons.lefttableheaders.size).fill(0);
   const right = new Array(adons.righttableheaders.size).fill(0);
   const cols = new Array(

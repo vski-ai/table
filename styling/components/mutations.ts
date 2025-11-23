@@ -1,4 +1,4 @@
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import {
   CELL_STYLE_RESET,
   CELL_STYLE_SET,
@@ -20,7 +20,7 @@ import {
 import { CellStyle } from "../types.ts";
 
 type WithStore = {
-  store: TableStore;
+  store: Store;
 };
 
 type SetColumnStyle = {
@@ -98,7 +98,7 @@ export type ScopedStyleProps =
   | { scope: "table" };
 
 export type StyleProps = {
-  store: TableStore;
+  store: Store;
 } & ScopedStyleProps;
 
 export function getStyle(

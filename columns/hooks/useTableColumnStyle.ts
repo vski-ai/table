@@ -1,11 +1,11 @@
 import { useMemo } from "preact/hooks";
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import { sanitizeColName } from "@/common/sanitizeColName.ts";
 import { useColumnResizer } from "./useColumnnResize.ts";
 import { useOrderedColumns } from "./useOrderedColumns.ts";
 
 export interface TableStyleProps {
-  store: TableStore;
+  store: Store;
 }
 
 export function useTableColumnStyle({ store }: TableStyleProps) {
@@ -37,7 +37,9 @@ export function useTableColumnStyle({ store }: TableStyleProps) {
       ...columns.reduce(
         (acc, col) => {
           acc[`--col-width-${sanitizeColName(col)}`] = `${
-            getColumnWidth(col)
+            getColumnWidth(
+              col,
+            )
           }px`;
           return acc;
         },

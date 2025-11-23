@@ -1,5 +1,5 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, InferPersist, TableState } from "@/module/mod.ts";
+import { Command, InferPersist, State } from "@xmod/mod.ts";
 import { TableMeta } from "./types.ts";
 import { RowData } from "@/row/types.ts";
 
@@ -17,9 +17,9 @@ type FetcherState = {
   };
 };
 
-declare module "@/module/types.ts" {
-  interface TableState extends FetcherState {}
-  interface TableStore {
+declare module "@xmod/types.ts" {
+  interface State extends FetcherState {}
+  interface Store {
     shouldReload: () => void;
     getRow: (id: string | number) => RowData;
   }
@@ -52,7 +52,7 @@ export function state(init: InferPersist<FetcherState>): FetcherState {
   };
 }
 
-export function persist(state: TableState): InferPersist<FetcherState> {
+export function persist(state: State): InferPersist<FetcherState> {
   return {
     fetcher: {
       table_meta: state.fetcher.table_meta.value,
@@ -60,7 +60,7 @@ export function persist(state: TableState): InferPersist<FetcherState> {
   };
 }
 
-export function mutate(state: TableState, command: TableMetaCommnand) {
+export function mutate(state: State, command: TableMetaCommnand) {
   switch (command.type) {
     case TABLE_META_SET: {
       state.fetcher.table_meta.value = command.payload;
@@ -69,7 +69,7 @@ export function mutate(state: TableState, command: TableMetaCommnand) {
   }
 }
 
-export function methods(state: TableState) {
+export function methods(state: State) {
   return {
     shouldReload() {
       state.fetcher.reload_key.value = new Date().getTime();

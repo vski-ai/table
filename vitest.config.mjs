@@ -9,4 +9,9 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
   },
+  resolve: {
+    alias: {
+      "npm:@preact/signals@^2.5.1": "@preact/signals",
+    },
+  },
 });

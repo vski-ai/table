@@ -1,5 +1,5 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/module/mod.ts";
+import { Command, State } from "@xmod/mod.ts";
 import { TypeFormatComponent } from "./types.ts";
 import { DefaultFormater } from "./components/DefaultFormater.tsx";
 import { InferPersist } from "../module/types.ts";
@@ -16,12 +16,12 @@ type DatatypesState = {
   };
 };
 
-declare module "@/module/types.ts" {
-  interface TableState extends DatatypesState {
+declare module "@xmod/types.ts" {
+  interface State extends DatatypesState {
     [TYPE_FORMATTERS_ACCESSOR]: Record<string, TypeFormatComponent<string>>;
   }
 
-  interface TableStore {
+  interface Store {
     getFormater: <T extends string>(datetype: T) => TypeFormatComponent<T>;
     addFormater: <T extends string>(formatter: TypeFormatComponent<T>) => void;
   }
@@ -49,10 +49,10 @@ export type ColumnNumnerFormatSetCommand = Command<
      { column: [column_name], type: "number", options: [datetype_options] } or
      { column: [column_name], type: "unit", options: [datetype_options] } or
      { column: [column_name], type: "currency", options: [datetype_options] }
-    Datetype options support all Intl.NumberFormatOptions options (number, currency, units), 
+    Datetype options support all Intl.NumberFormatOptions options (number, currency, units),
     but it is also IMPORTANT to pass user locale { locale: string }. The default locale is en-US.
-    Example: 
-      { 
+    Example:
+      {
           "column": "total_price",
           "type": "currency",
           "options": {
@@ -72,10 +72,10 @@ export type ColumnDateFormatSetCommand = Command<
   `Set column date/time formatting:
      { column: [column_name], type: "date", options: [datetype_options] }
 
-    Datetype options support all Intl.DateTimeFormatOptions options, 
+    Datetype options support all Intl.DateTimeFormatOptions options,
     but it is also IMPORTANT to pass user locale { locale: string }. The default locale is en-US.
-    Example: 
-      { 
+    Example:
+      {
           "column": "delivery date",
           "type": "date",
           "options": {"locale":"en-GB","dateStyle":"medium","timeStyle":"medium"}
@@ -89,10 +89,10 @@ export type FormattingCommandType =
   | ColumnDateFormatSetCommand
   | ColumnNumnerFormatSetCommand;
 
-export function inject(_: TableState) {
+export function inject(_: State) {
   return {
     [TYPE_FORMATTERS_ACCESSOR]: {
-      "default": DefaultFormater,
+      default: DefaultFormater,
     },
   };
 }
@@ -108,7 +108,7 @@ export function state(persist: InferPersist<DatatypesState>): DatatypesState {
   };
 }
 
-export function persist(state: TableState) {
+export function persist(state: State) {
   return {
     data_type: {
       column: state.data_type.column.value,
@@ -117,7 +117,7 @@ export function persist(state: TableState) {
   };
 }
 
-export function mutate(state: TableState, command: FormattingCommandType) {
+export function mutate(state: State, command: FormattingCommandType) {
   const setFormat = () => {
     state.data_type.options.value = {
       ...state.data_type.options.value,
@@ -158,11 +158,10 @@ export function mutate(state: TableState, command: FormattingCommandType) {
   }
 }
 
-export function methods(state: TableState) {
+export function methods(state: State) {
   return {
     getFormater(datatype: string) {
-      return state[TYPE_FORMATTERS_ACCESSOR]?.[datatype] ??
-        DefaultFormater;
+      return state[TYPE_FORMATTERS_ACCESSOR]?.[datatype] ?? DefaultFormater;
     },
     addFormater<T extends string>(formatter: TypeFormatComponent<T>) {
       state[TYPE_FORMATTERS_ACCESSOR][formatter.datatype] = formatter;

@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/preact";
 import { Row } from "./Row.tsx";
-import { createTableModule, NoopStorageAdapter } from "@/module/mod.ts";
+import { createApp } from "@xmod/mod.ts";
+import { modules } from "@/table/factory.tsx";
 import { RowData } from "@/row/types.ts";
 
 describe("Row component", () => {
   it("should render a row with the correct cells", () => {
-    const store = createTableModule({
+    const store = createApp({
       id: "test",
-      modules: [],
-      persistence: new NoopStorageAdapter(),
+      modules,
     });
     const row: RowData = { id: "row1", col1: "Cell 1", col2: "Cell 2" };
 

@@ -1,9 +1,9 @@
 import { MutableRef, useEffect } from "preact/hooks";
-import { TableStore } from "@/module/store/mod.ts";
+import { Store } from "@xmod/mod.ts";
 import { CELL_SELECT_RESET, CellSelectResetCmd } from "@/cell/store.ts";
 
 type Props = {
-  store: TableStore;
+  store: Store;
   tableRef: MutableRef<HTMLTableElement | null>;
 };
 

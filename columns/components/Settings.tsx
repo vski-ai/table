@@ -1,4 +1,4 @@
-import { CommonRendererCallback, TableStore } from "@/module/types.ts";
+import { CommonRendererCallback, Store } from "@xmod/types.ts";
 import EyeIcon from "lucide-react/dist/esm/icons/eye.js";
 import EyeClosedIcon from "lucide-react/dist/esm/icons/eye-closed.js";
 import CogIcon from "lucide-react/dist/esm/icons/columns-3-cog.js";
@@ -8,7 +8,7 @@ import { Draggable } from "@/input/components/Draggable.tsx";
 import { Dialog } from "@/common/Dialog.tsx";
 
 type ColumnsSettingsProps = {
-  store: TableStore;
+  store: Store;
 };
 
 export function Settings({ store }: ColumnsSettingsProps) {

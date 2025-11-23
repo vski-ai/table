@@ -5,8 +5,8 @@ import type {
   CommonRendererCallback,
   StyleResolverCallback,
   WithRef,
-} from "@/module/types.ts";
-import type { TableStore } from "@/module/store/types.ts";
+} from "@/table/types.ts";
+import type { Store } from "@xmod/types.ts";
 
 export interface RowData extends Record<string, string | number> {
   id: string | number;
@@ -21,7 +21,7 @@ declare module "@/fetcher/types.ts" {
   }
 }
 
-declare module "@/module/types.ts" {
+declare module "@xmod/types.ts" {
   interface Slots {
     cellprefixes: Addon<CellRendererCallback>;
     cellsuffixes: Addon<CellRendererCallback>;
@@ -41,7 +41,7 @@ export type CellRendererCallback =
     opts: {
       column: string;
       row: RowData;
-      store: TableStore;
+      store: Store;
       rowIndex?: number;
     } & WithRef,
   ) => ComponentChildren);

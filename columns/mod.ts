@@ -1,9 +1,9 @@
 export * from "./types.ts";
 import {
   BeforeInitCallback,
-  ITableModule,
   ModuleInitCallback,
-} from "@/module/types.ts";
+  XModule,
+} from "@xmod/types.ts";
 import { addMenuItems } from "@/ctxmenu/utils/addMenuItems.ts";
 import { renderColumnSettings } from "./components/Settings.tsx";
 import { MenuItems } from "./menu.tsx";
@@ -21,7 +21,7 @@ const onInit: ModuleInitCallback = ({ store }) => {
   });
 };
 
-export const TableColumnsModule: ITableModule = {
+export const TableColumnsModule: XModule = {
   name: "columns",
   beforeInit,
   onInit,

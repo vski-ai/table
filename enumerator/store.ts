@@ -1,5 +1,5 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/module/mod.ts";
+import { Command, State } from "@xmod/mod.ts";
 
 type ResizingRow = { rowId: string | number; height: number } | null;
 
@@ -9,8 +9,8 @@ type EnumeratorStore = {
   };
 };
 
-declare module "@/module/types.ts" {
-  interface TableState extends EnumeratorStore {}
+declare module "@xmod/types.ts" {
+  interface State extends EnumeratorStore {}
 }
 
 export const ROW_RESIZING_SET = "ROW_RESIZING_SET";
@@ -33,11 +33,11 @@ export function state<T>(): EnumeratorStore {
   };
 }
 
-export function persist(_: TableState) {
+export function persist(_: State) {
   return {};
 }
 
-export function mutate(state: TableState, command: RowCommand) {
+export function mutate(state: State, command: RowCommand) {
   switch (command.type) {
     case ROW_RESIZING_SET:
       state.enumerator.resizing_row.value = command.payload;

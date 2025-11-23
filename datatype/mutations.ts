@@ -1,4 +1,4 @@
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import {
   COLUMN_DATATYPE_OPTIONS_SET,
   COLUMN_DATATYPE_SET,
@@ -6,9 +6,13 @@ import {
   ColumnDataTypeSetCommand,
 } from "./store.ts";
 
-export function resetFormatting(
-  { store, column }: { store: TableStore; column?: string },
-) {
+export function resetFormatting({
+  store,
+  column,
+}: {
+  store: Store;
+  column?: string;
+}) {
   if (!column) return;
   store.dispatch<ColumnDataTypeSetCommand>({
     type: COLUMN_DATATYPE_SET,
@@ -31,7 +35,7 @@ export function setFormatting<T>({
   opts,
 }: {
   datatype: string;
-  store: TableStore;
+  store: Store;
   column?: string;
   opts: T;
 }) {

@@ -1,9 +1,9 @@
 import { useCallback } from "preact/hooks";
 import { RowData } from "@/row/types.ts";
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 
 interface RowHeightsProps {
-  store: TableStore;
+  store: Store;
   expandable?: boolean;
   height?: number;
   rowKey?: string;

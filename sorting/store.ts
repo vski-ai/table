@@ -1,9 +1,9 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/module/mod.ts";
+import { Command, State } from "@xmod/mod.ts";
 import { SortState } from "./types.ts";
 
-declare module "@/module/types.ts" {
-  interface TableState {
+declare module "@xmod/types.ts" {
+  interface State {
     sorting: Signal<SortState>;
   }
 }
@@ -17,13 +17,13 @@ export function state(init: Record<string, any> | null) {
   };
 }
 
-export function persist(state: TableState) {
+export function persist(state: State) {
   return {
     sorting: state.sorting.value,
   };
 }
 
-export function mutate(state: TableState, command: SortSetCommand) {
+export function mutate(state: State, command: SortSetCommand) {
   switch (command.type) {
     case SORT_SET: {
       state.sorting.value = command.payload;

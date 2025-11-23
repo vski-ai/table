@@ -1,5 +1,5 @@
 import { RowData } from "../row/types.ts";
-import { TableStore } from "@/module/store/types.ts";
+import { Store } from "@xmod/types.ts";
 import { ComponentChildren } from "preact";
 
 export interface DataType<T extends string = "default", O = any> {
@@ -9,7 +9,7 @@ export interface DataType<T extends string = "default", O = any> {
 }
 
 export interface TypeFormatOpts {
-  store: TableStore;
+  store: Store;
   row: RowData;
   column: string;
 }

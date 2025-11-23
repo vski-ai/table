@@ -1,9 +1,9 @@
-import { SortedAddon } from "@/module/components/SortedAddon.ts";
+import { SortedAddon } from "@xmod/mod.ts";
 import type {
   ClassResolverCallback,
   CommonRendererCallback,
   StyleResolverCallback,
-} from "@/module/types.ts";
+} from "@/table/types.ts";
 import type { CellRendererCallback } from "./types.ts";
 
 export const slots = () => ({

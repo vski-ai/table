@@ -1,4 +1,4 @@
-import { LocalStorageAdapter } from "@/module/mod.ts";
+import { LocalStorageAdapter } from "@xmod/mod.ts";
 import { useEffect, useRef } from "preact/hooks";
 import { createTable, type DataLoadCallback } from "../mod.ts";
 

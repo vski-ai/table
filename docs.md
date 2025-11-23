@@ -73,11 +73,11 @@ that provides callbcaks:
 ```ts
 import * as store from "./store.ts";
 
-import { ITableModule, ModuleInitCallback } from "@/module/types.ts";
+import { ModuleInitCallback, XModule } from "@xmod/types.ts";
 
 const onInit: ModuleInitCallback = ({ store, ...rest }) => {};
 
-export const MyModule: ITableModule = {
+export const MyModule: XModule = {
   name: "mymodule",
   onInit,
   store,
@@ -100,7 +100,7 @@ Here is an example of a store:
 
 ```ts
 import { Signal, signal } from "@preact/signals";
-import { Command, InferPersist, TableState } from "@/module/mod.ts";
+import { Command, InferPersist, State } from "@xmod/mod.ts";
 
 type MyState = {
   mymod: {
@@ -108,8 +108,8 @@ type MyState = {
   };
 };
 
-declare module "@/module/types.ts" {
-  interface TableState extends MyState {}
+declare module "@xmod/types.ts" {
+  interface State extends MyState {}
 }
 
 const MYMOD_PROP_SET = 'MYMOD_PROP_SET'
@@ -131,7 +131,7 @@ export function state(pesist: InferPersist<MyState>): MyState {
 // The persist callback, must return state attributes
 // as a JSON serializable object.
 // Here we explicitly specify what is needed to pesist
-export function persist(state: TableState): InferPersist<MyState> {
+export function persist(state: State): InferPersist<MyState> {
   return {
     mymod: {
       prop: state.mymod.prop.value,
@@ -142,7 +142,7 @@ export function persist(state: TableState): InferPersist<MyState> {
 // State mutation for `store.dispatch`.
 // A command spec is { type: string, payload:<P>, history: boolean }
 // History flag is for dispatch handler, it isn't used here.
-export function mutate(state: TableState, cmd: CMyModPropSetCmd) {
+export function mutate(state: State, cmd: CMyModPropSetCmd) {
   swtich(cmd.type) {
     case "MYMOD_PROP_SET":
       state.mymod.prop = cmd.payload
@@ -187,7 +187,7 @@ The default menu placement targets are `header` and `body`. `body` meaning an
 element clicked inside table body and the target was inside a cell.
 
 A module can add their own menu targets on initialization using
-`addMenuPlacement({ store: TableStore, items: PlacementTargetResolver[] })`.
+`addMenuPlacement({ store: Store, items: PlacementTargetResolver[] })`.
 
 Here is an interface used for menu placements:
 

@@ -1,8 +1,8 @@
 import { useMemo } from "preact/hooks";
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import { useOrderedColumns } from "./useOrderedColumns.ts";
 interface StickyColOffset {
-  store: TableStore;
+  store: Store;
 }
 
 export function useStickyColOffset({ store }: StickyColOffset) {
@@ -42,7 +42,7 @@ export function useStickyColOffset({ store }: StickyColOffset) {
 }
 
 interface StickyColumn {
-  store: TableStore;
+  store: Store;
   column: string;
 }
 

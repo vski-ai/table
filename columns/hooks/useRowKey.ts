@@ -1,13 +1,11 @@
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import { useMemo } from "preact/hooks";
 
 type RowKeyProps = {
-  store: TableStore;
+  store: Store;
 };
 
-export function useRowKey({
-  store,
-}: RowKeyProps) {
+export function useRowKey({ store }: RowKeyProps) {
   const columns = store.state.columns.all?.value ?? [];
   const rowIdentifier = "id";
   return useMemo(() => {

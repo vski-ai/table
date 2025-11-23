@@ -2,10 +2,10 @@ import ArrowDownIcon from "lucide-react/dist/esm/icons/arrow-down-0-1.js";
 import ArrowUpIcon from "lucide-react/dist/esm/icons/arrow-up-1-0.js";
 import ArrowDownUpIcon from "lucide-react/dist/esm/icons/arrow-down-up.js";
 
-import { TableStore } from "@/module/mod.ts";
+import { Store } from "@xmod/mod.ts";
 import { cn } from "@/common/className.ts";
 
-import { ColumnRendererCallback } from "@/module/types.ts";
+import { ColumnRendererCallback } from "@xmod/types.ts";
 import { useCallback } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 import { SORT_SET, SortSetCommand } from "../store.ts";
@@ -13,7 +13,7 @@ import { SortState } from "../types.ts";
 
 interface RowSorterProps {
   column: string;
-  store: TableStore;
+  store: Store;
 }
 
 export const RowSorter = ({ column, store }: RowSorterProps) => {

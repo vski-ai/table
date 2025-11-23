@@ -1,10 +1,10 @@
 import { RowData } from "@/row/types.ts";
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 
 export interface TypeFormatProps {
   column: string;
   row: RowData;
-  store: TableStore;
+  store: Store;
 }
 
 export function TypeFormat({ store, column, row }: TypeFormatProps) {

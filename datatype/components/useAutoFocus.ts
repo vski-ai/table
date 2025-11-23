@@ -1,10 +1,10 @@
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import { MutableRef, useEffect } from "preact/hooks";
 
 export function useAutoFocus(
   ref: MutableRef<HTMLElement | null>,
   key: string | number = "",
-  store: TableStore,
+  store: Store,
   inferTabIndex = true,
 ) {
   useEffect(() => {

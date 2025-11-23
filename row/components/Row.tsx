@@ -1,7 +1,7 @@
 import { useCallback } from "preact/hooks";
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import { useOrderedColumns } from "@/columns/hooks/useOrderedColumns.ts";
-import { useAddons } from "@/module/mod.ts";
+import { getAddons } from "@xmod/mod.ts";
 
 import { useRowHeights } from "@/row/hooks/useRowHeights.ts";
 import { Cell } from "@/cell/mod.ts";
@@ -13,14 +13,14 @@ interface RowProps {
   rowIndex: number;
   rowKey: string;
   rowHeight: number;
-  store: TableStore;
+  store: Store;
   columns: string[];
 }
 
 export const Row = (props: RowProps) => {
   const { row, rowIndex, rowHeight, store, columns, rowKey } = props;
 
-  const addons = useAddons({ store });
+  const addons = getAddons({ store });
   const height = rowHeight;
 
   const classes = addons.rowclasses.string({
@@ -81,7 +81,7 @@ export const Row = (props: RowProps) => {
 };
 
 interface RenderRowCallbackProps {
-  store: TableStore;
+  store: Store;
   rowHeight: number;
 }
 

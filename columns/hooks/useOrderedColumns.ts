@@ -1,7 +1,7 @@
-import { TableStore } from "@/module/mod.ts";
+import { Store } from "@xmod/mod.ts";
 
 interface OrderedColumnsProps {
-  store: TableStore;
+  store: Store;
   visibility?: boolean;
 }
 

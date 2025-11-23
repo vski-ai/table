@@ -18,6 +18,4 @@ export const TableSettings: ContextMenuItem = {
   },
 };
 
-export const MenuItems = [
-  TableSettings,
-];
+export const MenuItems = [TableSettings];

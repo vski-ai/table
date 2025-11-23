@@ -2,8 +2,8 @@ import { ComponentChildren } from "preact";
 import { useSignal } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
 import { cn } from "@/common/className.ts";
-import { useAddons } from "@/module/mod.ts";
-import { TableStore } from "@/module/types.ts";
+import { getAddons } from "@xmod/mod.ts";
+import { Store } from "@xmod/types.ts";
 import { Draggable } from "@/input/components/Draggable.tsx";
 import { useColumnsOrderCallback } from "../hooks/useColumnsOrderCallback.ts";
 import { useColumnResizer } from "../hooks/useColumnnResize.ts";
@@ -11,12 +11,12 @@ import { useStickyColumn } from "../hooks/useStickyColumn.ts";
 
 export interface ColumnProps {
   column: string;
-  store: TableStore;
+  store: Store;
   children?: ComponentChildren;
 }
 
 export function Column({ column, children, store }: ColumnProps) {
-  const addons = useAddons({ store });
+  const addons = getAddons({ store });
   const onColumnDrop = useColumnsOrderCallback({ store });
   const { getColumnWidth, handleResizeUpdateCallback, handleResizeCallback } =
     useColumnResizer({

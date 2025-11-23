@@ -1,10 +1,10 @@
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import { RowData } from "@/row/types.ts";
 
 export interface DataLoadOptions {
   offset: number;
   limit: number;
-  store: TableStore;
+  store: Store;
 }
 
 export interface TableMeta {

@@ -1,5 +1,5 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, InferPersist, TableState } from "@/module/mod.ts";
+import { Command, InferPersist, State } from "@xmod/mod.ts";
 import { RowData } from "./types.ts";
 
 type RowsState = {
@@ -10,8 +10,8 @@ type RowsState = {
   };
 };
 
-declare module "@/module/types.ts" {
-  interface TableState extends RowsState {}
+declare module "@xmod/types.ts" {
+  interface State extends RowsState {}
 }
 
 export const STICKY_TOP_ROWS_SET = "STICKY_TOP_ROWS_SET";
@@ -51,7 +51,7 @@ export function persist(state: RowsState): InferPersist<RowsState> {
   };
 }
 
-export function mutate(state: TableState, command: StickyRowsCommand) {
+export function mutate(state: State, command: StickyRowsCommand) {
   switch (command.type) {
     case STICKY_TOP_ROWS_SET:
       state.rows.sticky_top.value = command.payload;

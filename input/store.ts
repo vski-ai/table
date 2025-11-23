@@ -1,5 +1,5 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/module/mod.ts";
+import { Command, State } from "@xmod/mod.ts";
 
 type KeyboardState = {
   keyboard: {
@@ -17,8 +17,8 @@ type KeyboardState = {
 
 type InputState = KeyboardState;
 
-declare module "@/module/types.ts" {
-  interface TableState extends InputState {}
+declare module "@xmod/types.ts" {
+  interface State extends InputState {}
 }
 
 export function state(): InputState {
@@ -37,8 +37,8 @@ export function state(): InputState {
   };
 }
 
-export function persist(_: TableState) {
+export function persist(_: State) {
   return {};
 }
 
-export function mutate(_: TableState, __: Command) {}
+export function mutate(_: State, __: Command) {}

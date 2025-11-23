@@ -2,12 +2,8 @@ export * from "./types.ts";
 export * from "./components/RowSorter.tsx";
 export * from "./createFrontendSorter.ts";
 
-import {
-  BeforeInitCallback,
-  BeforeLoadCallback,
-  ITableModule,
-  ModuleInitCallback,
-} from "@/module/mod.ts";
+import { BeforeInitCallback, ModuleInitCallback, XModule } from "@xmod/mod.ts";
+import type { BeforeLoadCallback } from "@/table/types.ts";
 import { renderSorter } from "./components/RowSorter.tsx";
 import { SortState } from "./types.ts";
 import * as store from "./store.ts";
@@ -34,7 +30,7 @@ const beforeLoad: BeforeLoadCallback = ({ options, store }) => {
   return options;
 };
 
-export const SortingModule: ITableModule = {
+export const SortingModule: XModule = {
   name: "sorting",
   beforeInit,
   beforeLoad,

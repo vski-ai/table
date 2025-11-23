@@ -1,6 +1,6 @@
-import { computed, Signal, signal } from "@preact/signals";
-import { Command, TableState } from "@/module/mod.ts";
-import { ContextMenu, ContextMenuItem } from "./types.ts";
+import type { Command, State } from "@xmod/types.ts";
+import type { ContextMenu, ContextMenuItem } from "./types.ts";
+import { computed, type Signal, signal } from "@preact/signals";
 
 export const PLACEMENT_TARGET_ACESSOR = Symbol("placement");
 
@@ -18,8 +18,8 @@ type ContextMenuState = {
   };
 };
 
-declare module "@/module/types.ts" {
-  interface TableState extends ContextMenuState {}
+declare module "@xmod/types.ts" {
+  interface State extends ContextMenuState {}
 }
 
 export const CONTEXT_MENU_ADD_ITEM = "CONTEXT_MENU_ADD_ITEM";
@@ -47,14 +47,17 @@ export function state(): ContextMenuState {
   const contextMenu = computed<ContextMenu>(() => {
     const items = Object.values(contextMenuItems.value);
 
-    const itemsByParent = items.reduce((acc, item) => {
-      const parent = item.parent || "main";
-      if (!acc[parent]) {
-        acc[parent] = [];
-      }
-      acc[parent].push(item);
-      return acc;
-    }, {} as Record<string, ContextMenuItem[]>);
+    const itemsByParent = items.reduce(
+      (acc, item) => {
+        const parent = item.parent || "main";
+        if (!acc[parent]) {
+          acc[parent] = [];
+        }
+        acc[parent].push(item);
+        return acc;
+      },
+      {} as Record<string, ContextMenuItem[]>,
+    );
 
     const buildMenu = (menuId: string): ContextMenu => {
       const menuItems = itemsByParent[menuId] || [];
@@ -84,19 +87,16 @@ export function state(): ContextMenuState {
     context_menu: {
       items: contextMenuItems,
       menu: contextMenu,
-      [PLACEMENT_TARGET_ACESSOR]: [
-        PlacementBody,
-        PlacementHeader,
-      ],
+      [PLACEMENT_TARGET_ACESSOR]: [PlacementBody, PlacementHeader],
     },
   };
 }
 
-export function persist(_: TableState) {
+export function persist(_: State) {
   return {};
 }
 
-export function mutate(state: TableState, command: ContextMenuAddCommand) {
+export function mutate(state: State, command: ContextMenuAddCommand) {
   switch (command.type) {
     case CONTEXT_MENU_ADD_ITEM: {
       state.context_menu.items.value = {

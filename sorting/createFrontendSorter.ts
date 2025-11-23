@@ -1,5 +1,5 @@
 import { RowData } from "@/row/types.ts";
-import { TableStore } from "@/module/mod.ts";
+import { Store } from "@xmod/mod.ts";
 import { SortState } from "./types.ts";
 
 const sortFn = (sorting: SortState) => (a: RowData, b: RowData) => {
@@ -20,7 +20,7 @@ const sortFn = (sorting: SortState) => (a: RowData, b: RowData) => {
  * is a bit tricky - we have to rebuilt tree and visit branches
  * recursevely.
  */
-const sortGroup = (data: RowData[], store: TableStore): RowData[] => {
+const sortGroup = (data: RowData[], store: Store): RowData[] => {
   const sorting = store.state.sorting.value;
   const groupSorting = store.state.grouping?.sorting?.value ?? {};
 
@@ -64,9 +64,12 @@ export function createFrontendSorter() {
   let lastSorting: SortState | undefined;
   let lastLeafSorting: Record<string, SortState> | undefined;
   let lastResult: RowData[] | undefined;
-  return function sorter({ data, store }: {
+  return function sorter({
+    data,
+    store,
+  }: {
     data: RowData[];
-    store: TableStore;
+    store: Store;
   }): RowData[] {
     const sorting = store.state.sorting.value;
     const groupSorting = store.state.grouping?.sorting?.value ?? {};

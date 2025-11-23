@@ -2,14 +2,14 @@ import { useMemo } from "preact/hooks";
 import { useRowHeights } from "@/row/hooks/useRowHeights.ts";
 import { useVariableVirtualizer } from "./useVariableVirtualizer.ts";
 
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import { DataLoadCallback } from "../types.ts";
 
 import { useLoader } from "./useLoader.ts";
 import { useRowKey } from "@/columns/hooks/useRowKey.ts";
 
 interface DataFetcherProps {
-  store: TableStore;
+  store: Store;
   rowHeight: number;
   buffer?: number;
   onDataLoad: DataLoadCallback;

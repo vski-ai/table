@@ -1,4 +1,4 @@
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import { MutableRef, useCallback, useEffect, useRef } from "preact/hooks";
 import { useGloalMouse } from "./useGlobalMouse.ts";
 import { useGloalKb } from "./useGlobalKb.ts";
@@ -6,7 +6,7 @@ import { useGloalKb } from "./useGlobalKb.ts";
 const BUFFER_SIZE = 5;
 
 type RowKbProps = {
-  store: TableStore;
+  store: Store;
   tableRef: MutableRef<HTMLTableElement | null>;
 };
 

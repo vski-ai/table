@@ -1,10 +1,10 @@
 import { useCallback } from "preact/hooks";
 
-import { TableStore } from "@/module/mod.ts";
+import { Store } from "@xmod/mod.ts";
 import { COLUMN_WIDTHS_SET, ColumnWidthCommand } from "../store.ts";
 
 interface ColumnResizerProps {
-  store: TableStore;
+  store: Store;
 }
 
 export function useColumnResizer({ store }: ColumnResizerProps) {

@@ -1,5 +1,5 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, InferPersist, TableState } from "@/module/mod.ts";
+import { Command, InferPersist, State } from "@xmod/mod.ts";
 import { RowData } from "@/row/types.ts";
 
 type GetCellValueOpts = { row: RowData; column: string };
@@ -11,9 +11,9 @@ type EditingStore = {
   };
 };
 
-declare module "@/module/types.ts" {
-  interface TableState extends EditingStore {}
-  interface TableStore {
+declare module "@xmod/types.ts" {
+  interface State extends EditingStore {}
+  interface Store {
     getCurrentRowValue: ({ row }: { row: RowData }) => RowData;
     getCurrentCellValue: (opts: GetCellValueOpts) => string;
     isCellModified: (opts: GetCellValueOpts) => boolean;
@@ -53,11 +53,11 @@ export function state(persist: InferPersist<EditingStore>): EditingStore {
   };
 }
 
-export function persist(_: TableState) {
+export function persist(_: State) {
   return {};
 }
 
-export function mutate(state: TableState, command: EditingCommandType) {
+export function mutate(state: State, command: EditingCommandType) {
   switch (command.type) {
     case CELL_EDITING_SET:
       state.editing.cell.value = command.payload;
@@ -77,7 +77,7 @@ export function mutate(state: TableState, command: EditingCommandType) {
   }
 }
 
-export function methods(state: TableState) {
+export function methods(state: State) {
   return {
     getCurrentCellValue({ row, column }: GetCellValueOpts) {
       return state.editing.rows.value[row.id]?.[column] ?? row[column];

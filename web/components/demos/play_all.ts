@@ -1,10 +1,10 @@
 import { MutableRef } from "preact/hooks";
 import { delay, end, scrollX, scrollY, start } from "./common.ts";
-import { TableStore } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
 import { navigation } from "./navigation.ts";
 
 export async function playAll(
-  store: TableStore,
+  store: Store,
   scrollContainer: MutableRef<HTMLElement>,
 ) {
   if (!scrollContainer.current) {
@@ -57,12 +57,12 @@ export async function playAll(
   store.state.data_type.options.value = {
     ...store.state.data_type.options.value,
     Total: {
-      "minimumFractionDigits": 3,
-      "maximumFractionDigits": 3,
-      "locale": "en-US",
-      "style": "currency",
-      "currencyDisplay": "symbol",
-      "currency": "USD",
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
+      locale: "en-US",
+      style: "currency",
+      currencyDisplay: "symbol",
+      currency: "USD",
     },
   };
 
@@ -92,9 +92,9 @@ export async function playAll(
   store.state.data_type.options.value = {
     ...store.state.data_type.options.value,
     "Order Date": {
-      "locale": "en-GB",
-      "dateStyle": "medium",
-      "timeStyle": "medium",
+      locale: "en-GB",
+      dateStyle: "medium",
+      timeStyle: "medium",
     },
   };
   store.state.data_type.column.value = {
@@ -141,20 +141,20 @@ export async function playAll(
   store.state.data_type.options.value = {
     ...store.state.data_type.options.value,
     Price: {
-      "minimumFractionDigits": 2,
-      "maximumFractionDigits": 2,
-      "locale": "en-US",
-      "style": "currency",
-      "currencyDisplay": "symbol",
-      "currency": "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+      locale: "en-US",
+      style: "currency",
+      currencyDisplay: "symbol",
+      currency: "USD",
     },
     Discount: {
-      "minimumFractionDigits": 2,
-      "maximumFractionDigits": 2,
-      "locale": "en-US",
-      "style": "currency",
-      "currencyDisplay": "symbol",
-      "currency": "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+      locale: "en-US",
+      style: "currency",
+      currencyDisplay: "symbol",
+      currency: "USD",
     },
   };
   store.state.data_type.column.value = {

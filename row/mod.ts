@@ -7,9 +7,9 @@ export * from "./types.ts";
 import {
   AfterLoadCallback,
   BeforeInitCallback,
-  ITableModule,
   ModuleInitCallback,
-} from "@/module/types.ts";
+  XModule,
+} from "@xmod/types.ts";
 import { addMenuItems } from "@/ctxmenu/utils/addMenuItems.ts";
 import {
   bottomStickRowsRenderCallback,
@@ -51,7 +51,7 @@ const afterLoad: AfterLoadCallback = ({ store, res }) => {
   return res;
 };
 
-export const RowsModule: ITableModule = {
+export const RowsModule: XModule = {
   name: "rows",
   beforeInit,
   onInit,

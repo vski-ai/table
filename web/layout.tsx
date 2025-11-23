@@ -14,6 +14,17 @@ import { VskiTableLogo } from "./icons/VskiTableLogo.tsx";
 
 import { ui } from "./state.ts";
 
+function AiBadge() {
+  return (
+    <span class="text-white badge badge-xs bg-blue-500 border-none absolute dense:hidden">
+      <span class="text-white badge badge-xs bg-sky-700 border-none -ml-3">
+        ai
+      </span>
+      $
+    </span>
+  );
+}
+
 export default function ({ children }: { children: any }) {
   return (
     <>
@@ -47,8 +58,7 @@ export default function ({ children }: { children: any }) {
               <a href="/core" class="aria-[current=page]:active">
                 <TableIcon />
                 Table Engine{" "}
-                <span class="badge badge-xs bg-sky-500 absolute dense:hidden">
-                  {/*<span class="badge badge-xs badge-accent -ml-3"></span>*/}
+                <span class="badge badge-xs border-none text-white bg-sky-500 absolute dense:hidden w-11">
                   free
                 </span>
               </a>
@@ -56,25 +66,14 @@ export default function ({ children }: { children: any }) {
             <li>
               <a href="/flat" class="aria-[current=page]:active">
                 <PenIcon />
-                AI Edit Mode{" "}
-                <span class="badge badge-xs bg-blue-500 border-none absolute dense:hidden">
-                  <span class="badge badge-xs bg-sky-500 border-none -ml-3">
-                    ai
-                  </span>
-                  $
-                </span>
+                Edit Mode <AiBadge />
               </a>
             </li>
             <li>
               <a href="/groupable" class="aria-[current=page]:active">
                 <ChartIcon />
                 Tree Engine
-                <span class="badge badge-xs bg-blue-500 border-none absolute dense:hidden">
-                  <span class="badge badge-xs bg-sky-500 border-none -ml-3">
-                    ai
-                  </span>
-                  $
-                </span>
+                <AiBadge />
               </a>
             </li>
             <li>
@@ -85,12 +84,7 @@ export default function ({ children }: { children: any }) {
               >
                 <KanbanIcon />
                 Kanban
-                <span class="badge badge-xs bg-blue-500 border-none absolute dense:hidden">
-                  <span class="badge badge-xs bg-sky-500 border-none -ml-3">
-                    ai
-                  </span>
-                  $
-                </span>
+                <AiBadge />
               </a>
             </li>
             <li class="pointer-events-none opacity-50">
@@ -100,13 +94,8 @@ export default function ({ children }: { children: any }) {
                 class="aria-[current=page]:active disabled"
               >
                 <WorkflowIcon />
-                Automate
-                <span class="badge badge-xs bg-blue-500 border-none absolute dense:hidden">
-                  <span class="badge badge-xs bg-sky-500 border-none -ml-3">
-                    ai
-                  </span>
-                  $
-                </span>
+                Workflows
+                <AiBadge />
               </a>
             </li>
             <li class="pointer-events-none opacity-50">
@@ -117,7 +106,7 @@ export default function ({ children }: { children: any }) {
               >
                 <PlugZapIcon />
                 Agentic flows
-                <span class="badge badge-xs badge-accent absolute dense:hidden">
+                <span class="badge badge-xs badge-accent border-none text-white w-11 absolute dense:hidden">
                   soon
                 </span>
               </a>

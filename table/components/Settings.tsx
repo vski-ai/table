@@ -1,17 +1,17 @@
-import { CommonRendererCallback, TableStore } from "@/module/types.ts";
+import { getAddons, type Store } from "@xmod/mod.ts";
+import { CommonRendererCallback } from "../types.ts";
 import CogIcon from "lucide-react/dist/esm/icons/cog.js";
 import { Select } from "@/common/Select.tsx";
 import { StyleSettings } from "@/styling/components/StyleSettings.tsx";
 import { PxSlider } from "./PxSlider.tsx";
-import { useAddons } from "@/module/mod.ts";
 import { Dialog } from "@/common/Dialog.tsx";
 
 type TableSettingsProps = {
-  store: TableStore;
+  store: Store;
 };
 
 export const Settings = ({ store }: TableSettingsProps) => {
-  const addons = useAddons({ store });
+  const addons = getAddons({ store });
 
   return (
     <Dialog
@@ -62,6 +62,6 @@ export const Settings = ({ store }: TableSettingsProps) => {
   );
 };
 
-export const renderTableSettings: CommonRendererCallback = ({ store }) => {
+export const renderSettings: CommonRendererCallback = ({ store }) => {
   return <Settings store={store} />;
 };

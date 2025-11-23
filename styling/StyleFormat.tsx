@@ -1,5 +1,5 @@
-import { TableStore } from "@/module/types.ts";
-import { CommonRendererCallback } from "@/module/mod.ts";
+import { Store } from "@xmod/types.ts";
+import { CommonRendererCallback } from "@xmod/mod.ts";
 
 const ROOT_SEL = (id: string) => `table[x-id="vt_${id}"] `;
 const ROW_SEL = (root: string, rowId: string) =>
@@ -11,7 +11,7 @@ const CELL_SEL = (root: string, rowId: string, column: string) =>
   ` tr[data-row-id="${rowId}"] td[data-column-name="${column}"] .vt-fmt `;
 
 export interface StyleFormatProps {
-  store: TableStore;
+  store: Store;
 }
 
 export function StyleFormat({ store }: StyleFormatProps) {

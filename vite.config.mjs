@@ -6,4 +6,9 @@ import deno from "@deno/vite-plugin";
 export default defineConfig({
   plugins: [deno(), tailwindcss(), preact()],
   publicDir: "web/public",
+  resolve: {
+    alias: {
+      "npm:@preact/signals@^2.5.1": "@preact/signals",
+    },
+  },
 });

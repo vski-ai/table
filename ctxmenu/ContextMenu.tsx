@@ -7,14 +7,14 @@ import {
   useRef,
 } from "preact/hooks";
 import { computePosition, flip, shift } from "@floating-ui/dom";
-import { TableStore } from "@/module/types.ts";
-import { CommonRendererCallback } from "@/module/types.ts";
+import { Store } from "@xmod/types.ts";
+import { CommonRendererCallback } from "@xmod/types.ts";
 import { MenuContext, MenuItem } from "./types.ts";
 import BackIcon from "lucide-react/dist/esm/icons/chevron-left.js";
 import { useMenuPlacement } from "./hooks/useMenuPlacement.ts";
 
 interface ContextMenuProps {
-  store: TableStore;
+  store: Store;
   target?: MutableRef<HTMLElement>;
 }
 
@@ -67,7 +67,9 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
   const { open, close, push, pop } = useContextMenu();
 
   const currentMenu = contextMenuState.value.history.length > 0
-    ? contextMenuState.value.history[contextMenuState.value.history.length - 1]
+    ? contextMenuState.value.history[
+      contextMenuState.value.history.length - 1
+    ]
     : null;
   const isSubmenu = contextMenuState.value.history.length > 1;
   const contextMenuOpacity = useSignal(0);
@@ -186,7 +188,8 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
 
   useLayoutEffect(() => {
     if (
-      contextMenuState.value.isOpen && menuRef.current &&
+      contextMenuState.value.isOpen &&
+      menuRef.current &&
       contextMenuState.value.virtualElement
     ) {
       computePosition(contextMenuState.value.virtualElement, menuRef.current, {
@@ -208,7 +211,8 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
 
   const orderedKeys = useRef<string[]>([]);
   useEffect(() => {
-    orderedKeys.current = "qwertasdfgzxcvyuiophjklbnm".toLocaleUpperCase()
+    orderedKeys.current = "qwertasdfgzxcvyuiophjklbnm"
+      .toLocaleUpperCase()
       .split("");
   }, [
     currentMenu,
@@ -233,9 +237,11 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
         class="vt-menu"
         tabIndex={0}
         onKeyPress={(ev) => {
-          (ev.currentTarget.querySelector(
-            `[data-kbd=${ev.key.toUpperCase()}]`,
-          ) as HTMLButtonElement)?.click();
+          (
+            ev.currentTarget.querySelector(
+              `[data-kbd=${ev.key.toUpperCase()}]`,
+            ) as HTMLButtonElement
+          )?.click();
         }}
       >
         {isSubmenu && (
@@ -253,74 +259,80 @@ export function ContextMenu({ store, target }: ContextMenuProps) {
           </div>
         )}
         <ul>
-          {currentMenu.items.map((item: MenuItem, index: number) => (
-            !item.visibility(context.value) ? null : (
-              item.action
-                ? (
-                  <li key={index} class="relative">
-                    <button
-                      type="button"
-                      class="p-2 ctx-menu-item"
-                      data-menu-index={index}
-                      data-kbd={orderedKeys.current.at(0)}
-                      tabIndex={0}
-                      onMouseEnter={() => highlight(item)}
-                      onFocus={() => highlight(item)}
-                      onBlur={() => deHightlight(item)}
-                      onMouseLeave={() => deHightlight(item)}
-                      onKeyDown={(ev) => {
-                        if (ev.key === "ArrowUp" || ev.key === "ArrowDown") {
-                          ev.preventDefault();
-                          ev.stopPropagation();
-                          const next = (ev.currentTarget.parentNode
-                            ?.nextSibling as HTMLLIElement)?.querySelector(
-                              "button.ctx-menu-item",
-                            ) as HTMLButtonElement;
-                          const prev = (ev.currentTarget.parentNode
-                            ?.previousSibling as HTMLLIElement)
-                            ?.querySelector(
-                              "button.ctx-menu-item",
-                            ) as HTMLButtonElement;
-                          if (ev.key === "ArrowUp") {
-                            prev?.focus();
-                            return;
-                          }
-                          if (ev.key === "ArrowDown") {
-                            next?.focus();
-                          }
+          {currentMenu.items.map((item: MenuItem, index: number) =>
+            !item.visibility(context.value)
+              ? null
+              : item.action
+              ? (
+                <li key={index} class="relative">
+                  <button
+                    type="button"
+                    class="p-2 ctx-menu-item"
+                    data-menu-index={index}
+                    data-kbd={orderedKeys.current.at(0)}
+                    tabIndex={0}
+                    onMouseEnter={() => highlight(item)}
+                    onFocus={() => highlight(item)}
+                    onBlur={() => deHightlight(item)}
+                    onMouseLeave={() => deHightlight(item)}
+                    onKeyDown={(ev) => {
+                      if (ev.key === "ArrowUp" || ev.key === "ArrowDown") {
+                        ev.preventDefault();
+                        ev.stopPropagation();
+                        const next = (
+                          ev.currentTarget.parentNode
+                            ?.nextSibling as HTMLLIElement
+                        )?.querySelector(
+                          "button.ctx-menu-item",
+                        ) as HTMLButtonElement;
+                        const prev = (
+                          ev.currentTarget.parentNode
+                            ?.previousSibling as HTMLLIElement
+                        )?.querySelector(
+                          "button.ctx-menu-item",
+                        ) as HTMLButtonElement;
+                        if (ev.key === "ArrowUp") {
+                          prev?.focus();
+                          return;
                         }
-                      }}
-                      onClick={(e) => {
-                        deHightlight();
-                        e.preventDefault();
-                        e.stopPropagation();
-                        if (item.submenu?.items?.length) {
-                          push(item.submenu);
-                          menuRef.current?.focus();
-                        } else if (item.action) {
-                          item.action(context.value);
-                          close();
+                        if (ev.key === "ArrowDown") {
+                          next?.focus();
                         }
-                      }}
-                    >
-                      {item.label(context.value)}
-                      <small class="kbd" style={{ fontSize: ".7em" }}>
-                        {orderedKeys.current.shift()}
-                      </small>
-                    </button>
-                  </li>
-                )
-                : item.label(context.value)
-            )
-          ))}
+                      }
+                    }}
+                    onClick={(e) => {
+                      deHightlight();
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (item.submenu?.items?.length) {
+                        push(item.submenu);
+                        menuRef.current?.focus();
+                      } else if (item.action) {
+                        item.action(context.value);
+                        close();
+                      }
+                    }}
+                  >
+                    {item.label(context.value)}
+                    <small class="kbd" style={{ fontSize: ".7em" }}>
+                      {orderedKeys.current.shift()}
+                    </small>
+                  </button>
+                </li>
+              )
+              : (
+                item.label(context.value)
+              )
+          )}
         </ul>
       </div>
     </>
   );
 }
 
-export const contextMenuRenderCallback: CommonRendererCallback = (
-  { store, ref },
-) => {
+export const contextMenuRenderCallback: CommonRendererCallback = ({
+  store,
+  ref,
+}) => {
   return <ContextMenu store={store} target={ref} />;
 };

@@ -1,16 +1,16 @@
-import { TableStore } from "@/module/mod.ts";
-import { useAddons } from "@/module/mod.ts";
+import { Store } from "@xmod/mod.ts";
+import { getAddons } from "@xmod/mod.ts";
 import { useTableColumnStyle } from "../hooks/useTableColumnStyle.ts";
 import { useOrderedColumns } from "../hooks/useOrderedColumns.ts";
 import { Column } from "./Column.tsx";
 
 interface HeaderProps {
-  store: TableStore;
+  store: Store;
   loading: boolean;
 }
 
 export function Header({ store, loading }: HeaderProps) {
-  const addons = useAddons({ store });
+  const addons = getAddons({ store });
   const columnsInOrder = useOrderedColumns({ store });
   const { style } = useTableColumnStyle({ store });
 

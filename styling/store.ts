@@ -1,5 +1,5 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, InferPersist, TableState } from "@/module/mod.ts";
+import { Command, InferPersist, State } from "@xmod/mod.ts";
 import { CellStyle } from "./types.ts";
 
 type CSSStyleObject = Record<string, string | undefined>;
@@ -13,8 +13,8 @@ type StylesState = {
   };
 };
 
-declare module "@/module/types.ts" {
-  interface TableState extends StylesState {}
+declare module "@xmod/types.ts" {
+  interface State extends StylesState {}
 }
 
 export const TABLE_STYLE_SET = "TABLE_STYLE_SET";
@@ -97,7 +97,7 @@ export function state(persist: InferPersist<StylesState>): StylesState {
   };
 }
 
-export function persist(state: TableState): InferPersist<StylesState> {
+export function persist(state: State): InferPersist<StylesState> {
   return {
     styles: {
       table: state.styles.table.value,
@@ -108,7 +108,7 @@ export function persist(state: TableState): InferPersist<StylesState> {
   };
 }
 
-export function mutate(state: TableState, command: StylingCommandType) {
+export function mutate(state: State, command: StylingCommandType) {
   switch (command.type) {
     case TABLE_STYLE_SET:
       state.styles.table.value = {
@@ -166,8 +166,8 @@ export function mutate(state: TableState, command: StylingCommandType) {
       break;
     case CELL_STYLE_RESET:
       {
-        const { [command.payload.rowKey]: row, ...rest } = state.styles.cells
-          .value;
+        const { [command.payload.rowKey]: row, ...rest } =
+          state.styles.cells.value;
         const { [command.payload.columnId]: _, ...restRow } = row;
         state.styles.cells.value = {
           ...rest,

@@ -1,5 +1,5 @@
 import { Signal, signal } from "@preact/signals";
-import { Command, InferPersist } from "@/module/mod.ts";
+import { Command, InferPersist } from "@xmod/mod.ts";
 
 type TableViewState = {
   table: {
@@ -9,8 +9,8 @@ type TableViewState = {
   };
 };
 
-declare module "@/module/types.ts" {
-  interface TableState extends TableViewState {}
+declare module "@xmod/mod.ts" {
+  interface State extends TableViewState {}
 }
 
 export const SET_DEFAULT_ROW_HEIGHT = "SET_DEFAULT_ROW_HEIGHT";

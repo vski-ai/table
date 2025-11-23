@@ -1,10 +1,10 @@
 import * as KeyboardStore from "./store.ts";
 
-import { ITableModule, ModuleInitCallback } from "@/module/types.ts";
+import { ModuleInitCallback, XModule } from "@xmod/types.ts";
 
 const onInit: ModuleInitCallback = () => {};
 
-export const InputModule: ITableModule = {
+export const InputModule: XModule = {
   name: "keyboard",
   onInit,
   store: KeyboardStore,

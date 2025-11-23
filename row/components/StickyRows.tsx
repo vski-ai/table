@@ -1,11 +1,11 @@
-import { CommonRendererCallback } from "@/module/types.ts";
-import { TableStore } from "@/module/types.ts";
+import { CommonRendererCallback } from "@xmod/types.ts";
+import { Store } from "@xmod/types.ts";
 import { useTableColumnStyle } from "@/columns/hooks/useTableColumnStyle.ts";
 import { useRenderRowCallback } from "./Row.tsx";
 import { RowPadding } from "./RowPadding.tsx";
 
 interface StickyRowsProps {
-  store: TableStore;
+  store: Store;
 }
 
 export const StickyTopRows = ({ store }: StickyRowsProps) => {
@@ -39,9 +39,9 @@ export const StickyTopRows = ({ store }: StickyRowsProps) => {
   );
 };
 
-export const topStickRowsRenderCallback: CommonRendererCallback = (
-  { store },
-) => {
+export const topStickRowsRenderCallback: CommonRendererCallback = ({
+  store,
+}) => {
   return <StickyTopRows store={store} />;
 };
 
@@ -71,8 +71,8 @@ export const StickyBottomRows = ({ store }: StickyRowsProps) => {
   );
 };
 
-export const bottomStickRowsRenderCallback: CommonRendererCallback = (
-  { store },
-) => {
+export const bottomStickRowsRenderCallback: CommonRendererCallback = ({
+  store,
+}) => {
   return <StickyBottomRows store={store} />;
 };

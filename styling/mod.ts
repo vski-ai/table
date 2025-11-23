@@ -1,8 +1,8 @@
 import {
   BeforeInitCallback,
-  ITableModule,
   ModuleInitCallback,
-} from "@/module/types.ts";
+  XModule,
+} from "@xmod/types.ts";
 import { addMenuItems } from "@/ctxmenu/mod.ts";
 import { renderStyleFormat } from "./StyleFormat.tsx";
 import { MenuItems } from "./menu.tsx";
@@ -18,7 +18,7 @@ const onInit: ModuleInitCallback = ({ store }) => {
   });
 };
 
-export const StylingModule: ITableModule = {
+export const StylingModule: XModule = {
   name: "styling",
   store: Store,
   beforeInit,

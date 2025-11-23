@@ -1,4 +1,4 @@
-import { TableStore } from "@/module/store/types.ts";
+import { Store } from "@xmod/types.ts";
 import { ComponentChildren } from "preact";
 
 export interface ContextMenuItem {
@@ -17,7 +17,7 @@ export interface MenuContext {
   rowId?: string;
   index?: string;
   placement?: string;
-  store: TableStore;
+  store: Store;
 }
 
 export interface MenuItem {
