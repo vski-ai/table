@@ -13,7 +13,9 @@ export function Header({ store, loading }: HeaderProps) {
   const addons = getAddons({ store });
   const columnsInOrder = useOrderedColumns({ store });
   const { style } = useTableColumnStyle({ store });
-
+  const classes = addons.headerclasses.string({
+    store,
+  });
   return (
     <div
       style={{
@@ -25,19 +27,13 @@ export function Header({ store, loading }: HeaderProps) {
       <table
         style={style}
         x-id={`vt_${store.state.tableId}`}
-        class="vt vt-header"
+        class={"vt vt-header " + classes}
         tabIndex={-1}
       >
         <thead id="vt-main-head">
           {loading
             ? (
-              <tr>
-                {new Array(30).fill(0).map((_, i) => (
-                  <th class="vt-col col-loading" key={i} style={{ width: 150 }}>
-                    <div class="vt-header-skeleton"></div>
-                  </th>
-                ))}
-              </tr>
+              addons.headerskeleton.at(0)?.()
             )
             : (
               <tr>

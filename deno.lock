@@ -3,7 +3,7 @@
   "specifiers": {
     "jsr:@david/code-block-writer@^13.0.3": "13.0.3",
     "jsr:@deno/dnt@~0.42.3": "0.42.3",
-    "jsr:@nesterow/xmod@~0.1.7": "0.1.7",
+    "jsr:@nesterow/xmod@~0.1.8": "0.1.8",
     "jsr:@std/assert@1": "1.0.16",
     "jsr:@std/fmt@1": "1.0.8",
     "jsr:@std/fs@1": "1.0.20",
@@ -44,8 +44,8 @@
         "jsr:@ts-morph/bootstrap"
       ]
     },
-    "@nesterow/xmod@0.1.7": {
-      "integrity": "868eb78aee6339f80cd443be231f6e5878a647f687f69f6e0540081d28705f92",
+    "@nesterow/xmod@0.1.8": {
+      "integrity": "6e488c88f5ac992b3cb92f3c9f48e476616ba79fe97f50a145395e3c8660517f",
       "dependencies": [
         "npm:@preact/signals"
       ]
@@ -2239,7 +2239,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@deno/dnt@~0.42.3",
-      "jsr:@nesterow/xmod@~0.1.7",
+      "jsr:@nesterow/xmod@~0.1.8",
       "jsr:@std/assert@1",
       "npm:@deno/vite-plugin@^1.0.5",
       "npm:@faker-js/faker@^10.1.0",

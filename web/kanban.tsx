@@ -45,7 +45,7 @@ export const KanbanTable = () => {
   };
 
   return (
-    <div class="relative" ref={scrollRef}>
+    <div class="relative mt-12" ref={scrollRef}>
       <Table onDataLoad={onDataLoad} container={scrollRef} />
     </div>
   );

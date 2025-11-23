@@ -1,16 +1,9 @@
 import type { Store } from "@xmod/types.ts";
-import type { Addon } from "@xmod/types.ts";
 import type { RowData } from "@/row/types.ts";
 import type { DataLoadOptions, DataLoadResult } from "@/fetcher/types.ts";
 import type { MutableRef } from "preact/hooks";
 
 declare module "@xmod/types.ts" {
-  interface Slots {
-    beforetable: Addon<CommonRendererCallback>;
-    aftertable: Addon<CommonRendererCallback>;
-    beforesettings: Addon<CommonRendererCallback>;
-    aftersettings: Addon<CommonRendererCallback>;
-  }
   interface Store {
     scrollContainerRef: MutableRef<HTMLElement>;
   }

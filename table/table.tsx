@@ -1,16 +1,11 @@
 import { Store } from "@xmod/mod.ts";
-import { MutableRef, useRef } from "preact/hooks";
+import { MutableRef, useEffect, useRef } from "preact/hooks";
 import { DataLoadCallback } from "@/fetcher/types.ts";
 import { useDataFetcher } from "@/fetcher/hooks/useDataFetcher.ts";
 import { getAddons } from "@xmod/mod.ts";
 import { Header } from "@/columns/components/Header.tsx";
 import { useTableColumnStyle } from "@/columns/hooks/useTableColumnStyle.ts";
-import {
-  RowData,
-  RowPadding,
-  RowSkeleton,
-  useRenderRowCallback,
-} from "@/row/mod.ts";
+import { RowData, RowPadding, useRenderRowCallback } from "@/row/mod.ts";
 
 import { useTableInput } from "@/input/hooks/useTableInput.ts";
 
@@ -50,6 +45,10 @@ export function Table(props: TableProps) {
     { row: "bottom", index: -10 },
   ];
 
+  const classes = addons.tableclasses.string({
+    store,
+  });
+
   const initializing = !store.state.fetcher.is_initialized.value;
 
   return (
@@ -63,13 +62,13 @@ export function Table(props: TableProps) {
       <table
         style={style}
         x-id={`vt_${store.state.tableId}`}
-        class="vt vt-main"
+        class={"vt vt-main " + classes}
         ref={tableRef}
         tabIndex={-1}
         {...kb}
       >
         <tbody>
-          {initializing && <RowSkeleton />}
+          {initializing && addons.tableskeleton.at(0)?.()}
 
           {renderRows.map((item, i) => {
             if (item.row === "top") {

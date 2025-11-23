@@ -69,7 +69,7 @@ export function Column({ column, children, store }: ColumnProps) {
   const { left, right, isSticky, isStickyLeft, isStickyRight } =
     useStickyColumn({ store, column });
 
-  const classes = addons.headerclasses.string({
+  const classes = addons.thclasses.string({
     column,
     store,
   });
