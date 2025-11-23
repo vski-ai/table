@@ -8,6 +8,7 @@ interface DraggableProps {
   onTransfer?: (draggedId: string, targetId: string) => void;
   id: string;
   store: Store;
+  dropable?: boolean;
 }
 
 export const Draggable = ({
@@ -15,6 +16,7 @@ export const Draggable = ({
   onTransfer,
   id,
   store,
+  dropable = true,
 }: DraggableProps) => {
   const dragOver = useSignal(false);
   const globalActive = store.state.drag.active;
@@ -30,6 +32,7 @@ export const Draggable = ({
   };
 
   const onDragOver = (e: TargetedDragEvent<HTMLElement>) => {
+    if (!dropable) return;
     e.preventDefault();
     e.stopImmediatePropagation();
     dragOver.value = true;

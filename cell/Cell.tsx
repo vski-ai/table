@@ -27,6 +27,10 @@ export const Cell = ({ store, column, row }: CellProps) => {
     store,
   });
 
+  const attributes = addons.columnattributes.data({
+    column,
+    store,
+  });
   return (
     <td
       key={column}
@@ -40,14 +44,17 @@ export const Cell = ({ store, column, row }: CellProps) => {
         zIndex: isSticky ? 1 : 0,
         position: isSticky ? "sticky" : undefined,
       }}
-      class={cn({
-        "vt-cell": true,
-        "stick-left": isStickyLeft,
-        "stick-right": isStickyRight,
-        multifocus: isSelected,
-      }) +
+      class={
+        cn({
+          "vt-cell": true,
+          "stick-left": isStickyLeft,
+          "stick-right": isStickyRight,
+          multifocus: isSelected,
+        }) +
         ` ` +
-        classes}
+        classes
+      }
+      {...attributes}
       {...keyBindings}
     >
       <div class="vt-cell-wrap" title={row[column]?.toString()}>

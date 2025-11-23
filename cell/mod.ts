@@ -1,4 +1,3 @@
-export * from "./types.ts";
 export * from "./Cell.tsx";
 import { XModule } from "@xmod/mod.ts";
 import { slots } from "./slots.ts";
