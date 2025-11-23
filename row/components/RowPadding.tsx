@@ -42,7 +42,7 @@ export const RowPadding = ({ padding, name, store }: RowPaddingProps) => {
       {columns.map((col) =>
         store.state.columns.visibility.value[col] === false ? null : (
           <>
-            {addons.beforepadding.render({ store })}
+            {addons.beforepadding.render({} as any)}
             <td
               class="vt-cell"
               style={{
@@ -52,7 +52,6 @@ export const RowPadding = ({ padding, name, store }: RowPaddingProps) => {
               }}
             >
             </td>
-            {addons.afterpadding.render({ store })}
           </>
         )
       )}

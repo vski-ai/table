@@ -58,6 +58,10 @@ export function Header({ store, loading }: HeaderProps) {
                     })}
                   </>
                 ))}
+                {addons.righttableheaders.render({
+                  column: "",
+                  store,
+                })}
               </tr>
             )}
         </thead>

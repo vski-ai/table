@@ -3,11 +3,12 @@ export * from "./components/RowSorter.tsx";
 export * from "./createFrontendSorter.ts";
 
 import {
+  BeforeInitCallback,
   BeforeLoadCallback,
   ITableModule,
   ModuleInitCallback,
 } from "@/module/mod.ts";
-import { headerRenderCallback } from "./components/RowSorter.tsx";
+import { renderSorter } from "./components/RowSorter.tsx";
 import { SortState } from "./types.ts";
 import * as store from "./store.ts";
 
@@ -22,8 +23,8 @@ declare module "@/fetcher/types.ts" {
   }
 }
 
-const onInit: ModuleInitCallback = ({ headerprefixes }) => {
-  headerprefixes.use(headerRenderCallback);
+const beforeInit: BeforeInitCallback = ({ headerprefixes }) => {
+  headerprefixes.use(renderSorter);
 };
 
 const beforeLoad: BeforeLoadCallback = ({ options, store }) => {
@@ -35,7 +36,7 @@ const beforeLoad: BeforeLoadCallback = ({ options, store }) => {
 
 export const SortingModule: ITableModule = {
   name: "sorting",
-  onInit,
+  beforeInit,
   beforeLoad,
   store,
 };

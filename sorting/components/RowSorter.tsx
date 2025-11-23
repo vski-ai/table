@@ -23,7 +23,7 @@ export const RowSorter = ({ column, store }: RowSorterProps) => {
   }
 
   const isLoading = useSignal(false);
-  const state = store.state.sorting.value ?? {};
+  const state = store.state?.sorting?.value ?? {};
 
   const sort = (state: SortState) => {
     store.dispatch<SortSetCommand>({
@@ -86,9 +86,6 @@ export const RowSorter = ({ column, store }: RowSorterProps) => {
   );
 };
 
-export const headerRenderCallback: ColumnRendererCallback = ({
-  column,
-  store,
-}) => {
+export const renderSorter: ColumnRendererCallback = ({ column, store }) => {
   return <RowSorter column={column} store={store} />;
 };

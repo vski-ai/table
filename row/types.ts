@@ -1,3 +1,13 @@
+import type { ComponentChildren } from "preact";
+import type {
+  Addon,
+  ClassResolverCallback,
+  CommonRendererCallback,
+  StyleResolverCallback,
+  WithRef,
+} from "@/module/types.ts";
+import type { TableStore } from "@/module/store/types.ts";
+
 export interface RowData extends Record<string, string | number> {
   id: string | number;
 }
@@ -10,3 +20,28 @@ declare module "@/fetcher/types.ts" {
     };
   }
 }
+
+declare module "@/module/types.ts" {
+  interface ModuleInitOptions {
+    cellprefixes: Addon<CellRendererCallback>;
+    cellsuffixes: Addon<CellRendererCallback>;
+    lefttablecells: Addon<CellRendererCallback>;
+    righttablecells: Addon<CellRendererCallback>;
+    beforepadding: Addon<CommonRendererCallback>;
+    beforecells: Addon<CellRendererCallback>;
+    aftercells: Addon<CellRendererCallback>;
+    rowclasses: Addon<ClassResolverCallback>;
+    rowstyles: Addon<StyleResolverCallback>;
+  }
+}
+
+export type CellRendererCallback =
+  & { columnName?: string }
+  & ((
+    opts: {
+      column: string;
+      row: RowData;
+      store: TableStore;
+      rowIndex?: number;
+    } & WithRef,
+  ) => ComponentChildren);

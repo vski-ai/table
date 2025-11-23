@@ -4,6 +4,7 @@ import {
   ColumnRendererCallback,
   CommonRendererCallback,
   ITableModule,
+  Slots,
   StyleResolverCallback,
 } from "./types.ts";
 import { ADDONS_CONTAINER_ACCESSOR } from "./hooks/private.ts";
@@ -46,10 +47,10 @@ export const buildInModules = [
 
 export const createPluginContainer = (
   store: TableStore,
-  plugins: ITableModule[],
+  modules: ITableModule[],
 ) => {
-  plugins = [...buildInModules, ...plugins];
-  const sortedPlugins = [...plugins].sort((a, b) => {
+  modules = [...buildInModules, ...modules];
+  const sortedPlugins = [...modules].sort((a, b) => {
     if (a.dependencies?.includes(b.name)) {
       return 1;
     }
@@ -59,83 +60,23 @@ export const createPluginContainer = (
     return 0;
   });
 
-  const beforetable = new SortedAddon<CommonRendererCallback>();
-  const insidetable = new SortedAddon<CommonRendererCallback>();
-  const beforesettings = new SortedAddon<CommonRendererCallback>();
-  const aftersettings = new SortedAddon<CommonRendererCallback>();
-  const aftertable = new SortedAddon<CommonRendererCallback>();
-  const headerprefixes = new SortedAddon<ColumnRendererCallback>();
-  const lefttablecells = new SortedAddon<CellRendererCallback>();
-  const beforecells = new SortedAddon<CellRendererCallback>();
-  const aftercells = new SortedAddon<CellRendererCallback>();
-  const cellprefixes = new SortedAddon<CellRendererCallback>();
-  const cellsuffixes = new SortedAddon<CellRendererCallback>();
-  const righttablecells = new SortedAddon<CellRendererCallback>();
-  const lefttableheaders = new SortedAddon<ColumnRendererCallback>();
-  const beforeheaders = new SortedAddon<ColumnRendererCallback>();
-  const afterheaders = new SortedAddon<ColumnRendererCallback>();
-  const righttableheaders = new SortedAddon<ColumnRendererCallback>();
-  const rowclasses = new SortedAddon<ClassResolverCallback>();
-  const columnclasses = new SortedAddon<ClassResolverCallback>();
-  const headerclasses = new SortedAddon<ClassResolverCallback>();
-  const rowstyles = new SortedAddon<StyleResolverCallback>();
-  const beforepadding = new SortedAddon<CommonRendererCallback>();
-  const afterpadding = new SortedAddon<CommonRendererCallback>();
+  const slots = modules.reduce(
+    (acc, val) => ({ ...acc, ...(val.slots?.() ?? {}) }),
+    {},
+  ) as Slots;
+
+  modules.forEach((mod) => mod.beforeInit?.(slots));
 
   setTimeout(async () => {
     for (const plugin of sortedPlugins) {
       plugin.onInit?.({
         store,
-        headerprefixes,
-        lefttablecells,
-        righttablecells,
-        lefttableheaders,
-        righttableheaders,
-        cellprefixes,
-        cellsuffixes,
-        rowclasses,
-        columnclasses,
-        rowstyles,
-        beforetable,
-        insidetable,
-        aftertable,
-        beforesettings,
-        aftersettings,
-        beforecells,
-        aftercells,
-        beforeheaders,
-        afterheaders,
-        beforepadding,
-        afterpadding,
-        headerclasses,
       });
     }
     await new Promise((r) => setTimeout(r, 1));
     for (const plugin of sortedPlugins) {
       plugin.afterInit?.({
         store,
-        headerprefixes,
-        lefttablecells,
-        righttablecells,
-        lefttableheaders,
-        righttableheaders,
-        cellprefixes,
-        cellsuffixes,
-        rowclasses,
-        columnclasses,
-        rowstyles,
-        beforetable,
-        insidetable,
-        aftertable,
-        beforesettings,
-        aftersettings,
-        beforecells,
-        aftercells,
-        beforeheaders,
-        afterheaders,
-        beforepadding,
-        afterpadding,
-        headerclasses,
       });
     }
   }, 0);
@@ -171,28 +112,7 @@ export const createPluginContainer = (
     beforeLoad,
     afterLoad,
     beforeRender,
-    headerprefixes,
-    lefttablecells,
-    righttablecells,
-    lefttableheaders,
-    righttableheaders,
-    cellprefixes,
-    cellsuffixes,
-    rowclasses,
-    columnclasses,
-    rowstyles,
-    beforetable,
-    insidetable,
-    aftertable,
-    beforesettings,
-    aftersettings,
-    beforecells,
-    aftercells,
-    beforeheaders,
-    afterheaders,
-    beforepadding,
-    afterpadding,
-    headerclasses,
+    ...slots,
   };
 
   // @ts-ignore: some privats

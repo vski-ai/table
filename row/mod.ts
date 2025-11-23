@@ -6,6 +6,7 @@ export * from "./types.ts";
 
 import {
   AfterLoadCallback,
+  BeforeInitCallback,
   ITableModule,
   ModuleInitCallback,
 } from "@/module/types.ts";
@@ -19,24 +20,17 @@ import {
   StickyBottomRowsSetCommand,
   StickyTopRowsSetCommand,
 } from "./store.ts";
+import { slots } from "./slots.ts";
 import * as store from "./store.ts";
 
-const onInit: ModuleInitCallback = ({
-  store,
-  aftertable,
-  beforetable,
-}) => {
+const beforeInit: BeforeInitCallback = ({ aftertable, beforetable }) => {
   beforetable.use(topStickRowsRenderCallback);
   aftertable.use(bottomStickRowsRenderCallback);
+};
+const onInit: ModuleInitCallback = ({ store }) => {
   addMenuItems({
     store,
-    items: [
-      Stick,
-      StickTop,
-      StickBottom,
-      StickReset,
-      UnpinRow,
-    ],
+    items: [Stick, StickTop, StickBottom, StickReset, UnpinRow],
   });
 };
 
@@ -59,7 +53,9 @@ const afterLoad: AfterLoadCallback = ({ store, res }) => {
 
 export const RowsModule: ITableModule = {
   name: "rows",
+  beforeInit,
   onInit,
   afterLoad,
   store,
+  slots,
 };

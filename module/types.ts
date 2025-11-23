@@ -6,7 +6,9 @@ import { SortedAddon } from "./components/SortedAddon.ts";
 import { MutableRef } from "preact/hooks";
 import { StoreModule } from "@/module/types.ts";
 
-type WithRef = {
+export type Addon<T extends (...args: any) => any = any> = SortedAddon<T>;
+
+export type WithRef = {
   ref?: MutableRef<HTMLElement>;
 };
 export type ClassResolverCallback = (
@@ -71,46 +73,16 @@ export type BeforeLoadCallback = (
   opts: BeforeLoadOptions,
 ) => Promise<DataLoadOptions> | DataLoadOptions;
 
-type BeforeTable = SortedAddon<CommonRendererCallback>;
-type InsideTable = SortedAddon<CommonRendererCallback>;
-type AfterTable = SortedAddon<CommonRendererCallback>;
-type HeaderPrefixes = SortedAddon<ColumnRendererCallback>;
-type CellPrefixes = SortedAddon<CellRendererCallback>;
-type CellSuffixes = SortedAddon<CellRendererCallback>;
-type LeftTableCells = SortedAddon<CellRendererCallback>;
-type RightTableCells = SortedAddon<CellRendererCallback>;
-type LeftTableHeaders = SortedAddon<ColumnRendererCallback>;
-type RightTableHeaders = SortedAddon<ColumnRendererCallback>;
 type RowClasses = SortedAddon<ClassResolverCallback>;
-type RowStyles = SortedAddon<StyleResolverCallback>;
 
 export interface ModuleInitOptions {
   store: TableStore;
-  headerprefixes: HeaderPrefixes;
-  lefttablecells: LeftTableCells;
-  righttablecells: RightTableCells;
-  beforecells: LeftTableCells;
-  aftercells: LeftTableCells;
-  lefttableheaders: LeftTableHeaders;
-  righttableheaders: RightTableHeaders;
-  beforeheaders: LeftTableHeaders;
-  afterheaders: RightTableHeaders;
-  cellprefixes: CellPrefixes;
-  cellsuffixes: CellSuffixes;
-  rowclasses: RowClasses;
-  columnclasses: RowClasses;
-  headerclasses: RowClasses;
-  rowstyles: RowStyles;
-  beforetable: BeforeTable;
-  insidetable: InsideTable;
-  aftertable: AfterTable;
-  beforesettings: AfterTable;
-  aftersettings: AfterTable;
-  beforepadding: BeforeTable;
-  afterpadding: BeforeTable;
 }
 
 export type ModuleInitCallback = (opts: ModuleInitOptions) => void;
+
+export interface Slots extends Record<string, any> {}
+export type BeforeInitCallback = (opts: Slots) => void;
 
 export type ITableModule<T extends Record<string, any> = Record<string, any>> =
   {
@@ -118,6 +90,7 @@ export type ITableModule<T extends Record<string, any> = Record<string, any>> =
     dependencies?: string[];
     tableProps?: T;
 
+    beforeInit?: BeforeInitCallback;
     onInit?: ModuleInitCallback;
     afterInit?: ModuleInitCallback;
 
@@ -130,4 +103,5 @@ export type ITableModule<T extends Record<string, any> = Record<string, any>> =
     beforeRender?: BeforeRenderCallback;
 
     store?: StoreModule;
+    slots?: () => Partial<Slots>;
   };

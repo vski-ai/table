@@ -34,7 +34,7 @@ export function Settings({ store }: ColumnsSettingsProps) {
     >
       <div class="modal-body mt-6">
         {columns.map((column) => (
-          <Draggable store={store} onDrop={onColumnDrop} id={column}>
+          <Draggable store={store} onTransfer={onColumnDrop} id={column}>
             <div class="card p-2 mt-1 flex flex-row justify-between bg-sky-950 cursor-move">
               <input
                 type="text"
