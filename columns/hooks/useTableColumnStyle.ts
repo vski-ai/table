@@ -3,6 +3,7 @@ import { Store } from "@xmod/types.ts";
 import { sanitizeColName } from "@/common/sanitizeColName.ts";
 import { useColumnResizer } from "./useColumnnResize.ts";
 import { useOrderedColumns } from "./useOrderedColumns.ts";
+import { useComputed } from "@preact/signals";
 
 export interface TableStyleProps {
   store: Store;
@@ -14,7 +15,7 @@ export function useTableColumnStyle({ store }: TableStyleProps) {
   const service_columns = store.state.columns.service_columns.value;
   const columns = [...service_columns, ...ordered_columns];
 
-  const totalWidth = useMemo(() => {
+  const totalWidth = useComputed(() => {
     const { column, width: resizingColumnWidth } =
       store.state.columns.resizing_column.value || {};
 
@@ -26,21 +27,16 @@ export function useTableColumnStyle({ store }: TableStyleProps) {
         (sum, [col, _]) => sum + getColumnWidth(col),
         resizingColumnWidth ?? 0,
       );
-  }, [
-    store.state.columns.widths.value,
-    store.state.columns.resizing_column.value,
-  ]);
+  });
 
-  const style = useMemo(() => {
+  const style = useComputed(() => {
     const widths: Record<string, string> = {
-      width: `${totalWidth}px`,
+      width: `${totalWidth.value}px`,
       ...columns.reduce(
         (acc, col) => {
-          acc[`--col-width-${sanitizeColName(col)}`] = `${
-            getColumnWidth(
-              col,
-            )
-          }px`;
+          acc[`--col-width-${sanitizeColName(col)}`] = `${getColumnWidth(
+            col,
+          )}px`;
           return acc;
         },
         {} as Record<string, string>,
@@ -55,7 +51,7 @@ export function useTableColumnStyle({ store }: TableStyleProps) {
     }, 0);
 
     return widths;
-  }, [totalWidth, columns, store.state.columns.widths.value]);
+  });
 
   return {
     style,

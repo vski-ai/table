@@ -11,6 +11,7 @@ import { ContextModule } from "@enterprise/context/mod.ts";
 import { SelectorModule } from "@enterprise/selector/mod.ts";
 import { MatcherModule } from "@enterprise/matcher/mod.ts";
 import { EditModeModule } from "@enterprise/editmode/mod.ts";
+//import { GroupHeadModule } from "@enterprise/grouphead/mod.ts";
 
 const { data, pinnedRows } = generateRows(5000);
 const sorter = createFrontendSorter();
@@ -32,6 +33,7 @@ export const FlatTable = () => {
       SelectorModule,
       MatcherModule,
       EditModeModule,
+      //GroupHeadModule,
     ],
     storage: new LocalStorageAdapter(),
   });

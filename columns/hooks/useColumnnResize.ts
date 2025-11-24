@@ -28,18 +28,24 @@ export function useColumnResizer({ store }: ColumnResizerProps) {
     [],
   );
 
-  const getColumnWidth = useCallback((col: string) => {
-    if (
-      store.state.columns.resizing_column.value &&
-      store.state.columns.resizing_column.value.column === col
-    ) {
-      return store.state.columns.resizing_column.value.width;
-    }
-    return (
-      store.state.columns.widths.value[col] ??
+  const getColumnWidth = useCallback(
+    (col: string) => {
+      if (
+        store.state.columns.resizing_column.value &&
+        store.state.columns.resizing_column.value.column === col
+      ) {
+        return store.state.columns.resizing_column.value.width;
+      }
+      return (
+        store.state.columns.widths.value[col] ??
         store.state.table.column_width.value
-    );
-  }, []);
+      );
+    },
+    [
+      store.state.columns.widths.value,
+      store.state.columns.resizing_column.value,
+    ],
+  );
   return {
     resizingColumn: store.state.columns.resizing_column,
     getColumnWidth,

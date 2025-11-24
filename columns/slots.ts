@@ -3,9 +3,12 @@ import { ClassResolverCallback } from "@/table/types.ts";
 import { type ColumnRendererCallback } from "./types.ts";
 import { ComponentChildren } from "preact";
 import { renderSkeleton } from "./components/Skeleton.tsx";
+import { CommonRendererCallback } from "@/table/types.ts";
 
 declare module "@xmod/types.ts" {
   interface Slots {
+    beforeheader: SortedAddon<CommonRendererCallback>;
+    afterheader: SortedAddon<CommonRendererCallback>;
     headerprefixes: SortedAddon<ColumnRendererCallback>;
     lefttableheaders: SortedAddon<ColumnRendererCallback>;
     righttableheaders: SortedAddon<ColumnRendererCallback>;
@@ -18,6 +21,8 @@ declare module "@xmod/types.ts" {
 }
 
 export const slots = () => ({
+  beforeheader: new SortedAddon<CommonRendererCallback>(),
+  afterheader: new SortedAddon<CommonRendererCallback>(),
   headerprefixes: new SortedAddon<ColumnRendererCallback>(),
   lefttableheaders: new SortedAddon<ColumnRendererCallback>(),
   beforeheaders: new SortedAddon<ColumnRendererCallback>(),

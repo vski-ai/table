@@ -10,6 +10,7 @@ type ColumnsState = {
     widths: Signal<Record<string, number>>;
     sticky: Signal<Record<string, StickyPosition>>;
     resizing_column: Signal<{ column: string; width: number } | null>;
+    resizing_target: Signal<Record<string, string | undefined>>;
     header_height: Signal<number>;
     settings_dialog: Signal<boolean>;
   };
@@ -79,6 +80,7 @@ export function state<T>(persist: InferPersist<ColumnsState>): ColumnsState {
   const resizing_column = signal(null);
   const header_height = signal<number>(42);
   const settings_dialog = signal(false);
+  const resizing_target = signal({});
   return {
     columns: {
       all,
@@ -88,6 +90,7 @@ export function state<T>(persist: InferPersist<ColumnsState>): ColumnsState {
       widths,
       sticky,
       resizing_column,
+      resizing_target,
       header_height,
       settings_dialog,
     },

@@ -26,7 +26,7 @@ export function Table(props: TableProps) {
     onDataLoad,
   });
 
-  const { style } = useTableColumnStyle({ store });
+  const { style, totalWidth } = useTableColumnStyle({ store });
 
   const renderRow = useRenderRowCallback({
     store,
@@ -60,11 +60,12 @@ export function Table(props: TableProps) {
       })}
 
       <table
-        style={style}
+        style={style.value}
         x-id={`vt_${store.state.tableId}`}
         class={"vt vt-main " + classes}
         ref={tableRef}
         tabIndex={-1}
+        width={totalWidth.value}
         {...kb}
       >
         <tbody>

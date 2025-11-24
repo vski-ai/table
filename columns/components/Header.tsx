@@ -3,6 +3,7 @@ import { getAddons } from "@xmod/mod.ts";
 import { useTableColumnStyle } from "../hooks/useTableColumnStyle.ts";
 import { useOrderedColumns } from "../hooks/useOrderedColumns.ts";
 import { Column } from "./Column.tsx";
+import { useEffect, useRef } from "preact/hooks";
 
 interface HeaderProps {
   store: Store;
@@ -16,6 +17,11 @@ export function Header({ store, loading }: HeaderProps) {
   const classes = addons.headerclasses.string({
     store,
   });
+  const ref = useRef(null);
+  useEffect(() => {
+    store.headerRef = ref;
+  }, [ref.current]);
+
   return (
     <div
       style={{
@@ -25,17 +31,19 @@ export function Header({ store, loading }: HeaderProps) {
       }}
     >
       <table
-        style={style}
+        style={style.value}
         x-id={`vt_${store.state.tableId}`}
         class={"vt vt-header " + classes}
         tabIndex={-1}
       >
-        <thead id="vt-main-head">
-          {loading
-            ? (
-              addons.headerskeleton.at(0)?.()
-            )
-            : (
+        <thead id="vt-main-head" ref={ref}>
+          {loading ? (
+            addons.headerskeleton.at(0)?.()
+          ) : (
+            <>
+              {addons.beforeheader.render({
+                store,
+              })}
               <tr>
                 {addons.lefttableheaders.render({
                   column: "",
@@ -59,7 +67,11 @@ export function Header({ store, loading }: HeaderProps) {
                   store,
                 })}
               </tr>
-            )}
+              {addons.afterheader.render({
+                store,
+              })}
+            </>
+          )}
         </thead>
       </table>
     </div>

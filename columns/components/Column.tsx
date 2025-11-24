@@ -1,6 +1,6 @@
 import { ComponentChildren } from "preact";
 import { useSignal } from "@preact/signals";
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef, useMemo } from "preact/hooks";
 import { cn } from "@/common/className.ts";
 import { getAddons } from "@xmod/mod.ts";
 import { Store } from "@xmod/types.ts";
@@ -12,10 +12,18 @@ import { useStickyColumn } from "../hooks/useStickyColumn.ts";
 export interface ColumnProps {
   column: string;
   store: Store;
+  colspan?: number;
   children?: ComponentChildren;
+  onResize?: (vl: number) => void;
 }
 
-export function Column({ column, children, store }: ColumnProps) {
+export function Column({
+  column,
+  colspan,
+  children,
+  store,
+  onResize,
+}: ColumnProps) {
   const addons = getAddons({ store });
   const onColumnDrop = useColumnsOrderCallback({ store });
   const { getColumnWidth, handleResizeUpdateCallback, handleResizeCallback } =
@@ -33,6 +41,7 @@ export function Column({ column, children, store }: ColumnProps) {
   // TODO: needs i18n and fromatters
   const formattedName = column;
 
+  const { resizing_target } = store.state.columns;
   const handleMouseDown = (e: MouseEvent) => {
     e.preventDefault();
     isResizing.value = true;
@@ -46,6 +55,7 @@ export function Column({ column, children, store }: ColumnProps) {
       if (newWidth > 50) {
         // Minimum column width
         handleResizeUpdateCallback(column, newWidth);
+        onResize?.(newWidth);
       }
     };
 
@@ -53,6 +63,7 @@ export function Column({ column, children, store }: ColumnProps) {
       isResizing.value = false;
       const newWidth = startWidth.value + (moveEvent.clientX - startX.value);
       handleResizeCallback(column, newWidth > 50 ? newWidth : 50);
+      onResize?.(newWidth);
     };
 
     if (isResizing.value) {
@@ -77,6 +88,7 @@ export function Column({ column, children, store }: ColumnProps) {
   return (
     <th
       tabindex={0}
+      colSpan={colspan}
       data-column-name={column}
       style={{
         height: store.state.columns?.header_height?.value ?? 50,
@@ -87,61 +99,71 @@ export function Column({ column, children, store }: ColumnProps) {
         position: isSticky ? "sticky" : undefined,
       }}
       id={`column-header-${column}`}
-      class={cn({
-        "vt-col": true,
-        "stick-left": isStickyLeft,
-        "stick-right": isStickyRight,
-      }) +
+      class={
+        cn({
+          "vt-col": true,
+          "stick-left": isStickyLeft,
+          "stick-right": isStickyRight,
+        }) +
         " " +
-        classes}
+        classes
+      }
     >
       <Draggable store={store} onTransfer={onColumnDrop} id={column}>
-        {children ? children : (
+        {children ? (
+          children
+        ) : (
           <div class="vt-col-wrap">
             {addons.headerprefixes.render({
               column,
               store,
             })}
-            {!edit.value
-              ? (
-                <div
-                  class="vt-col-content"
-                  title={formattedName}
-                  onDblClick={() => {
-                    edit.value = true;
-                    setTimeout(() => {
-                      inputRef.current?.focus();
-                    });
-                  }}
-                >
-                  {formattedName}
-                </div>
-              )
-              : (
-                <input
-                  autoFocus
-                  autoComplete="off"
-                  type="text"
-                  value={formattedName}
-                  ref={inputRef}
-                  onFocusOut={() => {
+            {!edit.value ? (
+              <div
+                class="vt-col-content"
+                title={formattedName}
+                onDblClick={() => {
+                  edit.value = true;
+                  setTimeout(() => {
+                    inputRef.current?.focus();
+                  });
+                }}
+              >
+                {formattedName}
+              </div>
+            ) : (
+              <input
+                autoFocus
+                autoComplete="off"
+                type="text"
+                value={formattedName}
+                ref={inputRef}
+                onFocusOut={() => {
+                  edit.value = false;
+                }}
+                onKeyUp={(ev) => {
+                  if (ev.key === "Enter") {
                     edit.value = false;
-                  }}
-                  onKeyUp={(ev) => {
-                    if (ev.key === "Enter") {
-                      edit.value = false;
-                    }
-                    if (ev.key === "esc") {
-                      edit.value = false;
-                    }
-                  }}
-                />
-              )}
+                  }
+                  if (ev.key === "esc") {
+                    edit.value = false;
+                  }
+                }}
+              />
+            )}
             <div class="ml-2"></div>
           </div>
         )}
       </Draggable>
-      <div class="vt-col-resize" onMouseDown={handleMouseDown} />
+      <div
+        class={cn([
+          "vt-col-resize",
+          resizing_target.value[column] &&
+            column !== resizing_target.value[column] &&
+            "pointer-events-none",
+        ])}
+        onMouseDown={handleMouseDown}
+      />
     </th>
   );
 }

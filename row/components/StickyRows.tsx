@@ -1,4 +1,4 @@
-import { CommonRendererCallback } from "@xmod/types.ts";
+import { CommonRendererCallback } from "@/table/types.ts";
 import { Store } from "@xmod/types.ts";
 import { useTableColumnStyle } from "@/columns/hooks/useTableColumnStyle.ts";
 import { useRenderRowCallback } from "./Row.tsx";
@@ -29,7 +29,7 @@ export const StickyTopRows = ({ store }: StickyRowsProps) => {
         top: store.state.columns.header_height.value, // header heihgt
       }}
     >
-      <table style={style} class="vt" x-id={`vt_${store.state.tableId}`}>
+      <table style={style.value} class="vt" x-id={`vt_${store.state.tableId}`}>
         <tbody>
           <RowPadding padding={0} name="top-rows" store={store} />
           {rows.map((row, index) => renderRow(row, index))}
@@ -61,7 +61,7 @@ export const StickyBottomRows = ({ store }: StickyRowsProps) => {
 
   return (
     <div class="vt-sticky-rows-bottom">
-      <table style={style} class="vt" x-id={`vt_${store.state.tableId}`}>
+      <table style={style.value} class="vt" x-id={`vt_${store.state.tableId}`}>
         <tbody>
           <RowPadding padding={0} name="bottom-rows" store={store} />
           {rows.map((row, index) => renderRow(row, index))}
