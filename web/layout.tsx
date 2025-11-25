@@ -57,7 +57,7 @@ export default function ({ children }: { children: any }) {
             <li>
               <a href="/core" class="aria-[current=page]:active">
                 <TableIcon />
-                Table Engine{" "}
+                Grid Engine{" "}
                 <span class="badge badge-xs border-none text-white bg-sky-500 absolute dense:hidden w-11">
                   free
                 </span>

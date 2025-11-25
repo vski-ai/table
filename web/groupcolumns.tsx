@@ -11,7 +11,7 @@ import { ContextModule } from "@enterprise/context/mod.ts";
 import { SelectorModule } from "@enterprise/selector/mod.ts";
 import { MatcherModule } from "@enterprise/matcher/mod.ts";
 import { EditModeModule } from "@enterprise/editmode/mod.ts";
-import { GroupHeadModule } from "@enterprise/grouphead/mod.ts";
+import { ColgroupModule } from "@enterprise/colgroup/mod.ts";
 
 const { data, pinnedRows } = generateRows(100);
 const sorter = createFrontendSorter();
@@ -23,7 +23,7 @@ export const GroupColumnsTable = () => {
   }, []);
 
   const { Table } = createTable({
-    id: "flat",
+    id: "group-cols",
     modules: [
       SortingModule,
       EnumeratorModule,
@@ -33,7 +33,7 @@ export const GroupColumnsTable = () => {
       SelectorModule,
       MatcherModule,
       EditModeModule,
-      GroupHeadModule,
+      ColgroupModule,
     ],
     storage: new LocalStorageAdapter(),
   });
