@@ -8,7 +8,7 @@ import {
 } from "preact/hooks";
 import { computePosition, flip, shift } from "@floating-ui/dom";
 import { Store } from "@xmod/types.ts";
-import { CommonRendererCallback } from "@xmod/types.ts";
+import { CommonRendererCallback } from "@/table/types.ts";
 import { MenuContext, MenuItem } from "./types.ts";
 import BackIcon from "lucide-react/dist/esm/icons/chevron-left.js";
 import { useMenuPlacement } from "./hooks/useMenuPlacement.ts";

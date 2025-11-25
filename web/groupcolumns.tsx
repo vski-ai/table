@@ -6,10 +6,17 @@ import { createFrontendSorter, SortingModule } from "@/sorting/mod.ts";
 
 import { EnumeratorModule } from "../enumerator/mod.ts";
 import { generateRows } from "./mock/flat-table.ts";
-const { data, pinnedRows } = generateRows(200);
+import { ChatModule, SearchModule } from "@enterprise/mod.ts";
+import { ContextModule } from "@enterprise/context/mod.ts";
+import { SelectorModule } from "@enterprise/selector/mod.ts";
+import { MatcherModule } from "@enterprise/matcher/mod.ts";
+import { EditModeModule } from "@enterprise/editmode/mod.ts";
+import { GroupHeadModule } from "@enterprise/grouphead/mod.ts";
+
+const { data, pinnedRows } = generateRows(100);
 const sorter = createFrontendSorter();
 
-export const CoreTable = () => {
+export const GroupColumnsTable = () => {
   const scrollRef = useRef<any>(null);
   useEffect(() => {
     scrollRef.current = document.querySelector(".main-outlet");
@@ -17,12 +24,22 @@ export const CoreTable = () => {
 
   const { Table } = createTable({
     id: "flat",
-    modules: [SortingModule, EnumeratorModule],
+    modules: [
+      SortingModule,
+      EnumeratorModule,
+      ChatModule,
+      ContextModule,
+      SearchModule,
+      SelectorModule,
+      MatcherModule,
+      EditModeModule,
+      GroupHeadModule,
+    ],
     storage: new LocalStorageAdapter(),
   });
 
   const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    //await new Promise((resolve) => setTimeout(resolve, 1000));
     const sorted = sorter({
       data: data as RowData[],
       store,
@@ -31,7 +48,7 @@ export const CoreTable = () => {
       rows: sorted.slice(offset, offset + limit),
       total: sorted.length,
       meta: {
-        sortable_all: false,
+        sortable_all: true,
         //pinnedRows,
       },
     };

@@ -37,41 +37,43 @@ export function Header({ store, loading }: HeaderProps) {
         tabIndex={-1}
       >
         <thead id="vt-main-head" ref={ref}>
-          {loading ? (
-            addons.headerskeleton.at(0)?.()
-          ) : (
-            <>
-              {addons.beforeheader.render({
-                store,
-              })}
-              <tr>
-                {addons.lefttableheaders.render({
-                  column: "",
+          {loading
+            ? (
+              addons.headerskeleton.at(0)?.()
+            )
+            : (
+              <>
+                {addons.beforeheader.render({
                   store,
                 })}
-                {columnsInOrder.map((col) => (
-                  <>
-                    {addons.beforeheaders.render({
-                      column: "",
-                      store,
-                    })}
-                    <Column key={col} column={col} store={store} />
-                    {addons.afterheaders.render({
-                      column: "",
-                      store,
-                    })}
-                  </>
-                ))}
-                {addons.righttableheaders.render({
-                  column: "",
+                <tr>
+                  {addons.lefttableheaders.render({
+                    column: "",
+                    store,
+                  })}
+                  {columnsInOrder.map((col) => (
+                    <>
+                      {addons.beforeheaders.render({
+                        column: "",
+                        store,
+                      })}
+                      <Column key={col} column={col} store={store} />
+                      {addons.afterheaders.render({
+                        column: "",
+                        store,
+                      })}
+                    </>
+                  ))}
+                  {addons.righttableheaders.render({
+                    column: "",
+                    store,
+                  })}
+                </tr>
+                {addons.afterheader.render({
                   store,
                 })}
-              </tr>
-              {addons.afterheader.render({
-                store,
-              })}
-            </>
-          )}
+              </>
+            )}
         </thead>
       </table>
     </div>

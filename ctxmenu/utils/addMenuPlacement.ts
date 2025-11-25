@@ -11,7 +11,7 @@ type MenuPlamentProps = {
 
 export function addMenuPlacement({ store, items }: MenuPlamentProps) {
   const targets = store.state.context_menu[PLACEMENT_TARGET_ACESSOR];
-  targets.push(...items);
+  targets.unshift(...items);
   const unique = new Set<string>();
   for (const target of targets) {
     if (unique.has(target.name)) {
