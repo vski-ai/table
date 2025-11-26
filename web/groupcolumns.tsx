@@ -90,26 +90,6 @@ const datatype_mock = {
   currency: "CHF",
 };
 
-const width_mock = {
-  __selector__: 58,
-  __enumerator__: 58,
-  USA: 50,
-  Canada: 0,
-  Mexico: 0,
-  "2023Q1": 50,
-  "2023Q2": 0,
-  "2023Q3": 0,
-  "2023Q4": 0,
-  "2024Q1": 50,
-  "2024Q2": 0,
-  "2024Q3": 0,
-  "2024Q4": 0,
-  "2025Q1": 50,
-  "2025Q2": 0,
-  "2025Q3": 0,
-  "2025Q4": 0,
-};
-
 export const GroupColumnsTable = () => {
   const scrollRef = useRef<any>(null);
   useEffect(() => {
