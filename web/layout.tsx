@@ -7,7 +7,7 @@ import KanbanIcon from "lucide-react/dist/esm/icons/kanban.js";
 import TableIcon from "lucide-react/dist/esm/icons/table.js";
 import PenIcon from "lucide-react/dist/esm/icons/pen.js";
 import WorkflowIcon from "lucide-react/dist/esm/icons/workflow.js";
-import LayoutDashboardIcon from "lucide-react/dist/esm/icons/table-properties.js";
+import CombineIcon from "lucide-react/dist/esm/icons/combine.js";
 import PlugZapIcon from "lucide-react/dist/esm/icons/plug-zap.js";
 import ChartIcon from "lucide-react/dist/esm/icons/table-2.js";
 import { VskiTableLogo } from "./icons/VskiTableLogo.tsx";
@@ -70,6 +70,17 @@ export default function ({ children }: { children: any }) {
               </a>
             </li>
             <li>
+              <a
+                aria-disabled="true"
+                href="/group-columns"
+                class="aria-[current=page]:active"
+              >
+                <CombineIcon />
+                Col Group
+                <AiBadge />
+              </a>
+            </li>
+            <li>
               <a href="/groupable" class="aria-[current=page]:active">
                 <ChartIcon />
                 Tree Engine
@@ -87,6 +98,7 @@ export default function ({ children }: { children: any }) {
                 <AiBadge />
               </a>
             </li>
+
             <li class="pointer-events-none opacity-50">
               <a
                 aria-disabled="true"

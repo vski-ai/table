@@ -5,7 +5,7 @@ import { createTable, type DataLoadCallback } from "../mod.ts";
 import { createFrontendSorter, SortingModule } from "@/sorting/mod.ts";
 
 import { EnumeratorModule } from "../enumerator/mod.ts";
-import { generateRows } from "./mock/flat-table.ts";
+import { generateRows } from "@enterprise/colgroup/mock/colGroups.ts";
 import { ChatModule, SearchModule } from "@enterprise/mod.ts";
 import { ContextModule } from "@enterprise/context/mod.ts";
 import { SelectorModule } from "@enterprise/selector/mod.ts";
@@ -13,8 +13,102 @@ import { MatcherModule } from "@enterprise/matcher/mod.ts";
 import { EditModeModule } from "@enterprise/editmode/mod.ts";
 import { ColgroupModule } from "@enterprise/colgroup/mod.ts";
 
-const { data, pinnedRows } = generateRows(100);
+const data = generateRows(50) as any;
 const sorter = createFrontendSorter();
+
+const mock_user_settings = {
+  columns: [
+    {
+      name: "EMEA",
+      widths: {},
+      colspan: 3,
+      column: "Germany/France/UK",
+      children: ["Germany", "France", "UK"],
+    },
+    {
+      widths: {},
+      colspan: 3,
+      column: "USA/Canada/Mexico",
+      children: ["USA", "Canada", "Mexico"],
+      name: "North America",
+      folded: true,
+    },
+    {
+      widths: {},
+      colspan: 4,
+      column: "2023Q1/2023Q2/2023Q3/2023Q4",
+      children: ["2023Q1", "2023Q2", "2023Q3", "2023Q4"],
+      name: "2023",
+      folded: true,
+    },
+    {
+      widths: {},
+      colspan: 4,
+      column: "2024Q1/2024Q2/2024Q3/2024Q4",
+      children: ["2024Q1", "2024Q2", "2024Q3", "2024Q4"],
+      name: "2024",
+      folded: true,
+    },
+    {
+      widths: {},
+      colspan: 4,
+      column: "2025Q1/2025Q2/2025Q3/2025Q4",
+      children: ["2025Q1", "2025Q2", "2025Q3", "2025Q4"],
+      name: "2025",
+      folded: true,
+    },
+    {
+      widths: {},
+      colspan: 4,
+      column: "2026Q1/2026Q2/2026Q3/2026Q4",
+      children: ["2026Q1", "2026Q2", "2026Q3", "2026Q4"],
+      name: "2026",
+    },
+    {
+      widths: {},
+      colspan: 4,
+      column: "Hardware/Software/Services/Consulting",
+      children: ["Hardware", "Software", "Services", "Consulting"],
+      name: "Product Line",
+    },
+    {
+      widths: {},
+      colspan: 4,
+      column: "Retail/B2B/Government/Healthcare",
+      children: ["Retail", "B2B", "Government", "Healthcare"],
+      name: "Sector",
+    },
+  ],
+};
+
+const datatype_mock = {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+  locale: "en-GB",
+  style: "currency",
+  currencyDisplay: "symbol",
+  currency: "CHF",
+};
+
+const width_mock = {
+  __selector__: 58,
+  __enumerator__: 58,
+  USA: 50,
+  Canada: 0,
+  Mexico: 0,
+  "2023Q1": 50,
+  "2023Q2": 0,
+  "2023Q3": 0,
+  "2023Q4": 0,
+  "2024Q1": 50,
+  "2024Q2": 0,
+  "2024Q3": 0,
+  "2024Q4": 0,
+  "2025Q1": 50,
+  "2025Q2": 0,
+  "2025Q3": 0,
+  "2025Q4": 0,
+};
 
 export const GroupColumnsTable = () => {
   const scrollRef = useRef<any>(null);
@@ -22,7 +116,7 @@ export const GroupColumnsTable = () => {
     scrollRef.current = document.querySelector(".main-outlet");
   }, []);
 
-  const { Table } = createTable({
+  const { Table, store } = createTable({
     id: "group-cols",
     modules: [
       SortingModule,
@@ -37,6 +131,14 @@ export const GroupColumnsTable = () => {
     ],
     storage: new LocalStorageAdapter(),
   });
+  store.state.columns.widths.value = width_mock;
+  store.state.colgroup.columns.value = mock_user_settings.columns;
+  mock_user_settings.columns.forEach((c) =>
+    c.children.forEach((col) => {
+      store.state.data_type.column.value[col] = "currency";
+      store.state.data_type.options.value[col] = datatype_mock;
+    })
+  );
 
   const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {
     //await new Promise((resolve) => setTimeout(resolve, 1000));
