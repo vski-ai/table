@@ -1,5 +1,5 @@
 import { LocalStorageAdapter } from "@xmod/mod.ts";
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useMemo, useRef } from "preact/hooks";
 import { RowData } from "@/row/types.ts";
 import { createTable, type DataLoadCallback } from "../mod.ts";
 import { createFrontendSorter, SortingModule } from "@/sorting/mod.ts";
@@ -131,15 +131,17 @@ export const GroupColumnsTable = () => {
     ],
     storage: new LocalStorageAdapter(),
   });
-  store.state.columns.ordered.value = [];
-  store.state.columns.widths.value = width_mock;
-  store.state.colgroup.columns.value = mock_user_settings.columns;
-  mock_user_settings.columns.forEach((c) =>
-    c.children.forEach((col) => {
-      store.state.data_type.column.value[col] = "currency";
-      store.state.data_type.options.value[col] = datatype_mock;
-    })
-  );
+  const columns = store.state.colgroup.columns;
+  useMemo(() => {
+    store.state.columns.ordered.value = [];
+    columns.value = mock_user_settings.columns;
+    mock_user_settings.columns.forEach((c) =>
+      c.children.forEach((col) => {
+        store.state.data_type.column.value[col] = "currency";
+        store.state.data_type.options.value[col] = datatype_mock;
+      }),
+    );
+  }, []);
 
   const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {
     //await new Promise((resolve) => setTimeout(resolve, 1000));
