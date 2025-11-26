@@ -131,13 +131,14 @@ export const GroupColumnsTable = () => {
     ],
     storage: new LocalStorageAdapter(),
   });
+  store.state.columns.ordered.value = [];
   store.state.columns.widths.value = width_mock;
   store.state.colgroup.columns.value = mock_user_settings.columns;
   mock_user_settings.columns.forEach((c) =>
     c.children.forEach((col) => {
       store.state.data_type.column.value[col] = "currency";
       store.state.data_type.options.value[col] = datatype_mock;
-    })
+    }),
   );
 
   const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {
