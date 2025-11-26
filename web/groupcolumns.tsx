@@ -120,7 +120,7 @@ export const GroupColumnsTable = () => {
     id: "group-cols",
     modules: [
       SortingModule,
-      EnumeratorModule,
+      //EnumeratorModule,
       ChatModule,
       ContextModule,
       SearchModule,
@@ -138,7 +138,7 @@ export const GroupColumnsTable = () => {
     c.children.forEach((col) => {
       store.state.data_type.column.value[col] = "currency";
       store.state.data_type.options.value[col] = datatype_mock;
-    }),
+    })
   );
 
   const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {
