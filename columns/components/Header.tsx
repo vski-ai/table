@@ -4,21 +4,12 @@ import { useTableColumnStyle } from "../hooks/useTableColumnStyle.ts";
 import { useOrderedColumns } from "../hooks/useOrderedColumns.ts";
 import { Column } from "./Column.tsx";
 import { useEffect, useRef } from "preact/hooks";
-import { cloneElement } from "preact";
-import { className } from "../../common/className.ts";
+import { mapAddons } from "../hooks/mapAddons.ts";
 
 interface HeaderProps {
   store: Store;
   loading: boolean;
 }
-
-const mapAddons = (e: any) => {
-  if (!e) return e;
-  e.props.children = cloneElement(e.props.children as any, {
-    "data-addon": true,
-  });
-  return e;
-};
 
 export function Header({ store, loading }: HeaderProps) {
   const addons = getAddons({ store });

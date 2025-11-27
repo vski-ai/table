@@ -19,7 +19,7 @@ import {
 const data = generateGroupedRows();
 const sorter = createFrontendSorter();
 
-export const GroupedTable = () => {
+export const TreeTable = () => {
   const scrollRef = useRef<any>(null);
   useEffect(() => {
     scrollRef.current = document.querySelector(".main-outlet");
@@ -61,7 +61,7 @@ export const GroupedTable = () => {
   };
 
   const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    //await new Promise((resolve) => setTimeout(resolve, 500));
     const sorted = sorter({
       data: data as any,
       store,

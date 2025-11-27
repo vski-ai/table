@@ -5,7 +5,7 @@ import { Home } from "./Home.tsx";
 import { CoreTable } from "./core.tsx";
 import { FlatTable } from "./flattable.tsx";
 import { EditableTable } from "./editable.tsx";
-import { GroupedTable } from "./grouping.tsx";
+import { TreeTable } from "./tree.tsx";
 import { KanbanTable } from "./kanban.tsx";
 import { GroupColumnsTable } from "./groupcolumns.tsx";
 
@@ -20,7 +20,7 @@ export function App() {
           <Route path="/core" component={CoreTable} />
           <Route path="/flat" component={FlatTable} />
           <Route path="/editable" component={EditableTable} />
-          <Route path="/groupable" component={GroupedTable} />
+          <Route path="/tree" component={TreeTable} />
           <Route path="/kanban" component={KanbanTable} />
           <Route path="/group-columns" component={GroupColumnsTable} />
           <Route path="/hire" component={HireMe} />

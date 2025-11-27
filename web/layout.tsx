@@ -81,7 +81,7 @@ export default function ({ children }: { children: any }) {
               </a>
             </li>
             <li>
-              <a href="/groupable" class="aria-[current=page]:active">
+              <a href="/tree" class="aria-[current=page]:active">
                 <ChartIcon />
                 Tree Engine
                 <AiBadge />
