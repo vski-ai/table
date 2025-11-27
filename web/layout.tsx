@@ -98,7 +98,7 @@ export default function ({ children }: { children: any }) {
                 <AiBadge />
               </a>
             </li>
-            <li class="pointer-events-none opacity-50">
+            <li>
               <a
                 href="/gantt"
                 class="aria-[current=page]:active"

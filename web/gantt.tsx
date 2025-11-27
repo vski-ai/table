@@ -49,6 +49,9 @@ export const GanttTable = () => {
     Revenue: "currency",
     Tax: "currency",
   };
+  store.state.columns.sticky.value = {
+    __group_by__: "left",
+  };
   const currencyOpts = {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
