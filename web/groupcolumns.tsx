@@ -90,6 +90,24 @@ const datatype_mock = {
   currency: "CHF",
 };
 
+const folded_columns = {
+  USA: true,
+  Canada: true,
+  Mexico: true,
+  "2023Q1": true,
+  "2023Q2": true,
+  "2023Q3": true,
+  "2023Q4": true,
+  "2024Q1": true,
+  "2024Q2": true,
+  "2024Q3": true,
+  "2024Q4": true,
+  "2025Q1": true,
+  "2025Q2": true,
+  "2025Q3": true,
+  "2025Q4": true,
+};
+
 export const GroupColumnsTable = () => {
   const scrollRef = useRef<any>(null);
   useEffect(() => {
@@ -112,9 +130,11 @@ export const GroupColumnsTable = () => {
     storage: new LocalStorageAdapter(),
   });
   const columns = store.state.colgroup.columns;
+  const folded = store.state.colgroup.folded_columns;
   useMemo(() => {
     store.state.columns.ordered.value = [];
     columns.value = mock_user_settings.columns;
+    folded.value = folded_columns;
     mock_user_settings.columns.forEach((c) =>
       c.children.forEach((col) => {
         store.state.data_type.column.value[col] = "currency";
