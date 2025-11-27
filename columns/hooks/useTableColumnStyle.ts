@@ -34,9 +34,11 @@ export function useTableColumnStyle({ store }: TableStyleProps) {
       width: `${totalWidth.value}px`,
       ...columns.reduce(
         (acc, col) => {
-          acc[`--col-width-${sanitizeColName(col)}`] = `${getColumnWidth(
-            col,
-          )}px`;
+          acc[`--col-width-${sanitizeColName(col)}`] = `${
+            getColumnWidth(
+              col,
+            )
+          }px`;
           return acc;
         },
         {} as Record<string, string>,

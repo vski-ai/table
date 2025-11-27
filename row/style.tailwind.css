@@ -10,6 +10,9 @@
       transform: none;
       animation: none;
     }
+    [data-loading-addon="true"] * {
+      opacity: 0;
+    }
   }
   .vt-sticky-rows-top {
     @apply sticky z-20!;

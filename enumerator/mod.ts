@@ -23,7 +23,7 @@ const afterInit: ModuleInitCallback = ({ store }) => {
 
 export const EnumeratorModule: XModule = {
   name: "enumerator",
-  dependencies: ["$fetcher"],
+  dependencies: ["fetcher"],
   store,
   beforeInit,
   afterInit,

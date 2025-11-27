@@ -12,6 +12,7 @@ type KeyboardState = {
   };
   drag: {
     active: Signal<boolean>;
+    data: Signal<unknown>;
   };
 };
 
@@ -33,6 +34,7 @@ export function state(): InputState {
     },
     drag: {
       active: signal(false),
+      data: signal(null),
     },
   };
 }

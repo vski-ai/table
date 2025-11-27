@@ -1,11 +1,10 @@
-import { Signal, signal } from "@preact/signals";
-import { Command, State } from "@xmod/mod.ts";
-import { TypeFormatComponent } from "./types.ts";
+import { type Signal, signal } from "@preact/signals";
+import type { Command, InferPersist, State } from "@xmod/mod.ts";
+import type { TypeFormatComponent } from "./types.ts";
+import type { NumberDataTypeOptions, NumberDataTypes } from "./number/types.ts";
+import type { DateDataType, DateDataTypeOptions } from "./date/types.ts";
+import type { DataType } from "./types.ts";
 import { DefaultFormater } from "./components/DefaultFormater.tsx";
-import { InferPersist } from "../module/types.ts";
-import { NumberDataTypeOptions, NumberDataTypes } from "./number/types.ts";
-import { DateDataType, DateDataTypeOptions } from "./date/types.ts";
-import { DataType } from "./types.ts";
 
 const TYPE_FORMATTERS_ACCESSOR = Symbol("formatters");
 
