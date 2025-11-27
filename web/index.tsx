@@ -8,6 +8,7 @@ import { EditableTable } from "./editable.tsx";
 import { TreeTable } from "./tree.tsx";
 import { KanbanTable } from "./kanban.tsx";
 import { GroupColumnsTable } from "./groupcolumns.tsx";
+import { GanttTable } from "./gantt.tsx";
 
 import Layout from "./layout.tsx";
 
@@ -23,6 +24,7 @@ export function App() {
           <Route path="/tree" component={TreeTable} />
           <Route path="/kanban" component={KanbanTable} />
           <Route path="/group-columns" component={GroupColumnsTable} />
+          <Route path="/gantt" component={GanttTable} />
           <Route path="/hire" component={HireMe} />
           <Route default component={NotFound} />
         </Router>

@@ -9,7 +9,7 @@
     }
 
     &.stick-left {
-      @apply after:border-gray-600 dark:after:border-gray-600;
+      @apply after:border-gray-300 dark:after:border-gray-600;
     }
 
     &.stick-right {

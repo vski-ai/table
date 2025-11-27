@@ -5,5 +5,6 @@
 {
   "language_servers": ["deno", "tailwindcss-language-server"],
   "format_on_save": "on",
-  "formatter": "language_server"
+  "formatter": "language_server",
+
 }

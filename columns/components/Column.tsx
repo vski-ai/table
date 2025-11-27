@@ -1,6 +1,6 @@
 import { ComponentChildren } from "preact";
 import { useSignal } from "@preact/signals";
-import { useEffect, useMemo, useRef } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 import { cn } from "@/common/className.ts";
 import { getAddons } from "@xmod/mod.ts";
 import { Store } from "@xmod/types.ts";

@@ -1,6 +1,6 @@
 import { useCallback } from "preact/hooks";
 
-import { CellRendererCallback } from "@xmod/mod.ts";
+import { CellRendererCallback } from "@/row/mod.ts";
 import { Store } from "@xmod/types.ts";
 import { RowData } from "@/row/types.ts";
 import { useRowKey } from "@/columns/hooks/useRowKey.ts";

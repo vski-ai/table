@@ -10,6 +10,7 @@ import WorkflowIcon from "lucide-react/dist/esm/icons/workflow.js";
 import CombineIcon from "lucide-react/dist/esm/icons/combine.js";
 import PlugZapIcon from "lucide-react/dist/esm/icons/plug-zap.js";
 import ChartIcon from "lucide-react/dist/esm/icons/table-2.js";
+import GanttIcon from "lucide-react/dist/esm/icons/chart-gantt.js";
 import { VskiTableLogo } from "./icons/VskiTableLogo.tsx";
 
 import { ui } from "./state.ts";
@@ -89,12 +90,21 @@ export default function ({ children }: { children: any }) {
             </li>
             <li>
               <a
-                aria-disabled="true"
                 href="/kanban"
                 class="aria-[current=page]:active"
               >
                 <KanbanIcon />
                 Kanban
+                <AiBadge />
+              </a>
+            </li>
+            <li class="pointer-events-none opacity-50">
+              <a
+                href="/gantt"
+                class="aria-[current=page]:active"
+              >
+                <GanttIcon />
+                Gantt
                 <AiBadge />
               </a>
             </li>
