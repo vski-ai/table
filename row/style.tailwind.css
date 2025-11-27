@@ -11,7 +11,7 @@
       animation: none;
     }
     [data-loading-addon="true"] * {
-      opacity: 0;
+      opacity: 0 !important;
     }
   }
   .vt-sticky-rows-top {

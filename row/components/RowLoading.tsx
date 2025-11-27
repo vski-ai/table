@@ -1,14 +1,6 @@
 import type { Store } from "@xmod/types.ts";
 import { getAddons } from "@xmod/mod.ts";
-import { cloneElement } from "preact";
-
-const mapAddons = (e: any) => {
-  if (!e) return e;
-  e.props.children = cloneElement(e.props.children as any, {
-    "data-loading-addon": true,
-  });
-  return e;
-};
+import { mapAddons } from "../hooks/mapAddons.ts";
 
 export const RowLoading = ({
   columns,
@@ -28,7 +20,7 @@ export const RowLoading = ({
   return (
     <tr class="vt-row" style={{ height: rowHeight + "px" }}>
       {lefttableheaders
-        .render({ store, column: "header-addon-l" })
+        .render({ store, column: "" })
         .map(mapAddons)}
       {cols.map(() => (
         <td class="vt-cell" style={{ height: rowHeight }}>
@@ -36,7 +28,7 @@ export const RowLoading = ({
         </td>
       ))}
       {righttableheaders
-        .render({ store, column: "header-addon-l" })
+        .render({ store, column: "" })
         .map(mapAddons)}
     </tr>
   );

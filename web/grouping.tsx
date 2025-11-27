@@ -61,7 +61,7 @@ export const GroupedTable = () => {
   };
 
   const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {
-    //await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     const sorted = sorter({
       data: data as any,
       store,
