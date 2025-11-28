@@ -61,7 +61,7 @@ export const Demo = () => {
     >
       <div class="mockup-window overflow-hidden shadow-md bg-sky-900/50 dark:bg-sky-800/50  border border-sky-500/50 w-full max-w-340">
         <div class="hidden xl:block bg-tansparent absolute left-0 right-0 w-full text-center top-3.5 h-12 p-0 w-200">
-          <h4 class="font-semibold">Core Features</h4>
+          <h4 class="font-semibold">Core Features (Slow Network)</h4>
         </div>
         <div class="bg-tansparent absolute -right-4 top-1 h-12 p-1 w-100">
           <div class="flex gap-3 items-center justify-betwwen">
