@@ -6,17 +6,19 @@ import { getAddons } from "@xmod/mod.ts";
 import { Header } from "@/columns/components/Header.tsx";
 import { useTableColumnStyle } from "@/columns/hooks/useTableColumnStyle.ts";
 import { RowData, RowPadding, useRenderRowCallback } from "@/row/mod.ts";
-
+import { useScrollEffect } from "./hooks/useScrollEffect.ts";
 import { useTableInput } from "@/input/hooks/useTableInput.ts";
 
 export type TableProps = {
   onDataLoad: DataLoadCallback;
   store: Store;
   scrollContainerRef: MutableRef<HTMLElement>;
+  scrollEffect?: boolean;
 };
 
 export function Table(props: TableProps) {
-  const { store, scrollContainerRef, onDataLoad } = props;
+  const { store, scrollContainerRef, onDataLoad, scrollEffect = true } = props;
+  useScrollEffect({ store, enabled: scrollEffect });
 
   const rowHeight = store.state.table.row_height.value;
 

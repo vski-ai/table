@@ -37,7 +37,7 @@ export const Demo = () => {
     limit,
     store,
   }: any) => {
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise((resolve) => setTimeout(resolve, 500));
     const sorted = sorter({
       data: data as any,
       store,

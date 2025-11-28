@@ -22,6 +22,7 @@ type Result = {
 type TableProps = {
   container: MutableRef<HTMLElement>;
   onDataLoad: TableViewProps["onDataLoad"];
+  scrollEffect: TableViewProps["scrollEffect"];
 };
 
 export const modules = [
@@ -44,7 +45,7 @@ export function createTable(props: CreateAppOpts): Result {
   });
   return {
     store,
-    Table({ container, onDataLoad }: TableProps) {
+    Table({ container, onDataLoad, scrollEffect }: TableProps) {
       store.scrollContainerRef = container;
       useEffect(() => {
         container.current?.classList.add("vt-wrapper");
@@ -54,6 +55,7 @@ export function createTable(props: CreateAppOpts): Result {
         <TableView
           store={store}
           scrollContainerRef={container}
+          scrollEffect={scrollEffect}
           onDataLoad={onDataLoad}
         />
       );

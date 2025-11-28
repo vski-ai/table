@@ -1,4 +1,20 @@
 @layer components {
+  @keyframes apear {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  .vt-scrolling td * {
+    animation-name: apear;
+    animation-duration: 0.2s; /* How long the animation takes */
+    animation-timing-function: ease-out; /* Makes it smooth */
+    animation-fill-mode: forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
+  }
   .vt-settings {
     @apply rounded-none! dark:bg-gray-900! border-l border-l-sky-500/30;
 
