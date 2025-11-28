@@ -1,4 +1,5 @@
-import { CommonRendererCallback, Store } from "@xmod/types.ts";
+import type { Store } from "@xmod/types.ts";
+import type { CommonRendererCallback } from "@/table/types.ts";
 import EyeIcon from "lucide-react/dist/esm/icons/eye.js";
 import EyeClosedIcon from "lucide-react/dist/esm/icons/eye-closed.js";
 import CogIcon from "lucide-react/dist/esm/icons/columns-3-cog.js";
