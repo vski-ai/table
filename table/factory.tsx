@@ -22,7 +22,7 @@ type Result = {
 type TableProps = {
   container: MutableRef<HTMLElement>;
   onDataLoad: TableViewProps["onDataLoad"];
-  scrollEffect: TableViewProps["scrollEffect"];
+  scrollEffect?: TableViewProps["scrollEffect"];
 };
 
 export const modules = [

@@ -67,8 +67,8 @@ export const GanttTable = () => {
   };
 
   const onDataLoad: DataLoadCallback = async ({ offset, limit, store }) => {
-    //await new Promise((resolve) => setTimeout(resolve, 1000));
     const rows = filterGanttRows(data, store);
+    await new Promise((resolve) => setTimeout(resolve, 1));
     return {
       rows: rows.slice(offset, offset + limit),
       total: rows.length,
@@ -81,7 +81,6 @@ export const GanttTable = () => {
       <Table
         onDataLoad={onDataLoad}
         container={scrollRef}
-        scrollEffect={false}
       />
     </div>
   );
