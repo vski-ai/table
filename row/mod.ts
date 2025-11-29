@@ -4,12 +4,12 @@ export * from "./components/RowPadding.tsx";
 export * from "./components/RowSkeleton.tsx";
 export * from "./types.ts";
 
-import {
-  AfterLoadCallback,
+import type {
   BeforeInitCallback,
   ModuleInitCallback,
   XModule,
 } from "@xmod/types.ts";
+import { AfterLoadCallback } from "@/table/mod.ts";
 import { addMenuItems } from "@/ctxmenu/utils/addMenuItems.ts";
 import {
   bottomStickRowsRenderCallback,
@@ -23,9 +23,9 @@ import {
 import { slots } from "./slots.ts";
 import * as store from "./store.ts";
 
-const beforeInit: BeforeInitCallback = ({ aftertable, beforetable }) => {
-  beforetable.use(topStickRowsRenderCallback);
-  aftertable.use(bottomStickRowsRenderCallback);
+const beforeInit: BeforeInitCallback = ({ table }) => {
+  table.before.use(topStickRowsRenderCallback);
+  table.after.use(bottomStickRowsRenderCallback);
 };
 const onInit: ModuleInitCallback = ({ store }) => {
   addMenuItems({

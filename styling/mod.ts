@@ -8,8 +8,8 @@ import { renderStyleFormat } from "./StyleFormat.tsx";
 import { MenuItems } from "./menu.tsx";
 import * as Store from "./store.ts";
 
-const beforeInit: BeforeInitCallback = ({ beforetable }) => {
-  beforetable.use(renderStyleFormat);
+const beforeInit: BeforeInitCallback = ({ table }) => {
+  table.before.use(renderStyleFormat);
 };
 const onInit: ModuleInitCallback = ({ store }) => {
   addMenuItems({

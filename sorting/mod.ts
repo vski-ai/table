@@ -19,8 +19,8 @@ declare module "@/fetcher/types.ts" {
   }
 }
 
-const beforeInit: BeforeInitCallback = ({ headerprefixes }) => {
-  headerprefixes.use(renderSorter);
+const beforeInit: BeforeInitCallback = ({ column }) => {
+  column.prefixes.use(renderSorter);
 };
 
 const beforeLoad: BeforeLoadCallback = ({ options, store }) => {

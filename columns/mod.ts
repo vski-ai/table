@@ -10,8 +10,8 @@ import { MenuItems } from "./menu.tsx";
 import { slots } from "./slots.ts";
 import * as store from "./store.ts";
 
-const beforeInit: BeforeInitCallback = ({ beforetable }) => {
-  beforetable.use(renderColumnSettings);
+const beforeInit: BeforeInitCallback = ({ table }) => {
+  table.before.use(renderColumnSettings);
 };
 
 const onInit: ModuleInitCallback = ({ store }) => {

@@ -20,13 +20,18 @@ interface RowProps {
 export const Row = (props: RowProps) => {
   const { row, rowIndex, rowHeight, store, columns, rowKey } = props;
 
-  const addons = getAddons({ store });
+  const { row: rowAddons } = getAddons({ store });
   const height = rowHeight;
 
-  const classes = addons.rowclasses.string({
+  const classes = rowAddons.classes.string({
     row,
     store,
     rowKey,
+  });
+
+  const styles = rowAddons.styles.data({
+    row,
+    store,
   });
 
   return (
@@ -38,13 +43,10 @@ export const Row = (props: RowProps) => {
         class={"vt-row " + classes}
         style={{
           height: height,
-          ...addons.rowstyles.data({
-            row,
-            store,
-          }),
+          ...styles,
         }}
       >
-        {addons.lefttablecells.render({
+        {rowAddons.left.render({
           column: "",
           store,
           row,
@@ -53,15 +55,15 @@ export const Row = (props: RowProps) => {
 
         {columns.map((column) => (
           <>
-            {addons.beforecells.render({
-              column: "",
+            {rowAddons.beforeEach.render({
+              column,
               store,
               row,
               rowIndex,
             })}
             <Cell key={column} store={store} row={row} column={column} />
-            {addons.aftercells.render({
-              column: "",
+            {rowAddons.afterEach.render({
+              column,
               store,
               row,
               rowIndex,
@@ -69,7 +71,7 @@ export const Row = (props: RowProps) => {
           </>
         ))}
 
-        {addons.righttablecells.render({
+        {rowAddons.right.render({
           column: "",
           store,
           row,

@@ -4,11 +4,11 @@ import { addMenuItems } from "@/ctxmenu/utils/addMenuItems.ts";
 import { renderSettings } from "./components/Settings.tsx";
 import { MenuItems } from "./menu.tsx";
 import { slots } from "./slots.tsx";
-import { hooks } from "./hooks.ts";
+import { hooks } from "./plugins.ts";
 import * as store from "./store.ts";
 
-const beforeInit: BeforeInitCallback = ({ beforetable }) => {
-  beforetable.use(renderSettings);
+const beforeInit: BeforeInitCallback = ({ table }) => {
+  table.before.use(renderSettings);
 };
 
 const onInit: ModuleInitCallback = ({ store }) => {

@@ -24,7 +24,7 @@ export function Column({
   store,
   onResize,
 }: ColumnProps) {
-  const addons = getAddons({ store });
+  const { header, column: columnAddons } = getAddons({ store });
   const onColumnDrop = useColumnsOrderCallback({ store });
   const { getColumnWidth, handleResizeUpdateCallback, handleResizeCallback } =
     useColumnResizer({
@@ -80,7 +80,12 @@ export function Column({
   const { left, right, isSticky, isStickyLeft, isStickyRight } =
     useStickyColumn({ store, column });
 
-  const classes = addons.thclasses.string({
+  const classes = header.classes.string({
+    column,
+    store,
+  });
+
+  const colClasses = columnAddons.classes.string({
     column,
     store,
   });
@@ -103,14 +108,14 @@ export function Column({
         "vt-col": true,
         "stick-left": isStickyLeft,
         "stick-right": isStickyRight,
-      }) +
-        " " +
-        classes}
+        [classes]: true,
+        [colClasses]: true,
+      })}
     >
       <Draggable store={store} onTransfer={onColumnDrop} id={column}>
         {children ? children : (
           <div class="vt-col-wrap">
-            {addons.headerprefixes.render({
+            {columnAddons.prefixes.render({
               column,
               store,
             })}
@@ -149,6 +154,10 @@ export function Column({
                   }}
                 />
               )}
+            {columnAddons.suffixes.render({
+              column,
+              store,
+            })}
             <div class="ml-2"></div>
           </div>
         )}

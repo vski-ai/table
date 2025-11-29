@@ -4,21 +4,31 @@ import { ComponentChildren } from "preact";
 import { RowSkeleton } from "@/row/mod.ts";
 
 declare module "@xmod/types.ts" {
-  interface Slots {
-    beforetable: SortedAddon<CommonRendererCallback>;
-    aftertable: SortedAddon<CommonRendererCallback>;
-    beforesettings: SortedAddon<CommonRendererCallback>;
-    aftersettings: SortedAddon<CommonRendererCallback>;
-    tableclasses: SortedAddon<CommonRendererCallback>;
-    tableskeleton: (() => ComponentChildren)[];
-  }
+  interface Slots extends TableSlots {}
 }
 
-export const slots = () => ({
-  beforesettings: new SortedAddon<CommonRendererCallback>(),
-  aftersettings: new SortedAddon<CommonRendererCallback>(),
-  beforetable: new SortedAddon<CommonRendererCallback>(),
-  aftertable: new SortedAddon<CommonRendererCallback>(),
-  tableclasses: new SortedAddon<ClassResolverCallback>(),
-  tableskeleton: [() => <RowSkeleton />],
+type TableSlots = {
+  settings: {
+    before: SortedAddon<CommonRendererCallback>;
+    after: SortedAddon<CommonRendererCallback>;
+  };
+  table: {
+    before: SortedAddon<CommonRendererCallback>;
+    after: SortedAddon<CommonRendererCallback>;
+    classes: SortedAddon<CommonRendererCallback>;
+    skeleton: (() => ComponentChildren)[];
+  };
+};
+
+export const slots = (): TableSlots => ({
+  settings: {
+    before: new SortedAddon<CommonRendererCallback>(),
+    after: new SortedAddon<CommonRendererCallback>(),
+  },
+  table: {
+    before: new SortedAddon<CommonRendererCallback>(),
+    after: new SortedAddon<CommonRendererCallback>(),
+    classes: new SortedAddon<ClassResolverCallback>(),
+    skeleton: [() => <RowSkeleton />],
+  },
 });

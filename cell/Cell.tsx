@@ -14,7 +14,7 @@ interface CellProps {
 }
 
 export const Cell = ({ store, column, row }: CellProps) => {
-  const addons = getAddons({ store });
+  const { cell } = getAddons({ store });
   const key = store.getCellKey({ row, column });
 
   const { isSticky, isStickyLeft, isStickyRight, left, right } =
@@ -22,12 +22,12 @@ export const Cell = ({ store, column, row }: CellProps) => {
   const isSelected = store.state.cells.selected?.value?.[key];
   const keyBindings = useCellInput({ store, row, column });
 
-  const classes = addons.columnclasses.string({
+  const classes = cell.classes.string({
     column,
     store,
   });
 
-  const attributes = addons.columnattributes.data({
+  const attributes = cell.attributes.data({
     column,
     store,
   });
@@ -56,7 +56,7 @@ export const Cell = ({ store, column, row }: CellProps) => {
       {...keyBindings}
     >
       <div class="vt-cell-wrap" title={row[column]?.toString()}>
-        {addons.cellprefixes.render({
+        {cell.prefixes?.render({
           column: column,
           row,
           store,
@@ -64,7 +64,7 @@ export const Cell = ({ store, column, row }: CellProps) => {
 
         <TypeFormat {...{ store, column, row }} />
 
-        {addons.cellsuffixes?.render({
+        {cell.suffixes?.render({
           column: column,
           row,
           store,

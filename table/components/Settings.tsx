@@ -11,7 +11,7 @@ type TableSettingsProps = {
 };
 
 export const Settings = ({ store }: TableSettingsProps) => {
-  const addons = getAddons({ store });
+  const { settings } = getAddons({ store });
 
   return (
     <Dialog
@@ -24,7 +24,7 @@ export const Settings = ({ store }: TableSettingsProps) => {
       }}
     >
       <div class="vt-settings-body">
-        {addons.beforesettings.render({ store })}
+        {settings.before.render({ store })}
 
         <label class="vt-settings-label">Table Styles</label>
 
@@ -56,7 +56,7 @@ export const Settings = ({ store }: TableSettingsProps) => {
           }}
         />
 
-        {addons.aftersettings.render({ store })}
+        {settings.after.render({ store })}
       </div>
     </Dialog>
   );

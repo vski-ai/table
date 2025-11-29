@@ -1,8 +1,8 @@
 import { useCallback } from "preact/hooks";
 
-import { CellRendererCallback } from "@/row/mod.ts";
-import { Store } from "@xmod/types.ts";
-import { RowData } from "@/row/types.ts";
+import type { CellRendererCallback } from "@/cell/types.ts";
+import type { Store } from "@xmod/types.ts";
+import type { RowData } from "@/row/types.ts";
 import { useRowKey } from "@/columns/hooks/useRowKey.ts";
 import { useRowHeights } from "@/row/hooks/useRowHeights.ts";
 import { RowResizeHandle } from "./RowResizeHandle.tsx";

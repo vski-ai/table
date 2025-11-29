@@ -6,8 +6,8 @@ import { addMenuItems } from "./utils/addMenuItems.ts";
 import { Copy } from "./default.tsx";
 import * as store from "./store.ts";
 
-const beforeInit: BeforeInitCallback = ({ beforetable }) => {
-  beforetable.use(contextMenuRenderCallback);
+const beforeInit: BeforeInitCallback = ({ table }) => {
+  table.before.use(contextMenuRenderCallback);
 };
 
 const onInit: ModuleInitCallback = ({ store }) => {

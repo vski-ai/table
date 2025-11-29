@@ -12,12 +12,14 @@ interface HeaderProps {
 }
 
 export function Header({ store, loading }: HeaderProps) {
-  const addons = getAddons({ store });
-  const columnsInOrder = useOrderedColumns({ store });
-  const { style } = useTableColumnStyle({ store });
-  const classes = addons.headerclasses.string({
+  const { header } = getAddons({ store });
+  const classes = header.parentClasses.string({
     store,
   });
+
+  const columnsInOrder = useOrderedColumns({ store });
+  const { style } = useTableColumnStyle({ store });
+
   const ref = useRef(null);
   useEffect(() => {
     store.headerRef = ref;
@@ -40,15 +42,15 @@ export function Header({ store, loading }: HeaderProps) {
         <thead id="vt-main-head" ref={ref}>
           {loading
             ? (
-              addons.headerskeleton.at(0)?.()
+              header.skeleton.at(0)?.()
             )
             : (
               <>
-                {addons.beforeheader.render({
+                {header.before.render({
                   store,
                 })}
                 <tr>
-                  {addons.lefttableheaders
+                  {header.left
                     .render({
                       column: "",
                       store,
@@ -56,25 +58,25 @@ export function Header({ store, loading }: HeaderProps) {
                     .map(mapAddons)}
                   {columnsInOrder.map((col) => (
                     <>
-                      {addons.beforeheaders.render({
-                        column: "",
+                      {header.beforeEach.render({
+                        column: col,
                         store,
                       })}
                       <Column key={col} column={col} store={store} />
-                      {addons.afterheaders.render({
-                        column: "",
+                      {header.afterEach.render({
+                        column: col,
                         store,
                       })}
                     </>
                   ))}
-                  {addons.righttableheaders
+                  {header.right
                     .render({
                       column: "",
                       store,
                     })
                     .map(mapAddons)}
                 </tr>
-                {addons.afterheader.render({
+                {header.after.render({
                   store,
                 })}
               </>

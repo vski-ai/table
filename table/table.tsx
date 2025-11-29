@@ -39,7 +39,7 @@ export function Table(props: TableProps) {
 
   const kb = useTableInput({ store, tableRef });
 
-  const addons = getAddons({ store });
+  const { table } = getAddons({ store });
 
   const renderRows = [
     { row: "top", index: -10 },
@@ -47,7 +47,7 @@ export function Table(props: TableProps) {
     { row: "bottom", index: -10 },
   ];
 
-  const classes = addons.tableclasses.string({
+  const classes = table.classes.string({
     store,
   });
 
@@ -56,7 +56,7 @@ export function Table(props: TableProps) {
   return (
     <>
       <Header store={store} loading={initializing} />
-      {addons.beforetable.render({
+      {table.before.render({
         ref: scrollContainerRef,
         store,
       })}
@@ -71,7 +71,7 @@ export function Table(props: TableProps) {
         {...kb}
       >
         <tbody>
-          {initializing && addons.tableskeleton.at(0)?.()}
+          {initializing && table.skeleton.at(0)?.()}
 
           {renderRows.map((item, i) => {
             if (item.row === "top") {
@@ -107,7 +107,7 @@ export function Table(props: TableProps) {
           })}
         </tbody>
       </table>
-      {addons.aftertable.render({
+      {table.after.render({
         ref: scrollContainerRef,
         store,
       })}

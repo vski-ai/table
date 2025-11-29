@@ -11,15 +11,15 @@ export const RowLoading = ({
   rowHeight: number;
   store: Store;
 }) => {
-  const { lefttableheaders, righttableheaders, beforeheaders } = getAddons({
+  const { header } = getAddons({
     store,
   });
   const cols = new Array(
-    columns.length * (beforeheaders.size + beforeheaders.size + 1),
+    columns.length * (header.right.size + header.left.size + 1),
   ).fill(0);
   return (
     <tr class="vt-row" style={{ height: rowHeight + "px" }}>
-      {lefttableheaders
+      {header.left
         .render({ store, column: "" })
         .map(mapAddons)}
       {cols.map(() => (
@@ -27,7 +27,7 @@ export const RowLoading = ({
           <div class="vt-loading"></div>
         </td>
       ))}
-      {righttableheaders
+      {header.right
         .render({ store, column: "" })
         .map(mapAddons)}
     </tr>
