@@ -90,7 +90,8 @@ export function methods(state: State) {
       if (!edited) {
         return false;
       }
-      return state.editing.rows.value[row.id]?.[column] !== row[column];
+      return String(state.editing.rows.value[row.id]?.[column]) !==
+        String(row[column]);
     },
   };
 }

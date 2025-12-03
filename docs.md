@@ -5,536 +5,79 @@
 ## Getting Started
 
 <!--
-@assistant this section contains fundametal knowleddge about the module system design.
+@assistant this section contains fundametal knowleddge about the module system design. In order to understand the  implementation detatils use a read tool or `cat` on the input module directory `./input` or the cell module `./cell`. You can also read all modules and summarize your understanding of mod system and architecture if this tool is available to you.
 -->
 
 This project makes use of [@nesterow/xmod](https://github.com/nesterow/xmod)
 module system. The import is allised to `@xmod`
 
-## Core Concepts
+# Frontend Architecture
 
-### Modules
+This document provides an overview of the frontend architecture for this
+project.
 
-The fundamental building block in @xmod. Each module encapsulates a piece of
-your application's state, logic, and UI. Modules can be independent or declare
-dependencies on other modules.
+## Introduction
 
-XModule is an object with following type signature:
+The frontend is a Preact application built with Vite and Deno. It follows a
+modular architecture, where features are organized into self-contained modules.
+This approach promotes code reusability, maintainability, and scalability.
 
-```ts
-export type Addon<T extends (...args: any) => any = any> = SortedAddon<T>;
+### Module Structure
 
-export interface ModuleInitOptions {
-  store: Store;
-}
+A typical module has the following structure:
 
-export interface Slots extends Record<string, any> {}
-export type BeforeInitCallback = (opts: Slots) => void;
-export type ModuleInitCallback = (opts: ModuleInitOptions) => void;
-export type ModuleHooksCallback = (opts: {
-  modules: XModule[];
-  store: Store;
-}) => Record<string, (...args: any[]) => any>;
+- **`mod.ts`**: The entry point of the module. It exports the module definition.
+- **`store.ts`**: The state management for the module, using `@preact/signals`.
+- **Components (e.g., `MyComponent.tsx`)**: Preact components related to the
+  module.
 
-export interface XModule<T extends Record<string, any> = Record<string, any>> {
-  name: string;
-  dependencies?: string[];
-  store?: StoreModule;
-  slots?: () => Partial<Slots>;
-  hooks?: ModuleHooksCallback;
-  beforeInit?: BeforeInitCallback;
-  onInit?: ModuleInitCallback;
-  afterInit?: ModuleInitCallback;
-}
-```
+### Creating a New Module
 
-Only required argument is `name` which must be unique for the application scope.
-The optional `dependencies` array is module names this module depends on.
+To create a new module, follow these steps:
 
-### Slots Factory
+1. Create a new directory in the project directory.
+2. Create a `mod.ts` file that exports a module definition.
+3. Create a `store.ts` file to manage the module's state.
+4. Create the necessary components for the module.
 
-Slots can have any type (callback, jsx, string, etc). A factory implementation
-has to provide module augmetation which specifies type used by slot.
+### Module Interaction
 
-```ts
-import { SortedAddon } from "@xmod/mod.ts";
-import type { ClassResolverCallback } from "@/table/types.ts";
+Modules can interact with each other through the store instance.
 
-declare module "@xmod/types.ts" {
-  interface Slots {
-    // here we use SortedAddon, but the type sig can be anything
-    // and defined by a consumer
-    columnclasses: SortedAddon<ClassResolverCallback>;
-  }
-}
+## State Management
 
-export const slots = () => ({
-  columnclasses: new SortedAddon<ClassResolverCallback>(),
-});
-```
+The application uses `@preact/signals` for state management. The state is
+organized by modules, and each module has its own `store.ts` file.
 
-Slots are injected into the addons container and when needed they can be accesed
-by using getAddon({ store }) method.
+The `store.ts` file exports the following functions:
 
-```tsx
-import { getAddons } from "@xmod/mod.ts";
+- **`state()`**: A function that returns the initial state of the module.
+- **`persist()`**: A function that returns the state that should be persisted to
+  `localStorage`.
+- **`mutate()`**: A function that mutates the state based on a command.
 
-// example: consuming a slot
-export const Cell = ({ store, column, row }: CellProps) => {
-  const addons = getAddons({ store });
-  // some code...
-  const classes = addons.columnclasses.string({
-    column,
-    store,
-  });
-  
-  return (
-    <td className={"my-cell " + classes}>
-      {/* some code.. */}
-    </td>
-  )
-```
+The application state is accessible through the `app.state` property in the
+application context.
 
-### Hooks
+## Codestyle
 
-Hooks allow to extend the XModule interface itself when we want to add our own
-methods . The hook handlers live in the addons container and initialized by a
-`hooks` factory, the hook callbacks should be provided by an XModule
-implementation.
+The project follows a consistent codestyle to ensure readability and
+maintainability.
 
-Example hooks factory:
-
-```ts
-declare module "@xmod/types.ts" {
-  interface XModule {
-    beforeLoad?: BeforeLoadCallback;
-  }
-}
-
-export const hooks: ModuleHooksCallback = ({ modules, store }) => {
-  const beforeLoad = async (options: DataLoadOptions) => {
-    let result = options;
-    for (const plugin of modules) {
-      result = (await plugin.beforeLoad?.({
-        options: result,
-        store,
-      })) ?? result;
-    }
-    return result;
-  };
-  return {
-    beforeLoad,
-  };
-};
-```
-
-Example providing a hook:
-
-```ts
-// ... a sorting module part ...
-//
-const beforeLoad: BeforeLoadCallback = ({ options, store }) => {
-  const sorting = store.state.sorting.value;
-  if (!options) return options;
-  options.sort = sorting;
-  return options;
-};
-
-export const SortingModule: XModule = {
-  name: "sorting",
-  beforeInit,
-  beforeLoad,
-  store,
-};
-```
-
-Example consuming hooks of a type:
-
-```ts
-import { getAddons } from "@xmod/mod.ts";
-import { useEffect } from "preact/hooks";
-
-export function useMyFetch({ store, url, options }) {
-  const { beforeLoad } = getAddons({ store });
-  useEffect(() => {
-    const requestOpts = beforeLoad(options); // modules will extend options
-    // ... fetch with new requestOpts ...
-  }, [url]);
-}
-```
-
-### Before Init
-
-`beforeInit` is called before store initialzation, and receives slots defined by
-all modules - when we want to render a compenent in a slot, we use this
-callback. Usually a slot uses a SortedAddon interface, but it may have any type
-signature.
-
-### On Init
-
-`onInit` is called after state factory gathered all singnals ands other state
-from the modules. The callback receives store as an argument onInit({ store })
-
-### After Init
-
-`onInit` is called after all `onInit` mutations executed i.e. all modules
-initialized state.
-
-### Persistence
-
-On app initialization we provide a storage implementation with following type
-sig:
-
-```ts
-export interface StorageAdapter {
-  getItem<T>(key: string): T | null;
-  setItem<T>(key: string, value: T): void;
-  removeItem(key: string): void;
-}
-```
-
-The storage must be json serializable and sync (designed for low latency and
-UX). If you need server persist, use side effects on saveItem, and load state on
-app init.
-
-### Store Factory
-
-A store is an object with following type signature:
-
-```ts
-export interface Command<T = any, P = any, Doc = any> {
-  type: T;
-  payload: P;
-  history?: boolean; // whether to use Cmd+Z, Cmd+Shift+Z
-  comment?: Doc; // Doc for LLMs and generators
-}
-
-export interface State {
-  [key: string]: Signal<unknown> | unknown;
-}
-
-export interface Store {
-  state: State;
-  dispatch: <T, R = any>(command: T) => R[];
-  undo: () => void;
-  redo: () => void;
-}
-
-export type InferPersist<T extends Record<string, any>> = Record<
-  keyof T,
-  Partial<Record<keyof T[keyof T], any>>
->;
-
-type StoreModule = {
-  state: (init: any) => { [key: string]: Signal<unknown> | unknown };
-  persist: (state: State) => { [key: string]: unknown };
-  mutate: (state: State, command: Command) => void;
-  methods?: (state: State) => Record<string, (...args: any[]) => any>;
-  // for injecting anything except signals
-  inject?: (state: State) => Record<string, any>;
-};
-```
-
-- state: a factory that returns state to be injected into `State`
-- persist: a factory that saves state into a persistent storage
-- mutate: a callback called by the dipatch method
-- methods: a factory that injects additional method into store (do not polut,
-  use only when needed)
-
-Usually a store factory lives in a separate file which does module augmetation
-and provide types. See module example below.
-
-## A Module Example
-
-```ts
-// file: store.ts
-import { type Signal, signal } from "@preact/signals";
-import type { Command, State } from "@xmod/mod.ts";
-import type { RowData } from "@/row/types.ts";
-
-type CheckboxState = {
-  checkbox: {
-    selected: Signal<boolean>;
-  };
-};
-
-declare module "@xmod/types.ts" {
-  interface State extends CheckboxState {}
-  interface Store {
-    getCheckboxState: (opts: {}) => string; // on/off
-  }
-}
-
-export const CHECKBOX_CHECK = "CHECKBOX_CHECK";
-
-export type CheckCmd = Command<
-  typeof CHECKBOX_CHECK,
-  boolean,
-  "Check the checkbox"
->;
-
-export function state(persist: InferPersist<CheckboxState>): CellsState {
-  const checkbox = signal(persist?.checkbox?.selected ?? false);
-  return {
-    checkbox: { selected },
-  };
-}
-
-export function persist(state: CheckboxState): InferPersist<CheckboxState> {
-  return {
-    checkbox: {
-      selected: state.checkbox.selected.value,
-    },
-  };
-}
-
-export function mutate(
-  state: State,
-  cmd: CheckCmd,
-) {
-  switch (cmd.type) {
-    case CELL_SELECT:
-      state.checkbox.selected.value = cmd.payload;
-      break;
-  }
-}
-
-export function methods(state: State) {
-  return {
-    getCheckboxState(_) {
-      return state.checkbox.selected.value ? "on" : "off";
-    },
-  };
-}
-```
-
-Module init
-
-```ts
-import { XModule } from "@xmod/mod.ts";
-import * as store from "./store.ts";
-
-export const TableCellModule: XModule = {
-  name: "checkbox",
-  store,
-};
-```
-
-END OF FUNDAMENTALS
-
-## Table Component & Modules
-
-<!--
-@assistant this section contains basic information about the datagrid component and its modules. More compherensive docs and styleguide is in
-the enterprise scope.
--->
-
-### Use the table
-
-```tsx
-import { LocalStorageAdapter, type DataLoadCallback } from "@xmod/mod.ts";
-import { createTable } from "@vski/table/mod.ts";
-import { useRef } from "preact/hooks";
-
-export function MyTable() {
-
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const { Table, store: _store } = createTable({
-    id: "my-table-id", // must be a unique id
-    modules: [],
-    storage: new LocalStorageAdapter(),
-  });
-
-  // Data Load Callback
-  const onDataLoad: DataLoadCallback = async (
-    { offset, limit, store }
-  ) => {
-    return {
-      rows: [{ id: 'required', attribute: 'value' }],
-      total: 1
-    }
-  }
-
-  return (
-    <div class="w h overflow-auto" ref={scrollRef}>
-      <Table 
-        onDataLoad={onDataLoad}
-        container={scrollRef}
-      >
-    </div>
-  )
-}
-```
-
-### Mutating State
-
-We can do almost anything by dispatching commands. The modules should care to
-provide the command types and docs for LLMs.
-
-This is a recommended way of mutating state inside the table.
-
-```ts
-import { CONSUME_TYPE_UNIQ_COMMAND_ID, type ConsumeCmdType } from "some-module";
-
-store.dispatch<ConsumeType>({
-  type: CONSUME_TYPE_UNIQ_COMMAND_ID,
-  payload: "Payload According to Consume Type",
-  history: false, // whether to record history for (Ctrl+Z, Ctrl^Y)
-});
-```
-
-Another way to mutate state is to access `store.state` directly. Most of the
-properties are signals and can be mutated directly. It is not recommended,
-especially when implementing agentic flows.
-
-```ts
-store.state.columns.header_height.value = 42;
-```
-
-## Hooks
-
-This component provides hooks such as `beforeLoad` and `afterLoad`.
-
-We use those callbacks to apply transformations to request input `beforeLoad`
-and to the request result `afterLoad`. This is hanndy for adapting
-request/response to a format consumable by this table or for extending query
-`beforeLoad` if our modules add additional filters or options.
-
-### Context Menu
-
-Context Menu is a built-in table module. It provides methods and interfaces for
-adding menu items (or any components) to be rendered in the contex menu.
-
-The default item parent is 'main', the other menu items can specify their names
-(menu prop) and parents. The render callbacks receive menu context (MenuContext
-type) that contains store, placement and other dependencies.
-
-The default menu placement targets are `header` and `body`. `body` meaning an
-element clicked inside table body and the target was inside a cell.
-
-A module can add their own menu targets on initialization using
-`addMenuPlacement({ store: Store, items: PlacementTargetResolver[] })`.
-
-Here is an interface used for menu placements:
-
-```ts
-interface PlacementTargetResolver {
-  name: string; // new placement target name
-  match: (el: HTMLElement) => boolean; // accepts current event target, returns boolean (usually !!el.closest('selector'))
-  target: (el: HTMLElement) => HTMLElement | null; // if returns an element, the 'highlight' class is added to it
-}
-```
-
-The `visibility` callback returns a boolean and used to determine whether to
-show an item.
-
-A menu action method is called if there are no children.
-
-Here is an example of a menu item that will appear in the main menu, when
-clicked on table header and when there is a column to work with:
-
-```ts
-import { ContextMenuItem } from "@/ctxmenu/types.ts";
-import NumberIcon from "lucide-react/dist/esm/icons/decimals-arrow-right.js";
-import { ComponentChildren } from "preact";
-
-export const COLUMN_DATATYPE_MENU = "column_datatype";
-
-// The title is shown in a submenu
-export const Title = ({ children }: { children: ComponentChildren }) => {
-  return (
-    <div class="vt-fmt-menu-title">
-      {children}
-      <NumberIcon />
-    </div>
-  );
-};
-
-const Item = ({ children }: { children: ComponentChildren }) => {
-  return (
-    <>
-      <NumberIcon />
-      {children}
-    </>
-  );
-};
-
-// @assistant There's no fucking icon in ContextMenuItem
-// use the label() method to render icons with text or other jsx components
-export const ColumnMenu: ContextMenuItem = {
-  menu: COLUMN_DATATYPE_MENU,
-  order: 0,
-  visibility: ({ placement, column }) => !!column && placement === "header",
-  title: () => <Title>Data types</Title>, // a title is rendered on top of ther child menu, before "back" button
-  label: () => <Item>Data types</Item>,
-  action() {},
-};
-
-export const MenuItems = [
-  ColumnMenu,
-];
-```
-
-Here is an example of a column menu child item:
-
-```ts
-import { ContextMenuItem } from "@/ctxmenu/types.ts";
-import { COLUMN_DATATYPE_MENU, Title } from "../menu.tsx";
-import { Settings } from "./Settings.tsx";
-import CalendarIcon from "lucide-react/dist/esm/icons/calendar-clock.js";
-
-export const DATE_DATATYPE_MENU = "column_datatype_date";
-
-export const DateDatatypeMenu: ContextMenuItem = {
-  menu: DATE_DATATYPE_MENU,
-  parent: COLUMN_DATATYPE_MENU,
-  visibility: () => true,
-  title: ({ column }) => (
-    <Title>
-      Date format{" "}
-      <span class="badge badge-xs badge-accent absolute right-1">{column}</span>
-    </Title>
-  ),
-  label: () => (
-    <>
-      <CalendarIcon />
-      <span>Datetime Format</span>
-    </>
-  ),
-  action() {},
-};
-
-export const DateSettingsMenu: ContextMenuItem = {
-  menu: "date_settings_menu",
-  parent: DATE_DATATYPE_MENU,
-  visibility: () => true,
-  label: (ctx) => <Settings {...ctx} />,
-};
-
-export const DateMenuItems = [
-  DateDatatypeMenu,
-];
-```
-
-See [typedefs](./ctxmenu/types.ts) for context menu. We work with
-`ContextMenuItem`.
-
-Here is an example of adding menu items on module init:
-
-```ts
-import { addMenuItems } from "@/ctxmenu/utils/addMenuItems.ts";
-import { MenuItems } from "./menu.tsx";
-
-const onInit: ModuleInitCallback = ({
-  store,
-}) => {
-  addMenuItems({
-    store,
-    items: MenuItems,
-  });
-};
-```
+- **Typing:** The code is written in TypeScript.
+- **Naming Conventions:**
+  - Components are named in `PascalCase`.
+  - Files are named in `PascalCase` for components and `kebab-case` for other
+    files.
+  - Variables and functions are named in `camelCase`.
+- **Component Structure:**
+  - Components are defined in their own files.
+  - The component file should be located in the module's directory.
+  - The component file should export the component as the default export.
+- **Imports:**
+  - Imports are organized by modules.
+  - Absolute imports are used for modules (`@/module_name/...`).
+  - Relative imports are used within a module.
 
 END OF DOCS
 

@@ -1,7 +1,7 @@
 import { Signal, signal } from "@preact/signals";
 import { Command, State } from "@xmod/mod.ts";
 
-type KeyboardState = {
+type InputState = {
   keyboard: {
     altKey: Signal<boolean>;
     metaKey: Signal<boolean>;
@@ -15,8 +15,6 @@ type KeyboardState = {
     data: Signal<unknown>;
   };
 };
-
-type InputState = KeyboardState;
 
 declare module "@xmod/types.ts" {
   interface State extends InputState {}
